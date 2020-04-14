@@ -251,7 +251,7 @@ class MemberController extends Controller
         $user = $this->getUserInfo();
         
         $user->collect_details = UserCollect::getCollectDetails($user->id, $id);
-        // dd($$user->collect_details);
+        // dd($user->collect_details->toArray());
         // $user->collect_details = UserCollect::getCollectDetails($user->id);
         $folder_name = '';
         $folder_obj = UserCollectFolder::find($id);
@@ -259,16 +259,18 @@ class MemberController extends Controller
             $folder_name = $folder_obj->name;
         }
         
-        //要删除的id
-        $delid=UserCollect::where('user_collect_folder_id',$id)->pluck('id');
-        
-		// dd($delid);
-		
+        foreach($user->collect_details as $k=>$v){
+            //要删除的id
+            // dump($v['id']);
+            $user->collect_details[$k]['delid']=UserCollect::where('user_collect_folder_id',$id)->where('collect_id',$v['id'])->value('id');
+        }
+        // echo '<pre>';
+		// dump($user->collect_details);
+		// die;
         $data = [
             'lang' => $lang,
             'user' => $user,
             'folder_name' => $folder_name,
-            'delid' => $delid,
         ];
         return view('member.collect_detail', $data);
     }
@@ -340,10 +342,10 @@ class MemberController extends Controller
     public function deleteFinderItem(Request $request)
     {
         $this->checkLogin();
-
         $finder_id = $request->finder_id;
         $user_id = Auth::id();
-        $finder = UserFinder::where('user_id', $user_id)->where('id', $finder_id)->first();
+        $finder = UserFinder::where('user_id', $user_id)->where('id', $finder_id)->first(); 
+
         if ($finder) {
             $finder->delete();
             return Output::makeResult($request, null);
@@ -352,6 +354,22 @@ class MemberController extends Controller
         }
     }
     
+    public function deleteFolderItem(Request $request)
+    {
+        $this->checkLogin();
+        // dd($request->all());
+        $finder_id = $request->finder_id;
+        $user_id = Auth::id();
+        $finder = UserCollect::where('user_id', $user_id)->where('id', $finder_id)->first(); 
+        // dd($finder);
+        if ($finder) {
+            $finder->delete();
+            return Output::makeResult($request, null);
+        } else {
+            return Output::makeResult($request, null, Error::SYSTEM_ERROR, '你无权删除该图片');
+        }
+    }
+
     
     public function attendance(Request $request)
     {

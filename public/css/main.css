@@ -46,7 +46,7 @@ body { font: 14px 'montserrat-regular', 'PingFangSC-Regular', 'Helvetica', Arial
 .triangle:before { position: absolute; top: 0; left: 0; content: ''; height: 0; width: 0; display: block; /*border: 8px transparent solid;**/ border-bottom-width: 0; border-left-width: 0; border-top-color: #636af3; z-index: 10 }
 .content-post, .excerpt { text-align: justify }
 @font-face { font-family: 'salong'; src: url('../font/salong.eot'); src: url('../font/salong.eot?#iefix') format('embedded-opentype'), url('../font/salong.woff') format('woff'), url('../font/salong.otf') format('opentype'), url('../font/salong.ttf') format('truetype'), url('../font/salong.svg#salong') format('svg'); font-style: normal; font-weight: normal }
-[class^="icon-"]:before, [class*="icon-"]:before { display: inline-block; font-family: "salong"; font-style: normal; font-variant: normal; font-weight: normal; line-height: 24px; padding-top: 3px; text-align: center; text-decoration: inherit; text-transform: none; }
+[class^="icon-"]:before, [class*="icon-"]:before { display: inline-block; font-family: "salong"; font-style: normal; font-variant: normal; font-weight: normal; line-height: 24px; /*padding-top: 3px;*/ text-align: center; text-decoration: inherit; text-transform: none; }
 .header { height: 75px; }
 .header_main { background-color: #fff; border-bottom: 1px #f2f2f2 solid; }
 .main { margin-top: 7px; }

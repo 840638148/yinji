@@ -107,7 +107,8 @@ Route::post('member/add_follow', 'MemberController@addFollow');
 Route::post('member/cancel_follow', 'MemberController@cancelFollow');
 Route::post('member/cancel_subscription', 'MemberController@cancelSubscription');
 Route::post('member/attendance', 'MemberController@attendance');
-Route::post('member/delete_finder_item', 'MemberController@deleteFinderItem');
+Route::post('member/delete_finder_item', 'MemberController@deleteFinderItem');  //删除个人发现的一张图片
+Route::post('member/delete_folder_item', 'MemberController@deleteFolderItem');  //删除个人收藏中心的一张图片
 Route::post('member/comment', 'MemberController@comment');
 Route::post('member/upload_img', 'MemberController@uploadImg');
 
