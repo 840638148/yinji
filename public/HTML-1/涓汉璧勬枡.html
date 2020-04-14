@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>印际—个人中心——我的关注</title>
+<link href="css/main.css" rel="stylesheet" type="text/css" />
+<link href="css/response.css" rel="stylesheet" type="text/css" />
+<link href="css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+<link href="css/highlight.css" rel="stylesheet" type="text/css" />
+<link href="css/animate.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+function nTabs(thisObj,Num){
+if(thisObj.className == "active")return;
+var tabObj = thisObj.parentNode.id;
+var tabList = document.getElementById(tabObj).getElementsByTagName("li");
+for(i=0; i <tabList.length; i++)
+{
+if (i == Num)
+{
+   thisObj.className = "active";
+      document.getElementById(tabObj+"_Content"+i).style.display = "block";
+}else{
+   tabList[i].className = "normal";
+   document.getElementById(tabObj+"_Content"+i).style.display = "none";
+}
+}
+}
+</script>
+</head>
+
+<body class="bj">
+<div class="home_top">
+  <div class="home_banber"> <img src="images/home_bj.jpg" alt="个人主页图片" /></div>
+  <div class="home_tongji">
+    <ul>
+      <li>人气</br>
+        5007</li>
+      <li>收藏</br>
+        5007</li>
+      <li>粉丝</br>
+        5007</li>
+      <li>关注</br>
+        5007</li>
+    </ul>
+  </div>
+  <div class="home_personal"> <img src="images/favicon.jpg" alt="yinji" />
+    <h2>Yin.ji<span class="vip1">VIP</span></h2>
+  </div>
+  <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">个人说明： 专业，努力！!</p>
+  <div class="home_nav">
+    <ul>
+      <li><a  href="个人中心.html">个人中心</a></li>
+      <li><a href="我的订单.html">我的订单</a></li>
+      <li><a href="我的发现.html">我的发现</a></li>
+      <li><a href="我的收藏.html">我的收藏</a></li>
+      <li><a href="我的订阅.html">我的订阅</a></li>
+      <li><a href="我的关注.html">我的关注</a></li>
+      <li class="current"><a href="个人资料.html">个人资料</a></li>
+    </ul>
+  </div>
+</div>
+<section class="wrapper">
+  <div class="mt30 home_box">
+    <div class="TabTitle">
+      <ul id="myTab1" style="float:left; width:600px;">
+        <li class="active" onclick="nTabs(this,0);">基本信息</li>
+        <li class="normal" onclick="nTabs(this,1);">账号修改</li>
+      </ul>
+    </div>
+    <div class="TabContent content-post"> 
+      <!---发现--->
+      <div id="myTab1_Content0" >
+        <form id="info-form" class="contribute_form" role="form" method="POST" action="">
+          <input type="hidden" name="update" value="info">
+          <input type="hidden" name="_wpnonce" value="fa56a68d7f">
+          <section class="page-header">
+            <h3>基本信息</h3>
+          </section>
+          <p>
+            <label for="display_name">昵称 (必填)</label>
+            <input type="text" id="display_name" name="display_name" value="Yin.ji" required="">
+          </p>
+           <p>
+            <label for="display_name">性别</label>
+            <input name="" type="radio" value="" checked="checked" />保密  <input name="" type="radio" value="" />男  <input name="" type="radio" value="" />女
+          </p>
+           <p>
+            <label for="display_name">所在城市</label>
+            <input type="text" id="display_name" name="display_name" value="选择城市" required="">
+          </p>
+          <p>
+            <label for="url">个人主页</label>
+            <input type="text" id="url" name="url" value="http://www.yinjispace.com/">
+          </p>
+          <p>
+            <label for="description">个人说明</label>
+            <textarea rows="3" name="description" id="description">专业，努力！!</textarea>
+          </p>
+          <div id="profile_avatar">
+            <label for="avatar">头像</label>
+            <img class="avatar" src="http://www.yinjispace.com/wp-content/uploads/2017/10/2017102803344214.jpg" data-original="http://www.yinjispace.com/wp-content/uploads/2017/10/2017102803344214.jpg" alt="Yin.ji" style="display: block;"> <a class="avatar_uploader" href="javascript:void(0)"> 点击更换头像 </a> <span>当前为<strong>自定义头像</strong>，建议大小：120*120。获取头像的顺序为：自定义头像、社交头像、全球通用头像、默认头像</span> </div>
+          
+          <div id="homepage_top_img" style="overflow:hidden">
+            <label for="avatar">个人主图</label>
+            <img src="http://www.yinjispace.com/wp-content/uploads/2017/10/2017102803344214.jpg" alt="个人主图" width="600" hidden="200" style="display:block; width:200px; float:left; height:100px;" >
+             <a class="avatar_uploader" href="javascript:void(0)"> 点击更换个人主图 </a> <span>当前为<strong>个人主页主图</strong>，建议大小：1920*300。</span> </div>
+          <p>
+            <input type="submit" value="保存更改" class="submit">
+          </p>
+        </form>
+      </div>
+      <div id="myTab1_Content1"  class="none">
+        <form id="pass-form" class="contribute_form" role="form" method="post">
+          <input type="hidden" name="update" value="pass">
+          <input type="hidden" name="_wpnonce" value="fa56a68d7f">
+          <p>
+            <label for="email">手机号(必填)</label>
+            <input type="text" id="email" name="email" value="" required="">
+          </p>
+          <p>
+            <label for="email">电子邮件 (必填)</label>
+            <input type="text" id="email" name="email" value="" required="">
+          </p>
+          <p>
+            <label for="pass1">新密码</label>
+            <input type="password" id="pass1" name="pass1">
+            <span class="help-block">如果需要修改密码，请输入新的密码，不改则留空。</span></p>
+          <p>
+            <label for="pass2">重复新密码</label>
+            <input type="password" id="pass2" name="pass2">
+            <span class="help-block">再输入一遍新密码，提示：密码最好至少包含7个字符，为了保证密码强度，使用大小写字母、数字和符号结合。</span></p>
+          <p>
+            <input type="submit" value="保存更改" class="submit">
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+<footer class="mt30">
+  <div class="foot wrapper" style="height:280px;">
+    <div class="ft_left">
+      <div class="ft_logo"><img src="images/foot_24.gif" alt="印际——中国最好的室内设计资讯平台" /></div>
+      <div class="">
+        <ul>
+          <li class="email"><a href="mailto:yinji@yinjispace.com">yinji@yinjispace.com</a></li>
+          <li class="add">中国●深圳</li>
+        </ul>
+      </div>
+      <div class="social"> <a href="#"><img src="images/foot_31.gif" alt="新浪微博" /></a> <a href="#"><img src="images/foot_33.gif" alt="微信公众" /></a> <a href="#"><img src="images/foot_35.gif" alt="新浪微博" /></a> <a href="#"><img src="images/foot_37.gif" alt="pin" /></a> </div>
+    </div>
+    <div class="weixin"> <img src="images/foot_27.gif" alt="微信公众号" />打开微信扫一扫</div>
+    <div class="ft_right">
+      <dl>
+        <dt>网站地图</dt>
+        <dd><a href="#">首页</a></dd>
+        <dd><a href="#">室内</a>
+          <p>
+          
+          <ul>
+            <li><a href="#">住宅</a></li>
+            <li><a href="$">别墅</a></li>
+            <li><a href="#">酒店</a></li>
+            <li><a href="#">地产</a></li>
+            <li><a href="#">餐饮</a></li>
+            <li><a href="#">更多...</a></li>
+          </ul>
+          </p>
+        </dd>
+        <dd><a href="#">建筑</a>
+          <p>
+          
+          <ul>
+            <li><a href="#">天际线</a></li>
+            <li><a href="$">住宅建筑</a></li>
+            <li><a href="#">公共建筑</a></li>
+          </ul>
+          </p>
+        </dd>
+        <dd><a href="#">发现</a></dd>
+        <dd><a href="#">设计师</a>
+          <p>
+          
+          <ul>
+            <li><a href="#">大师</a></li>
+            <li><a href="$">英国</a></li>
+            <li><a href="#">法国</a></li>
+            <li><a href="#">美国</a></li>
+            <li><a href="#">意大利</a></li>
+            <li><a href="#">其他</a></li>
+          </ul>
+          </p>
+        </dd>
+        <dd><a href="#">品牌</a>
+          <p>
+          
+          <ul>
+            <li><a href="#">灯具</a></li>
+            <li><a href="$">家具</a></li>
+          </ul>
+          </p>
+        </dd>
+        <dd><a href="#">杂货铺</a></dd>
+        <dd><a href="#">关于我们</a>
+          <p>
+          
+          <ul>
+            <li><a href="$">联系我们</a></li>
+            <li><a href="#">加入我们</a></li>
+            <li><a href="#">法律说明</a></li>
+          </ul>
+          </p>
+        </dd>
+      </dl>
+    </div>
+  </div>
+  <!-- 版权 -->
+  <section class="copyright">
+    <p> Copyright © 2012-2016 <a title="印际——发现全球设计之美！" href="http://www.yinjispace.com/" target="_blank" rel="noopener">印际</a>.保留所有权利 </p>
+  </section>
+  <!-- 版权end --> 
+</footer>
+</body>
+</html>

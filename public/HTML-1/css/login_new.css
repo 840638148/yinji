@@ -1,0 +1,33 @@
+@charset "utf-8";
+/* CSS Document */
+body { margin: 0px; background: url(../images/login_body.jpg); }
+ul,li{list-style-type: none; margin:0; padding:0;}
+.hide{ display:none}
+.login form, .login h1 a { overflow: hidden; font-weight: 800; }
+#login { width: 300px; margin: 5% auto; background: #fff; padding: 50px 100px; font-family: "微软雅黑", Arial, Helvetica, sans-serif; border-radius: 6px;position:relative }
+.login h1 a {background:url( ../images/login-logo.png) center top no-repeat; background-repeat: no-repeat; color: #444; width: 128px; height: 128px;border-radius:128px; font-size: 20px; line-height: 1.3em; margin: 0 auto 25px; padding: 0; text-indent: -9999px; outline: 0; display: block; }
+.login form .forgetmenot{ font-size: 12px; line-height: 30px; font-weight: 100; color:#999 }
+.login h2 { color: #666; font-weight: 100; font-size: 30px; text-align: center }
+.login form .input { border: 1px solid #ddd; height: 48px; line-height:48px; width: 270px; padding: 0 10px; border-radius:6px; font-size: 14px }
+.button.button-large { color: #fff; height:48px; line-height:48px; cursor: pointer; width: 290px; border-radius: 6px; background: #e1244e; border: 0;font-size: 16px; }
+.button-primary:hover { background: #d51d46; }
+.verification{position:absolute; right:0; height:50px; border-radius:0 6px 6px 0;border: 0;padding:0 20px; cursor: pointer; background:#d6d6d6; color:#666}
+.verification:hover{ background:#CCC}
+.nav { float: right; color: #999; font-size: 12px }
+.login .backtoblog a, .login .nav a { text-decoration: none; color: #999; font-size: 12px }
+.ma_box{position: absolute;background:#FFF;border-radius: 6px; padding-top:50px; width:500px; height:640px;text-align:center;left:0; top:0;}
+.login_ico{width:51px; height:51px; position:absolute; right:5px; top:5px;}
+.likes{ font-size:14px; font-weight:100; color:#666; margin-bottom:20px; float:left}
+.likes dt,.likes dd,.add_like,.like_label li{ float:left; margin:5px;}
+.likes dd ,.add_like,.like_label li{padding:0 15px; line-height:30px; background:#f8f8f8; border:1px solid #eee;border-radius:3px;}
+.add_like{ display:block; text-decoration:none; color:#d51d46}
+.like_label{position: fixed; text-align:center; width:440px; height:300px; margin-left:-250px; left:50%; top:30%; background:#fff;z-index:999;border-radius:5px; padding:10px 30px;}
+.like_label h1{ font-size:16px; display:block; border-bottom:1px solid #ddd; line-height:36px; color:#666; text-align:left}
+.like_label li{ text-align:left;list-style-type: none; cursor: pointer; color:#999;}
+.like_label li.selected{ background-color:#f90; color:#fff; border:1px solid #f60;}
+.like_label ul{ width:100%; float:left; font-size:14px; height:180px; overflow:auto;}
+.like_label .button{float:left;padding:0 15px; line-height:36px; background:#d51d46; color:#fff;border-radius:3px; text-decoration:none}
+.t_box{position:relative; width:100%;}
+.like_bj{position: fixed; background:#000; opacity:0.6; width:100%; height:100%; top:0; left:0;z-index:99;}
+.like_button{position:absolute; right:30px; top:30px; color:#999; text-decoration:none; font-size:14px}
+

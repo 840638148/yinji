@@ -1,0 +1,73 @@
+/*首页最新家具*/
+
+.home_ffe img.thumb { width: 100%; }
+/*分类模块4*/
+
+.cat5_sidebar { width: 368px; }
+.admin-bar .cat5_sidebar.move { margin-top: 32px; }
+.cat4_list ul li.last { width: 50%; position: relative; padding: 0 12px 8px; }
+.cat4_list ul li.last:last-child, .cat4_list ul li.last:nth-last-child(2) { padding-bottom: 0; }
+.cat4_list ul li.last:before { font-family: 'salong'; position: absolute; content: '\e8ad'; top: 0; left: 0; }
+.cat4_list a { display: block; overflow: hidden; -ms-text-overflow: ellipsis; text-overflow: ellipsis; white-space: nowrap; }
+.cat4_list ul li.last:hover a, .cat4_list ul li.last:hover:before { color: #b1244e; }
+/*ajax加载更多*/
+
+.post_list .ias-noneleft, .post_list .ias-spinner, .post_list .ias-trigger { margin-right: 20px; }
+/*文章面包屑*/
+
+.single .crumbs_wrap h3 { margin: 0 -20px -18px; border: none; }
+/*收藏*/
+
+.post_declare { position: relative; }
+.post_declare .wpfp-span { position: absolute; top: 20px; right: 20px; }
+.post_declare .vip-span { position: absolute; top: 20px; right: 100px; }
+.post_declare .wpfp-span, .post_declare .vip-span { background-color: #f90; color: #fff; display: inline-block; padding: 4px 20px; text-align: center; }
+.post_declare .vip-span { background: #e1244e; }
+.post_declare .wpfp-span .wpfp-link, .post_declare .vip-span .wpfp-link { color: #fff; display: block; }
+.post_declare .wpfp-span .wpfp-img { position: absolute; top: 8px; left: -20px; }
+.post_declare .wpfp-span .wpfp-hide { display: none; }
+/****************************收藏****************************/
+
+.wpuf-wrap .wpfp-span ul { margin-bottom: 20px; }
+.wpuf-wrap .wpfp-span .ias-spinner > div, .wpuf-wrap .wpfp-span .ias-spinner a, .wpuf-wrap .wpfp-span .ias-trigger a, .wpuf-wrap .wpfp-span .ias-noneleft { margin-top: 20px; }
+.wpuf-wrap .wpfp-span, .wpuf-wrap .wpfp-span ul li { overflow: hidden; }
+.wpuf-wrap .wpfp-span ul li:nth-child(2n) { background-color: #f9f9f9; }
+.wpuf-wrap .wpfp-span ul li a { padding: 8px 12px; display: inline-block; border-right: 1px #f2f2f2 solid; border-bottom: 1px #eee solid; font-size: 14px; color: #333; }
+.wpuf-wrap .wpfp-span ul li:first-child { border-top: 1px #f2f2f2 solid; }
+.wpuf-wrap .wpfp-span ul li a:first-child { width: 90%; float: left; border-left: 1px #f2f2f2 solid; }
+.wpuf-wrap .wpfp-span ul li a:last-child { width: 10%; float: right; text-align: center; white-space: nowrap; }
+/*标题*/
+
+.wpuf-wrap .wpfp-span .title span { color: #999; margin-right: 6px; font-size: 12px; }
+.wpuf-wrap .wpfp-span .remove-parent:hover, .wpuf-wrap .wpfp-span .title:hover { color: #b1244e; }
+.wpuf-wrap .wpfp-span .remove-parent { color: #999; }
+/*清除按钮*/
+
+.wpuf-wrap .wpfp-span > .wpfp-link { text-align: center; padding: 4px 20px; background-color: #e1244e; display: inline-block; color: #fff; float: left; }
+.wpuf-wrap .wpfp-span > .wpfp-link:hover { background-color: #b1244e; }
+.wpuf-wrap .wpfp-span > .wpfp-img { margin: 0; float: right; display: none; }
+/****************************收藏end****************************/
+
+/****************************家具****************************/
+
+.top_thumb { width: 100%; }
+/*标题*/
+
+.gallery.entry .post-head h2 { text-align: center; border-bottom: 1px #eee solid; padding-bottom: 12px; }
+/*按钮*/
+.left_designer,.ffe_btn{ float:left; }
+.left_designer h2 i{ margin-right:10px;}
+.left_designer h2{color: #fff; float: left;  line-height: 60px; margin-right: 20px;}
+.right_designer .atar_Show{ margin-top:20px;}
+.ffe_btn a { display: inline-block; vertical-align: middle; margin: 0 8px; border-radius: 4px; font-size: 16px; color:#fff }
+.ffe_posts { margin-bottom: 32px; }
+.ffe_posts ul { margin-right: -10px; }
+.ffe_posts ul li { width:33.3%; padding: 0 10px 10px 0; margin-bottom:10px; overflow:hidden; height:250px;}
+.ffe_posts ul li a { display: block; position: relative; }
+.ffe_posts .zpbt{ position: absolute; text-align: center; top: 0; right: 0; bottom: 0; left: 0; background-color: rgba(0, 0, 0, 0.5); opacity: 0; visibility: hidden; -webkit-transition: ease-in-out 0.5s; transition: ease-in-out 0.5s; }
+.ffe_posts h3 { position: absolute; top: 50%; left: 12px; right: 12px; -webkit-transform: translateY(-50%); transform: translateY(-50%); color: #fff; }
+.ffe_posts ul li:hover div { opacity: 1; visibility: visible; }
+.ffe_tags, .all_ffe { display: inline-block; vertical-align: middle; }
+.all_ffe a { color: #f30; }
+
+/****************************家具end****************************/

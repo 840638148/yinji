@@ -1,0 +1,860 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>印际——会员服务</title>
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="/css/response.css" rel="stylesheet" type="text/css" />
+<script src="../js/jquery-1.10.2.min.js"></script>
+</head>
+
+<body>
+<header class="index">
+<section id="header_main" class="header_main header_animated headroom--not-top headroom--not-bottom slideDown">
+<section class="wrapper">
+
+<!--菜单-->
+  
+<header class="mobile_header hide">
+  <section class="mheader_main header_animated headroom--top headroom--not-bottom"> 
+    
+    <!--按钮--> 
+    
+    <i class="icon-menu"></i> <i class="icon-user"></i> 
+    
+    <!--按钮end--> 
+    
+    <!--LOGO-->
+    
+    <h1> <a href="/" class="logo" title="发现全球设计之美-印际"><img src="/images/logo.png" alt="印际"></a> </h1>
+    
+    <!--LOGOend--> 
+    
+  </section>
+</header>
+<nav class="header-nav top-nav">
+
+<!--LOGO-->
+
+<h1> <a href="/" class="logo left" title="印际-发现全球设计之美"><img src="/images/logo.png" alt="印际"></a> </h1>
+
+<!--LOGO-->
+
+<div class="header-menu  right">
+<ul class="menu">
+<li class="menu-item menu-item-search search-btn" style="border-left: 1px solid #fff; border-left-color: rgba(255,255,255,.3);"><a href="#search" title="点击搜索"><i class="icon-search-1"></i></a></li>
+<li class="menu-item menu-item-search" style=" border-left: 1px solid #fff; border-left-color: rgba(255,255,255,.3);"> 
+  
+  <!--登录后个人中心--> 
+  
+  <a href="/member" title=""><img class="avatar" src=" /img/avatar.png " alt="月夜"></a>
+  <ul class="sub-menu">
+  
+  <!---li> <a href="/member"> 个人中心</a> </li>
+
+
+
+                                    <li> <a href="/myposts"> 我的文章</a> </li>
+
+
+
+                                    <li> <a href="/contributepost"> 文章投稿</a> </li>
+
+
+
+                                    <li> <a href="/member/collect"> 我的收藏</a> </li>
+
+
+
+                                    <li> <a href="/member/profile"> 我的帐户</a> </li>
+
+
+
+                                    <li> <a href="/member/point"> 我的积分</a> </li>
+
+
+
+                                    <li> <a href="/member/porfile"> 编辑资料</a> </li-->
+
+
+
+                                    <li> <a href="/user/logout" title="登出"> 退出登录 </a> </li>
+
+
+
+                                </ul>
+
+
+
+                                <!--个人中心-->
+
+
+
+                            </li>
+
+
+
+                        
+
+                        <li class="menu-item menu-item-search" style="border-left: 1px solid #fff; border-left-color: rgba(255,255,255,.3);">
+
+
+
+
+
+
+
+                        
+
+                            <a href="javascript:void(0);"><i id="lang-switch" data="en">En</i></a>
+
+
+
+                        
+
+
+
+
+
+
+
+
+
+                        </li>
+
+
+
+                    </ul></div>
+
+
+
+                <div class="header-menu right phc_head_menu">
+
+
+
+                    <ul class="menu">
+
+
+
+                        <li id="menu-item-2637" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-2637"> <a href="/" class="top_nav_link">
+
+
+
+                                <div class="cube_container">
+
+
+
+                                    <div class="backer">Home</div>
+
+
+
+                                    <div class="front">首页</div>
+
+
+
+                                </div>
+
+
+
+                            </a> </li>
+
+
+
+                        <li id="menu-item-2674" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2674"> <a href="/news" class="top_nav_link">
+
+
+
+                                <div class="cube_container">
+
+
+
+                                    <div class="backer">News</div>
+
+
+
+                                    <div class="front">新闻</div>
+
+
+
+                                </div>
+
+
+
+                            </a> </li>
+
+
+
+                        <li id="menu-item-2638" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2638"> <a href="/interior" class="top_nav_link">
+
+
+
+                                <div class="cube_container">
+
+
+
+                                    <div class="backer">Interiors</div>
+
+
+
+                                    <div class="front">室内</div>
+
+
+
+                                </div>
+
+
+
+                            </a> </li>
+
+
+
+                        <li id="menu-item-2673" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2673"> <a href="/archs" class="top_nav_link">
+
+
+
+                                <div class="cube_container">
+
+
+
+                                    <div class="backer">Architecture</div>
+
+
+
+                                    <div class="front">建筑</div>
+
+
+
+                                </div>
+
+
+
+                            </a> </li>
+
+
+
+                        <li id="menu-item-2676" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2676"> <a href="/designer" class="top_nav_link">
+
+
+
+                                <div class="cube_container">
+
+
+
+                                    <div class="backer">Designers</div>
+
+
+
+                                    <div class="front">设计师</div>
+
+
+
+                                </div>
+
+
+
+                            </a> </li>
+
+
+
+                        <li id="menu-item-17508" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17508"> <a href="/finder" class="top_nav_link">
+
+
+
+                                <div class="cube_container">
+
+
+
+                                    <div class="backer">Finder</div>
+
+
+
+                                    <div class="front">发现</div>
+
+
+
+                                </div>
+
+
+
+                            </a> </li>
+
+
+
+                        <li id="menu-item-17509" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17509"> <a href="/job" class="top_nav_link">
+
+
+
+                                <div class="cube_container">
+
+
+
+                                    <div class="backer">Jobs</div>
+
+
+
+                                    <div class="front">工作</div>
+
+
+
+                                </div>
+
+
+
+                            </a> </li>
+
+
+
+                        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17509"> <a href="/vip/promotion" class="top_nav_link">
+
+
+
+                                <div class="cube_container">
+
+
+
+                                    <div class="backer">Cooperate</div>
+
+
+
+                                    <div class="front">合作</div>
+
+
+
+                                </div>
+
+
+
+                            </a>
+
+
+
+                            <!---ul class="sub-menu">
+
+
+
+                                <li><a href="/about"> 关于印际</a></li>
+
+
+
+                                <li> <a href="/ad"> 文章推广</a></li>
+
+
+
+                                <li> <a href="/register"> 广告合作</a></li>
+
+
+
+                                <li> <a href="/work"> 招聘服务</a></li>
+
+
+
+                                <li><a href="/vip"> 会员服务</a></li>
+
+
+
+                            </ul--->
+
+
+
+                        </li>
+
+
+
+                    </ul>
+
+
+
+                </div>
+
+
+
+            </nav>
+
+
+
+            <!--菜单end-->
+
+
+
+        </section>
+
+
+
+    </section>
+
+
+
+</header>
+
+<div class="about_bj"></div>
+
+<div class="about_nav">
+
+  <ul>
+
+    <li ><a href="promotion.html">文章推广</a></li>
+
+    <li><a href="ad.html">广告合作</a></li>
+
+    <li class="current"><a href="vip_service.html">会员服务</a></li>
+
+    <li><a href="job_service.html">招聘服务</a></li>
+
+  </ul>
+
+</div>
+<div style="background: #231922; padding:30px 0;">
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="vip_deta">
+
+      <tbody><tr>
+
+        <th width="20">特权对比</th>
+
+        <th width="20%">普通用户</th>
+
+        <th width="20%">月会员</th>
+
+        <th width="20%">季会员</th>
+
+        <th width="20%">年会员</th>
+
+        <!--th width="14%">特邀作者</th>
+
+        <th width="14%">企业会员</th-->
+
+      </tr>
+
+     <tr>
+
+        <td>身份标识</td>
+
+        <td>×</td>
+
+        <td><img src="/images/vip_03_32.png" title="印际月会员" /></td>
+
+        <td><img src="/images/vip_05_32.png" title="印际季度会员" /></td>
+
+        <td><img src="/images/vip_07_32.png" title="印际年度会员" /></td>
+
+        <!--td><span class="vip_bj">特VIP</span></td>
+
+        <td><span class="vvip_bj">企VIP</span></td-->
+
+      </tr>
+
+      <tr>
+
+        <td>费用</td>
+
+        <td class="vip_jiage">免费</td>
+
+        <td class="vip_jiage"><em>99</em>元/月</td>
+
+        <td class="vip_jiage"><em>288</em>元/年</td>
+
+        <td class="vip_jiage"><em>999</em>元/年</td>
+
+        <!--td class="vip_jiage">特邀注册</td>
+
+        <td class="vip_jiage"><em>2888</em>元/年</td-->
+
+      </tr>
+
+      <tr>
+
+        <td>积分抵扣费用</td>
+
+        <td>×</td>
+
+        <td>5%</td>
+
+        <td>10%</td>
+
+        <td>15%</td>
+
+        <!--td >0</td>
+
+        <td>10%</td-->
+
+      </tr>
+
+      <tr>
+
+        <td>注册送积分</td>
+
+        <td>8</td>
+
+        <td>58</td>
+
+        <td>168</td>
+
+        <td>288</td>
+
+        <!--td>888</td>
+
+        <td>888</td-->
+
+      </tr>
+
+      <tr>
+
+        <td>签到积分额外（）</td>
+
+        <td>0</td>
+
+        <td>5</td>
+
+        <td>10</td>
+
+        <td>15</td>
+
+        <!--td>88</td>
+
+        <td>88</td-->
+
+      </tr>
+
+      
+
+      <tr>
+
+        <td>免积分下载次数（/天）</td>
+
+        <td>0</td>
+
+        <td>5</td>
+
+        <td>10</td>
+
+        <td>15</td>
+
+        <!--td>50</td>
+
+        <td>88</td-->
+
+      </tr>
+
+      <tr>
+
+        <td>积分下载次数（/天）</td>
+
+        <td>1</td>
+
+        <td>3</td>
+
+        <td>5</td>
+
+        <td>10</td>
+
+        <!--td>50</td>
+
+        <td>88</td-->
+
+      </tr>
+
+      <tr>
+
+        <td>发现灵感</td>
+
+        <td>×</td>
+
+        <td>√</td>
+
+        <td>√</td>
+
+        <td>√</td>
+
+        <!--td>√</td>
+
+        <td>√</td-->
+
+      </tr>
+
+      <tr>
+
+        <td>收藏文章</td>
+
+        <td>√</td>
+
+        <td>√</td>
+
+        <td>√</td>
+
+        <td>√</td>
+
+        <!--td>√</td>
+
+        <td>√</td-->
+
+      </tr>
+
+      <tr>
+
+        <td>订阅设计师</td>
+
+        <td>√</td>
+
+        <td>√</td>
+
+        <td>√</td>
+
+        <td>√</td>
+
+        <!--td>√</td>
+
+        <td>√</td-->
+
+      </tr>
+
+       <tr>
+
+        <td>关注用户</td>
+
+        <td>√</td>
+
+        <td>√</td>
+
+        <td>√</td>
+
+        <td>√</td>
+
+        <!--td>√</td>
+
+        <td>√</td-->
+
+      </tr>
+
+       <tr>
+
+        <td>个人页面</td>
+
+        <td>╳</td>
+
+        <td>√</td>
+
+        <td>√</td>
+
+        <td>√</td>
+
+        <!--td>√</td>
+
+        <td>╳</td-->
+
+      </tr>
+
+      <tr>
+
+        <td>企业页面</td>
+
+        <td>╳</td>
+
+        <td>╳</td>
+
+        <td>╳</td>
+
+        <td>╳</td>
+
+        <!--td>╳</td>
+
+        <td>√</td-->
+
+      </tr>
+
+     <tr>
+
+        <td>招聘</td>
+
+        <td>╳</td>
+
+        <td>╳</td>
+
+        <td>╳</td>
+
+        <td>╳</td>
+
+        <!--td>╳</td>
+
+        <td>√</td-->
+
+      </tr>
+
+      <tr>
+
+        <td>写稿</td>
+
+        <td>╳</td>
+
+        <td>╳</td>
+
+        <td>╳</td>
+
+        <td>╳</td>
+
+        <!--td>√</td>
+
+        <td>√</td-->
+
+      </tr>
+
+      <tr>
+
+        <!--<td colspan="5"><a href="/vip/intro">立即开通</a></td>-->
+        <td colspan="5"><section><a href="javascript:void(0)" class="openVip">立即开通</a></section></td>
+
+      </tr>
+
+    </tbody></table>
+</div>    
+
+
+
+
+
+<!--------选购会员弹窗------->
+
+<div class="new_folder_box" style="display:none;">
+  <div class="new_folder_bj"></div>
+  <div class="create_folder">
+    <div class="create_folder_title">
+      <h2>成为会员</h2>
+    </div>
+    <div class="close vip_close">关闭</div>
+    <div class="vip_select mt30">
+      <ul>
+        <li class="determine vipfee_type1" vip_level="1" price="{{$month_price or '0.01'}}" omit="88"><em>{{$month_price or '0.01'}}</em>元
+          <p>月会员</p>
+          <del>原价：108元</del></li>
+        <li class="vipfee_type2" vip_level="2" price="{{$season_price or '0.01'}}" omit="299"><em>{{$season_price or '0.01'}}</em>元
+          <p>季会员</p>
+          <del>原价：324元</del></li>
+        <li class="vipfee_type3" vip_level="3" price="{{$year_price or '0.01'}}" omit="1999"><em>{{$year_price or '0.01'}}</em>元
+          <p>年会员</p>
+          <del>原价：1296元</del></li>
+      </ul>
+    </div>
+    <div class="vip_check">
+      <ul>
+        <li>
+          <input name="" type="checkbox" value="" checked="checked" />
+          到期自动续费一个月，可随时取消</li>
+        <li>
+          <input  name="" type="checkbox" value="" checked="checked"/>
+          <a href="#">同意并接受《服务条款》</a></li>
+      </ul>
+    </div>
+    <div class="vip_pay">
+      <form class="cart vip_pay" action="/vip/wxbuy" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="vip_type" id="vip_type" value="1" />
+        <input type="hidden" name="payment_code" id="payment_code" value="alipay" />
+        <input type="hidden" name="pay_total" id="pay_total" value="{{$month_price or '0.01'}}" />
+        <p class="vip_pay_msg">应付：<span>{{$month_price or '0.01'}}</span>元 ( 立省88元)</p>
+        <p>
+          <button type="button" class="single_add_to_cart_button button_red alt" id="buy_now_button">立即购买 </button>
+        </p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!--------选购会员结束-------> 
+
+
+
+
+
+<script>
+/*$(document).on("click",".openVip",function () {
+    $(".new_folder_box").show();
+    return false;
+})
+
+$(document).on("click",".vip_close",function () {
+    $(".new_folder_box").hide();
+    return false;
+
+})*/
+</script> 
+
+
+<!-- 版权 -->
+
+
+
+<section class="copyright">
+
+
+
+  <div class="wrapper">
+
+    <div class="social fl"><a href="/static/about.html">关于我们</a> | <a href="/static/bqbh.html">版权保护</a> | <a href="/static/flsm.html">法律声明</a>  | <a href="/static/map.html">网站地图</a></div>
+
+    Copyright © 2016-2019 印际 / Yinji.space / 粤ICP备17108593号
+
+
+
+    <div class="social fr">
+
+      关注：<a href="https://weibo.com/yinjispace"><img src="/images/foot_31.gif" alt="新浪微博"></a>
+
+
+
+      <a href="javascript:void(0)" onmouseout="hideImg()" onmouseover="showImg()"><img src="/images/foot_33.gif" alt="印际微信公众">
+
+        <div class="footer_weixin" id="wxImg">
+
+          <ul>
+ <img src="/images/weixinqrcode.jpg" alt="扫一扫二维码">
+          </ul>
+
+        </div></a>
+
+
+
+      <a href="https://www.instagram.com/yinjispace/"><img src="/images/foot_35.gif" alt="instagram"></a>
+
+
+
+      <a href="https://www.pinterest.com/yinjispace"><img src="/images/foot_37.gif" alt="pin"></a>
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+</section>
+
+ <script type="text/javascript">
+
+    function  showImg(){
+
+    document.getElementById("wxImg").style.display='block';
+
+    }
+
+    function hideImg(){
+
+    document.getElementById("wxImg").style.display='none';
+
+    }
+
+    </script>
+
+<!-- 版权end -->
+
+
+
+
+</body>
+
+</html>
+
+
+
+  

@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>印际——会员登录</title>
+<link href="css/login_new.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="login">
+<div id="login">
+  <h1><a href="http://www.yinjispace.com" title="印际" tabindex="-1">印际</a></h1>
+  <h2>会员登陆</h2>
+  <form name="loginform" id="loginform" action="http://www.yinjispace.com/wp-login.php" method="post">
+    <p>
+      <label for="user_login">
+        <input type="text" name="log" id="user_login" class="input" value="" size="20" placeholder="输入手机号/用户名/邮箱">
+      </label>
+    </p>
+    <p>
+      <label for="user_pass">
+        <input type="password" name="pwd" id="user_pass" class="input" value="" size="20" placeholder="输入密码">
+      </label>
+    </p>
+    <p class="forgetmenot">
+      <label for="rememberme">
+        <input name="rememberme" type="checkbox" id="rememberme" value="forever">
+        记住我的登录信息</label>
+    </p>
+    <p class="submit">
+      <input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="登录">
+      <input type="hidden" name="redirect_to" value="http://www.yinjispace.com/wp-admin/">
+      <input type="hidden" name="testcookie" value="1">
+    </p>
+  </form>
+  <p class="nav"> <a href="http://www.yinjispace.com/wp-login.php?action=register">注册</a> | <a href="http://www.yinjispace.com/my-account/lost-password/">忘记密码？</a> </p>
+  <p class="backtoblog"><a href="http://www.yinjispace.com/">← 返回到印际</a></p>
+  <div class=""><span style="float:left; line-height:36px;"> 其他登录：</span> <a href="#" title="使用QQ登录" style="margin-right:10px;"><img src="images/tl_qq.png"></a> <a  href="#" title="使用微信登录"><img src="images/tl_weixin.png"></a></div>
+  <div class="login_ico"><a href="#"><img src="images/erweima.gif" width="51" height="51" alt="二维码登陆" /></a></div>
+
+<!--二维码登陆-->
+<div class="ma_box hide">
+  <h1><a href="http://www.yinjispace.com" title="印际" tabindex="-1">印际</a></h1>
+    <h2>微信扫码登陆</h2>
+    <p><img src="images/ma_07.gif" width="290" height="290" alt="111" /></p>
+    <p class="backtoblog"><a href="http://www.yinjispace.com/">← 返回到印际</a></p> 
+    <div class="login_ico"><a href="#"><img src="images/diannao_03.gif" width="51" height="51" alt="账号登陆" /></a></div>
+  </div>
+  </div>
+    <script type="text/javascript">
+function wp_attempt_focus(){
+setTimeout( function(){ try{
+d = document.getElementById('user_login');
+d.focus();
+d.select();
+} catch(e){}
+}, 200);
+}
+
+wp_attempt_focus();
+if(typeof wpOnload=='function')wpOnload();
+</script>
+ </body>
+</html>
