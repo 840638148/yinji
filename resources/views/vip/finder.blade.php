@@ -842,10 +842,12 @@ $(document).ready(function(){
       for(i=0; i <tabList.length; i++){
         if (i == Num){
           thisObj.className = "active";
-          document.getElementById(tabObj+i).style.display = "block";
+          // document.getElementById(tabObj+i).style.display = "block"; 
+          tabList[i].style.dispaly="block"; 
         }else{
           tabList[i].className = "normal";
-          document.getElementById(tabObj+i).style.display = "none";
+          // document.getElementById(tabObj+i).style.display = "none";
+          tabList[i].style.dispaly="none"; 
         }
       }
     }
