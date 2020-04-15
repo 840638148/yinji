@@ -28,7 +28,32 @@ class DesignerController extends Controller
             ->count();
         $categories = DesignerCategory::where('display', '0')->get();
         $designers = Designer::getDesigners($request);
+          
+        // $starsavg=[];
+        // foreach($designers as $k=>$v){
+            // $starsavg = Designer::getRelatedArticle($v['id']);//获取每个设计师下的所有作品
+            // $starsavg = Db::table('designers')->;//获取每个设计师下的所有作品
+            // $starsavg=$designers[$k]['starsavg'];
+
+            
+            // $designers[$k]['starsavg'] = ArticleComment::whereIn('comment_id', $starsavg->modelKeys())->where('display', '1')->avg('stars');
+            // dump($starsavg);
+            // foreach($starsavg as $key=>$val){
+               
+                // $designers[$k]['starsavg'] = ArticleComment::where('comment_id', $val['id'])->where('display', '1')->pluck('stars');
+                // $designers[$k]['starsavg'] = sprintf("%.1f",$designers[$k]['starsavg']);//保留小数点一位
+            // }
+               
+        // }
+
+        // dd($designers);
+        // foreach($designers as $key=>$designall){
+            // $designersstarsavg=ArticleComment::where('comment_id',$designall['id'])->value('stars');
+            // $starscount=count($designersstarsavg);
+            // $designers[$k]['starsavg'] = sprintf("%.1f",$designers[$k]['starsavg']);//保留小数点一位
+        // }
         
+
         
 
         $data = [
@@ -54,7 +79,7 @@ class DesignerController extends Controller
         $is_subscription = UserSubscription::isSubscription($id);
 
         $comments_total = ArticleComment::where('comment_id', $id)->where('display', '1')->count();
-        // dd($comments_total);
+        // dd($related_designers);
         // $comments = Designer::where('designers.id', $id)->leftjoin('articles','articles.static_url','designers.static_url')->get();
 
         foreach($related_articles as $k=>$designall){

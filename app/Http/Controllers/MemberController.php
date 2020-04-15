@@ -354,6 +354,7 @@ class MemberController extends Controller
         }
     }
     
+    //删除个人中心->收藏中心的->一个收藏夹里的一张图片
     public function deleteFolderItem(Request $request)
     {
         $this->checkLogin();

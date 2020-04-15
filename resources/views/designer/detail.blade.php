@@ -219,7 +219,7 @@
 
                            </div>
 
-                       <span class="xg_dingyue"><i class="icon-bookmark"></i> {{$related_designer['like_num']}}</span>
+                       <span class="xg_dingyue"><i class="icon-bookmark"></i> {{$related_designer['subscription_num']}}</span>
 
                        <span class="xg_fenlei">
 

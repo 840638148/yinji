@@ -76,8 +76,8 @@ class Designer extends Model
 
         $designers = $obj->orderBy('like_num', 'desc')->paginate(intval($request->per_page));
 
-        $lang = Session::get('language') ?? 'zh-CN';
-        if ('zh-CN' == $lang) {
+        $lang = Session::get('language') ?? 'zh-EN';
+        if ('zh-EN' == $lang) {
             $display_name = "name_cn";
         } else {
             $display_name = "name_en_abbr";
@@ -242,14 +242,15 @@ class Designer extends Model
         if (empty($designer)) {
             return false;
         }
-
-        $designers = Designer::where('designer_status', '1')
-            ->where('id', '!=', $id)
-            ->where('display', '0')
-            ->where('category_ids', 'like', '%,' . implode(',', $designer->category_ids) . ',%')
+        
+        $designers = Designer::leftjoin('designer_categories', 'designers.category_ids','=','designer_categories.id')
+            ->where('designer_status', '1')
+            ->where('designers.id', '!=', $id)
+            ->where('designers.display', '0')
+            ->where('designers.category_ids', 'like', '%,' . implode(',', $designer->category_ids) . ',%')
             ->limit(10)
             ->get();
-
+dd($designers);
 
         $lang = Session::get('language') ?? 'zh-CN';
         if ('zh-CN' == $lang) {
