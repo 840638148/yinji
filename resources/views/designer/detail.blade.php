@@ -194,7 +194,7 @@
                 @if ($key < 3)
 
                         <li class="layout_li ajaxpost">
-
+                        <div class="interior_dafen">{{sprintf("%.1f",$starsav==0 ? '5.0' : $starsav)}}</div>
                             <article class="postgrid wow bounceInUp animated" style="visibility: visible; animation-name: bounceInUp;">
 
                                 <a href="@if($related_designer->static_url) /designer/{{$related_designer->static_url}} @else /designer/detail/{{$related_designer->id}} @endif" title="{{get_designer_title($related_designer)}}" target="_blank"> <img class="thumb" src="{{url('uploads/' . $related_designer->custom_thum)}}" data-original="{{url('uploads/' . $related_designer->custom_thum)}}" alt="{{get_designer_title($related_designer)}}" style="display: block;"> </a>
@@ -203,8 +203,8 @@
 
                                     <h2><a href="@if($related_designer->static_url) /designer/{{$related_designer->static_url}} @else /designer/detail/{{$related_designer->id}} @endif" title="{{get_designer_title($related_designer)}}" target="_blank">{{get_designer_title($related_designer)}}</a></h2>
 
-                        <div class="xg_design">
-
+                        <div class="xg_design"> 
+ 
                           <!--分类-->
 
                           <span class="guojia2">

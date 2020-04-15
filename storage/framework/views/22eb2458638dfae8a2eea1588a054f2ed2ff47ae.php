@@ -71,11 +71,11 @@
 
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                            </span>
+                            </span>  
 
-                            <span class="ffe_liulan"><?php echo e($designer->like_num); ?></span></div>
+                            <span class="ffe_liulan"><?php echo e($designer->starsav==0 ? '5.0' : $designer->starsav); ?></span></div>
 
-                    </section>
+                    </section>  
 
                 </article>
 

@@ -73,9 +73,9 @@
 
                             </span>  
 
-                            <span class="ffe_liulan">{{$designer->starsavg==0 ? '5.0' : $designer->starsavg}}</span></div>
+                            <span class="ffe_liulan">{{$designer->starsav==0 ? '5.0' : $designer->starsav}}</span></div>
 
-                    </section>
+                    </section>  
 
                 </article>
 

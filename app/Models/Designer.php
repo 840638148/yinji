@@ -103,6 +103,34 @@ class Designer extends Model
             $designer->fans_num = UserSubscription::where('designer_id', $designer->id)->count();
             $designer->articles = Article::where('article_status', 2)->where('designer_id', 'like', "%,{$designer->id},%")->limit(4)->get();
             $designer->categorys = $tmp;
+
+            $res = Article::where('articles.article_status', '2')
+                ->where('articles.display', '0')
+                ->where('articles.designer_id', 'like', "%,{$designer->id},%");
+            $related_articles = $res->get();
+
+            $starscount = $res ->count('articles.id');
+
+            foreach($related_articles as $k=>$designall){
+                $related_articles[$k]['starsavg']=ArticleComment::where('comment_id',$designall['id'])->avg('stars');
+                if($related_articles[$k]['starsavg']==''){
+                    $related_articles[$k]['starsavg']='5.0';
+                }
+            }
+
+
+            $comments_total = ArticleComment::where('comment_id', $designer->id)->where('display', '1')->count();
+            foreach($related_articles as $key){
+                $comments_total+=$key['starsavg'];
+            }
+
+            if($comments_total==0 || $starscount==0){
+                $designer->starsav=0;
+            }else{
+                $starsav=$comments_total/$starscount;
+                $designer->starsav=sprintf("%.1f",$starsav);//保留小数点一位
+            }
+
         }
         return $designers;
     }
@@ -207,9 +235,9 @@ class Designer extends Model
 
         $articles = $obj->orderBy('release_time', 'desc')->get();
 
-        $lang = Session::get('language') ?? 'zh-CN';
-        if ('zh-CN' == $lang) {
-            $display_name = "name_cn";
+        $lang = Session::get('language') ?? 'zh-EN';
+        if ('zh-EN' == $lang) {
+            $display_name = "name_cn";  
         } else {
             $display_name = "name_en";
         }
@@ -243,17 +271,19 @@ class Designer extends Model
             return false;
         }
         
-        $designers = Designer::leftjoin('designer_categories', 'designers.category_ids','=','designer_categories.id')
-            ->where('designer_status', '1')
+        // $designer=Designer::leftjoin('articles','articles.designer_id','=','designers.id')->where('designers.category_ids',$designer->category_ids)->get()->toArray();
+        // dd($designer);
+
+        $designers = Designer::where('designer_status', '1')
             ->where('designers.id', '!=', $id)
             ->where('designers.display', '0')
             ->where('designers.category_ids', 'like', '%,' . implode(',', $designer->category_ids) . ',%')
             ->limit(10)
             ->get();
-// dd($designers);
 
-        $lang = Session::get('language') ?? 'zh-CN';
-        if ('zh-CN' == $lang) {
+
+        $lang = Session::get('language') ?? 'zh-EN';
+        if ('zh-EN' == $lang) {  
             $display_name = "name_cn";
         } else {
             $display_name = "name_en_abbr";
