@@ -157,11 +157,11 @@
             
             <div class="new_25">
       <ul>      
-                {{--@if($userstars)
-                <li class="like_article"><a href="#df"><i class="icon-thumbs-up"></i>{{$userstars}}</a></li>
-                @else @endif--}}
+                @if($userstars !=null )
+                <li class="like_article"><a href="#df"><i class="icon-thumbs-up"></i>评语{{$userstars}}.0</a></li>
+                @else 
                 <li class="like_article"><a href="#df"><i class="icon-thumbs-up"></i>评语</a></li>
-               
+               @endif
                 <li><i class="icon-share"></i>分享
           <div class="fenbox">
                     <div class="jiantou"></div>
@@ -340,7 +340,7 @@
                     @endforeach 
             </div>
                  <!----打分--->
-    {{--@if($userstars == null || $userstars ==0)--}}
+    @if($userstars==null)
      <div class="pingfen">
       <div id="startone"  class="block clearfix" >
           <div class="star_score"></div>
@@ -359,7 +359,7 @@
                 @endcomponent 
                 <!--face end--> 
               </div>
-    {{--@endif--}}
+    @endif
     </div>
      <!----点评星星------>
     <script type="text/javascript" src="/js/startScore.js"></script>
@@ -724,7 +724,7 @@
                   </div>
           <div class="Statistics">
                     <ul>
-              <li><span> {{$designer->article_num}} </span>作品</li>
+              <li><a href="@if($designer->static_url)/designer/{{$designer->static_url}} @else /designer/detail/{{$designer->id}} @endif"><span>{{$designer->article_num}}</span>作品</a></li>
               <li><span> {{$designer->subscription_num}} </span>粉丝</li>
             </ul>
                   </div>

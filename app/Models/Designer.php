@@ -250,7 +250,7 @@ class Designer extends Model
             ->where('designers.category_ids', 'like', '%,' . implode(',', $designer->category_ids) . ',%')
             ->limit(10)
             ->get();
-dd($designers);
+// dd($designers);
 
         $lang = Session::get('language') ?? 'zh-CN';
         if ('zh-CN' == $lang) {

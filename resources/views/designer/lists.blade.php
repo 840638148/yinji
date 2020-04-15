@@ -71,7 +71,7 @@
 
                                 @endforeach
 
-                            </span>
+                            </span>  
 
                             <span class="ffe_liulan">{{$designer->starsavg==0 ? '5.0' : $designer->starsavg}}</span></div>
 

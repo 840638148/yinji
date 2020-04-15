@@ -383,8 +383,8 @@ class ArticleController extends Controller
         	// $starsav=round($starsav);
         	$starsav=sprintf("%.1f",$starsav);//保留小数点一位
         }
-
-        // $userstars=ArticleComment::where('user_id', $user_id)->where('comment_id',$id)->pluck('stars');
+ 
+        $userstars=ArticleComment::where('user_id', $user_id)->where('comment_id',$id)->value('stars');
         // $userstars=sprintf("%.1f",$userstars);
         // dd($userstars);
         // foreach($articles as $k=>$articleslist){
@@ -420,7 +420,7 @@ class ArticleController extends Controller
             'issc' => $issc,
             'isvip' => $isvip,
             'starsav' => $starsav,
-            // 'userstars' => $userstars,
+            'userstars' => $userstars,
         ];
         return view('article.detail', $data);
     }
