@@ -251,8 +251,6 @@ class MemberController extends Controller
         $user = $this->getUserInfo();
         
         $user->collect_details = UserCollect::getCollectDetails($user->id, $id);
-        // dd($user->collect_details->toArray());
-        // $user->collect_details = UserCollect::getCollectDetails($user->id);
         $folder_name = '';
         $folder_obj = UserCollectFolder::find($id);
         if ($folder_obj) {
@@ -260,13 +258,10 @@ class MemberController extends Controller
         }
         
         foreach($user->collect_details as $k=>$v){
-            //要删除的id
-            // dump($v['id']);
+            //要删除的图片id
             $user->collect_details[$k]['delid']=UserCollect::where('user_collect_folder_id',$id)->where('collect_id',$v['id'])->value('id');
         }
-        // echo '<pre>';
-		// dump($user->collect_details);
-		// die;
+
         $data = [
             'lang' => $lang,
             'user' => $user,
@@ -417,7 +412,10 @@ class MemberController extends Controller
         
         $alaredy = $obj::where('comment_id', $request->comment_id)->where('user_id', Auth::id())->count();
         if ($alaredy) {
-            return Output::makeResult($request, null, 500, '每个用户只允许打分评论一次');
+            return Output::makeResult($request, null, 500, '每个用户只允许评分留言一次');
+        }
+        if($request->stars==null){
+            return Output::makeResult($request, null, 500, '请评分！');
         }
 
         if($request->comment==''){
