@@ -117,7 +117,7 @@
        <li>
         <div class="atar_Show">
  
-          <p tip="<?php echo e($starsav !=0 ? $starsav : '5.0'); ?>"></p>
+          <p tip="<?php echo e($starsav !=null ? $starsav : '5.0'); ?>"></p>
 
         </div>
         <span></span>
@@ -163,9 +163,11 @@
             
             <div class="new_25">
       <ul>      
-                
+                <?php if($userstars !=null ): ?>
+                <li class="like_article"><a href="#df"><i class="icon-thumbs-up"></i>评语<?php echo e($userstars); ?>.0</a></li>
+                <?php else: ?> 
                 <li class="like_article"><a href="#df"><i class="icon-thumbs-up"></i>评语</a></li>
-               
+               <?php endif; ?>
                 <li><i class="icon-share"></i>分享
           <div class="fenbox">
                     <div class="jiantou"></div>
@@ -331,7 +333,7 @@
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
             </div>
                  <!----打分--->
-    
+    <?php if($userstars==null): ?>
      <div class="pingfen">
       <div id="startone"  class="block clearfix" >
           <div class="star_score"></div>
@@ -350,7 +352,7 @@
                 <?php echo $__env->renderComponent(); ?> 
                 <!--face end--> 
               </div>
-    
+    <?php endif; ?>
     </div>
      <!----点评星星------>
     <script type="text/javascript" src="/js/startScore.js"></script>
@@ -642,15 +644,12 @@
                 }
 
                 var comment=$(".message").html();
-                // if(comment==""){
-                //     layer.msg('请先输入留言内容');
-                //     $('.message').focus();//自动获取焦点
-                //     return;
-                // }
+
 
                 var comment_id = '<?php echo e($article->id); ?>';
                 var comment_type = $(this).attr('data-comment-type');
                 var stars=$('.fenshu').html();
+
                 $.ajax({
                     url: '/member/comment',
                     type: 'POST',
@@ -715,7 +714,7 @@
                   </div>
           <div class="Statistics">
                     <ul>
-              <li><span> <?php echo e($designer->article_num); ?> </span>作品</li>
+              <li><a href="<?php if($designer->static_url): ?>/designer/<?php echo e($designer->static_url); ?> <?php else: ?> /designer/detail/<?php echo e($designer->id); ?> <?php endif; ?>"><span><?php echo e($designer->article_num); ?></span>作品</a></li>
               <li><span> <?php echo e($designer->subscription_num); ?> </span>粉丝</li>
             </ul>
                   </div>

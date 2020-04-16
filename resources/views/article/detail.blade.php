@@ -111,7 +111,7 @@
        <li>
         <div class="atar_Show">
  
-          <p tip="{{$starsav !=0 ? $starsav : '5.0' }}"></p>
+          <p tip="{{$starsav !=null ? $starsav : '5.0' }}"></p>
 
         </div>
         <span></span>
@@ -651,15 +651,12 @@
                 }
 
                 var comment=$(".message").html();
-                // if(comment==""){
-                //     layer.msg('请先输入留言内容');
-                //     $('.message').focus();//自动获取焦点
-                //     return;
-                // }
+
 
                 var comment_id = '{{$article->id}}';
                 var comment_type = $(this).attr('data-comment-type');
                 var stars=$('.fenshu').html();
+
                 $.ajax({
                     url: '/member/comment',
                     type: 'POST',

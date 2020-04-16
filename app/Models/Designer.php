@@ -272,20 +272,61 @@ class Designer extends Model
             return false;
         }
         
-        // $designer=Designer::leftjoin('articles','articles.designer_id','=','designers.id')->where('designers.category_ids',$designer->category_ids)->get()->toArray();
-        // dd($designer);
-
         $designers = Designer::where('designer_status', '1')
             ->where('designers.id', '!=', $id)
             ->where('designers.display', '0')
             ->where('designers.category_ids', 'like', '%,' . implode(',', $designer->category_ids) . ',%')
             ->limit(10)
+            ->groupBy('designers.id')
             ->get();
 
 
-        $lang = Session::get('language') ?? 'zh-EN';
-        if ('zh-EN' == $lang) {  
-            $display_name = "name_cn";
+        $starscounts=0;
+        $comments_totals=0;
+        // 根据上面查出相关设计师的id查出设计师旗下的文章
+        foreach($designers as $k=>$designall){
+            $designers[$k]['designer_articles'] = Designer::getRelatedArticle($designall['id']);
+            $gb=$designers[$k]['designer_articles']->groupBy('designer_articles')->toArray();
+        //    dump($gb);
+            $count=count($designall->designer_articles);
+            
+            // //根据旗下的文章算出该设计师所有文章的平均分
+            foreach($gb as $kk=>$vv){
+                // dump($vv[0]['id']);
+
+                foreach($vv as $vs){
+                    $rsavg=ArticleComment::where('comment_id',$vs['id']);
+                    $starscounts+=$rsavg->get()->count($vs['id']);//获取该设计师下作品总数量
+
+                                        
+                    if($rsavg==null){
+                        continue;
+                    }else{
+                        $comments_totals+=$rsavg->sum('stars');//总分数
+                    }
+
+                    if($comments_totals==0 || $starscounts==0){
+                        $designer->designeravg=0;
+                    }else{
+                        $designeravg=$comments_totals/$starscounts;
+                        $designers[$k]['designeravg']=sprintf("%.1f",$designeravg);//保留小数点一位
+                    } 
+                }
+
+                
+
+            }   
+
+            
+
+        }
+
+ 
+        // dd($starscounts,$comments_totals,$designeravg);
+
+        $lang = Session::get('language') ?? 'zh-CN';
+        if ('zh-CN' == $lang) {  
+            $display_name = "name_en_abbr";
         } else {
             $display_name = "name_en_abbr";
         }

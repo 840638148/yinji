@@ -192,7 +192,7 @@
                 <?php if($key < 3): ?>
 
                         <li class="layout_li ajaxpost">
-                        <div class="interior_dafen"><?php echo e(sprintf("%.1f",$starsav==0 ? '5.0' : $starsav)); ?></div>
+                        <div class="interior_dafen"><?php echo e(sprintf("%.1f",$related_designer['designeravg']==0 ? '5.0' : $related_designer['designeravg'])); ?></div>
                             <article class="postgrid wow bounceInUp animated" style="visibility: visible; animation-name: bounceInUp;">
 
                                 <a href="<?php if($related_designer->static_url): ?> /designer/<?php echo e($related_designer->static_url); ?> <?php else: ?> /designer/detail/<?php echo e($related_designer->id); ?> <?php endif; ?>" title="<?php echo e(get_designer_title($related_designer)); ?>" target="_blank"> <img class="thumb" src="<?php echo e(url('uploads/' . $related_designer->custom_thum)); ?>" data-original="<?php echo e(url('uploads/' . $related_designer->custom_thum)); ?>" alt="<?php echo e(get_designer_title($related_designer)); ?>" style="display: block;"> </a>
@@ -264,121 +264,58 @@
         <div class="login_folder">
 
             <div id="login" class="login">
-
-
-
-                <!--		<h1><a href="--><!--" title="--><!--" tabindex="-1">--><!--</a></h1>-->
-
-
-
+                <!--<h1><a href="--><!--" title="--><!--" tabindex="-1">--><!--</a></h1>-->
                 <h1><a href="/indx" title="<?php echo e(trans('comm.yinji')); ?>" tabindex="-1"><?php echo e(trans('comm.yinji')); ?></a></h1>
-
                 <h2><?php echo e(trans('login.login_title')); ?></h2>
-
-
-
                 <!-- 登陸 -->
-
-
-
                 <form name="loginform" id="loginform" action="/user/login" method="post">
-
                     <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>" />
-
                     <p>
-
                         <label for="user_login">
-
                             <input type="text" name="user_login" id="user_login" class="input" value="" size="20"
-
-
-
                                    placeholder="<?php echo e(trans('login.input_username')); ?>">
-
                         </label>
-
                     </p>
-
                     <p>
-
                         <label for="user_pass">
-
                             <input type="password" name="password" id="user_pass" class="input" value="" size="20" placeholder="<?php echo e(trans('login.input_password')); ?>">
-
                         </label>
-
                     </p>
 
                     <p class="forgetmenot">
-
                         <label for="rememberme">
-
-                            <input name="rememberme" type="checkbox" id="rememberme"
-
-
-
-                                   value="forever">
-
-                            <?php echo e(trans('login.remember_me')); ?> </label>
-
+                            <input name="rememberme" type="checkbox" id="rememberme" value="forever"><?php echo e(trans('login.remember_me')); ?> 
+                        </label>
                     </p>
 
                     <p class="submit">
-
-                        <input type="button" name="wp-submit" id="wp-submit-login" class="button button-primary button-large"
-
-
-
-                               value="<?php echo e(trans('login.login')); ?>">
-
+                        <input type="button" name="wp-submit" id="wp-submit-login" class="button button-primary button-large" value="<?php echo e(trans('login.login')); ?>">
                         <input type="hidden" name="redirect_to" value="/user/index">
-
                         <input type="hidden" name="testcookie" value="1">
-
                     </p>
-
                 </form>
 
                 <div style=" overflow:hidden">
-
-                    <p id="nav" class="fr"> <a href="/user/register"><?php echo e(trans('login.register')); ?></a> | <a
-
-
-
-                                href="/user/forgot_password"><?php echo e(trans('login.forgot_password')); ?></a> </p>
+                    <p id="nav" class="fr"> 
+                        <a href="/user/register"><?php echo e(trans('login.register')); ?></a> | 
+                        <a href="/user/forgot_password"><?php echo e(trans('login.forgot_password')); ?></a> 
+                    </p>
 
                     <p class="fl"> <a href="/"> ← <?php echo e(trans('login.return')); ?> </a> </p>
-
                 </div>
 
                 <div class=""> <span style="float:left; line-height:36px;color: #999;"> <?php echo e(trans('login.other_login')); ?>：</span><a href="javascript:void(0);" onclick="WeChatLogin();" title="使用微信登录"><img src="/img/tl_weixin.png"></a> </div>
 
-                <div class="login_ico"> <a href="javascript:void(0);" onclick="WeChatLogin();"><img src="/img/erweima.gif" width="51"
-
-
-
-                                                                                                    height="51" alt="二维码登陆"></a> </div>
+                <div class="login_ico"> <a href="javascript:void(0);" onclick="WeChatLogin();"><img src="/img/erweima.gif" width="51" height="51" alt="二维码登陆"></a> </div>
 
                 <div class="ma_box hide">
-
                     <h1><a href="/index" title="<?php echo e(trans('comm.yinji')); ?>" tabindex="-1"><?php echo e(trans('comm.yinji')); ?></a></h1>
 
-
-
-                    <!-- <h2>微信扫码登陆</h2> -->
-
-                    <!--
-
+                    <!-- <h2>微信扫码登陆</h2> 
                     <p>
-
                         <iframe frameborder="0" scrolling="no" width="365" height="395"
-
-
-
                                 src="/auth/weixin"></iframe>
-
                     </p>
-
                     -->
 
                     <p class="backtoblog" style="text-align:center"> <a href="/"> ← <?php echo e(trans('login.return')); ?> </a> </p>
@@ -400,530 +337,265 @@
  <!-------仿QQ留言板-------->
 
         
-
-
-
        
-
-
-
             
-
-
-
                 
-
                     
-
                         
-
                             
-
                             
-
                             
-
                         
-
                     
-
                 
-
-
-
             
-
  
 
             
-
-
-
             
-
-
-
                 
-
-
-
                 
-
-
-
                 
-
-
-
                 
-
-
-
             
-
-
-
         
 
-        <script type="text/javascript">
-
-
-
-            //点赞
-
-            $(".like_article").click(function(e){
-
-                var that = $(this)
-
-                if(that.text().indexOf('点赞')>-1){
-
-                    var like_id = '<?php echo e($designer->id); ?>';
-
-                    $.ajax({
-
-                        url: '/designer/like',
-
-                        type: 'POST',
-
-                        dataType: 'json',
-
-                        data: {_token:'<?php echo e(csrf_token()); ?>',like_id:like_id},
-
-                        success: function (data) {
-
-                            if (data.status_code == 0 && data.data.status == true) {
-
-                                layer.msg('+1',{skin: 'intro-login-class layui-layer-hui'})
-
-                                that.text('已赞('+data.data.like_num+')')
-
-                                //window.location.reload();
-
-                            } else {
-
-                                layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
-
-                                // alert(data.message);
-
-                            }
-
-                        }
-
-                    });
-
-                }
-
-
-
-
-
-            });
-
-
-
-            //订阅
-
-            $(".subscription_designer").click(function(e){
-
-                var that = $(this)
-
-                if(!IS_LOGIN){
-
-                    $('.login_box').show();
-
-                }else{
-
-                    if(that.text() == '订阅'){
-
-                        var designer_id = '<?php echo e($designer->id); ?>';
-
-                        $.ajax({
-
-                            url: '/designer/subscription',
-
-                            type: 'POST',
-
-                            dataType: 'json',
-
-                            data: {_token:'<?php echo e(csrf_token()); ?>',designer_id:designer_id},
-
-                            success: function (data) {
-
-                                if (data.status_code == 0) {
-
-                                    that.text('已订阅')
-
-                                    that.addClass('have-disalbed')
-
-                                    //window.location.reload();
-
-                                } else {
-
-                                    layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
-
-                                    // alert(data.message);
-
-                                }
-
-                            }
-
-                        });
-
+<script type="text/javascript">
+    //点赞
+    $(".like_article").click(function(e){
+        var that = $(this)
+        if(that.text().indexOf('点赞')>-1){
+            var like_id = '<?php echo e($designer->id); ?>';
+            $.ajax({
+                url: '/designer/like',
+                type: 'POST',
+                dataType: 'json',
+                data: {_token:'<?php echo e(csrf_token()); ?>',like_id:like_id},
+                success: function (data) {
+                    if (data.status_code == 0 && data.data.status == true) {
+                        layer.msg('+1',{skin: 'intro-login-class layui-layer-hui'})
+                        that.text('已赞('+data.data.like_num+')')
+                        //window.location.reload();
+                    } else {
+                        layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
                     }
-
                 }
-
             });
+        }
+    });
 
 
 
-            //收藏
-
-            $(".collect_article").click(function(e){
-
-
-
-                var collect_id = '';
-
-
-
-                var folder_id = $('#folder_id').val();
-
-                var folder_name = $('#folder_name').val();
-
-                if(!IS_LOGIN){
-
-                    $('.login_box').show();
-
-                }else{
-
-                    $.ajax({
-
-                        url: '/article/collect',
-
-                        type: 'POST',
-
-                        dataType: 'json',
-
-                        data: {_token:'<?php echo e(csrf_token()); ?>',folder_id:folder_id,folder_name:folder_name,collect_id:collect_id},
-
-                        success: function (data) {
-
-                            if (data.status_code == 0) {
-
-                                window.location.reload();
-
-                            } else {
-
-                                alert(data.message);
-
-
-
-                            }
-
-                        }
-
-                    });
-
-                }
-
-
-
-
-
-            });
-
-
-
-            //下载
-
-            $('#vip-download').click(function(e){
-
-                var article_id = '';
-
+    //订阅
+    $(".subscription_designer").click(function(e){
+        var that = $(this)
+        if(!IS_LOGIN){
+            $('.login_box').show();
+        }else{
+            if(that.text() == '订阅'){
+                var designer_id = '<?php echo e($designer->id); ?>';
                 $.ajax({
-
-                    url: '/article/vip_download',
-
+                    url: '/designer/subscription',
                     type: 'POST',
-
                     dataType: 'json',
-
-                    data: {_token:'<?php echo e(csrf_token()); ?>',article_id:article_id},
-
+                    data: {_token:'<?php echo e(csrf_token()); ?>',designer_id:designer_id},
                     success: function (data) {
-
-                        if (data.status_code == 0) {                            
-
-                            window.open(data.data.vip_download);
-
-                        } else {
-
-                            alert(data.message);
-
-
-
-                        }
-
-                    }
-
-                });
-
-
-
-            });
-
-
-
-
-
-            $('.vip_prompt .vip_buy').click(function () {
-
-                $(".new_folder_box").show();
-
-                layer.closeAll();
-
-            })
-
-
-
-            $('.vip_prompt .vip_detail').click(function () {
-
-                location.href='/vip/intro'
-
-            })
-
-
-
-            $(document).on("click",".vip_close",function () {
-
-                $(".new_folder_box").hide();
-
-                return false;
-
-            })
-
-
-
-            $(document).on("click",".new_folder_bj",function () {
-
-                $(".login_box").hide();
-
-                $(".new_folder_box").hide();
-
-                return false;
-
-            })
-
-
-
-
-
-            $(document).on("click",".vip_prompt",function () {
-
-                layer.closeAll()
-
-                return false;
-
-            })
-
-
-
-            $(document).on("click",".layui-layer-shade",function () {
-
-                layer.closeAll()
-
-                return false;
-
-            })
-
-
-
-            //关闭所有展示框
-
-            $(document).on('click','.modal .close',function(){
-
-                class_find_layui_win();
-
-            })
-
-
-
-            var wx_url = "<?php echo e(url('/article/detail/')); ?>";
-
-
-
-            //$("#qrcode").qrcode(wx_url);
-
-
-
-
-
-
-
-            //点击小图片，显示表情
-
-
-
-            $(".bq").click(function(e){
-
-
-
-                $(".face").slideDown();//慢慢向下展开
-
-
-
-                e.stopPropagation();   //阻止冒泡事件
-
-
-
-            });
-
-
-
-
-
-
-
-            //在桌面任意地方点击，他是关闭
-
-
-
-            $(document).click(function(){
-
-
-
-                $(".face").slideUp();//慢慢向上收
-
-
-
-            });
-
-
-
-
-
-
-
-            //点击小图标时，添加功能
-
-
-
-            $(".face ul li").click(function(){
-
-
-
-                var simg=$(this).find("img").clone();
-
-
-
-                $(".message").append(simg);
-
-
-
-            });
-
-
-
-
-
-
-
-            //点击发表按扭，发表内容
-
-
-
-            $("span.submit").click(function(){
-
-                if (!IS_LOGIN) {
-
-                    $('.login_box').show();
-
-                    return;
-
-                }
-
-                var comment=$(".message").html();
-
-                if(comment==""){
-
-                    alert('请先输入留言内容');
-
-                    $('.message').focus();//自动获取焦点
-
-                    return;
-
-                }
-
-                var comment_id = '<?php echo e($designer->id); ?>';
-
-                var comment_type = $(this).attr('data-comment-type');
-
-                $.ajax({
-
-                    url: '/member/comment',
-
-                    type: 'POST',
-
-                    dataType: 'json',
-
-                    data: {
-
-                        type:comment_type,
-
-                        _token:_token,
-
-                        comment_id:comment_id,
-
-                        comment:comment
-
-                    },
-
-                    success: function (data) {
-
                         if (data.status_code == 0) {
-
-                            //$msg = '<div class="msgBox"><dl>';
-
-                            //$msg += '<dt><img src="' + data.data.user_info.avatar + '" width="50" height="50"/></dt>';
-
-                            //$msg += '<dd>' + data.data.user_info.nickname + ' <i>' + data.data.user_info.vip_level + '</i>';
-
-                            //$msg += '<span>发布于：' + data.data.comment_info.created_at + '</span></dd>';
-
-                            //$msg += '<div class="msgTxt">' + comment + '</div></dl></div>';
-
-
-
-                            //$(".msgCon").prepend($msg);
-
-                            $(".message").html('');
-
-                            alert('评论成功，审核通过后将会显示。');
-
+                            that.text('已订阅')
+                            that.addClass('have-disalbed')
+                            //window.location.reload();
                         } else {
-
-                            alert(data.message);
-
-
-
+                            layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
                         }
-
                     }
-
                 });
+            }
+        }
+
+    });
 
 
 
-
-
-
-
+    //收藏
+    $(".collect_article").click(function(e){
+        var collect_id = '';
+        var folder_id = $('#folder_id').val();
+        var folder_name = $('#folder_name').val();
+        if(!IS_LOGIN){
+            $('.login_box').show();
+        }else{
+            $.ajax({
+                url: '/article/collect',
+                type: 'POST',
+                dataType: 'json',
+                data: {_token:'<?php echo e(csrf_token()); ?>',folder_id:folder_id,folder_name:folder_name,collect_id:collect_id},
+                success: function (data) {
+                    if (data.status_code == 0) {
+                        window.location.reload();
+                    } else {
+                        layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+                    }
+                }
             });
+        }
+    });
 
 
 
-        </script>
+    //下载
+    $('#vip-download').click(function(e){
+        var article_id = '';
+        $.ajax({
+            url: '/article/vip_download',
+            type: 'POST',
+            dataType: 'json',
+            data: {_token:'<?php echo e(csrf_token()); ?>',article_id:article_id},
+            success: function (data) {
+                if (data.status_code == 0) {                            
+                    window.open(data.data.vip_download);
+                } else {
+                    layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+                }
+            }
+        });
+    });
+
+
+
+
+
+    $('.vip_prompt .vip_buy').click(function () {
+        $(".new_folder_box").show();
+        layer.closeAll();
+    })
+
+
+    $('.vip_prompt .vip_detail').click(function () {
+        location.href='/vip/intro'
+    })
+
+
+    $(document).on("click",".vip_close",function () {
+        $(".new_folder_box").hide();
+        return false;
+    })
+
+
+    $(document).on("click",".new_folder_bj",function () {
+        $(".login_box").hide();
+        $(".new_folder_box").hide();
+        return false;
+    })
+
+
+
+
+
+    $(document).on("click",".vip_prompt",function () {
+        layer.closeAll()
+        return false;
+    })
+
+
+
+    $(document).on("click",".layui-layer-shade",function () {
+        layer.closeAll()
+        return false;
+    })
+
+
+
+    //关闭所有展示框
+    $(document).on('click','.modal .close',function(){
+        class_find_layui_win();
+    })
+
+    var wx_url = "<?php echo e(url('/article/detail/')); ?>";
+
+    //$("#qrcode").qrcode(wx_url);
+
+
+
+
+    //点击小图片，显示表情
+    $(".bq").click(function(e){
+        $(".face").slideDown();//慢慢向下展开
+        e.stopPropagation();   //阻止冒泡事件
+    });
+
+
+
+
+
+
+
+    //在桌面任意地方点击，他是关闭
+    $(document).click(function(){
+        $(".face").slideUp();//慢慢向上收
+    });
+
+
+
+
+
+
+
+    //点击小图标时，添加功能
+    $(".face ul li").click(function(){
+        var simg=$(this).find("img").clone();
+        $(".message").append(simg);
+    });
+
+
+
+
+
+
+
+    //点击发表按扭，发表内容
+    $("span.submit").click(function(){
+        if (!IS_LOGIN) {
+            $('.login_box').show();
+            return;
+        }
+
+        var comment=$(".message").html();
+        if(comment==""){
+            alert('请先输入留言内容');
+            $('.message').focus();//自动获取焦点
+            return;
+        }
+
+        var comment_id = '<?php echo e($designer->id); ?>';
+        var comment_type = $(this).attr('data-comment-type');
+        $.ajax({
+            url: '/member/comment',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                type:comment_type,
+                _token:_token,
+                comment_id:comment_id,
+                comment:comment
+            },
+
+            success: function (data) {
+                if (data.status_code == 0) {
+                    //$msg = '<div class="msgBox"><dl>';
+                    //$msg += '<dt><img src="' + data.data.user_info.avatar + '" width="50" height="50"/></dt>';
+                    //$msg += '<dd>' + data.data.user_info.nickname + ' <i>' + data.data.user_info.vip_level + '</i>';
+                    //$msg += '<span>发布于：' + data.data.comment_info.created_at + '</span></dd>';
+                    //$msg += '<div class="msgTxt">' + comment + '</div></dl></div>';
+                    //$(".msgCon").prepend($msg);
+                    $(".message").html('');
+                    alert('评论成功，审核通过后将会显示。');
+                } else {
+                    alert(data.message);
+                }
+            }
+        });
+    });
+</script>
 
         <!-------仿QQ留言板结束-------->
 
@@ -936,31 +608,12 @@
 
 
 <script type="text/javascript">
-
     function WeChatLogin() {
-
-
-
         if ($(".ma_box").hasClass("hide")) {
-
-
-
             $(".ma_box").removeClass("hide");
-
-
-
         } else {
-
-
-
             $(".ma_box").addClass("hide");
-
-
-
         }
-
-
-
     }
 
 
@@ -970,25 +623,9 @@
 
 
     function toLogin() {
-
-
-
         //以下为按钮点击事件的逻辑。注意这里要重新打开窗口
-
-
-
         //否则后面跳转到QQ登录，授权页面时会直接缩小当前浏览器的窗口，而不是打开新窗口
-
-
-
         var A = window.open("/auth/qq", "_self");
-
-
-
-
-
-
-
     }
 
 
@@ -998,129 +635,49 @@
 
 
     function wp_attempt_focus() {
-
-
-
         setTimeout(function () {
-
-
-
             try {
-
-
-
                 d = document.getElementById('user_login');
-
-
-
                 d.focus();
-
-
-
                 d.select();
-
-
-
             } catch (e) {
 
-
-
             }
-
-
-
         }, 200);
-
-
-
     }
 
     //监听回车事件
 
     $(document).keyup(function(event){
-
         if(event.keyCode ==13){
-
             $('#wp-submit-login').trigger("click");
-
         }
-
     });
 
 
 
     $("#wp-submit-login").click(function () {
-
-
-
         // var loginform = new FormData();
-
-
-
         var url = $.trim($('#loginform').attr("action"));
-
-
-
         $.ajax({
-
-
-
             url: url,
-
-
-
             type: 'POST',
-
-
-
             dataType: 'json',
-
-
-
             data: $('#loginform').serialize(),
-
-
-
             success: function (data) {
-
-
-
                 if (data.status_code == 0) {
-
-
-
                     setTimeout(function () {
-
                         location.href =  location.href
-
-
-
                     }, 300);
-
-
-
                 } else {
-
                     layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
-
                 }
-
-
-
             }
-
-
-
         });
-
-
-
     });
 
     wp_attempt_focus();
-
     if (typeof wpOnload == 'function') wpOnload();
-
 </script>
 
 <?php $__env->stopSection(); ?>
