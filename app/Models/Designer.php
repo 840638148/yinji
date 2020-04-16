@@ -135,6 +135,7 @@ class Designer extends Model
         return $designers;
     }
     
+    //设计师分页
     public static function getMoreDesigners(& $request, $category_ids = [])
     {
         $designers = Designer::getDesigners($request, $category_ids);
@@ -164,7 +165,7 @@ class Designer extends Model
                             <span class="guojia">
                                 ' . $category_html . '
                             </span>
-                            <span class="ffe_liulan">' . $designer->subscription_num . '</span></div>
+                            <span class="ffe_liulan">' . ($designer->starsav==0 ? '5.0' : $designer->starsav) . '</span></div>
                     </section>
                 </article>
             </li>';

@@ -52,8 +52,6 @@ class DesignerController extends Controller
         $is_subscription = UserSubscription::isSubscription($id);
 
         $comments_total = ArticleComment::where('comment_id', $id)->where('display', '1')->count();
-        // dd($related_designers);
-        // $comments = Designer::where('designers.id', $id)->leftjoin('articles','articles.static_url','designers.static_url')->get();
 
         foreach($related_articles as $k=>$designall){
             $related_articles[$k]['starsavg']=ArticleComment::where('comment_id',$designall['id'])->avg('stars');
@@ -62,8 +60,8 @@ class DesignerController extends Controller
             }
         }
 
+        //该设计师的总平均分
         $starscount=count($related_articles);//总数
-        // dd($related_articles);
         foreach($related_articles as $key){
             $comments_total+=$key['starsavg'];
         }
@@ -73,10 +71,7 @@ class DesignerController extends Controller
         	$starsav=$comments_total/$starscount;
         	$starsav=sprintf("%.1f",$starsav);//保留小数点一位
         }
-
-// dd($comments_total,$starscount,$starsav);  
         
-
         $data = [
             'user' => $this->getUserInfo(),
             'lang' => $lang,
