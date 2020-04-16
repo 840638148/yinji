@@ -42,7 +42,6 @@ class MemberController extends Controller
         $last_days = UserAttendance::getLastDays($user->id);
         $tips = UserAttendance::getAttendanceTips();
 
-        // dd($user->collects); 
         $data = [
             'lang' => $lang,
             'user' => $user,
@@ -233,7 +232,6 @@ class MemberController extends Controller
         $user = $this->getUserInfo();
         $user->collects = UserCollect::getCollects($user->id);
 		
-		// dd($user->collects);
         $data = [
             'lang' => $lang,
             'user' => $user,
@@ -324,7 +322,6 @@ class MemberController extends Controller
 
         $folist=UserFinderFolder::where('user_finder_folders.id',$request->id)->leftjoin('user_finders','user_finder_folders.id','user_finders.user_finder_folder_id')->get()->toArray();
 
-		// dd($request->id);
         $data = [
             'lang' => $lang,
             'user' => $user,
