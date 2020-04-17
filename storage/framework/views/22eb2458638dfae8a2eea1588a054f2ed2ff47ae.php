@@ -33,7 +33,7 @@
 
         <ul class="layout_ul ajaxposts designer-content">
 
-            <?php $__currentLoopData = $designers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $designer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <?php $__currentLoopData = $designers->dearr; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $designer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
             <li class="layout_li ajaxpost ">
           

@@ -33,7 +33,7 @@
 
         <ul class="layout_ul ajaxposts designer-content">
 
-            @foreach ($designers as $designer)
+            @foreach ($designers->dearr as $designer)
 
             <li class="layout_li ajaxpost ">
           

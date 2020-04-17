@@ -73,11 +73,10 @@ class Designer extends Model
             });
         }
 
-
         $designers = $obj->orderBy('like_num', 'desc')->paginate(intval($request->per_page));
-
-        $lang = Session::get('language') ?? 'zh-EN';
-        if ('zh-EN' == $lang) {
+        
+        $lang = Session::get('language') ?? 'zh-CN';
+        if ('zh-CN' == $lang) {
             $display_name = "name_cn";
         } else {
             $display_name = "name_en_abbr";
@@ -108,7 +107,6 @@ class Designer extends Model
                 ->where('articles.display', '0')
                 ->where('articles.designer_id', 'like', "%,{$designer->id},%");
             $related_articles = $res->get();
-
             $starscount = $res ->count('articles.id');
 
             foreach($related_articles as $k=>$designall){
@@ -117,7 +115,6 @@ class Designer extends Model
                     $related_articles[$k]['starsavg']='5.0';
                 }
             }
-
 
             $comments_total = ArticleComment::where('comment_id', $designer->id)->where('display', '1')->count();
             foreach($related_articles as $key){
@@ -131,8 +128,14 @@ class Designer extends Model
                 $designer->starsav=sprintf("%.1f",$starsav);//保留小数点一位
                 
             }
-
+            //以平均分进行降序
+            $dearr=$designers->items();
+            $dearr=collect($dearr)->sortByDesc('starsav')->all();
+            $designers->dearr=$dearr;
         }
+      
+        // $designers=$designers->sortByDesc('starsav')->values();
+       
         // dd($designers);
         return $designers;
     }
