@@ -244,13 +244,14 @@ class Article extends Model
         return $articles;
     }
     
+    //文章列表页的分页
     public static function getMoreArticles(& $request, $category_ids = [])
     {
         $articles = Article::getArticles($request, $category_ids);
         $data = [];
         foreach ($articles as $k=>$article) {
             $category_html = '';
-            $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['id'])->avg('stars');
+            $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['id'])->orderBy('article_comments.stars','desc')->avg('stars');
             $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
             if ($article->category) {
                 foreach ($article->category as $category) {
@@ -287,9 +288,19 @@ class Article extends Model
                             <span title="" class="like"><i class="icon-eye"></i><span class="count">' .$article->view_num . '</span></span> </div>
                     </article>
                 </li>';
-            $data[] = $tmp_html;
+            // $data[] = $tmp_html;
+            $data[] = [
+                'starsavg' => $article->starsavg,
+                'html' => $tmp_html
+            ];
+            
         }
-        return $data;
+        $data = collect($data)->sortByDesc('starsavg')->values()->all();
+        $html = '';
+        foreach ($data as $item) {
+            $html .= $item['html'];
+        }
+        return $html;
         
     }
 

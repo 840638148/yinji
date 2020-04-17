@@ -98,25 +98,7 @@
     </section>
 
 
-    <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
     <script>
-// window.vm = new Vue({
-//         el: '#ajaxpost',
-//         data: {
-//             list:null,
-            
-//         },
-       
-//     })
-// window.t=this;
-
-
-
-
-
-
-
-
 
     //打开排序列表
     $(document).on('click','.sort',function(){
@@ -232,7 +214,8 @@
                             console.log(data);
                             if (data.status_code == 0) {
                                 page++;
-                                h =  data.data.join('')
+                                // h =  data.data.join('')
+                                h =  data.data
                                 $('.article-content').append(h)
                                 if(data.data.length<15){
                                     isEnd = true

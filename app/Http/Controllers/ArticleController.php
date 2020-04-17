@@ -211,7 +211,7 @@ class ArticleController extends Controller
             'articles' => $articles,
             // 'starsav'   =>$starsav,
         ];
-        echo("<script>console.log(".json_encode($data).");</script>");
+        // echo("<script>console.log(".json_encode($data).");</script>");
         return view('article.lists', $data);
     }
 
