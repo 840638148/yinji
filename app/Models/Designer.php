@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 
@@ -129,9 +129,11 @@ class Designer extends Model
             }else{
                 $starsav=$comments_total/$starscount;
                 $designer->starsav=sprintf("%.1f",$starsav);//保留小数点一位
+                
             }
 
         }
+        // dd($designers);
         return $designers;
     }
     
@@ -277,7 +279,6 @@ class Designer extends Model
             ->where('designers.display', '0')
             ->where('designers.category_ids', 'like', '%,' . implode(',', $designer->category_ids) . ',%')
             ->limit(10)
-            ->groupBy('designers.id')
             ->get();
 
 
@@ -285,44 +286,33 @@ class Designer extends Model
         $comments_totals=0;
         // 根据上面查出相关设计师的id查出设计师旗下的文章
         foreach($designers as $k=>$designall){
-            $designers[$k]['designer_articles'] = Designer::getRelatedArticle($designall['id']);
-            $gb=$designers[$k]['designer_articles']->groupBy('designer_articles')->toArray();
-        //    dump($gb);
-            $count=count($designall->designer_articles);
-            
-            // //根据旗下的文章算出该设计师所有文章的平均分
-            foreach($gb as $kk=>$vv){
-                // dump($vv[0]['id']);
+            $res = Designer::getRelatedArticle($designall['id']);
 
-                foreach($vv as $vs){
-                    $rsavg=ArticleComment::where('comment_id',$vs['id']);
-                    $starscounts+=$rsavg->get()->count($vs['id']);//获取该设计师下作品总数量
-
-                                        
-                    if($rsavg==null){
-                        continue;
-                    }else{
-                        $comments_totals+=$rsavg->sum('stars');//总分数
-                    }
-
-                    if($comments_totals==0 || $starscounts==0){
-                        $designer->designeravg=0;
-                    }else{
+            $starscounts=count($res);//获取该设计师下作品总数量
+            $designers[$k]['count'] = $starscounts;
+            $comments = [];
+            //根据旗下的文章算出该设计师所有文章的平均分
+            if($starscounts==0){
+                $designers[$k]['designeravg']=0;
+            }else{
+                
+                foreach($res as $kk=>$vv){
+                        $rsavg=DB::table('article_comments')->where('comment_id',$vv['id'])->value('stars');
+                        $rsavg = ($rsavg!='') ? $rsavg : 5;
+                        $comments[]=$rsavg;
+                        $comments_totals+=$rsavg;//总分数
                         $designeravg=$comments_totals/$starscounts;
                         $designers[$k]['designeravg']=sprintf("%.1f",$designeravg);//保留小数点一位
-                    } 
                 }
+            }
+            // $designers[$k]['comments'] = $comments;
+            // $designers[$k]['sum'] = $comments_totals;
+            $comments_totals = 0;//遍历一个设计师后初始化
+        }   
 
-                
+        $designers=collect($designers)->sortByDesc('designeravg');//对平均分进行降序排序
 
-            }   
-
-            
-
-        }
-
- 
-        // dd($starscounts,$comments_totals,$designeravg);
+        // dd($designers);
 
         $lang = Session::get('language') ?? 'zh-CN';
         if ('zh-CN' == $lang) {  

@@ -73,26 +73,6 @@ class DesignerController extends Controller
         	$starsav=sprintf("%.1f",$starsav);//保留小数点一位
         }
         
-
-
-
-    //     // 根据设计师的id查出设计师旗下的文章
-    //     foreach($related_designers as $k=>$designall){
-    //         $res = Article::where('articles.article_status', '2')
-    //         ->where('articles.display', '0')
-    //         ->where('articles.designer_id', 'like', "%".implode(',',$designall->category_ids)."%");// $designall->category_ids是个一维数组，要将他转为字符串用implode
-            
-    //     }
-    //     $designer_articles = $res->get()->toArray();
-    //     $starscounts = $res ->count('articles.id');
-    //    dd($related_designers);
-
-    //     // 根据设计师的id查出设计师旗下的文章
-    //     foreach($designer_articles as $key=>$val){
-    //         $designarticle=Designer::getRelatedArticle($val['id']);
-    //         // dump($designarticle);
-    //     }
-        
         $data = [
             'user' => $this->getUserInfo(),
             'lang' => $lang,
