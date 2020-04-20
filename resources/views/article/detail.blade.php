@@ -384,9 +384,7 @@
     <!----点评星星------>
             <script type="text/javascript">
 
-
             //点赞
-
             /*$(".like_article").click(function(e){
                 var that = $(this)
                 var like_id = '{{$article->id}}';
@@ -410,52 +408,24 @@
                 }
             });*/
 
-
-
-
-
-
-
             //收藏
-
             $(".collect_article").click(function(e){
-
                 var collect_id = '{{$article->id}}';
-
                 var folder_id = $(this).attr('data-id');
-
                 var folder_name = $('#folder_name').val();
-
                 $.ajax({
-
                     url: '/article/collect',
-
                     type: 'POST',
-
                     dataType: 'json',
-
                     data: {_token:'{{csrf_token()}}',folder_id:folder_id,folder_name:folder_name,collect_id:collect_id},
-
                     success: function (data) {
-
                         if (data.status_code == 0) {
-
                             window.location.reload();
-
                         } else {
-
                             alert(data.message);
-
-
-
                         }
-
                     }
-
                 });
-
-
-
             });
 
 

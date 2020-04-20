@@ -74,7 +74,6 @@ class Designer extends Model
         }
 
         $designers = $obj->orderBy('like_num', 'desc')->paginate(intval($request->per_page));
-        
         $lang = Session::get('language') ?? 'zh-CN';
         if ('zh-CN' == $lang) {
             $display_name = "name_cn";
@@ -115,27 +114,22 @@ class Designer extends Model
                     $related_articles[$k]['starsavg']='5.0';
                 }
             }
-
             $comments_total = ArticleComment::where('comment_id', $designer->id)->where('display', '1')->count();
             foreach($related_articles as $key){
                 $comments_total+=$key['starsavg'];
             }
-
             if($comments_total==0 || $starscount==0){
                 $designer->starsav=0;
             }else{
                 $starsav=$comments_total/$starscount;
                 $designer->starsav=sprintf("%.1f",$starsav);//保留小数点一位
-                
             }
             //以平均分进行降序
             $dearr=$designers->items();
             $dearr=collect($dearr)->sortByDesc('starsav')->all();
             $designers->dearr=$dearr;
         }
-      
         // $designers=$designers->sortByDesc('starsav')->values();
-       
         // dd($designers);
         return $designers;
     }
@@ -276,15 +270,25 @@ class Designer extends Model
         if (empty($designer)) {
             return false;
         }
-        
+
         $designers = Designer::where('designer_status', '1')
-            ->where('designers.id', '!=', $id)
-            ->where('designers.display', '0')
-            ->where('designers.category_ids', 'like', '%,' . implode(',', $designer->category_ids) . ',%')
+            ->where('industry',$designer->industry)
+            ->where('id', '!=', $id)
+            ->where('display', '0')
+            ->where('category_ids', 'like', '%,' . implode(',', $designer->category_ids) . ',%')
             ->limit(10)
             ->get();
 
+        if(count($designers)>0 && count($designers)<3){
+            $designers = Designer::where('designer_status', '1')
+            ->where('industry',$designer->industry)
+            ->where('id', '!=', $id)
+            ->where('display', '0')
+            ->limit(10)
+            ->get();
+        }
 
+        // dd($designers);
         $starscounts=0;
         $comments_totals=0;
         // 根据上面查出相关设计师的id查出设计师旗下的文章
