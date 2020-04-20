@@ -278,74 +278,157 @@ class Designer extends Model
             ->where('category_ids', 'like', '%,' . implode(',', $designer->category_ids) . ',%')
             ->limit(10)
             ->get();
-
+        
+        // $designers_dif =(object)array();
         if(count($designers)>0 && count($designers)<3){
-            $designers = Designer::where('designer_status', '1')
+            $designers_dif = Designer::where('designer_status', '1')
             ->where('industry',$designer->industry)
             ->where('id', '!=', $id)
             ->where('display', '0')
-            ->limit(10)
+            ->limit(3)
             ->get();
-        }
+        
+            $starscounts=0;
+            $comments_totals=0;
+            // 根据上面查出相关设计师的id查出设计师旗下的文章
+            foreach($designers as $k=>$designall){
+                $res = Designer::getRelatedArticle($designall['id']);
 
-        // dd($designers);
-        $starscounts=0;
-        $comments_totals=0;
-        // 根据上面查出相关设计师的id查出设计师旗下的文章
-        foreach($designers as $k=>$designall){
-            $res = Designer::getRelatedArticle($designall['id']);
-
-            $starscounts=count($res);//获取该设计师下作品总数量
-            $designers[$k]['count'] = $starscounts;
-            $comments = [];
-            //根据旗下的文章算出该设计师所有文章的平均分
-            if($starscounts==0){
-                $designers[$k]['designeravg']=0;
-            }else{
-                
-                foreach($res as $kk=>$vv){
-                        $rsavg=DB::table('article_comments')->where('comment_id',$vv['id'])->value('stars');
-                        $rsavg = ($rsavg!='') ? $rsavg : 5;
-                        $comments[]=$rsavg;
-                        $comments_totals+=$rsavg;//总分数
-                        $designeravg=$comments_totals/$starscounts;
-                        $designers[$k]['designeravg']=sprintf("%.1f",$designeravg);//保留小数点一位
+                $starscounts=count($res);//获取该设计师下作品总数量
+                $designers[$k]['count'] = $starscounts;
+                $comments = [];
+                //根据旗下的文章算出该设计师所有文章的平均分
+                if($starscounts==0){
+                    $designers[$k]['designeravg']=0;
+                }else{
+                    
+                    foreach($res as $kk=>$vv){
+                            $rsavg=DB::table('article_comments')->where('comment_id',$vv['id'])->value('stars');
+                            $rsavg = ($rsavg!='') ? $rsavg : 5;
+                            $comments[]=$rsavg;
+                            $comments_totals+=$rsavg;//总分数
+                            $designeravg=$comments_totals/$starscounts;
+                            $designers[$k]['designeravg']=sprintf("%.1f",$designeravg);//保留小数点一位
+                    }
                 }
+                // $designers[$k]['comments'] = $comments;
+                // $designers[$k]['sum'] = $comments_totals;
+                $comments_totals = 0;//遍历一个设计师后初始化
+            }   
+
+            $designers=collect($designers)->sortByDesc('designeravg');//对平均分进行降序排序
+
+            // dd($designers);
+
+            $lang = Session::get('language') ?? 'zh-CN';
+            if ('zh-CN' == $lang) {  
+                $display_name = "name_en_abbr";
+            } else {
+                $display_name = "name_en_abbr";
             }
-            // $designers[$k]['comments'] = $comments;
-            // $designers[$k]['sum'] = $comments_totals;
-            $comments_totals = 0;//遍历一个设计师后初始化
-        }   
 
-        $designers=collect($designers)->sortByDesc('designeravg');//对平均分进行降序排序
+            $categories = DesignerCategory::get();
+            $arr_category = [];
+            foreach ($categories as $category) {
+                $arr_category[$category->id] = $category->$display_name;
+            }
 
-        // dd($designers);
-
-        $lang = Session::get('language') ?? 'zh-CN';
-        if ('zh-CN' == $lang) {  
-            $display_name = "name_en_abbr";
-        } else {
-            $display_name = "name_en_abbr";
-        }
-
-        $categories = DesignerCategory::get();
-        $arr_category = [];
-        foreach ($categories as $category) {
-            $arr_category[$category->id] = $category->$display_name;
-        }
-
-        foreach ($designers as &$designer) {
-            $tmp = [];
-            if ($designer->category_ids) {
-                foreach ($designer->category_ids as $category_id) {
-                    $tmp[] = [
-                        'id' => $category_id,
-                        'name' => @$arr_category[$category_id],
-                    ];
+            foreach ($designers as &$designer) {
+                $tmp = [];
+                if ($designer->category_ids) {
+                    foreach ($designer->category_ids as $category_id) {
+                        $tmp[] = [
+                            'id' => $category_id,
+                            'name' => @$arr_category[$category_id],
+                        ];
+                    }
                 }
+                $designer->categorys = $tmp;
             }
-            $designer->categorys = $tmp;
+
+            // dd($designers_dif);
+            foreach ($designers_dif as &$designer) {
+                $tmp = [];
+                if ($designer->category_ids) {
+                    foreach ($designer->category_ids as $category_id) {
+                        $tmp[] = [
+                            'id' => $category_id,
+                            'name' => @$arr_category[$category_id],
+                        ];
+                    }
+                }
+                $designer->categorys = $tmp;
+            }
+
+            $deall=[];
+            foreach($designers as $k=>$v){
+                $deall[]=$v;
+            }
+
+            foreach($designers_dif as $k=>$v){
+                $deall[]=$v;
+            }
+            return $deall;
+        }else{
+            $starscounts=0;
+            $comments_totals=0;
+            // 根据上面查出相关设计师的id查出设计师旗下的文章
+            foreach($designers as $k=>$designall){
+                $res = Designer::getRelatedArticle($designall['id']);
+
+                $starscounts=count($res);//获取该设计师下作品总数量
+                $designers[$k]['count'] = $starscounts;
+                $comments = [];
+                //根据旗下的文章算出该设计师所有文章的平均分
+                if($starscounts==0){
+                    $designers[$k]['designeravg']=0;
+                }else{
+                    
+                    foreach($res as $kk=>$vv){
+                            $rsavg=DB::table('article_comments')->where('comment_id',$vv['id'])->value('stars');
+                            $rsavg = ($rsavg!='') ? $rsavg : 5;
+                            $comments[]=$rsavg;
+                            $comments_totals+=$rsavg;//总分数
+                            $designeravg=$comments_totals/$starscounts;
+                            $designers[$k]['designeravg']=sprintf("%.1f",$designeravg);//保留小数点一位
+                    }
+                }
+                // $designers[$k]['comments'] = $comments;
+                // $designers[$k]['sum'] = $comments_totals;
+                $comments_totals = 0;//遍历一个设计师后初始化
+            }   
+
+            $designers=collect($designers)->sortByDesc('designeravg');//对平均分进行降序排序
+
+            // dd($designers);
+
+            $lang = Session::get('language') ?? 'zh-CN';
+            if ('zh-CN' == $lang) {  
+                $display_name = "name_en_abbr";
+            } else {
+                $display_name = "name_en_abbr";
+            }
+
+            $categories = DesignerCategory::get();
+            $arr_category = [];
+            foreach ($categories as $category) {
+                $arr_category[$category->id] = $category->$display_name;
+            }
+
+            foreach ($designers as &$designer) {
+                $tmp = [];
+                if ($designer->category_ids) {
+                    foreach ($designer->category_ids as $category_id) {
+                        $tmp[] = [
+                            'id' => $category_id,
+                            'name' => @$arr_category[$category_id],
+                        ];
+                    }
+                }
+                $designer->categorys = $tmp;
+            }
+            return $designers;
         }
-        return $designers;
+        
     }
 }

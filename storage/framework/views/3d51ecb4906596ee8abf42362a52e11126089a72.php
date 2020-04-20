@@ -192,7 +192,7 @@
                 <?php if($key < 3): ?>
 
                         <li class="layout_li ajaxpost">
-                        <div class="interior_dafen"><?php echo e(sprintf("%.1f",$related_designer['designeravg']==0 ? '5.0' : $related_designer['designeravg'])); ?></div>
+                        <div class="interior_dafen"><?php echo e(sprintf("%.1f",$related_designer->designeravg==0 ? '5.0' : $related_designer->designeravg)); ?></div>
                             <article class="postgrid wow bounceInUp animated" style="visibility: visible; animation-name: bounceInUp;">
 
                                 <a href="<?php if($related_designer->static_url): ?> /designer/<?php echo e($related_designer->static_url); ?> <?php else: ?> /designer/detail/<?php echo e($related_designer->id); ?> <?php endif; ?>" title="<?php echo e(get_designer_title($related_designer)); ?>" target="_blank"> <img class="thumb" src="<?php echo e(url('uploads/' . $related_designer->custom_thum)); ?>" data-original="<?php echo e(url('uploads/' . $related_designer->custom_thum)); ?>" alt="<?php echo e(get_designer_title($related_designer)); ?>" style="display: block;"> </a>
@@ -217,7 +217,7 @@
 
                            </div>
 
-                       <span class="xg_dingyue"><i class="icon-bookmark"></i> <?php echo e($related_designer['subscription_num']); ?></span>
+                       <span class="xg_dingyue"><i class="icon-bookmark"></i> <?php echo e($related_designer->subscription_num); ?></span>
 
                        <span class="xg_fenlei">
 

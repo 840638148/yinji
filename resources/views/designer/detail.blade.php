@@ -194,7 +194,7 @@
                 @if ($key < 3)
 
                         <li class="layout_li ajaxpost">
-                        <div class="interior_dafen">{{sprintf("%.1f",$related_designer['designeravg']==0 ? '5.0' : $related_designer['designeravg'])}}</div>
+                        <div class="interior_dafen">{{sprintf("%.1f",$related_designer->designeravg==0 ? '5.0' : $related_designer->designeravg)}}</div>
                             <article class="postgrid wow bounceInUp animated" style="visibility: visible; animation-name: bounceInUp;">
 
                                 <a href="@if($related_designer->static_url) /designer/{{$related_designer->static_url}} @else /designer/detail/{{$related_designer->id}} @endif" title="{{get_designer_title($related_designer)}}" target="_blank"> <img class="thumb" src="{{url('uploads/' . $related_designer->custom_thum)}}" data-original="{{url('uploads/' . $related_designer->custom_thum)}}" alt="{{get_designer_title($related_designer)}}" style="display: block;"> </a>
@@ -219,7 +219,7 @@
 
                            </div>
 
-                       <span class="xg_dingyue"><i class="icon-bookmark"></i> {{$related_designer['subscription_num']}}</span>
+                       <span class="xg_dingyue"><i class="icon-bookmark"></i> {{$related_designer->subscription_num}}</span>
 
                        <span class="xg_fenlei">
 
@@ -258,7 +258,7 @@
 
 
     <!-- 登录 -->
-
+ 
     <div class="login_box" style="display:none;">
 
         <div class="new_folder_bj"></div>
