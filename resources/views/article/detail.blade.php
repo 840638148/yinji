@@ -316,7 +316,7 @@
                         
                         <dd>{{$comment->user->nickname}}
                         @if(App\User::isVip($comment->user->id))
-                        <i style="display: inline-block;width: 40px;height: 25px; background: #e1244e;margin-left: 10px;border-radius: 3px;color: #fff; font-size: 10px;line-height: 25px;text-align: center;">VIP{{$comment->user->level}}</i>
+                        <i style="display: inline-block;width: 40px;height: 25px; background: #e1244e;margin-left: 10px;border-radius: 3px;color: #fff; font-size: 10px;line-height: 25px;text-align: center;">VIP{{App\User::getVipLevel($comment->user->id)}}</i>
                         @else
                         <i style="display: inline-block;width: 55px;height: 25px;background: #ccc;margin-left: 10px;border-radius: 3px;color: #fff;font-size: 10px;line-height: 25px;text-align: center;">普通用户</i>
                         

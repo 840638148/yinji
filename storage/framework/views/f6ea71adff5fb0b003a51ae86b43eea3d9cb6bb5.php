@@ -46,15 +46,15 @@
           <?php $__currentLoopData = $user->collect_details; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
           <li class="layout_li ajaxpost">
             <article class="postgrid">
-            <span class="guojia" style="bottom: 60px;right: 60px;">
-              <a href="#" rel="tag">加拿大</a>
+            <span class="guojia2" >
+              <a style="position:absolute;bottom:60px;right:71px;z-index:9;" href="#" rel="tag">加拿大</a>
             </span>
               <figure> <a href="<?php if($article->static_url): ?> /article/<?php echo e($article->static_url); ?> <?php else: ?> /article/detail/<?php echo e($article->id); ?> <?php endif; ?>" title="<?php echo e(get_article_title($article)); ?>" target="_blank"> <img class="thumb" src="<?php echo e(get_article_thum($article)); ?>" data-original="<?php echo e(get_article_thum($article)); ?>" alt="<?php echo e(get_article_title($article)); ?>" style="display: block;"> </a> </figure>
               <h2> <a href="<?php if($article->static_url): ?> /article/<?php echo e($article->static_url); ?> <?php else: ?> /article/detail/<?php echo e($article->id); ?> <?php endif; ?>" title="<?php echo e(get_article_title($article)); ?>" target="_blank">
                 <div style="font-size:12px; line-height:30px; color:#999; font-family:Georgia , Times, serif;"><?php echo e(get_article_title($article, 1)); ?></div>
                 <div style=" color:#666; line-height:24px;"><?php echo e(get_article_title($article, 2)); ?></div>
                 </a> </h2>
-                <a href="javascript:;" class="find-icon-trash remove_find_img" data-id="<?php echo e($article->id); ?>" tag="删除发现的图片"></a> </div>
+                <a style="position: absolute;bottom: 60px;right: 30px;" href="javascript:;" class="find-icon-trash remove_find_img" data-id="<?php echo e($article->delid); ?>" tag="删除发现的图片"></a> </div>
               <div class="homeinfo"> 
                 <!--分类--> 
                 <?php if($article->category): ?>
@@ -73,5 +73,42 @@
     </ul>
   </div>
 </section>
+<script>
+//删除发现图片
+$(document).on('click','.remove_find_img',function(ev){
+    if (!confirm("确定删除？")) {
+        return false;
+    }
+
+    var finder_id = $(this).attr('data-id');
+    var url = '/member/delete_folder_item';
+    var folder_data = {
+        _token:_token,
+        finder_id:finder_id,
+    };
+
+    $.ajax({
+        async:false,
+        url: url,
+        type: 'POST',
+        dataType: 'json',
+        data: folder_data,
+        success: function (data) {
+            if (data.status_code == 0) {
+                alert('删除成功！');
+                window.location.reload();
+            } else { 
+                alert(data.message);
+            }
+        }
+    });
+
+    return false;
+});
+
+
+
+
+</script> 
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -5,182 +5,127 @@
 @section('content')
 
 <style>
-
-    .item .edit_favorites{
-
-        position: absolute;
-
-        display: inline-block;
-
-        vertical-align: top;
-
-        text-indent:0;
-
-        text-align: center;
-
-        line-height: 32px;
-
-        z-index: 120;
-
-        right:10px;
-
-    }
-
-    .edit_favorites:hover .item-setting-btns{
-
-        color:#555;
-
-    }
-
-    .find_title{
-
-        overflow:inherit;
-
-        position:absolute;
-        bottom: -2px;
-
-    }
-
-    .find_title h2{
-
-        float: none;
-	    width: 210px;
-	    vertical-align: top;
-	    background: #fff;
-	    padding: 0 5px;
-	    border-radius: 6px;
-	    margin: 0 0 5px 7px;
-		display: none;
-	    position: absolute;
-	    bottom: 2px;
-	    height: 35px;
-	    line-height: 30px;
-	    text-indent: 1em;
-    }
-    .find_title a{
-		display: none;
-    }
-    .find_title .find-icon-trash{
-		position: absolute;
-	    bottom: 8px;
-	    right: 10px;
-    }
-
-	.item_content:hover .find_title h2,.item_content:hover .find_title a{
-		display: block;
-	}
-
-    .item .item-setting-btns{
-
-        display: none;
-
-        position: absolute;
-
-        right: 0;
-
-        background: #fff;
-
-        border-radius: 4px;
-
-        width: 90px;
-
-        padding: 3px 0px;
-
-        text-align: center;
-
-        font-size: 12px;
-
-        box-shadow: 0 0 11px rgba(0,0,0,.1);
-
-        top:40px;
-
-        margin-bottom: 4px;
-
-    }
-
-
-
-    .item.selected .item-setting-btns{
-
-        display: block;
-
-    }
-
-    .modal{
-
-      display:none;
-
-    }
-
-    .img_browse{
-
-      position: fixed;
-
-      left: 50%;
-
-      top: 50%;
-
-      width: 800px;
-
-      margin-left: -350px;
-
-      margin-top: -350px;
-
-      height: 720px;
-
-      min-height:0;
-
-      background: #fff;
-
-      z-index: 999;
-
-      padding: 10px;
-
-      border-radius: 5px;
-
-    }
-
-    .img_browse .right{
-
-      width:260px;
-
-      height: 100%;
-
-    }
-
-    .img_browse .right .head img{
-
-      width:100%;
-
-      height: 100%;
-
-    }
-
-
-
-    .img_browse .right .faxian_info{
-
-      margin-top: 10px;
-
-    }
-    
-.lzcfg{
-    background: rgba(0,0,0,0.5);
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
+  .item .edit_favorites{
+      position: absolute;
+      display: inline-block;
+      vertical-align: top;
+      text-indent:0;
+      text-align: center;
+      line-height: 32px;
+      z-index: 120;
+      right:10px;
+  }
+
+  .edit_favorites:hover .item-setting-btns{
+      color:#555;
+  }
+
+  .find_title{
+      overflow:inherit;
+      position:absolute;
+      bottom: -2px;
+
+  }
+
+  .find_title h2{
+    float: none;
+    width: 210px;
+    vertical-align: top;
+    background: #fff;
+    padding: 0 5px;
+    border-radius: 6px;
+    margin: 0 0 5px 7px;
     display: none;
-    z-index: 99999999;
-}
+    position: absolute;
+    bottom: 2px;
+    height: 35px;
+    line-height: 30px;
+    text-indent: 1em;
+  }
+  .find_title a{
+  display: none;
+  }
+  .find_title .find-icon-trash{
+  position: absolute;
+    bottom: 8px;
+    right: 10px;
+  }
 
-.swiper-container{
-	display:none;
-	position:absolute;
-	z-index:9999999999;
-  top:31%;
-}
+  .item_content:hover .find_title h2,.item_content:hover .find_title a{
+    display: block;
+  }
+
+  .item .item-setting-btns{
+      display: none;
+      position: absolute;
+      right: 0;
+      background: #fff;
+      border-radius: 4px;
+      width: 90px;
+      padding: 3px 0px;
+      text-align: center;
+      font-size: 12px;
+      box-shadow: 0 0 11px rgba(0,0,0,.1);
+      top:40px;
+      margin-bottom: 4px;
+  }
+
+
+
+  .item.selected .item-setting-btns{
+    display: block;
+  }
+
+  .modal{
+  display:none;
+  }
+
+  .img_browse{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 800px;
+  margin-left: -350px;
+  margin-top: -350px;
+  height: 720px;
+  min-height:0;
+  background: #fff;
+  z-index: 999;
+  padding: 10px;
+  border-radius: 5px;
+  }
+
+  .img_browse .right{
+  width:260px;
+  height: 100%;
+  }
+
+  .img_browse .right .head img{
+  width:100%;
+  height: 100%;
+  }
+
+  .img_browse .right .faxian_info{
+    margin-top: 10px;
+  }
+      
+  .lzcfg{
+      background: rgba(0,0,0,0.5);
+      position: fixed;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      display: none;
+      z-index: 99999999;
+  }
+
+  .swiper-container{
+    display:none;
+    position:absolute;
+    z-index:9999999999;
+    top:31%;
+  }
 
 </style>
 <div class="lzcfg"></div>
@@ -216,7 +161,7 @@
 
    
   </div>
-<h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> {{$user->nickname}}  @if($user->is_vip)<span class="vip1">VIP{{$user->level}}</span>@else<span class="vip1" style="background-color:#ccc;color:#fff;">普通用户</span> @endif </h2>
+<h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> {{$user->nickname}}  @if($user->is_vip)<span class="vip1">VIP{{$user->vip_level}}</span>@else<span class="vip1" style="background-color:#ccc;color:#fff;">普通用户</span> @endif </h2>
   <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">个人说明： {{$user->personal_note}}</p>
 
   <div class="home_nav">

@@ -367,7 +367,7 @@ class ArticleController extends Controller
 		$user_id = Auth::id();
         $issc = UserFinder::where('user_id', $user_id)->get()->toArray();
         
-        $isvip=User::where('id',$user_id)->pluck('level')->first();
+        // $isvip=User::where('id',$user_id)->pluck('level')->first();
 
         //求打分的平均值
         $starsaverage=$comments->toArray();
@@ -418,7 +418,7 @@ class ArticleController extends Controller
             'season_price' => $season_price,
             'year_price' => $year_price,
             'issc' => $issc,
-            'isvip' => $isvip,
+            // 'isvip' => $isvip,
             'starsav' => $starsav,
             'userstars' => $userstars,
         ];

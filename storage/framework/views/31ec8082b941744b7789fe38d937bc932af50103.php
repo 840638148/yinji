@@ -309,7 +309,7 @@
                         <dd><?php echo e($comment->user->nickname); ?>
 
                         <?php if(App\User::isVip($comment->user->id)): ?>
-                        <i style="display: inline-block;width: 40px;height: 25px; background: #e1244e;margin-left: 10px;border-radius: 3px;color: #fff; font-size: 10px;line-height: 25px;text-align: center;">VIP<?php echo e($comment->user->level); ?></i>
+                        <i style="display: inline-block;width: 40px;height: 25px; background: #e1244e;margin-left: 10px;border-radius: 3px;color: #fff; font-size: 10px;line-height: 25px;text-align: center;">VIP<?php echo e(App\User::getVipLevel($comment->user->id)); ?></i>
                         <?php else: ?>
                         <i style="display: inline-block;width: 55px;height: 25px;background: #ccc;margin-left: 10px;border-radius: 3px;color: #fff;font-size: 10px;line-height: 25px;text-align: center;">普通用户</i>
                         
@@ -377,9 +377,7 @@
     <!----点评星星------>
             <script type="text/javascript">
 
-
             //点赞
-
             /*$(".like_article").click(function(e){
                 var that = $(this)
                 var like_id = '<?php echo e($article->id); ?>';
@@ -403,52 +401,24 @@
                 }
             });*/
 
-
-
-
-
-
-
             //收藏
-
             $(".collect_article").click(function(e){
-
                 var collect_id = '<?php echo e($article->id); ?>';
-
                 var folder_id = $(this).attr('data-id');
-
                 var folder_name = $('#folder_name').val();
-
                 $.ajax({
-
                     url: '/article/collect',
-
                     type: 'POST',
-
                     dataType: 'json',
-
                     data: {_token:'<?php echo e(csrf_token()); ?>',folder_id:folder_id,folder_name:folder_name,collect_id:collect_id},
-
                     success: function (data) {
-
                         if (data.status_code == 0) {
-
                             window.location.reload();
-
                         } else {
-
                             alert(data.message);
-
-
-
                         }
-
                     }
-
                 });
-
-
-
             });
 
 
