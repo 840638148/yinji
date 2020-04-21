@@ -230,7 +230,7 @@
 
         @foreach ($user->finder_details as $detail)
 
-      <div class="item discovery-item ">
+      <div class="item discovery-item " style="display:flex">
 
         <div class="item_content item_content2">
         		<!--<li> <img onclick="location='{{$detail['photo_url']}}'" src="{{$detail['photo_url']}}" alt="{{--mb_substr($detail['titlename'],0,30)--}}"> </li>-->

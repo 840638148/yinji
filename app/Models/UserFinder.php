@@ -149,6 +149,8 @@ class UserFinder extends Model
                         'img'   => url($user_finder->photo_url),
                         'url'   => url($user_finder->photo_url),
                         'title' => $user_finder->title ?? '',
+                        'tinames' => $tinames,
+                        'source' => $user_finder->photo_source,
                     ];
                 }
                 $obj[$user_finder->user_finder_folder_id]['folder']['total'] ++;
@@ -186,8 +188,8 @@ class UserFinder extends Model
                     'who_find' => [
                         'user_id'  => $user_finder->user_id,
                         'nickname' => @$user_info->nickname ?? '',
-                        'avatar'   =>isset($user_info->avatar) ? $user_info->avatar : '/img/avatar.png',
-                        // 'avatar'   => @$user_info->avatar ?? '/img/avatar.png',
+                        // 'avatar'   =>isset($user_info->avatar) ? $user_info->avatar : '/img/avatar.png',
+                        'avatar'   => @$user_info->avatar ?? '/img/avatar.png',
                         'tinames' => $tinames,
                         'source' => $user_finder->photo_source,
                     ]
@@ -209,33 +211,63 @@ class UserFinder extends Model
     public static function recommendFinders($user_id = null)
     {
         $recommend_finders = [];
-        $user_finders = self::orderBy('created_at', 'desc')
-            ->groupBy('photo_url')
-            // ->limit(100)
+        $user_finders = self::leftjoin('user_finder_folders','user_finders.user_finder_folder_id','=','user_finder_folders.id')
+            // ->where('')
+            
+            ->groupBy('user_finders.photo_url')
+            ->orderBy('user_finders.updated_at', 'desc')
+            // ->limit(50)
+            
+            // ->distinct('photo_url')
+            // ->distinct('source')->limit(30)
             ->get();
-        
+
+            // dd($user_finders);
         $finders = self::formatFinders($user_finders);
-		// dd($finders);
-        foreach ($finders as $finder) {
-            $recommend_finders[] = [
-                'id' => $finder['folder']['id'],
-                'title' => $finder['finder'][0]['title'],
-                'img' => $finder['finder'][0]['img'],
-                'source' => $finder['finder'][0]['source'],
-                'tinames' => $finder['finder'][0]['tinames'],
-                'who_find' => [[
-                    'userIcon' => $finder['who_find']['avatar'],
-                    'userName' => $finder['who_find']['nickname'],
-                    'userNo' => $finder['who_find']['user_id'],
-                    'folderName' => $finder['folder']['name'],
-                    'folderNo' => $finder['folder']['id'],
-                    'source' => $finder['finder'][0]['source'],
-                	'tinames' => $finder['finder'][0]['tinames'],
-                ]]
-            ];
+        // dd($user_finders);
+        foreach($finders as $k=>$v){
+            foreach($v['finder'] as $key=>$val){
+                $recommend_finders[] = [
+                    'id' => $k,
+                    'title' => $val['title'],
+                    'img' => $val['img'],
+                    'source' => $val['source'],
+                    'tinames' => $val['tinames'],
+                    'who_find' => [[
+                        'userIcon' => $v['who_find']['avatar'],
+                        'userName' => $v['who_find']['nickname'],
+                        'userNo' => $v['who_find']['user_id'],
+                        'folderName' => $v['folder']['name'],
+                        'folderNo' => $v['folder']['id'],
+                        'source' => $val['source'],
+                        'tinames' => $val['tinames'],
+                    ]]
+                ];         
+            }
         }
+
+		// dd($finders);
+        // foreach ($finders as $finder) {
+        //     // dump($finder['finder']);
+        //     $recommend_finders[] = [
+        //         'id' => $finder['folder']['id'],
+        //         'title' => $finder['finder'][0]['title'],
+        //         'img' => $finder['finder'][0]['img'],
+        //         'source' => $finder['finder'][0]['source'],
+        //         'tinames' => $finder['finder'][0]['tinames'],
+        //         'who_find' => [[
+        //             'userIcon' => $finder['who_find']['avatar'],
+        //             'userName' => $finder['who_find']['nickname'],
+        //             'userNo' => $finder['who_find']['user_id'],
+        //             'folderName' => $finder['folder']['name'],
+        //             'folderNo' => $finder['folder']['id'],
+        //             'source' => $finder['finder'][0]['source'],
+        //         	'tinames' => $finder['finder'][0]['tinames'],
+        //         ]]
+        //     ];
+        // }
         
-	     //dd($recommend_finders);  
+	    //  dd($recommend_finders);  
         return json_encode($recommend_finders);
     }
 
@@ -349,7 +381,7 @@ class UserFinder extends Model
            
             ];
         }
-
+        // dd($my_folders);
         return json_encode($my_folders);
     }
 

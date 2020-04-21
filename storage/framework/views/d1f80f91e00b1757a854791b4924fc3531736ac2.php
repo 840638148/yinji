@@ -3,12 +3,12 @@
   <div style="height:48px;line-height: 48px">
 
       <div class="folder-fenxiang">
-      	{{--@foreach($folder_detail['images'] as $val)--}}
+      	
         <span class="select-img-name" id="discovery-folder-name">
         <svg xml:space="preserve" style="background: #e1244e;width: 40px;height: 40px;text-align: center;color: #fff;display: inline-block;border-radius: 4px;"> <image id="image0" width="50%" height="50%" x="10" y="10" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACUAAAAlCAQAAABvl+iIAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfiDA0XHTkZwnQUAAAAVUlEQVRIx2P8z0AtwEQ1k0aNGjWKJkaxYIhgS/6MWMUZh6YHsToeTRxrGTA4PTg4jcIV7KgBy0jYoAFNDPRx1bA3ivTEgLMOHpweZBxtM4waNbiNAgDn9QhSF9pevwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0xMi0xM1QyMzoyOTo1NyswODowMMypGaQAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMTItMTNUMjM6Mjk6NTcrMDg6MDC99KEYAAAAAElFTkSuQmCC"></image></svg>
         
         </span>
-        {{--@endforeach--}}
+        
         <span style="position: absolute;right: 430px;top:10px;" >分享到：</span>
 
         <ul class="folder-fen-content detail-fen-content" style="background: #fff;width: 120px;float: right;height: 47px;position: absolute;top: 10px;right: 300px;">
@@ -18,17 +18,17 @@
             </a>
           </li>
           <li>
-            <a target="_blank" href="https://service.weibo.com/share/share.php?url={{url('/article/detail/' . $folder_detail['article']['id'])}}&amp;title=【{{get_article_title($folder_detail['article'])}}】&nbsp; &nbsp; &nbsp; &nbsp;{!!get_article_description($folder_detail['article'])!!}&nbsp;@印际&amp;appkey=&amp;pic=&amp;searchPic=true" title="分享到新浪微博" class="weibo" rel="nofollow">
+            <a target="_blank" href="https://service.weibo.com/share/share.php?url=<?php echo e(url('/article/detail/' . $folder_detail['article']['id'])); ?>&amp;title=【<?php echo e(get_article_title($folder_detail['article'])); ?>】&nbsp; &nbsp; &nbsp; &nbsp;<?php echo get_article_description($folder_detail['article']); ?>&nbsp;@印际&amp;appkey=&amp;pic=&amp;searchPic=true" title="分享到新浪微博" class="weibo" rel="nofollow">
               <img src="/images/folder-weibo.png" alt="分享到新浪微博" style="width: 80%"/>
             </a>
           </li>
           <li>
-            <a target="_blank" href="https://connect.qq.com/widget/shareqq/index.html?url={{url('/article/detail/' . $folder_detail['article']['id'])}}&amp;title={{get_article_title($folder_detail['article'])}}&amp;desc=&amp;summary=&nbsp; &nbsp; &nbsp; &nbsp;{!!get_article_description($folder_detail['article'])!!}&amp;site=印际" title="分享到QQ好友" class="qq" rel="nofollow">
+            <a target="_blank" href="https://connect.qq.com/widget/shareqq/index.html?url=<?php echo e(url('/article/detail/' . $folder_detail['article']['id'])); ?>&amp;title=<?php echo e(get_article_title($folder_detail['article'])); ?>&amp;desc=&amp;summary=&nbsp; &nbsp; &nbsp; &nbsp;<?php echo get_article_description($folder_detail['article']); ?>&amp;site=印际" title="分享到QQ好友" class="qq" rel="nofollow">
               <img src="/images/folder-qq.png" alt="分享到QQ好友" style="width: 80%"/>
             </a>
           </li>
           <li>  
-            <a target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url={{url('/article/detail/' . $folder_detail['article']['id'])}}&amp;title={{get_article_title($folder_detail['article'])}}&amp;desc=&amp;summary=&nbsp; &nbsp; &nbsp; &nbsp;{!!get_article_description($folder_detail['article'])!!}&amp;site=印际" title="分享到QQ空间" class="qqzone" rel="nofollow">
+            <a target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=<?php echo e(url('/article/detail/' . $folder_detail['article']['id'])); ?>&amp;title=<?php echo e(get_article_title($folder_detail['article'])); ?>&amp;desc=&amp;summary=&nbsp; &nbsp; &nbsp; &nbsp;<?php echo get_article_description($folder_detail['article']); ?>&amp;site=印际" title="分享到QQ空间" class="qqzone" rel="nofollow">
               <img src="/images/folder-qqzoe.png" alt="分享到空间" style="width: 80%"/>
             </a>
           </li>
@@ -37,31 +37,31 @@
       </div>
 
   </div>
-  @if ($folder_detail['images'])
-  <div class="image content-post"><img src="{{$folder_detail['images'][0]['photo_url']}}" alt="{{$folder_detail['images'][0]['title']}}" class="selected-image"/></div>
-  @endif
+  <?php if($folder_detail['images']): ?>
+  <div class="image content-post"><img src="<?php echo e($folder_detail['images'][0]['photo_url']); ?>" alt="<?php echo e($folder_detail['images'][0]['title']); ?>" class="selected-image"/></div>
+  <?php endif; ?>
 </div>
 <div class="right" >
-  <div class="folder-name" style="height: 48px;line-height: 48px;text-align: center">{{$folder_detail['folder']['name']}}</div>
+  <div class="folder-name" style="height: 48px;line-height: 48px;text-align: center"><?php echo e($folder_detail['folder']['name']); ?></div>
 
   <div class="more_img" style="">
-    @foreach ($folder_detail['images'] as $image)
+    <?php $__currentLoopData = $folder_detail['images']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
     
-      @if ($loop->first)
-        <a href="javascript:void(0)" class="more-img-item item-inner selected"><img src="{{$image['photo_url']}}" alt="{{$image['title']}}" /> <div class="cover"></div></a>
-      @else
-        <a href="javascript:void(0)" class="more-img-item item-inner"><img src="{{$image['photo_url']}}" alt="{{$image['title']}}" /> <div class="cover"></div></a>
-      @endif
-    @endforeach
+      <?php if($loop->first): ?>
+        <a href="javascript:void(0)" class="more-img-item item-inner selected"><img src="<?php echo e($image['photo_url']); ?>" alt="<?php echo e($image['title']); ?>" /> <div class="cover"></div></a>
+      <?php else: ?>
+        <a href="javascript:void(0)" class="more-img-item item-inner"><img src="<?php echo e($image['photo_url']); ?>" alt="<?php echo e($image['title']); ?>" /> <div class="cover"></div></a>
+      <?php endif; ?>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
   </div>
   <hr class="line-one"/>
   <div class="discoverer">
     <div class="head">
-      <img width="100%" height="100%" src="{{$folder_detail['user']['avatar']}}" alt="头像" />
+      <img width="100%" height="100%" src="<?php echo e($folder_detail['user']['avatar']); ?>" alt="头像" />
     </div>
     <div class='headright'>
-      <a href="#" style="font-size:18px;">{{$folder_detail['user']['nickname']=='' ? '匿名用户' : $folder_detail['user']['nickname']}}</a> <span class="vip1">@if($isvip)VIP{{$isvip['level']}}@else普通用户@endif</span>
-      <a class="Button user_follow_btn" data-id="{{$folder_detail['user']['id']}}">关注</a>
+      <a href="#" style="font-size:18px;"><?php echo e($folder_detail['user']['nickname']=='' ? '匿名用户' : $folder_detail['user']['nickname']); ?></a> <span class="vip1"><?php if($isvip): ?>VIP<?php echo e($isvip['level']); ?><?php else: ?>普通用户<?php endif; ?></span>
+      <a class="Button user_follow_btn" data-id="<?php echo e($folder_detail['user']['id']); ?>">关注</a>
     </div>
   </div> 
 </div>
@@ -102,19 +102,15 @@
   </div>
   <div class="collection_to">
     <ul class="discover-folders2">
-        @foreach($folder_detail['user_finder_folders'] as $key => $value)
+        <?php $__currentLoopData = $folder_detail['user_finder_folders']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <li>
-                <h3>{{$value}}</h3>
-                <span img="" floder_id="{{$key}}" class="folderattr null" title="{{$value}}"></span>
-                {{--@foreach($issc as $isscs)
-                @if($isscs)--}}
-                <a href=" " class="Button2 fr to_find_floder_act add_finder_btn" data-id="{{$key}}" data-img="" data-source="{{$folder_detail['article']['id']}}">收藏</a >
-                {{--@else
-                <a href=" " class="Button fr to_find_floder_act add_finder_btn have-disalbed" data-id="{{$key}}" data-img="" data-source="{{$folder_detail['article']['id']}}">已收藏</a >
-                @endif
-                @endforeach--}}
+                <h3><?php echo e($value); ?></h3>
+                <span img="" floder_id="<?php echo e($key); ?>" class="folderattr null" title="<?php echo e($value); ?>"></span>
+                
+                <a href=" " class="Button2 fr to_find_floder_act add_finder_btn" data-id="<?php echo e($key); ?>" data-img="" data-source="<?php echo e($folder_detail['article']['id']); ?>">收藏</a >
+                
             </li>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </ul>
   </div>
   <a href="#" class="create create-new-folder-btn">创建收藏夹</a>
@@ -165,7 +161,7 @@ var timer = setInterval(function(){
   }
 }, 300);
 
-var wx_url = "{{url('/article/detail/' . $folder_detail['article']['id'])}}";
+var wx_url = "<?php echo e(url('/article/detail/' . $folder_detail['article']['id'])); ?>";
 
 $("#qrcode").qrcode(wx_url);
 

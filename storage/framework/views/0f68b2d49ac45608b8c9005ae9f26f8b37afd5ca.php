@@ -1,9 +1,8 @@
-@extends('layouts.app')
-@section('title')
-    {{trans('comm.yinji')}} --招聘信息详情
-@endsection
+<?php $__env->startSection('title'); ?>
+    <?php echo e(trans('comm.yinji')); ?> --招聘信息详情
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <style>
   .job_ab li .job_ab_info{
     display:none;
@@ -63,7 +62,7 @@
   padding: 0 20px;
   }
 
-  @media only screen and (max-width: 768px){
+  @media  only screen and (max-width: 768px){
     .swiper-slide .detail{
       height:40px;
     }
@@ -78,22 +77,22 @@
         <div class="swiper-wrapper">
         	
         	
-		@foreach ($jobproject as $list)
+		<?php $__currentLoopData = $jobproject; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $list): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 			<div class="swiper-slide">
 				<div class="l-t-title">
 				<p>公司项目 Projects</p >
 			</div>
 
-				<img onclick="location='{{$list['link_url']}}'" class="img-responsive" src="/uploads/{{$list['project_photo']}}" title="{{$list['project_name']}}" name="{{$list['project_name']}}" />
+				<img onclick="location='<?php echo e($list['link_url']); ?>'" class="img-responsive" src="/uploads/<?php echo e($list['project_photo']); ?>" title="<?php echo e($list['project_name']); ?>" name="<?php echo e($list['project_name']); ?>" />
   
 				<p class="detail" >
-					<span>{{$list['project_name']}}</span>	
+					<span><?php echo e($list['project_name']); ?></span>	
 				</p>
 			</div>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         
         
-        </div>  
+        </div>
         <!-- 如果需要分页器 -->
         
         
@@ -114,13 +113,14 @@
         <ul>
 
           <li>
-            <div class="position">O {{$first_display['job_name']}}</div>
-            <div class="place">工作地点：{{$first_display['addr']}}</div>
+            <div class="position">O <?php echo e($first_display['job_name']); ?></div>
+            <div class="place">工作地点：<?php echo e($first_display['addr']); ?></div>
             <div class="position_content">
               <dl>
                 <dt> 职位内容：</dt>
                 <dd>
-                {!!$first_display['content']!!}
+                <?php echo $first_display['content']; ?>
+
                 <dd>
               </dl>
             </div>
@@ -128,22 +128,24 @@
               <dl>
                 <dt>任职要求：</dt>
                 <dd>
-                {!!$first_display['skills']!!}
+                <?php echo $first_display['skills']; ?>
+
                   </dd>
               </dl>
             </div>
           </li>
           
-         @foreach ($lists as $detail)
+         <?php $__currentLoopData = $lists; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $detail): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
           <li>
-            <div class="position">O {{$detail['job_name']}}</div>
-            <div class="place">工作地点：{{$detail['addr']}}</div>
+            <div class="position">O <?php echo e($detail['job_name']); ?></div>
+            <div class="place">工作地点：<?php echo e($detail['addr']); ?></div>
             <!--<div class="requirement">要求：{--!! $detail['job_require'] !!--}</div>-->
             <div class="position_content">
               <dl>
                 <dt> 职位内容：</dt>
                 <dd>
-                {!! $detail['content'] !!}
+                <?php echo $detail['content']; ?>
+
                 </dd>
               </dl>
             </div>
@@ -151,28 +153,29 @@
               <dl>
                 <dt>任职要求：</dt>
                <dd>
-                {!!$detail['skills']!!}
+                <?php echo $detail['skills']; ?>
+
                   </dd>
               </dl>
             </div>
           </li>
-           @endforeach
+           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           
         </ul>
       </div>
       
       <div class="apply_job">
        <dl>
-       	@foreach ($companyde as $list)
+       	<?php $__currentLoopData = $companyde; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $list): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
       <dt>申请方式</dt>
        <dd>
-       <p>申请人请将PDF格式的作品集及简历发到 <a href="javascript:void(0);"> {{$list->email}} </a>，并在标题处注明应聘职位。</p>
-       <p>电话：{{$list->tel}}转人事部</p>
-       <p>官网：<a href="{{$list->web_site}}" target="_blank">{{$list->web_site}}</a></p>
-       <p>地址：{{$list->addr}}</p>
+       <p>申请人请将PDF格式的作品集及简历发到 <a href="javascript:void(0);"> <?php echo e($list->email); ?> </a>，并在标题处注明应聘职位。</p>
+       <p>电话：<?php echo e($list->tel); ?>转人事部</p>
+       <p>官网：<a href="<?php echo e($list->web_site); ?>" target="_blank"><?php echo e($list->web_site); ?></a></p>
+       <p>地址：<?php echo e($list->addr); ?></p>
       </dd>
       </dl>
-      @endforeach
+      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
       </div>
      
       
@@ -184,17 +187,17 @@
   <div class="job_about">
   <div class="job_title"><h3>企业信息</h3></div>
   <div class="info">
-  @foreach ($companyde as $k => $list)
-  <div class="info_logo"><img src="/uploads/{{$list->company_logo}}" alt="{{$list->company_name}}" /><h2>{{$list->company_name}}</h2></div>
+  <?php $__currentLoopData = $companyde; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $list): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+  <div class="info_logo"><img src="/uploads/<?php echo e($list->company_logo); ?>" alt="<?php echo e($list->company_name); ?>" /><h2><?php echo e($list->company_name); ?></h2></div>
   <div class="info_xxx">
-  <li class="job_industry">行业：{{$list->category}}  </li>
-  <li class="job_email">邮箱：<a href="javascript:void(0);">{{$list->email}}</a></li>
-  <li class="job_web">网站：<a href="{{$list->web_site}}" target="_blank">{{$list->web_site}}</a></li>
-  <li class="job_tele">电话：{{$list->tel}} 转人事部</li>
-  <li class="job_address">地址：{{$list->addr}}</li>
-  <li class="job_welfare">福利待遇：{!!$list->welfare!!}</li><br>
-  <li class="job_company" >企业介绍：{!!$list->brief!!}</li>
-  @endforeach
+  <li class="job_industry">行业：<?php echo e($list->category); ?>  </li>
+  <li class="job_email">邮箱：<a href="javascript:void(0);"><?php echo e($list->email); ?></a></li>
+  <li class="job_web">网站：<a href="<?php echo e($list->web_site); ?>" target="_blank"><?php echo e($list->web_site); ?></a></li>
+  <li class="job_tele">电话：<?php echo e($list->tel); ?> 转人事部</li>
+  <li class="job_address">地址：<?php echo e($list->addr); ?></li>
+  <li class="job_welfare">福利待遇：<?php echo $list->welfare; ?></li><br>
+  <li class="job_company" >企业介绍：<?php echo $list->brief; ?></li>
+  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
   </div>
   </div>
   </div>
@@ -203,20 +206,20 @@
         <h3>相似工作</h3>
       </div>
       <ul>
-      	@foreach ($company_all_n as $key => $list)
-        <li><img src="/uploads/{{$list[0]['company_logo']}}" alt="{{$list[0]['company_name']}}" />
+      	<?php $__currentLoopData = $company_all_n; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $list): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <li><img src="/uploads/<?php echo e($list[0]['company_logo']); ?>" alt="<?php echo e($list[0]['company_name']); ?>" />
           <div class="job_ab_info">
             <div class="title">正在热招:</div>
             <!--<div class="main_li"><a target="_blank" title="运营主管" href="/zhaopin/260101.html">运营主管</a></div>-->
             <!--<div class="main_li"><a target="_blank" title="装饰工程师" href="/zhaopin/1008851.html">装饰工程师</a></div>-->
             <!--<div class="main_li"><a target="_blank" title="项目总经理" href="/zhaopin/1028099.html">项目总经理</a></div>-->
-            @foreach ($list as $k)
-            <div class="main_li"><a target="_blank" title="{{$k['job_name']}}" href="/job/detail/{{$k['id']}}">{{$k['job_name']}}</a></div>
-            @endforeach
-            <div style="display:block;float:right;position:absolute;bottom:10px;right:30px" class="whole"><a target="_blank" href="/job/detail/{{$list[0]['id']}}">查看全部</a></div>
+            <?php $__currentLoopData = $list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <div class="main_li"><a target="_blank" title="<?php echo e($k['job_name']); ?>" href="/job/detail/<?php echo e($k['id']); ?>"><?php echo e($k['job_name']); ?></a></div>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <div style="display:block;float:right;position:absolute;bottom:10px;right:30px" class="whole"><a target="_blank" href="/job/detail/<?php echo e($list[0]['id']); ?>">查看全部</a></div>
           </div>
         </li>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 <!--        <li><img src="/images/job_ab2.jpg" alt="绿地地产" />
           <h2>绿地地产</h2>
           <div class="job_ab_info ">
@@ -373,4 +376,5 @@ mySwiper.slideNext();
 
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

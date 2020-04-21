@@ -1,173 +1,94 @@
 @extends('layouts.app')
-
-
-
 @section('title')
-
   {{trans('comm.yinji')}}-发现
-
 @endsection
-
-
 
 @section('content')
 <style>
-
     .find_tab{
-
       margin-top:30px;
-
     }
 
     .folder_box{
-
       display: none;
-
       box-shadow: 0 4px 20px rgba(0,0,0,.2);
-
     }
 
     .discovery-item, .collection-item{
-
       margin: 10px 6px ;
-
-      cursor: pointer; 
-      /*background-color:#fbfbfb;*/
-
+      cursor: pointer; background-color:#fbfbfb;
     }
 
-    .collection-item:first-of-type,
-
-    .discovery-item:first-of-type{
-
+    .collection-item:first-of-type,.discovery-item:first-of-type{
       margin-top:0;
-
-    }
-    .discovery-item .find_title{
-		/*position: relative;*/
-		/*bottom:40px;*/
-  /*  	color: #fff;*/
     }
 
-    .collection-item .find_title,
-
-    .discovery-item .find_title{
-
+    .collection-item .find_title,.discovery-item .find_title{
       padding:0px 10px;
-
       line-height: 48px;
-
     }
 
-    .collection-item .who_find,
-
-    .discovery-item .who_find{
-	  /*position: absolute;*/
-   /*   bottom: 0px;*/
-   /*   width: 100%;*/
+    .collection-item .who_find,.discovery-item .who_find{
       padding:4px 10px;
-
     }
 
-    .collection-item .item__content,
-
-    .discovery-item .item__content{
-
+    .collection-item .item__content,.discovery-item .item__content{
       position: relative;
-
     }
 
-    .collection-item .folder,
-
-    .discovery-item .folder{
-
+    .collection-item .folder,.discovery-item .folder{
       display: none;
-
     }
 
-    .collection-item .folder_box ul,
-
-    .discovery-item .folder_box ul{
-
+    .collection-item .folder_box ul,.discovery-item .folder_box ul{
       border-bottom: 1px solid #ddd;
-
     }
 
     .Find_login{
-
       margin-left:-165px;
-
     }
 
     .Find_login #login{
-
       padding:20px;
-
     }
 
     .modal{
-
       display:none;
-
     }
 
     .create_button input, .vip_pay p button{
-
       padding: 6px 50px;
-
     }
 
     .create_folder input[type=radio]{
-
       margin:0;
-
     }
 
     .img_browse{
-
       position: fixed;
-
       left: 50%;
-
       top: 50%;
-
       width: 800px;
-
       margin-left: -350px;
-
       margin-top: -350px;
-
       height: 720px;
-
       min-height:0;
-
       background: #fff;
-
       z-index: 999;
-
       padding: 10px;
-
       border-radius: 5px;
-
     }
 
     .img_browse .right{
-
       width:260px;
-
       height: 100%;
-
     }
-
-
 
     .img_browse .right .faxian_info{
-
       margin-top: 10px;
-
     }
 
-  </style>
+</style>
 <div class="banner_news" style="background-image:url(/images/find.jpg)"> —— NEWS —— </div>
 <section class="wrapper"> 
   
@@ -192,16 +113,16 @@
       <!--发现-->
       
       <div id="myTab1_Content0" style="padding-bottom: 20px">
-        <form method="get" class="search_form" action="#">
+        <div class="masonry" id="discoveryItems">
+          <form method="get" class="search_form" action="#">
             {{--
             <input class="text_input" type="text" placeholder="输入关键字…" style=" width:1120px;">
             --}}
             
             {{--
             <input type="submit" class="search_btn" id="searchsubmit" value="搜索图片">
+            --}}
           </form>
-           <div class="masonry" id="discoveryItems">
-         
         </div>
       </div>
       
@@ -210,7 +131,8 @@
       <!--文件夹-->
       
       <div id="myTab1_Content1" class="none">
-       <form method="get" class="search_form" action="#">
+        <div class="masonry" id="collectionItems">
+          <form method="get" class="search_form" action="#">
             {{--
             <input class="text_input" type="text" placeholder="输入关键字…"   style=" width:1120px;">
             --}}
@@ -219,15 +141,14 @@
             <input type="submit" class="search_btn" id="searchsubmit" value="搜索文件">
             --}}
           </form>
-            <div class="masonry" id="collectionItems">
-         
         </div>
       </div>
       
       <!--文件夹结束-->
       
       <div id="myTab1_Content2" class="none">
-        <form method="get" class="search_form" action="#">
+        <div class="masonry" id="users">
+          <form method="get" class="search_form" action="#">
             {{--
             <input class="text_input" type="text" placeholder="输入关键字…" style=" width:1120px;">
             --}}
@@ -236,7 +157,6 @@
             <input type="submit" class="search_btn" id="searchsubmit" value="搜索用户">
             --}}
           </form>
-        <div class="masonry" id="users">
         </div>
       </div>
     </div>
@@ -451,10 +371,15 @@
       </a> </div>
     <hr />
     <div class="discoverer">
-      <div class="head"><img width="100%" height="100%" src="images/design_16-03.gif" alt="头像" /></div>
+      <div class="head"><img src="images/design_16-03.gif" alt="头像" /></div>
       <h2><a href="#">大仁哥10327</a> <span class="vip1">VIP</span></h2>
       <a class="Button">关注</a> </div>
-   
+    <hr />
+    <div class="faxian_info">
+      <p>从 <a href="#">严PPPPPPPP1</a> 收藏于 <a href="#">大厅</a></p>
+      <p>2017-06-02 14:59:57</p>
+      <p class="laiyuan"><a href="#">来源：Lera Brumina作品 | 80㎡ Apartmen...</a></p>
+    </div>
   </div>
 </div>
 
@@ -466,44 +391,49 @@
   <div class="close">关闭</div>
   <div class="left">
     <div style="height:48px;">
-      <h2 class="fl">文件夹名称</h2>
+      <h2 class="fl">文件夹名称333</h2>
       <span class="fr">分享到：</div>
     <div class="image"><img src="images/imges.jpg" alt="发现的图片" class="selected-image"/> </div>
   </div>
   <div class="right" style="margin-top:48px;">
-    <div class="more_img"> <a href="#" class="more-img-item selected"> <img src="images/imges.jpg" alt="图片一" />
+    <div class="more_img"> <a href="#" class="more-img-item selected"><img src="images/imges.jpg" alt="图片一" />
       <div class="cover"></div>
-      </a> <a href="#" class="more-img-item"> <img src="images/ad_05.gif" alt="图片一" />
+      </a> <a href="#" class="more-img-item"><img src="images/ad_05.gif" alt="图片一" />
       <div class="cover"></div>
-      </a> <a href="#" class="more-img-item"> <img src="images/design_16-03.gif" alt="图片二" />
+      </a> <a href="#" class="more-img-item"><img src="images/design_16-03.gif" alt="图片二" />
       <div class="cover"></div>
-      </a> <a href="#" class="more-img-item"> <img src="images/about_img.jpg" alt="图片一" />
+      </a> <a href="#" class="more-img-item"><img src="images/about_img.jpg" alt="图片一" />
       <div class="cover"></div>
-      </a> <a href="#" class="more-img-item"> <img src="images/ad_22.gif" alt="图片二" />
+      </a> <a href="#" class="more-img-item"><img src="images/ad_22.gif" alt="图片二" />
       <div class="cover"></div>
-      </a> <a href="#" class="more-img-item"> <img src="images/ad_05.gif" alt="图片一" />
+      </a> <a href="#" class="more-img-item"><img src="images/ad_05.gif" alt="图片一" />
       <div class="cover"></div>
-      </a> <a href="#" class="more-img-item"> <img src="images/design_16-03.gif" alt="图片二" />
+      </a> <a href="#" class="more-img-item"><img src="images/design_16-03.gif" alt="图片二" />
       <div class="cover"></div>
-      </a> <a href="#" class="more-img-item"> <img src="images/about_img.jpg" alt="图片一" />
+      </a> <a href="#" class="more-img-item"><img src="images/about_img.jpg" alt="图片一" />
       <div class="cover"></div>
-      </a> <a href="#" class="more-img-item"> <img src="images/ad_22.gif" alt="图片二" />
+      </a> <a href="#" class="more-img-item"><img src="images/ad_22.gif" alt="图片二" />
       <div class="cover"></div>
-      </a> <a href="#" class="more-img-item"> <img src="images/ad_05.gif" alt="图片一" />
+      </a> <a href="#" class="more-img-item"><img src="images/ad_05.gif" alt="图片一" />
       <div class="cover"></div>
-      </a> <a href="#" class="more-img-item"> <img src="images/design_16-03.gif" alt="图片二" />
+      </a> <a href="#" class="more-img-item"><img src="images/design_16-03.gif" alt="图片二" />
       <div class="cover"></div>
       </a> </div>
     <hr />
     <div class="discoverer">
-      <div class="head"><img width="100%" height="100%" src="images/design_16-03.gif" alt="头像" /></div>
+      <div class="head"><img src="images/design_16-03.gif" alt="头像" /></div>
       <h2><a href="#">大仁哥1027</a> <span class="vip1">VIP</span></h2>
       <a class="Button3">关注</a> </div>
-    
+    <hr />
+    <div class="faxian_info">
+      <p>从 <a href="#">严PPPPPPPP1</a> 收藏于 <a href="#">大厅</a></p>
+      <p>2017-06-02 14:59:57</p>
+      <p class="laiyuan"><a href="#">来源：Lera Brumina作品 | 80㎡ Apartmen...</a></p>
+    </div>
   </div>
 </div>
 
-<!--收藏图片浏览结束--> 
+<!--发现图片浏览结束--> 
 
 <!--弹窗结束--> 
 
@@ -513,102 +443,98 @@
 <script src="/js/member.js"></script> 
 <script type="text/javascript">
 
-$(document).ready(function(){
+    $(document).ready(function(){
+         // 发现
+        var discoveryItems = {!!$user->finders!!};
+        var folders = {!!$user->my_folders!!};
+        var discoveryItemsDom = discoveryItems.map(function( item){ return getDiscoveryItemDom(item, folders) }).join('');
 
-      //发现
+        $('#discoveryItems').html(discoveryItemsDom);
 
-    var discoveryItems = {!!$user->finders!!};
-    var folders = {!!$user->my_folders!!};
-    var discoveryItemsDom = discoveryItems.map(function( item){ return getDiscoveryItemDom(item, folders) }).join('');
-    $('#discoveryItems').html(discoveryItemsDom);
+        // $('#discoveryItems').append(discoveryItemsDom);
 
-    // $('#discoveryItems').append(discoveryItemsDom);
+        // 收藏
+        var collections = {!!$user->collections!!};
+        var collectionItemsDom = collections.map(function( item ){ return getCollectionItemDom(item) }).join('');
+        $('#collectionItems').html(collectionItemsDom);
 
-            // 收藏
-
-    var collections = {!!$user->collections!!};
-    var collectionItemsDom = collections.map(function( item ){ return getCollectionItemDom(item) }).join('');
-    $('#collectionItems').html(collectionItemsDom);
-
-            //推荐用户
-
-    var recommendUsers = {!!$user->recommend_users!!};
-    var users = recommendUsers.map(function( item ){ return getUsersDom(item) }).join('');
-    $('#users').html(users);
+        //推荐用户
+        var recommendUsers = {!!$user->recommend_users!!};
+        var users = recommendUsers.map(function( item ){ return getUsersDom(item) }).join('');
+        $('#users').html(users);
 
 
+      $('.user_follow_btn').click(function () {
+        var follow_id = $(this).attr('data-id');
+        var that = $(this)
+        $.ajax({
+          url: '/member/add_follow',
+          type: 'POST',
+          dataType: 'json',
+          data: {
+            _token:_token,
+            follow_id:follow_id
+          },
 
-  $('.user_follow_btn').click(function () {
-    var follow_id = $(this).attr('data-id');
-    var that = $(this)
-    $.ajax({
-      url: '/member/add_follow',
-      type: 'POST',
-      dataType: 'json',
-      data: {
-        _token:_token,
-        follow_id:follow_id
-      },
+          success: function (data) {
+            if (data.status_code == 0) {
+              layer.msg('关注成功！',{skin: 'intro-login-class layui-layer-hui'})
+              that.text('已关注')
+              that.removeClass('Button3')
+              that.addClass('Button')
+              that.addClass('have-disalbed')
+            } else {
+              layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+            }
+          }
+        });
+      });
 
-      success: function (data) {
-        if (data.status_code == 0) {
-          layer.msg('关注成功！',{skin: 'intro-login-class layui-layer-hui'})
-          that.text('已关注')
-          that.removeClass('Button3')
-          that.addClass('Button')
-          that.addClass('have-disalbed')
-        } else {
-          layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
-        }
+      //页面层-自定义
+      //登录
+      if(!IS_LOGIN){
+        $('.login_box').show();
+      }else if(IS_LOGIN && !IS_VIP){
+        layer.open({
+          type: 1,
+          title: false,
+          closeBtn: 0,
+          anim:-1,
+          isOutAnim:false,
+          content: $('#vip-img')
+        });
+
       }
-    });
-  });
-
-
-  //页面层-自定义
-  //判断是否登录
-  if(!IS_LOGIN){
-    $('.login_box').show();
-  }else if(IS_LOGIN && !IS_VIP){
-    layer.open({
-      type: 1,
-      title: false,
-      closeBtn: 0,
-      anim:-1,
-      isOutAnim:false,
-      content: $('#vip-img')
-    });
-  }
 
 
 
-	$('.vip_prompt .vip_buy').click(function () {
-		$(".new_folder_box").show();
-		layer.closeAll();
-	})
-	
-	
-	
-	$('.vip_prompt .vip_detail').click(function () {
-		location.href='/vip/intro'
-	})
+      $('.vip_prompt .vip_buy').click(function () {
+        $(".new_folder_box").show();
+        layer.closeAll();
+      })
 
 
 
-	$(document).on("click",".vip_close",function () {
-		$(".new_folder_box").hide();
-			if(!IS_VIP){
-				  layer.open({
-				    type: 1,
-				    title: false,
-				    closeBtn: 0,
-				    anim:-1,
-				    isOutAnim:false,
-			    	content: $('#vip-img')
-			  });
-			}
-		return false;
-	})
+      $('.vip_prompt .vip_detail').click(function () {
+        location.href='/vip/intro'
+      })
+
+
+
+      $(document).on("click",".vip_close",function () {
+        $(".new_folder_box").hide();
+        if(!IS_VIP){
+          layer.open({
+            type: 1,
+            title: false,
+            closeBtn: 0,
+            anim:-1,
+            isOutAnim:false,
+            content: $('#vip-img')
+          });
+        }
+        return false;
+      })
 
 
 //发现-点击收藏ajax交互
@@ -639,11 +565,11 @@ $(document).ready(function(){
           }
           if(data.status_code == 100001){
           	layer.msg('已经收藏过了',{skin: 'intro-login-class layui-layer-hui'})
-	      	that.text('已收藏')
-	      	that.css('width','50px')
-	        that.removeClass('Button2')
-	        that.addClass('Button')
-	        that.addClass('have-disalbed')
+            that.text('已收藏')
+            that.css('width','50px')
+            that.removeClass('Button2')
+            that.addClass('Button')
+            that.addClass('have-disalbed')
           	
             // layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
           }
@@ -655,40 +581,26 @@ $(document).ready(function(){
 })
 
     // 获取各种各样的DOM
- 
+
     // 获取发现每一项的Dom
 
     function getDiscoveryItemDom(item,folders){
-
+      //console.log(item,'aaaaaaaaaaa')
       var foldersArr = folders ||  [];
-      
-
       var h = '';
-  
-      h += '<div class="item discovery-item"  style="display:flex"; >'
-
-      h += '  <div class="item_content ">';
-
+      h += '<div class="item discovery-item" style="display:flex">'
+      h += '  <div class="item_content">';
       h += '    <img src="' + item.img + '" class="bg-img" data-id="' + item.id + '" id="sourceimg" source="'+item.source+'"  />';
-
       h += '    <div class="find_title" data-source="'+item.source+'">'; 
-
       h += '      <h2>'+ item.who_find?item.who_find[0].tinames:'' +'...</h2>';
-
       if(item.who_find && item.who_find.length > 0){
-
-        h += '      <a href="javascript:;" class="find_info_more"></a>'; 
-
+        h += '      <a href="javascript:;" class="find_info_more"></a>';
       }
 
       h += '    </div>';
-
-      h += '    <div class="who_find" style="display:none;">';
-
+      h += '    <div class="who_find" style="display:none">';
       item.who_find.map(function(user,index){
-		
         h += '      <img src="' + user.userIcon + '"  />';
-			
 		if(user.userName){
         	h += '      <span > <a href="javascript:;">'+ user.userName +'</a> 收藏到 <a href="#">'+ user.folderName + '</a></span>';
         }else{
@@ -751,7 +663,6 @@ $(document).ready(function(){
       h += '  </div>';
       h += '</div>';
       return h;
-   
     }
 
 
@@ -773,14 +684,23 @@ $(document).ready(function(){
       h += '  </ul>';
       h += '  <div class="find_title">';
       h += '    <h2><a href="folderlist/'+ item.id+'">'+ item.title + '</a></h2>';
-
+      // if(item.who_find && item.who_find.length > 0){
+      //   h += '      <a href="javascript:;" class="find_info_more"></a>';
+      // }
       if(item.who_find && item.who_find.length > 0){
         item.who_find.map(function(user,idx){
-        	
           h += '   <a href="javascript:void(0);" class="collect-user-icon"><img id="errimg" src="' + user.userIcon + '" onerror="this.onerror=``;this.src=`/img/avatar.png`" /></a> ';
         })
       }
       h += '  </div>';
+      // if(item.who_find && item.who_find.length > 0){
+      //   item.who_find.map(function(user,idx){
+      //     h += '  <div class="who_find" style="display:block">';
+      //     h += '    <img src="' + user.userIcon + '" />';
+      //     // h += '    <span><a href="#">'+ user.userName +'</a> 发现并收藏到 <a href="#">'+ user.folderName +'</a></span>';
+      //     h += '  </div>';
+      //   })
+      // }
       h += ' </div>';
       h += '</div>';
       return h;
@@ -792,7 +712,7 @@ $(document).ready(function(){
     // 获取推荐用户每一项的Dom
 
     function getUsersDom(user){
-      var h= ''; 
+      var h= '';
       h += ' <div class="item">';
       h += '   <div class="users">';
       h += '     <div class="border-bottom1">';
@@ -819,19 +739,13 @@ $(document).ready(function(){
     function getImgBrowseImgsDom(imgs,id,index){
       var imgsArr = imgs || [];
       var idx = index || 0;
-	  var h='';
-
+      var h = '';
       imgsArr.map(function(img, i){
         h += '<a href="#" class="more-img-item ' + (parseInt(idx) === i ? 'selected' : '') + '"><img src="' + img.src + '" alt="'+img.text+'" /> <div class="cover"></div></a>';
       })
-
       $( id + ' .selected-image').attr('src',imgsArr[idx].src);
       $(id + ' .more_img').html(h);
-
     }
-
-
-
 
 
 
@@ -839,15 +753,14 @@ $(document).ready(function(){
       if(thisObj.className == "active")return;
       var tabObj = thisObj.parentNode.id;
       var tabList = document.getElementById(tabObj).getElementsByTagName("li");
+
       for(i=0; i <tabList.length; i++){
         if (i == Num){
           thisObj.className = "active";
-          // document.getElementById(tabObj+i).style.display = "block"; 
-          tabList[i].style.dispaly="block"; 
+          document.getElementById(tabObj+"_Content"+i).style.display = "block";
         }else{
           tabList[i].className = "normal";
-          // document.getElementById(tabObj+i).style.display = "none";
-          tabList[i].style.dispaly="none"; 
+          document.getElementById(tabObj+"_Content"+i).style.display = "none";
         }
       }
     }
@@ -881,40 +794,56 @@ $(document).ready(function(){
     })
 
 
-/*
-    // 收藏夹展示图片框
 
-    // $(document).on('click','.collection-item',function(){
-    //   var folder_id = $(this).attr('data-id');
-    //   $.ajax({
-    //     async:false, 
-    //     url: 'vip/get_folder_detail',
-    //     type: 'POST',
-    //     //dataType: 'json',
-    //     data: {
-    //       _token:_token,
-    //       folder_id:folder_id
-    //     },
-    //     success: function (data) {
-    //       $('#collection-img-browse').html(data);
-    //       //初始化相框
-    //       //getImgBrowseImgsDom(browseImgs,'#collection-img-browse');打开的话会显示默认的图片
-    //       layer.open({
-    //         type: 1,
-    //         title: false,
-    //         closeBtn: 0,
-    //         anim:-1,
-    //         isOutAnim:false,
-    //         content: $('#collection-img-browse')
-    //       });
-    //     }
+    //新建文件夹
+    // $(document).on('click','.create-new-folder',function(){
+    //   layer.open({
+    //     type: 1,
+    //     title: false,
+    //     closeBtn: 0,
+    //     anim:-1,
+    //     isOutAnim:false,
+    //     content: $('#newFolders')
     //   });
+    //
     // })
+    //
+    //
+    // //创建文件夹
+    //
+    // $('.create_finder_folder_enter_btn').on('click',function () {
+    //
+    // })
+    // 收藏夹展示图片框
+    /*$(document).on('click','.collection-item',function(){
+      var folder_id = $(this).attr('data-id');
+      $.ajax({
+        async:false,
+        url: 'vip/get_folder_detail',
+        type: 'POST',
+        //dataType: 'json',
+        data: {
+          _token:_token,
+          folder_id:folder_id
+        },
+        success: function (data) {
+          $('#collection-img-browse').html(data);
+          //初始化相框
+          getImgBrowseImgsDom(browseImgs,'#collection-img-browse');
+          layer.open({
+            type: 1,
+            title: false,
+            closeBtn: 0,
+            anim:-1,
+            isOutAnim:false,
+            content: $('#collection-img-browse')
+          });
+        }
+      });
+    })*/
 
-*/
 
     // 发现展示图片框
-
     $(document).on('click','.discovery-item .bg-img',function(){
       var folder_id = $(this).attr('data-id');
       $.ajax({
@@ -940,14 +869,7 @@ $(document).ready(function(){
           });
         }
       });
-
-
-
-
-
     })
-
-
 
     //关闭所有展示框
     $(document).on('click','.modal .close',function(){
@@ -960,39 +882,22 @@ $(document).ready(function(){
     })
 
 
-
     //点击展示更多的收藏文件夹
-
     // $(document).on('click','.show-more-selcect-item',function(){
-
     //   if($(this).hasClass('showbox')){
-
     //     $(this).parent().css('width','80%');
-
     //     $(this).parent().siblings('.add-collection-btn').show()
-
     //     $(this).css('background-position','0px 0px');
-
     //     $(this).parents('.folder').siblings('.folder_box').css('display','none');
-
     //     $(this).removeClass('showbox')
-
     //   }else{
-
     //
-
     //     $(this).parent().siblings('.add-collection-btn').hide()
-
     //     $(this).parent().css('width','100%');
-
     //     $(this).css('background-position','0px -36px');
-
     //     $(this).parents('.folder').siblings('.folder_box').css('display','block');
-
     //     $(this).addClass('showbox');
-
     //   }
-
     // })
 
 
@@ -1019,7 +924,6 @@ $(document).ready(function(){
 
 
     // 发现页面展示收藏
-
     $(document).on('mouseenter','.discovery-item',function(){
       $(this).find('.folder').css('display','block');
     })
@@ -1038,7 +942,6 @@ $(document).ready(function(){
 
 
     //点击展示谁发现按钮
-
     $(document).on('click','.find_info_more',function(ev){
     	var dasou=$(this).parent().attr('data-source');
     	// alert(dasou);
@@ -1047,246 +950,104 @@ $(document).ready(function(){
         var isShow = $(this).css('display');
         if(isShow == 'block'){
           $(this).css('display','none');
-          //$(this).parent('.discovery-item .find_title').css({"position":"absolute","bottom": "-6px","color":"#fff"});
         }else{
           $(this).css('display','block');
-          //$(this).parent('.discovery-item .find_title').css({"position":"absolute","bottom": "35px","color":"#fff"});
         }
       })
     })
 
     //
-
     // $('.user_follow_btn').click(function () {
-
     //   var follow_id = $(this).attr('data-id');
-
     //   $.ajax({
-
     //     url: '/member/add_follow',
-
     //     type: 'POST',
-
     //     dataType: 'json',
-
     //     data: {
-
     //       _token:_token,
-
     //       follow_id:follow_id
-
     //     },
-
     //     success: function (data) {
-
     //       if (data.status_code == 0) {
-
     //         layer.msg('关注成功！',{skin: 'intro-login-class layui-layer-hui'})
-
     //       } else {
-
     //         layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
-
     //       }
-
     //     }
-
     //   });
-
     // });
-
-
-
   </script> 
 {{--会员购买模块--}} 
 <script>
-
-
-
     _omit  = 58;
-
     _price = '0.01';
-
-
-
-
-
     $(document).on("submit",".cart",function () {
-
-
-
       var agree = document.getElementById("agree").checked;
-
-
-
       if (!agree) {
-
-
-
-
-
-
-
         alert('请阅读并接受《服务条款》');
-
-
-
         return false;
-
-
-
       }
-
-
-
     });
-
-
-
-
-
-
 
     $(document).on("click",".vip_select li",function () {
-
       _self = $(this);
-
-
-
       _price = _self.attr("price");
-
       _omit = _self.attr("omit");
-
-
-
       $('#vip_type').val(_self.attr("vip_level"));
-
       $('#pay_total').val(_price);
-
       $('#payment_code').val('alipay');
-
-
-
       $(".vip_select li").removeClass("determine");
-
-
-
       _self.addClass("determine");
-
-
-
       var c = parseInt(_omit)-parseInt(_price);
-
-
-
       $(".vip_pay_msg").html("应付：<span>"+_price+"</span>元 ( 立省"+c+"元)");
-
-
-
     });
-
-
-
-
-
 
 
     $(document).ready(function(){
-
       // listen if someone clicks 'Buy Now' button
-
-
-
       // if(!IS_LOGIN){
-
       //     $('.login_box').show()
-
       // }
-
       $(document).on("click","#buy_now_button",function(){
-
         var vip_type = $('#vip_type').val();
-
         if (vip_type == '') {
-
           alert('请选择会员类型');
-
           return false;
-
         }
-
         window.location = '/vip/pay?vip_type=' + vip_type;
-
         return;
-
-
-
         //submit the form
-
-
-
         //$('form.cart').submit();
-
         var url = '/vip/wxbuy';
-
         var folder_data = {
-
           _token:_token,
-
           vip_type : $('#vip_type').val(),
-
           payment_code : $('#payment_code').val(),
-
           pay_total : $('#pay_total').val(),
-
         };
 
 
 
         $.ajax({
-
           async:false,
-
           url: url,
-
           type: 'POST',
-
           dataType: 'json',
-
           data: folder_data,
-
           success: function (data) {
-
             if (data.status_code == 0) {
-
               if ('alipay' == data.data.payment_code) {
-
                 window.location = data.data.redirect_url;
-
               } else {
-
                 alert('微信支付返回二维码地址');
-
               }
-
               layer.closeAll();
-
             } else {
-
               alert(data.message);
-
             }
-
           }
-
         });
-
-
-
       });
-
-
-
     });
 
 
@@ -1294,201 +1055,72 @@ $(document).ready(function(){
   </script> 
 {{--登录模块--}} 
 <script type="text/javascript">
-
     function WeChatLogin() {
-
-
-
-      if ($(".ma_box").hasClass("hide")) {
-
-
-
+      if($(".ma_box").hasClass("hide")) {
         $(".ma_box").removeClass("hide");
-
-
-
-      } else {
-
-
-
+      }else {
         $(".ma_box").addClass("hide");
-
-
-
       }
-
-
-
     }
-
-
-
-
-
 
 
     function toLogin() {
-
-
-
       //以下为按钮点击事件的逻辑。注意这里要重新打开窗口
-
-
-
       //否则后面跳转到QQ登录，授权页面时会直接缩小当前浏览器的窗口，而不是打开新窗口
-
-
-
       var A = window.open("/auth/qq", "_self");
-
-
-
-
-
-
-
     }
-
-
-
-
-
 
 
     function wp_attempt_focus() {
-
-
-
       setTimeout(function () {
-
-
-
         try {
-
-
-
           d = document.getElementById('user_login');
-
-
-
           d.focus();
-
-
-
           d.select();
-
-
 
         } catch (e) {
 
-
-
         }
-
-
-
       }, 200);
-
-
-
     }
 
     //监听回车事件
-
     $(document).keyup(function(event){
-
       if(event.keyCode ==13){
-
         $('#wp-submit-login').trigger("click");
-
       }
-
     });
 
-
-
     $("#wp-submit-login").click(function () {
-
-
-
       // var loginform = new FormData();
-
-
-
       var url = $.trim($('#loginform').attr("action"));
-
-
-
       $.ajax({
-
-
-
         url: url,
-
-
-
         type: 'POST',
-
-
-
         dataType: 'json',
-
-
-
         data: $('#loginform').serialize(),
-
-
-
         success: function (data) {
-
-
-
           if (data.status_code == 0) {
-
-
-
             setTimeout(function () {
-
               location.href =  '/finder'
-
-
-
             }, 300);
-
-
-
           } else {
-
             layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
-
           }
-
-
-
         }
-
-
-
       });
-
-
-
     });
 
     wp_attempt_focus();
-
     if (typeof wpOnload == 'function') wpOnload();
-
 
   </script> 
 <script type="text/javascript"> 
-  
 	//头像中图片不存在，显示默认图片
 	$(document).ready(function(){
 	  $("errimg").error(function(){
 	    $("img").attr('src','/img/avatar.png');
 	  });
 	});
-		
-  </script> 
+</script> 
 @endsection 

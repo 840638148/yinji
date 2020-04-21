@@ -1,23 +1,20 @@
-@extends('layouts.app')
+<?php $__env->startSection('title'); ?>
+
+    VIP_<?php echo e(trans('comm.yinji')); ?>
 
 
-
-@section('title')
-
-    VIP_{{trans('comm.yinji')}}
-
-@endsection
+<?php $__env->stopSection(); ?>
 
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <script src="/js/layer.js"></script> 
     <script src="/js/jquery.qrcode.min.js"></script>
     <section class="wrapper pay-wrap">
         <!---支付--->
         <div class="pay_box clearfix">
             <i class="pay_ico fl mr20" ></i>
-            <div style="float: left" class="pay-title"><h2 class="mt10">您的订单已提交成功！付款咯 </h2><p>购买：<span class="c_orange">{{$order_title}}</span></p></div>
-            <div style="float: right" class="pay-money"><h2 class="mt10">应付：<span class="c_red">{{$pay_total}}</span>元</h2><p>积分抵扣:<span class="c_red">{{$point_total}}</span>元</p></div>
+            <div style="float: left" class="pay-title"><h2 class="mt10">您的订单已提交成功！付款咯 </h2><p>购买：<span class="c_orange"><?php echo e($order_title); ?></span></p></div>
+            <div style="float: right" class="pay-money"><h2 class="mt10">应付：<span class="c_red"><?php echo e($pay_total); ?></span>元</h2><p>积分抵扣:<span class="c_red"><?php echo e($point_total); ?></span>元</p></div>
             <div id="clock" style="clear: both;font-size: 18px;color:red;margin-left:90px;" >订单还有 <span id="mintue">01分</span><span id="second">00秒</span> 后自动取消订单</div>
         </div>
 <script type="text/javascript">
@@ -28,7 +25,7 @@ window.onload = function () {
     return [minutes , seconds ];
     }
 
-    var time = 10000;
+    var time = 5000;
     var int=0;
     int= setInterval(function(){
         time -= 1000
@@ -89,7 +86,7 @@ window.onload = function () {
         <div class="pay_box pay_box-content mt30">
             <div class="pay_title"> 选择支付方式 </div>
             <ul class="pay">
-                <li class="weixin"><div class="qr-code">{{$wx_code_url}}</div><i class="weixin-icon"></i></li>
+                <li class="weixin"><div class="qr-code"><?php echo e($wx_code_url); ?></div><i class="weixin-icon"></i></li>
                 <li class="alipay"><a class="qr-code"></a><i class="alipay-icon"></i></li>
             </ul>
         </div>
@@ -133,5 +130,7 @@ window.onload = function () {
             // $('.hot-search').find('dd').
         })
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
 
+
+<?php echo $__env->make('layouts.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

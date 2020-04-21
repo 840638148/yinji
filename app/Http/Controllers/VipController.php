@@ -139,7 +139,7 @@ class VipController extends Controller
             
 		}
         
-        // dd($user);
+        // dd($user->my_folders);
 		//查出已经收藏的
 		$user_id = Auth::id();
 		$issc = UserCollect::where('user_id', $user_id)->get();
@@ -746,4 +746,41 @@ class VipController extends Controller
             die('fail'); //The notify response
         }
     }
+
+    /**
+     * 30分后没完成支付的自动取消订单
+     * 
+     * @param Request $request
+     */
+    public function autodelpay(Request $request)
+    {   
+        $paylist=VipBuyOrder::where('user_id',Auth::id())->where('pay_status',0)->get();
+        
+
+        foreach($paylist as $k=>$v){
+            // dump($v->user_id);
+            if($v->created_at->diffInMinutes() > 30){
+                //30分钟后未付款的更改支付状态
+                $request = DB::table('vip_buy_orders')->where('user_id',$v->user_id)->update(['pay_status'=>'-1']); 
+                // echo '<script>alert("更改状态成功")</script>';
+            }
+        }
+
+        if($request){
+            return Output::makeResult($request,null);
+        }else{
+            return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
+        }
+        
+    }
+
+
+
+
+
+
+
+
+
+
 }
