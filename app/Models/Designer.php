@@ -55,9 +55,10 @@ class Designer extends Model
 
     public static function getDesigners(& $request, $category_ids = [], $keyword = null)
     {
-        $obj = Designer::where('designer_status', '1')
-            ->where('display', '0');
-            
+        $obj = Designer::where('designer_status', '1')->where('display', '0')->orderby('designersavg','DESC');
+        // $obj=Db::table('designers')->where('designer_status', 1)->where('display', 0)->orderby('designersavg','desc')->toSql();
+        // dd($obj); 
+
         if ($category_ids) {
             $obj->where(function($query) use($category_ids){
                 foreach ($category_ids as $category_id) {
@@ -73,7 +74,7 @@ class Designer extends Model
             });
         }
 
-        $designers = $obj->orderBy('like_num', 'desc')->paginate(intval($request->per_page));
+        $designers = $obj->orderBy('designersavg', 'DESC')->paginate(intval($request->per_page));
         $lang = Session::get('language') ?? 'zh-CN';
         if ('zh-CN' == $lang) {
             $display_name = "name_cn";
@@ -122,12 +123,17 @@ class Designer extends Model
                 $designer->starsav=0;
             }else{
                 $starsav=$comments_total/$starscount;
-                $designer->starsav=sprintf("%.1f",$starsav);//保留小数点一位
+                $designer->starsav=sprintf("%.1f",$starsav);//保留小数点一位            
+                if($designer->starsav==''){
+                    $result=Designer::where('id',$designer->id)->update(['designersavg'=>'5.0']);
+                }else{
+                    $result=Designer::where('id',$designer->id)->update(['designersavg'=>$designer->starsav]);
+                }
             }
             //以平均分进行降序
-            $dearr=$designers->items();
-            $dearr=collect($dearr)->sortByDesc('starsav')->all();
-            $designers->dearr=$dearr;
+            // $dearr=$designers->items();
+            // $dearr=collect($dearr)->sortByDesc('starsav')->all();
+            // $designers->dearr=$dearr;
         }
         // $designers=$designers->sortByDesc('starsav')->values();
         // dd($designers);

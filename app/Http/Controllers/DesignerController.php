@@ -13,6 +13,7 @@ use App\Models\Designer;
 use App\Models\ArticleComment;
 use App\Models\Article;
 use Illuminate\Support\Facades\Auth;
+use DB;
 
 class DesignerController extends Controller
 {
@@ -29,6 +30,16 @@ class DesignerController extends Controller
             ->count();
         $categories = DesignerCategory::where('display', '0')->get();
         $designers = Designer::getDesigners($request);
+
+        // foreach($designers as $k=>$v){
+        //     // dump($v['starsav']);
+        //     if($v['starsav']==''){
+        //         $result=Designer::where('id',$v['id'])->update(['designersavg'=>'5.0']);
+        //     }else{
+        //         $result=Designer::where('id',$v['id'])->update(['designersavg'=>$v['starsav']]);
+        //     }
+        // }
+        // dd($designers);
 
         $data = [
             'user' => $this->getUserInfo(),
@@ -70,9 +81,14 @@ class DesignerController extends Controller
         	$starsav=0;   
         }else{
         	$starsav=$comments_total/$starscount;
-        	$starsav=sprintf("%.1f",$starsav);//保留小数点一位
+            $starsav=sprintf("%.1f",$starsav);//保留小数点一位
+            // $result=Db::table('designers')->where('id',$id)->update(['designersavg'=>$starsav]);
+            // $result=Designer::where('id',$id)->update(['designersavg'=>$starsav]);
         }
         
+        // dd($result);
+
+
         $data = [
             'user' => $this->getUserInfo(),
             'lang' => $lang,

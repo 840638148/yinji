@@ -211,11 +211,12 @@ class UserFinder extends Model
     public static function recommendFinders($user_id = null)
     {
         $recommend_finders = [];
-        $user_finders = self::leftjoin('user_finder_folders','user_finders.user_finder_folder_id','=','user_finder_folders.id')
+        $user_finders = self::
+        // leftjoin('user_finder_folders','user_finders.user_finder_folder_id','=','user_finder_folders.id')
             // ->where('')
             
-            ->groupBy('user_finders.photo_url')
-            ->orderBy('user_finders.updated_at', 'desc')
+            // ->groupBy('user_finders.photo_url')
+            orderBy('user_finders.updated_at', 'desc')
             // ->limit(50)
             
             // ->distinct('photo_url')
