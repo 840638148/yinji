@@ -20,6 +20,11 @@ class JobController extends Controller
     {
         $lang = $request->session()->get('language') ?? 'zh-CN';
 
+        if ($request->page && $request->page > 1) {
+            $result = CompanyWork::getMoreJobs($request);
+            return Output::makeResult($request, $result);
+        }
+
     	//使用model来获取所有列表，分页    获取company_work表的数据
     	$joblist=Company::leftJoin('company_works','companies.id','company_works.company_id')->orderby('company_works.updated_at','desc')->paginate(16);
 
@@ -52,7 +57,14 @@ class JobController extends Controller
     public function searchjob(Request $request)
     {   
         // dd($request->all());
-    	$lang = $request->session()->get('language') ?? 'zh-CN';
+        $lang = $request->session()->get('language') ?? 'zh-CN';
+        
+        
+        if ($request->page && $request->page > 1) {
+            $result = CompanyWork::getSearchJobs($request);
+            return Output::makeResult($request, $result);
+        }
+
 		//获取表单提交的数据
     	$keywords=$request->get('keywords');
     	$category=$request->get('jobcategory');
@@ -67,9 +79,6 @@ class JobController extends Controller
         
 		//热词查询
 		$hotword=Companyhot::all()->toArray();
-
-        // $jobslist = (new CompanyWork)->jobsearch($keywords)->toArray();
-        //  dd($request->all());
 
         //职位走这里
         if($category == 1 && $keywords != ''){
