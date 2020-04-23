@@ -109,8 +109,11 @@
         let that=$(this);
         let type=that.attr('so');
         let sjx=that.find(".arrow").attr('aw');
+        // let category=that.find(".arrow").attr('aw');
+        var r = window.location.href.substr(21);
         
         
+        console.log(r); 
         console.log(type,sjx); 
         console.log(that.find(".arrow").html()); 
 

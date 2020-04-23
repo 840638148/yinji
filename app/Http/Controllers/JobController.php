@@ -98,7 +98,6 @@ class JobController extends Controller
             $jobslist='';
         }
         
-
     	$data = [
     	   'lang' => $lang,
     	   'user' => $this->getUserInfo(),
@@ -109,36 +108,14 @@ class JobController extends Controller
 
         return view('job.searchjob',$data);
     }   
-       
-       
-    
-/*    public function detail(Request $request, $company_id)
-    {
-        $lang = $request->session()->get('language') ?? 'zh-CN';
-        
-    	$companyde=Db::table('companies')->where('id',$company_id)->get();
-        
-        $jobdetail=CompanyWork::where('id',$company_id)->get();//获取招聘详情
-        $jobproject=CompanyProject::all();//获取所有项目
-
-        $data = [
-            'user' => $this->getUserInfo(),
-            'lang' => $lang,
-            'jobdetail' => $jobdetail,
-            'jobproject' => $jobproject,
-            'companyde' => $companyde,
-        ];
-        
-        return view('job.detail', $data);
-    }*/
     
     public function detail(Request $request,$id)
     {
         $lang = $request->session()->get('language') ?? 'zh-CN';
-        
-      
+         
         //企业ID
-        $company_id=CompanyWork::where('id',$id)->first()->company_id;
+        $company_id=CompanyWork::where('id',$id)->firstOrFail()->company_id;
+
         //所有有关相同企业ID的数据
     	$companyde=Db::table('companies')->where('id',$company_id)->get();
 
@@ -159,10 +136,7 @@ class JobController extends Controller
 		  return $value->id == $id;
 		});
 		$lists=$lists->toArray();
-
-
         $jobproject=CompanyProject::where('company_id',$company_id)->get()->toArray();//获取所有项目
-        // dd($company_id);
 		
         $data = [
             'user' => $this->getUserInfo(),
@@ -177,6 +151,73 @@ class JobController extends Controller
         ];
         
         return view('job.detail', $data);
+    }
+    
+    
+    public function search_detail(Request $request,$id)
+    {   
+        $lang = $request->session()->get('language') ?? 'zh-CN';
+        // dd($request->all());
+        if($request->jobcategory==1){
+            $company_id=CompanyWork::where('id',$id)->firstOrFail()->company_id;
+            //所有有关相同企业ID的数据
+            $companyde=Db::table('companies')->where('id',$company_id)->get();
+            
+            //连表查询 并用company_id进行分组
+            $companyall=Company::leftJoin('company_works','companies.id','company_works.company_id')->orderby('companies.sort','desc')->orderby('company_works.updated_at','desc')->get()->groupby('company_id');
+            
+            //右边招聘显示最新的4个职位
+            $company_all_n = [];
+            foreach ($companyall as $company) {
+                $company_all_n[] = $company->take(4)->all();
+            }
+
+            $arr1=[];
+            $arr2=CompanyWork::where('company_id',$company_id)->get();//获取所有公司职位
+            
+            $first_display = $arr2->firstWhere('id', $id)->toArray();
+            $lists = $arr2->reject(function ($value) use ($id) {
+            return $value->id == $id;
+            });
+            $lists=$lists->toArray();
+            $jobproject=CompanyProject::where('company_id',$company_id)->get()->toArray();//获取所有项目
+
+            $data = [
+                'user' => $this->getUserInfo(),
+                'lang' => $lang,
+                'jobproject' => $jobproject,
+                'companyde' => $companyde,
+                'first_display' => $first_display,
+                'companyall' => $companyall,
+                'lists' => $lists,
+                'company_all_n' => $company_all_n,
+            ];
+            return view('job.detail', $data);
+        }else{
+            $company_id=CompanyWork::leftjoin('companies','companies.id','company_works.company_id')->where('company_works.company_id',$id)->firstOrFail()->value('company_id');
+            // dd($company_id);
+            $jobproject=CompanyProject::where('company_id',$company_id)->get()->toArray();//获取所有项目
+            $companyde=CompanyWork::leftjoin('companies','companies.id','company_works.company_id')->where('companies.id',$id)->get();
+
+            //连表查询并用company_id进行分组  右边推荐招聘
+            $companyall=Company::leftJoin('company_works','companies.id','company_works.company_id')->orderby('companies.sort','desc')->orderby('company_works.updated_at','desc')->get()->groupby('company_id');
+
+            //右边招聘显示最新的4个职位
+            $company_all_n = [];
+            foreach ($companyall as $company) {
+                $company_all_n[] = $company->take(4)->all();
+            }
+
+            $data = [
+                'user' => $this->getUserInfo(),
+                'lang' => $lang,
+                'companyde' => $companyde,
+                'jobproject' => $jobproject,
+                'companyall' => $companyall,
+                'company_all_n' => $company_all_n,
+            ];
+            return view('job.search_detail', $data);
+        }
     }
     
     

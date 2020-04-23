@@ -145,7 +145,8 @@ Route::get('folderlist/{id}', 'VipController@folderlist');//推荐收藏夹列�
 Route::post('vip/addfolders', 'VipController@addfolders');//推荐收藏夹列表
 Route::post('vip/scstatus', 'VipController@scstatus');//推荐收藏夹列表收藏的真实状态
 Route::post('vip/autodelpay', 'VipController@autodelpay');//半小时后未付款的自动取消订单
-Route::get('finder', 'VipController@finder');//发现页-->发现的分页
+Route::get('finder_ajax', 'VipController@finderajax');//发现页-->发现的分页
+
 
 
 //工作
@@ -153,6 +154,7 @@ Route::get('job', 'JobController@index');
 Route::get('job/detail/{id}', 'JobController@detail');
 Route::get('job/apply', 'JobController@apply');
 Route::get('job/searchjob', 'JobController@searchjob');
+Route::get('job/search_detail/{id}', 'JobController@search_detail');
 Route::get('job_ajax', 'JobController@index');//工作的分页
 // Route::get('job/searchjob_ajax', 'JobController@searchjob');//搜索工作的分页
 //搜索

@@ -99,9 +99,9 @@
     
     <div class="TabTitle">
       <ul id="myTab1">
-        <li class="active" onclick="nTabs(this,0);">发现</li>
-        <li class="normal" onclick="nTabs(this,1);">推荐收藏夹</li>
-        <li class="normal" onclick="nTabs(this,2);">推荐用户</li>
+        <li class="active" cate='finder' id='tabka' onclick="nTabs(this,0);">发现</li>
+        <li class="normal" cate='folder' id='tabka' onclick="nTabs(this,1);">推荐收藏夹</li>
+        <li class="normal" cate='tuijianuser' id='tabka' onclick="nTabs(this,2);">推荐用户</li>
       </ul>
     </div>
     
@@ -421,7 +421,7 @@
 </div>
 
 <!--发现图片浏览结束--> 
-
+<!-- {--!!$user->links()!!--} -->
 <!--弹窗结束--> 
 
 <!-- 模拟数据 --> 
@@ -434,6 +434,7 @@
          // 发现
         var discoveryItems = <?php echo $user->finders; ?>;
         var folders = <?php echo $user->my_folders; ?>;
+        // console.log()
         var discoveryItemsDom = discoveryItems.map(function( item){ return getDiscoveryItemDom(item, folders) }).join('');
 
         $('#discoveryItems').html(discoveryItemsDom);
@@ -572,7 +573,8 @@
     // 获取发现每一项的Dom
 
     function getDiscoveryItemDom(item,folders){
-      //console.log(item,'aaaaaaaaaaa')
+      // console.log(item,'aaaaaaaaaaa')
+      
       var foldersArr = folders ||  [];
       var h = '';
       h += '<div class="item discovery-item" style="display:flex">'
@@ -828,6 +830,58 @@
         }
       });
     })*/
+
+
+
+// 发现页的分页
+$(document).ready(function(){
+
+  $('#tabka').attr('cate', 'finder');
+  $(document).on('click','#tabka',function(){
+      let cate=$(this).attr('cate');//获取tab的分类
+      // console.log(cate);
+      let page = 2;isEnd = false
+    $(window).on('scroll',function(e){
+      let bodyHeight=document.body.scrollHeight==0?document.documentElement.scrollHeight:document.body.scrollHeight;
+            if(bodyHeight - $('body').scrollTop() -10 < window.innerHeight && !isEnd){
+              let h  = '';
+              let url = window.location.href;
+                $.ajax({
+                    async: false,
+                    url: url + '_ajax?page=' + page+'/cate='+cate,
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {},
+                    success: function(data){
+                        console.log(data);
+                        if(data.status_code == 0){
+                            page++;
+                            // h =  data.data.join('')
+                            h =  data.data
+                            $('#discoveryItems').append(h)
+                            if(data.data.length<15){
+                                isEnd = true
+                            }
+                        }else{
+                            isEnd = true
+                            alert(data.message);
+                        }
+                    }
+                });
+              }
+      })
+  })
+          
+
+})
+
+
+
+
+
+
+
+
 
 
     // 发现展示图片框

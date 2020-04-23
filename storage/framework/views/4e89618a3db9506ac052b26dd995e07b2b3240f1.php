@@ -75,14 +75,11 @@
     <!--招聘信息详情-->
     <div class="projects swiper-container" style="position:relative" id="projects">
         <div class="swiper-wrapper">
-        	
-        	
 		<?php $__currentLoopData = $jobproject; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $list): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 			<div class="swiper-slide">
 				<div class="l-t-title">
 				<p>公司项目 Projects</p >
 			</div>
-
 				<img onclick="location='<?php echo e($list['link_url']); ?>'" class="img-responsive" src="/uploads/<?php echo e($list['project_photo']); ?>" title="<?php echo e($list['project_name']); ?>" name="<?php echo e($list['project_name']); ?>" />
   
 				<p class="detail" >
@@ -94,14 +91,8 @@
         
         </div>  
         <!-- 如果需要分页器 -->
-        
-        
-        
         <div class="swiper-pagination" style="position:absolute; right:20px; bottom:15px;">
-        	
             <span class="swiper-pagination-bullet"></span>
-            <!--<span class="swiper-pagination-bullet"></span>
-            <span class="swiper-pagination-bullet"></span>-->
         </div>
         
     </div>
@@ -111,35 +102,10 @@
       </div>
       <div class="job_details">
         <ul>
-
-          <li>
-            <div class="position">O <?php echo e($first_display['job_name']); ?></div>
-            <div class="place">工作地点：<?php echo e($first_display['addr']); ?></div>
-            <div class="position_content">
-              <dl>
-                <dt> 职位内容：</dt>
-                <dd>
-                <?php echo $first_display['content']; ?>
-
-                <dd>
-              </dl>
-            </div>
-            <div class="position_content">
-              <dl>
-                <dt>任职要求：</dt>
-                <dd>
-                <?php echo $first_display['skills']; ?>
-
-                  </dd>
-              </dl>
-            </div>
-          </li>
-          
-         <?php $__currentLoopData = $lists; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $detail): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+         <?php $__currentLoopData = $companyde; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $detail): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
           <li>
             <div class="position">O <?php echo e($detail['job_name']); ?></div>
             <div class="place">工作地点：<?php echo e($detail['addr']); ?></div>
-            <!--<div class="requirement">要求：{--!! $detail['job_require'] !!--}</div>-->
             <div class="position_content">
               <dl>
                 <dt> 职位内容：</dt>
@@ -167,6 +133,7 @@
       <div class="apply_job">
        <dl>
        	<?php $__currentLoopData = $companyde; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $list): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <?php if($loop->first): ?>
       <dt>申请方式</dt>
        <dd>
        <p>申请人请将PDF格式的作品集及简历发到 <a href="javascript:void(0);"> <?php echo e($list->email); ?> </a>，并在标题处注明应聘职位。</p>
@@ -175,6 +142,7 @@
        <p>地址：<?php echo e($list->addr); ?></p>
       </dd>
       </dl>
+      <?php endif; ?>
       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
       </div>
      
@@ -188,6 +156,7 @@
   <div class="job_title"><h3>企业信息</h3></div>
   <div class="info">
   <?php $__currentLoopData = $companyde; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $list): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+  <?php if($loop->first): ?>
   <div class="info_logo"><img src="/uploads/<?php echo e($list->company_logo); ?>" alt="<?php echo e($list->company_name); ?>" /><h2><?php echo e($list->company_name); ?></h2></div>
   <div class="info_xxx">
   <li class="job_industry">行业：<?php echo e($list->category); ?>  </li>
@@ -197,6 +166,7 @@
   <li class="job_address">地址：<?php echo e($list->addr); ?></li>
   <li class="job_welfare">福利待遇：<?php echo $list->welfare; ?></li><br>
   <li class="job_company" >企业介绍：<?php echo $list->brief; ?></li>
+  <?php endif; ?>
   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
   </div>
   </div>
@@ -210,9 +180,6 @@
         <li><img src="/uploads/<?php echo e($list[0]['company_logo']); ?>" alt="<?php echo e($list[0]['company_name']); ?>" />
           <div class="job_ab_info">
             <div class="title">正在热招:</div>
-            <!--<div class="main_li"><a target="_blank" title="运营主管" href="/zhaopin/260101.html">运营主管</a></div>-->
-            <!--<div class="main_li"><a target="_blank" title="装饰工程师" href="/zhaopin/1008851.html">装饰工程师</a></div>-->
-            <!--<div class="main_li"><a target="_blank" title="项目总经理" href="/zhaopin/1028099.html">项目总经理</a></div>-->
             <?php $__currentLoopData = $list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="main_li"><a target="_blank" title="<?php echo e($k['job_name']); ?>" href="/job/detail/<?php echo e($k['id']); ?>"><?php echo e($k['job_name']); ?></a></div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -220,83 +187,7 @@
           </div>
         </li>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-<!--        <li><img src="/images/job_ab2.jpg" alt="绿地地产" />
-          <h2>绿地地产</h2>
-          <div class="job_ab_info ">
-            <div class="title">正在热招:</div>
-            <div class="main_li"><a target="_blank" title="运营主管" href="/zhaopin/260101.html">运营主管</a></div>
-            <div class="main_li"><a target="_blank" title="装饰工程师" href="/zhaopin/1008851.html">装饰工程师</a></div>
-            <div class="main_li"><a target="_blank" title="项目总经理" href="/zhaopin/1028099.html">项目总经理</a></div>
-            <div class="main_li"><a target="_blank" title="项目经理" href="/zhaopin/1007667.html">项目经理</a></div>
-            <div class="whole"><a target="_blank" href="/company/989600.html">查看全部</a></div>
-          </div>
-        </li>
-        <li><img src="/images/job_ab3.png" alt="绿地地产" />
-          <h2>绿地地产</h2>
-          <div class="job_ab_info ">
-            <div class="title">正在热招:</div>
-            <div class="main_li"><a target="_blank" title="运营主管" href="/zhaopin/260101.html">运营主管</a></div>
-            <div class="main_li"><a target="_blank" title="装饰工程师" href="/zhaopin/1008851.html">装饰工程师</a></div>
-            <div class="main_li"><a target="_blank" title="项目总经理" href="/zhaopin/1028099.html">项目总经理</a></div>
-            <div class="main_li"><a target="_blank" title="项目经理" href="/zhaopin/1007667.html">项目经理</a></div>
-            <div class="whole"><a target="_blank" href="/company/989600.html">查看全部</a></div>
-          </div>
-        </li>
-        <li><img src="/images/job_ab4.png" alt="绿地地产" />
-          <h2>绿地地产</h2>
-          <div class="job_ab_info ">
-            <div class="title">正在热招:</div>
-            <div class="main_li"><a target="_blank" title="运营主管" href="/zhaopin/260101.html">运营主管</a></div>
-            <div class="main_li"><a target="_blank" title="装饰工程师" href="/zhaopin/1008851.html">装饰工程师</a></div>
-            <div class="main_li"><a target="_blank" title="项目总经理" href="/zhaopin/1028099.html">项目总经理</a></div>
-            <div class="main_li"><a target="_blank" title="项目经理" href="/zhaopin/1007667.html">项目经理</a></div>
-            <div class="whole"><a target="_blank" href="/company/989600.html">查看全部</a></div>
-          </div>
-        </li>
-        <li><img src="/images/job_ab1.jpg" alt="绿地地产" />
-          <h2>绿地地产</h2>
-          <div class="job_ab_info ">
-            <div class="title">正在热招:</div>
-            <div class="main_li"><a target="_blank" title="运营主管" href="/zhaopin/260101.html">运营主管</a></div>
-            <div class="main_li"><a target="_blank" title="装饰工程师" href="/zhaopin/1008851.html">装饰工程师</a></div>
-            <div class="main_li"><a target="_blank" title="项目总经理" href="/zhaopin/1028099.html">项目总经理</a></div>
-            <div class="main_li"><a target="_blank" title="项目经理" href="/zhaopin/1007667.html">项目经理</a></div>
-            <div class="whole"><a target="_blank" href="/company/989600.html">查看全部</a></div>
-          </div>
-        </li>
-        <li><img src="/images/job_ab2.jpg" alt="绿地地产" />
-          <h2>绿地地产</h2>
-          <div class="job_ab_info ">
-            <div class="title">正在热招:</div>
-            <div class="main_li"><a target="_blank" title="运营主管" href="/zhaopin/260101.html">运营主管</a></div>
-            <div class="main_li"><a target="_blank" title="装饰工程师" href="/zhaopin/1008851.html">装饰工程师</a></div>
-            <div class="main_li"><a target="_blank" title="项目总经理" href="/zhaopin/1028099.html">项目总经理</a></div>
-            <div class="main_li"><a target="_blank" title="项目经理" href="/zhaopin/1007667.html">项目经理</a></div>
-            <div class="whole"><a target="_blank" href="/company/989600.html">查看全部</a></div>
-          </div>
-        </li>
-        <li><img src="/images/job_ab3.png" alt="绿地地产" />
-          <h2>绿地地产</h2>
-          <div class="job_ab_info ">
-            <div class="title">正在热招:</div>
-            <div class="main_li"><a target="_blank" title="运营主管" href="/zhaopin/260101.html">运营主管</a></div>
-            <div class="main_li"><a target="_blank" title="装饰工程师" href="/zhaopin/1008851.html">装饰工程师</a></div>
-            <div class="main_li"><a target="_blank" title="项目总经理" href="/zhaopin/1028099.html">项目总经理</a></div>
-            <div class="main_li"><a target="_blank" title="项目经理" href="/zhaopin/1007667.html">项目经理</a></div>
-            <div class="whole"><a target="_blank" href="/company/989600.html">查看全部</a></div>
-          </div>
-        </li>
-        <li><img src="/images/job_ab4.png" alt="绿地地产" />
-          <h2>绿地地产</h2>
-          <div class="job_ab_info ">
-            <div class="title">正在热招:</div>
-            <div class="main_li"><a target="_blank" title="运营主管" href="/zhaopin/260101.html">运营主管</a></div>
-            <div class="main_li"><a target="_blank" title="装饰工程师" href="/zhaopin/1008851.html">装饰工程师</a></div>
-            <div class="main_li"><a target="_blank" title="项目总经理" href="/zhaopin/1028099.html">项目总经理</a></div>
-            <div class="main_li"><a target="_blank" title="项目经理" href="/zhaopin/1007667.html">项目经理</a></div>
-            <div class="whole"><a target="_blank" href="/company/989600.html">查看全部</a></div>
-          </div>
-        </li>-->
+
       </ul>
     </div>
     <!------招聘广告位end-----> 
@@ -324,13 +215,7 @@
                 autoplayDisableOnInteraction:false,
                 paginationClickable :true,
                 speed:2000,
-                /*onTransitionStart:function(swiper){
-                    var index = swiper.activeIndex;
-                    var name = imgs[(index -1) % imgs.length ].name;
-                    var title = imgs[(index -1) % imgs.length].title;
-                    $('#projects .project-item-name').html(name);
-                    $('#projects .project-item-title').html(title);
-                }*/
+
             })
         }
 
@@ -358,21 +243,6 @@ var mySwiper = new Swiper(".swiper-container", {
 })
 
 
-//如果你初始化时没有定义Swiper实例，后面也可以通过Swiper的HTML元素来获取该实例
-/*new Swiper('.swiper-container')
-var mySwiper = document.querySelector('.swiper-container').swiper
-mySwiper.slideNext();
-
-    var imgs ;
-
-    $(function () {
-
-        foreach($companyde as $list){
-        imgs =  [{"src":"http:\/\/yinji.nenyes.com\/wp-content\/uploads\/2018\/12\/2018122705555226.jpg","title":"\u957f\u6c99\u4e2d\u5fc3\u57ce\u5e02\u5e7f\u573a","name":""},{"src":"http:\/\/yinji.nenyes.com\/wp-content\/uploads\/2018\/12\/2018122705561752.jpg","title":"\u957f\u6c99\u543e\u60a6\u5e7f\u573a","name":""},{"src":"http:\/\/yinji.nenyes.com\/wp-content\/uploads\/2018\/12\/2018122705555226.jpg","title":"111111111111111111","name":"#"}] ;
-         getSwiperImgs(imgs);
-        }
-    })
-*/
 
 </script>
 

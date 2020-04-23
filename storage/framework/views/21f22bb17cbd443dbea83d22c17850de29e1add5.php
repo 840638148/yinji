@@ -1,10 +1,8 @@
-@extends('layouts.app')
+<?php $__env->startSection('title'); ?>
+    <?php echo e(trans('comm.yinji')); ?> - 招聘搜索
+<?php $__env->stopSection(); ?>
 
-@section('title')
-    {{trans('comm.yinji')}} - 招聘搜索
-@endsection
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <section><img src="/images/job_02.jpg"  alt="工作" /></section>
 <style>
@@ -69,9 +67,9 @@
         	<!--热门搜索--> 
 
 	        热门搜索： 
-	        @foreach($hotword as $list)
-	        <a href="/job/searchjob?jobcategory=1&keywords={{$list['content']}}" >{{$list['content']}}</a> 
-	        @endforeach
+	        <?php $__currentLoopData = $hotword; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $list): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+	        <a href="/job/searchjob?jobcategory=1&keywords=<?php echo e($list['content']); ?>" ><?php echo e($list['content']); ?></a> 
+	        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
 
     </div>
@@ -83,45 +81,45 @@
 		<!--<div class="search_show" style="margin:30px 0;">-->
 		<div class="jobs-list">
 		    <!--搜索出来的数据显示在这里-->
-		    @if($jobslist != null && $jobslist != '')
-			    @foreach($jobslist as $list)
-            @if($list['cate']===1)
+		    <?php if($jobslist != null && $jobslist != ''): ?>
+			    <?php $__currentLoopData = $jobslist; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $list): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <?php if($list['cate']===1): ?>
 				  <article style="overflow:inherit;">
 		          <div class="post-box">
-		              <h2 style="margin-top:30px;" class="entry-title"><a href="/job/detail/{{$list['id']}}" target="_blank">{{$list['job_name']}}</a>
+		              <h2 style="margin-top:30px;" class="entry-title"><a href="/job/detail/<?php echo e($list['id']); ?>" target="_blank"><?php echo e($list['job_name']); ?></a>
 
-                  @if($list['new']==1)
+                  <?php if($list['new']==1): ?>
                   <span class="ico_new"><img src="/images/new.gif" alt="最新" /></span>
-                  @endif
-                  @if($list['hot']==1)
+                  <?php endif; ?>
+                  <?php if($list['hot']==1): ?>
                   <span class="ico_new"><img src="/images/ico_hot.gif" alt="热门招聘" /></span>
-                  @endif
-                  @if($list['fast']==1)
+                  <?php endif; ?>
+                  <?php if($list['fast']==1): ?>
                   <span class="ico_new"><img src="/images/ji_05.gif" alt="急聘" /></span>
-                  @endif
+                  <?php endif; ?>
                   </h2>
                   
-                  <p><a href="/job/detail/{{$list['id']}}" target="_blank">{{$list['company_name']}}</a></p>
+                  <p><a href="/job/detail/<?php echo e($list['id']); ?>" target="_blank"><?php echo e($list['company_name']); ?></a></p>
 		            </div>
                 </article>
-            @else
+            <?php else: ?>
             <article>
 		          <div class="post-box">  
-                  <p style="height:50px;line-height:80px;font-size:18px" ><a style="color:#777;" href="/job/search_detail/{{$list['id']}}" target="_blank">{{$list['company_name']}}</a></p>
+                  <p style="height:50px;line-height:80px;font-size:18px" ><a style="color:#777;" href="/job/search_detail/<?php echo e($list['id']); ?>" target="_blank"><?php echo e($list['company_name']); ?></a></p>
 		            </div>
 		        </article>
-            @endif
-			    @endforeach
-		    @else
+            <?php endif; ?>
+			    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+		    <?php else: ?>
 		    <h2>没有数据</h2>
-			@endif
+			<?php endif; ?>
 		</div>
 
   </div>
 
   <!---翻页---->
   <style>.pagination{margin: 100px auto;}</style>
-	{{--$jobslist->appends(Request::except('page', '_pjax'))->links()--}}
+	
   <!---翻页结束---->
 
   </div>
@@ -135,19 +133,19 @@
     <div class="job_ab">
 
       <ul>
-		@foreach ($company_all_n as $key => $list)       <!-- 获取companies表的数据  -->
-        <li><img src="/uploads/{{$list[0]['company_logo']}}" alt="{{$list[0]['company_name']}}" />
+		<?php $__currentLoopData = $company_all_n; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $list): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>       <!-- 获取companies表的数据  -->
+        <li><img src="/uploads/<?php echo e($list[0]['company_logo']); ?>" alt="<?php echo e($list[0]['company_name']); ?>" />
           <div class="job_ab_info">
-          @if(count($list) < 7)
-            @foreach ($list as $k )
-            <div class="main_li"><a target="_blank" title="{{$k['job_name']}}" href="/job/detail/{{$k['id']}}">{{$k['job_name']}}</a></div>
-            @endforeach
-            @endif
-            <div style="display:block;float:right;position:absolute;bottom:10px;right:30px" class="whole"><a target="_blank" href="/job/detail/{{$list[0]['id']}}">查看全部</a></div>
+          <?php if(count($list) < 7): ?>
+            <?php $__currentLoopData = $list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <div class="main_li"><a target="_blank" title="<?php echo e($k['job_name']); ?>" href="/job/detail/<?php echo e($k['id']); ?>"><?php echo e($k['job_name']); ?></a></div>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <?php endif; ?>
+            <div style="display:block;float:right;position:absolute;bottom:10px;right:30px" class="whole"><a target="_blank" href="/job/detail/<?php echo e($list[0]['id']); ?>">查看全部</a></div>
           </div>
 
         </li>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
       </ul>
     </div>
 
@@ -209,5 +207,7 @@
   })
   */
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
 
+
+<?php echo $__env->make('layouts.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
