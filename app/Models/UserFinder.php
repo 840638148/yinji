@@ -208,24 +208,14 @@ class UserFinder extends Model
      * @param $user_id
      * @return string
      */
-    public static function recommendFinders($user_id = null)
+    public static function recommendFinders($user_id = 0)
     {
         $recommend_finders = [];
         $user_finders = self::
-        // leftjoin('user_finder_folders','user_finders.user_finder_folder_id','=','user_finder_folders.id')
-            // ->where('')
-            
-            // ->groupBy('user_finders.photo_url')
             orderBy('user_finders.updated_at', 'desc')
-            // ->limit(50)
-            
-            // ->distinct('photo_url')
-            // ->distinct('source')->limit(30)
-            ->get();
+            ->paginate(30);
 
-            // dd($user_finders);
         $finders = self::formatFinders($user_finders);
-        // dd($user_finders);
         foreach($finders as $k=>$v){
             foreach($v['finder'] as $key=>$val){
                 $recommend_finders[] = [
@@ -246,29 +236,6 @@ class UserFinder extends Model
                 ];         
             }
         }
-
-		// dd($finders);
-        // foreach ($finders as $finder) {
-        //     // dump($finder['finder']);
-        //     $recommend_finders[] = [
-        //         'id' => $finder['folder']['id'],
-        //         'title' => $finder['finder'][0]['title'],
-        //         'img' => $finder['finder'][0]['img'],
-        //         'source' => $finder['finder'][0]['source'],
-        //         'tinames' => $finder['finder'][0]['tinames'],
-        //         'who_find' => [[
-        //             'userIcon' => $finder['who_find']['avatar'],
-        //             'userName' => $finder['who_find']['nickname'],
-        //             'userNo' => $finder['who_find']['user_id'],
-        //             'folderName' => $finder['folder']['name'],
-        //             'folderNo' => $finder['folder']['id'],
-        //             'source' => $finder['finder'][0]['source'],
-        //         	'tinames' => $finder['finder'][0]['tinames'],
-        //         ]]
-        //     ];
-        // }
-        
-	    //  dd($recommend_finders);  
         return json_encode($recommend_finders);
     }
 
@@ -285,7 +252,8 @@ class UserFinder extends Model
             ->orderBy('created_at', 'desc')
             ->groupBy('user_finder_folder_id')
             // ->limit(20)
-            ->get();
+            // ->get();
+            ->paginate(20);
         foreach ($user_finders as $finder) {
             $imgs = [];
             $img_finders = UserFinder::where('user_finder_folder_id', $finder->user_finder_folder_id)->limit(4)->get();
@@ -337,7 +305,8 @@ class UserFinder extends Model
             // ->limit(20)
             ->orderBy('view_num', 'desc')
             ->orderBy('level', 'desc')
-            ->get();
+            ->paginate(20);
+            // ->get();
  
         $recommend_users = [];
         foreach ($users as $user) {
@@ -363,7 +332,6 @@ class UserFinder extends Model
 
             ];
         }
-        // $recommend_users=array_column($recommend_users,'sort');
 		// dd($recommend_users);
         return json_encode($recommend_users);
     }
@@ -464,5 +432,34 @@ class UserFinder extends Model
             ->get();
         return $user_finders;
     }
-    
+
+    //发现页->分页
+    public static function getMoreTuijians(& $request,$cates)
+    {   $user_id= Auth::id();
+        switch ($cates) {
+            case 'finder':
+                $finders = self::recommendFinders($user_id);
+                $folders = self::getMyFolders($user_id);
+                $finders=json_decode($finders);
+                $folders=json_decode($folders);
+                $data = ['finders'=>$finders,'cates'=>$cates,'folders'=>$folders];
+                return $data;
+                break;
+            case 'folder':
+                $finders = self::recommendFolders($user_id);
+                $finders=json_decode($finders);
+                $data = ['finders'=>$finders,'cates'=>$cates];
+                return $data;
+                break;
+            case 'tuijianuser':
+                $finders = self::recommendUsers($user_id);
+                $finders=json_decode($finders);
+                $data = ['finders'=>$finders,'cates'=>$cates];
+                return $data;
+                break;
+        }
+        // $finders=json_decode($finders);
+        // $data = ['finders'=>$finders,'cates'=>$cates];
+        // return $data;
+    }
 }

@@ -189,7 +189,7 @@ class Article extends Model
     {
         $obj = Article::where('article_status', '2')
             ->where('display', '0')
-            ->orderBy('release_time', 'desc');
+            ->orderBy('release_time', 'desc')->orderby('articlesavg','desc');
 
         if ($category_ids) {
             $obj->where(function($query) use($category_ids){
@@ -213,7 +213,7 @@ class Article extends Model
             });
         }
 
-        $articles = $obj->paginate(intval($request->per_page));
+        $articles = $obj->orderby('articlesavg','desc')->paginate(intval($request->per_page));
 
         $lang = Session::get('language') ?? 'zh-CN';
         if ('zh-CN' == $lang) {
@@ -227,7 +227,7 @@ class Article extends Model
             $arr_category[$category->id] = $category->$display_name;
         }
         
-        foreach ($articles as & $article) {
+        foreach ($articles as  $k=>&$article) {
             $tmp = [];
             $article->category = [];
             if ($article->category_ids) {
@@ -239,8 +239,26 @@ class Article extends Model
                 }
             }
             $article->category = $tmp;
-        }
+            
+            $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['id'])->avg('stars');
+            $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
 
+
+            // if($articles[$k]['starsavg']==null || $articles[$k]['starsavg']=="0.0"){
+            //     $result=Article::where('id',$article['id'])->update(['articlesavg'=>'5.0']);
+            // }else{
+            //     $result=Article::where('id',$article['id'])->update(['articlesavg'=>$articles[$k]['starsavg']]);
+            // }
+            // dump($article->starsavg);
+        }
+ 
+        foreach($articles as $k=>$articleslist){   
+            if($articles[$k]['starsavg']==null || $articles[$k]['starsavg']=="0.0"){
+                $result=Article::where('id',$articleslist['id'])->update(['articlesavg'=>'5.0']);
+            }else{
+                $result=Article::where('id',$articleslist['id'])->update(['articlesavg'=>$articles[$k]['starsavg']]);
+            }
+        }
         return $articles;
     }
     
@@ -251,8 +269,8 @@ class Article extends Model
         $data = [];
         foreach ($articles as $k=>$article) {
             $category_html = '';
-            $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['id'])->orderBy('article_comments.stars','desc')->avg('stars');
-            $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
+            // $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['id'])->orderBy('article_comments.stars','desc')->avg('stars');
+            // $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
             if ($article->category) {
                 foreach ($article->category as $category) {
                     $category_html .= ' <a href="/article/category/' .$category['id'] . '" rel="category tag">' .$category['name'] . '</a>';
@@ -266,7 +284,7 @@ class Article extends Model
             }
             $tmp_html = '<li class="layout_li ajaxpost">
                     <article class="postgrid">
-                    <div class="interior_dafen">'.($article->starsavg !=0 ? $article->starsavg : "5.0").'</div>
+                    <div class="interior_dafen">'.($article->articlesavg !=0 ? $article->articlesavg : "5.0").'</div>
                         <figure>
                             <a href="' . $url . '" title="' .get_article_title($article) . '" target="_blank">
                                 <img class="thumb" src="' .get_article_thum($article) . '" data-original="' .get_article_thum($article) . '" alt="' .get_article_title($article) . '" style="display: block;">

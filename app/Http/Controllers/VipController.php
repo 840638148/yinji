@@ -118,9 +118,7 @@ class VipController extends Controller
         $lang = $request->session()->get('language') ?? 'zh-CN';
 
         $user = $this->getUserInfo();
-//        if (!$user || true !== $user->is_vip) {
-//            return redirect('vip/intro');
-//        }
+        
         $month_price = VipPrice::getPrice(1);
         $season_price = VipPrice::getPrice(2);
         $year_price = VipPrice::getPrice(3);
@@ -139,7 +137,6 @@ class VipController extends Controller
             
 		}
         
-        // dd($user->my_folders);
 		//查出已经收藏的
 		$user_id = Auth::id();
 		$issc = UserCollect::where('user_id', $user_id)->get();
@@ -154,6 +151,17 @@ class VipController extends Controller
             'issc' => $issc,
         ];
         return view('vip.finder', $data);
+    }
+
+    // 发现页->分页
+    public function finderajax(Request $request){
+        $cates=$request->cate;
+        // dd($request->all());
+        
+        if ($request->page && $request->page ) {
+            $resule = UserFinder::getMoreTuijians($request,$cates);
+            return Output::makeResult($request, $resule);
+        }
     }
 
 	//发现-->推荐收藏夹-->通过用户id来显示收藏夹的列表

@@ -281,10 +281,10 @@ class ArticleController extends Controller
         $topics = ArticleCategory::getTopics($id);
 
         $articles = Article::getArticles($request, $category_ids);
-        foreach($articles as $k=>$articleslist){
-            $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $articleslist['id'])->avg('stars');
-            $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
-        }
+        // foreach($articles as $k=>$articleslist){
+        //     $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $articleslist['id'])->avg('stars');
+        //     $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
+        // }
         $data = [
             'user' => $this->getUserInfo(),
             'lang' => $lang,
@@ -438,7 +438,7 @@ class ArticleController extends Controller
     {
         $type=$request->type;
         $sjx=$request->sjx;
-        // dd($request->all());
+        // dd($_GET);
 
         if($type=='starssort'){
             if($sjx=='desc'){

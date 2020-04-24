@@ -92,16 +92,14 @@
 <section class="wrapper"> 
   
   <!-- 选项卡1开始 -->
-  
   <div class="find_tab"> 
     
     <!-- 标题开始 -->
-    
     <div class="TabTitle">
       <ul id="myTab1">
-        <li class="active" cate='finder' id='tabka' onclick="nTabs(this,0);">发现</li>
-        <li class="normal" cate='folder' id='tabka' onclick="nTabs(this,1);">推荐收藏夹</li>
-        <li class="normal" cate='tuijianuser' id='tabka' onclick="nTabs(this,2);">推荐用户</li>
+        <li class="active tabka" cate='finder' onclick="nTabs(this,0);">发现</li>
+        <li class="normal tabka" cate='folder' onclick="nTabs(this,1);">推荐收藏夹</li>
+        <li class="normal tabka" cate='tuijianuser' onclick="nTabs(this,2);">推荐用户</li>
       </ul>
     </div>
     
@@ -110,7 +108,6 @@
     <div class="TabContent"> 
       
       <!--发现-->
-      
       <div id="myTab1_Content0" style="padding-bottom: 20px">
         <div class="masonry" id="discoveryItems">
           <form method="get" class="search_form" action="#">
@@ -124,7 +121,6 @@
       <!--发现结束--> 
       
       <!--文件夹-->
-      
       <div id="myTab1_Content1" class="none">
         <div class="masonry" id="collectionItems">
           <form method="get" class="search_form" action="#">
@@ -291,15 +287,11 @@
 </div>
 
 <!--------选购会员结束-------> 
-
 <!--VIP专栏提示-->
-
 <div class="vip_prompt modal" id="vip-img"><a href="#" class="vip_buy">开通VIP会员</a><a href="#" class="vip_detail">了解VIP详情>></a></div>
 
 <!--VIP专栏提示结束--> 
-
 <!--创建文件夹-->
-
 <div class="create_folder modal" id="newFolders">
   <div class="create_folder_title">
     <h2>创建文件夹</h2>
@@ -452,7 +444,7 @@
         $('#users').html(users);
 
 
-      $('.user_follow_btn').click(function () {
+        $('#users').on('click', '.user_follow_btn', function(){
         var follow_id = $(this).attr('data-id');
         var that = $(this)
         $.ajax({
@@ -494,20 +486,14 @@
 
       }
 
-
-
       $('.vip_prompt .vip_buy').click(function () {
         $(".new_folder_box").show();
         layer.closeAll();
       })
 
-
-
       $('.vip_prompt .vip_detail').click(function () {
         location.href='/vip/intro'
       })
-
-
 
       $(document).on("click",".vip_close",function () {
         $(".new_folder_box").hide();
@@ -526,7 +512,8 @@
 
 
 //发现-点击收藏ajax交互
-  $('.folder_box').on('click','.add_finder_btn',function(){
+  $('#discoveryItems').on('click','.add_finder_btn',function(){
+    console.log($(this).html());
     if( $(this).html()=='收藏'){
       var that = $(this)
       var itemEle = $(this).closest('.item_content').find('.bg-img')
@@ -558,7 +545,6 @@
             that.removeClass('Button2')
             that.addClass('Button')
             that.addClass('have-disalbed')
-          	
             // layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
           }
         }
@@ -569,12 +555,9 @@
 })
 
     // 获取各种各样的DOM
-
     // 获取发现每一项的Dom
-
     function getDiscoveryItemDom(item,folders){
       // console.log(item,'aaaaaaaaaaa')
-      
       var foldersArr = folders ||  [];
       var h = '';
       h += '<div class="item discovery-item" style="display:flex">'
@@ -598,29 +581,18 @@
       })
 
       h += '    </div>';
-
       h += '    <div class="folder">';
-
       h += '      <div class="fl folder_bj" style="width:80%" >选择文件夹';
-
       h += '        <span class="fr show-more-selcect-item" style="background:url(images/arrow-ico.png); width:36px; height:36px;"></span>';
-
       h += '      </div>';
-
       h += '      <a href="javascript:void(0)" class="Button2 fr add-collection-btn">收藏</a>';
-
       h += '    </div>';
-
       h += '    <div class="folder_box">';
-
       h += '      <ul>';
 
       foldersArr.map(function(folder,idx){
-
         h += '        <li>';
-
         h += '          <h3>'+ folder.title + '</h3>';
-        		
         		
 		var isscobj=<?php echo json_encode($issc); ?>;
 		var isscarr=JSON.parse(isscobj);
@@ -666,30 +638,18 @@
 
       item.imgs.map(function(img){
       	
-      	// console.log(item)
 			h += '    <li><a href="folderlist/'+ item.id+'"><img src="' + img.src +'" alt="' + img.alt + '" /></a></li>';
       })
 
       h += '  </ul>';
       h += '  <div class="find_title">';
       h += '    <h2><a href="folderlist/'+ item.id+'">'+ item.title + '</a></h2>';
-      // if(item.who_find && item.who_find.length > 0){
-      //   h += '      <a href="javascript:;" class="find_info_more"></a>';
-      // }
       if(item.who_find && item.who_find.length > 0){
         item.who_find.map(function(user,idx){
           h += '   <a href="javascript:void(0);" class="collect-user-icon"><img id="errimg" src="' + user.userIcon + '" onerror="this.onerror=``;this.src=`/img/avatar.png`" /></a> ';
         })
       }
       h += '  </div>';
-      // if(item.who_find && item.who_find.length > 0){
-      //   item.who_find.map(function(user,idx){
-      //     h += '  <div class="who_find" style="display:block">';
-      //     h += '    <img src="' + user.userIcon + '" />';
-      //     // h += '    <span><a href="#">'+ user.userName +'</a> 发现并收藏到 <a href="#">'+ user.folderName +'</a></span>';
-      //     h += '  </div>';
-      //   })
-      // }
       h += ' </div>';
       h += '</div>';
       return h;
@@ -737,25 +697,6 @@
     }
 
 
-
-    function nTabs(thisObj,Num){
-      if(thisObj.className == "active")return;
-      var tabObj = thisObj.parentNode.id;
-      var tabList = document.getElementById(tabObj).getElementsByTagName("li");
-
-      for(i=0; i <tabList.length; i++){
-        if (i == Num){
-          thisObj.className = "active";
-          document.getElementById(tabObj+"_Content"+i).style.display = "block";
-        }else{
-          tabList[i].className = "normal";
-          document.getElementById(tabObj+"_Content"+i).style.display = "none";
-        }
-      }
-    }
-
-
-
     function wp_attempt_focus(){
       setTimeout( function(){ try{
         d = document.getElementById('user_login');
@@ -781,107 +722,6 @@
       src = $(this).find('img').attr('src');
       $(this).parents('.img_browse').find('.selected-image').attr('src',src);
     })
-
-
-
-    //新建文件夹
-    // $(document).on('click','.create-new-folder',function(){
-    //   layer.open({
-    //     type: 1,
-    //     title: false,
-    //     closeBtn: 0,
-    //     anim:-1,
-    //     isOutAnim:false,
-    //     content: $('#newFolders')
-    //   });
-    //
-    // })
-    //
-    //
-    // //创建文件夹
-    //
-    // $('.create_finder_folder_enter_btn').on('click',function () {
-    //
-    // })
-    // 收藏夹展示图片框
-    /*$(document).on('click','.collection-item',function(){
-      var folder_id = $(this).attr('data-id');
-      $.ajax({
-        async:false,
-        url: 'vip/get_folder_detail',
-        type: 'POST',
-        //dataType: 'json',
-        data: {
-          _token:_token,
-          folder_id:folder_id
-        },
-        success: function (data) {
-          $('#collection-img-browse').html(data);
-          //初始化相框
-          getImgBrowseImgsDom(browseImgs,'#collection-img-browse');
-          layer.open({
-            type: 1,
-            title: false,
-            closeBtn: 0,
-            anim:-1,
-            isOutAnim:false,
-            content: $('#collection-img-browse')
-          });
-        }
-      });
-    })*/
-
-
-
-// 发现页的分页
-$(document).ready(function(){
-
-  $('#tabka').attr('cate', 'finder');
-  $(document).on('click','#tabka',function(){
-      let cate=$(this).attr('cate');//获取tab的分类
-      // console.log(cate);
-      let page = 2;isEnd = false
-    $(window).on('scroll',function(e){
-      let bodyHeight=document.body.scrollHeight==0?document.documentElement.scrollHeight:document.body.scrollHeight;
-            if(bodyHeight - $('body').scrollTop() -10 < window.innerHeight && !isEnd){
-              let h  = '';
-              let url = window.location.href;
-                $.ajax({
-                    async: false,
-                    url: url + '_ajax?page=' + page+'/cate='+cate,
-                    type: 'GET',
-                    dataType: 'json',
-                    data: {},
-                    success: function(data){
-                        console.log(data);
-                        if(data.status_code == 0){
-                            page++;
-                            // h =  data.data.join('')
-                            h =  data.data
-                            $('#discoveryItems').append(h)
-                            if(data.data.length<15){
-                                isEnd = true
-                            }
-                        }else{
-                            isEnd = true
-                            alert(data.message);
-                        }
-                    }
-                });
-              }
-      })
-  })
-          
-
-})
-
-
-
-
-
-
-
-
 
 
     // 发现展示图片框
@@ -922,27 +762,6 @@ $(document).ready(function(){
       layer.closeAll();
     })
 
-
-    //点击展示更多的收藏文件夹
-    // $(document).on('click','.show-more-selcect-item',function(){
-    //   if($(this).hasClass('showbox')){
-    //     $(this).parent().css('width','80%');
-    //     $(this).parent().siblings('.add-collection-btn').show()
-    //     $(this).css('background-position','0px 0px');
-    //     $(this).parents('.folder').siblings('.folder_box').css('display','none');
-    //     $(this).removeClass('showbox')
-    //   }else{
-    //
-    //     $(this).parent().siblings('.add-collection-btn').hide()
-    //     $(this).parent().css('width','100%');
-    //     $(this).css('background-position','0px -36px');
-    //     $(this).parents('.folder').siblings('.folder_box').css('display','block');
-    //     $(this).addClass('showbox');
-    //   }
-    // })
-
-
-
     $(document).on('click','.item_content .folder',function(){
       var moreEle =  $(this).find('.show-more-selcect-item')
       if(moreEle.hasClass('showbox')){
@@ -978,10 +797,6 @@ $(document).ready(function(){
       $(this).find('.folder_bj .show-more-select-item').css('background-position','0px 0px');
     })
 
-
-
-
-
     //点击展示谁发现按钮
     $(document).on('click','.find_info_more',function(ev){
     	var dasou=$(this).parent().attr('data-source');
@@ -997,26 +812,6 @@ $(document).ready(function(){
       })
     })
 
-    //
-    // $('.user_follow_btn').click(function () {
-    //   var follow_id = $(this).attr('data-id');
-    //   $.ajax({
-    //     url: '/member/add_follow',
-    //     type: 'POST',
-    //     dataType: 'json',
-    //     data: {
-    //       _token:_token,
-    //       follow_id:follow_id
-    //     },
-    //     success: function (data) {
-    //       if (data.status_code == 0) {
-    //         layer.msg('关注成功！',{skin: 'intro-login-class layui-layer-hui'})
-    //       } else {
-    //         layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
-    //       }
-    //     }
-    //   });
-    // });
   </script> 
  
 <script>
@@ -1163,6 +958,135 @@ $(document).ready(function(){
 	    $("img").attr('src','/img/avatar.png');
 	  });
 	});
+
+  window.cate='finder';
+  function nTabs(thisObj,Num){
+    if(thisObj.className == "active")return;
+    var tabObj = thisObj.parentNode.id;
+    var tabList = document.getElementById(tabObj).getElementsByTagName("li");
+
+    for(i=0; i <tabList.length; i++){
+      if (i == Num){
+        thisObj.className = "active";
+        document.getElementById(tabObj+"_Content"+i).style.display = "block";
+        
+        window.cate=thisObj.getAttribute('cate');//获取tab的分类
+        page = 2;isEnd = false
+        // console.log(cate);
+      }else{
+        
+        tabList[i].className = "normal";
+        document.getElementById(tabObj+"_Content"+i).style.display = "none";
+      }
+    }
+  }
+  
+  // 发现页的分页
+// $(document).ready(function(){
+  // let cate='finder';
+  // $(document).on('click','.tabka',function(){
+      // cate=$('#myTab1 .active').attr('cate');
+      // let page = 2;isEnd = false
+      
+  // })
+  // cate=$("#myTab1").find(".active").attr("cate");
+  let page = 2;isEnd = false
+  $(window).on('scroll',function(e){
+    
+    let bodyHeight=document.body.scrollHeight==0?document.documentElement.scrollHeight:document.body.scrollHeight;
+    if(bodyHeight - $('body').scrollTop() -10 < window.innerHeight && !isEnd){
+      console.log(cate);
+      let h  = '';
+      let url = window.location.href;
+      $.ajax({
+          async: false,
+          url: url + '_ajax?page=' + page+'&cate='+cate,
+          type: 'GET',
+          dataType: 'json',
+          data: {},
+          success: function(data){
+            let list=data.data;
+            let cates=data.data.cates;
+            let arrs=list.folders;
+              // console.log(list);
+            if(data.status_code == 0 && cates=='finder'){
+                page++;
+                $.each(list.finders,function(index, item){
+                  // console.log(arrs)
+                  h+='<div class="item discovery-item" style="display:flex">';
+                  h+='<div class="item_content"> ';
+                  h+='<img src="'+item.img+'" class="bg-img" data-id="'+item.id+'" id="sourceimg" source="'+item.source+'" /> ';
+                  h+='<div class="find_title" data-source="'+item.source+'">'+item.tinames+'<a href="javascript:;" class="find_info_more"></a></div>';
+                  h+='<div class="who_find" style="display:none">';
+                  h+='<img src="'+item.who_find[0].userIcon+'" />';
+                  h+='<span> <a href="javascript:;">'+item.who_find[0].userName+'</a> 收藏到 <a href="#">'+item.who_find[0].folderName+'</a></span></div>';
+                  h+='<div class="folder" style="display: none;"><div class="fl folder_bj" style="width:80%">';
+                  h+='选择文件夹<span class="fr show-more-selcect-item" style="background:url(images/arrow-ico.png); width:36px; height:36px;"></span></div>';
+                  h+='<a href="javascript:void(0)" class="Button2 fr add-collection-btn">收藏</a></div>';
+                  h+='<div class="folder_box" style="display: none;">';   
+                  h+='<ul>';
+                  $.each(arrs,function(indexs, value){
+                    h+='<li><h3>'+value.title+'</h3> <span class="" title=""></span>';
+                    h+='<a href="javascript:void(0)" class=" Button2 fr add_finder_btn" data-id="'+value.id+'" data-img="'+item.img+'" data-title="'+item.title+'" data-source="'+item.source+'">收藏</a> </li> '; 
+                  })
+                    h+='</ul><a href="javascript:void(0)" class="create create-new-folder" data-type="find" id="sourcea" sourceid="'+item.source+'">创建收藏夹</a></div></div></div> ';
+              })
+                $('#discoveryItems').append(h);
+                if(data.data.length<15){isEnd = true}
+
+            }else if(data.status_code == 0 && cates=='folder'){
+                page++; 
+                $.each(list.finders,function(index, item){
+                  // console.log(item.who_find[0]);
+                  let ims=item.imgs;
+                  h+='<div class="item collection-item" data-id="'+item.id+'">';
+                  h+='<div class="item__content">';
+                  h+='<ul onclick="location=\'/folderlist/'+item.id+'\'">';
+                  
+                  $.each(item.imgs,function(indexs, items){
+                    h+='<li>';
+                    h+='<a href="folderlist/'+item.id+'">';
+                    h+='<img src="'+items.src+'" alt="'+items.title+'"></a>';
+                    h+='</li>';
+                  })
+                  h+='</ul><div class="find_title"><h2>';
+                  h+='<a href="folderlist/'+item.id+'">'+item.who_find[0].folderName+'</a></h2>';
+                  h+='<a href="javascript:void(0);" class="collect-user-icon">';
+                  h+='<img id="errimg" src="'+item.who_find[0].userIcon+'" onerror="this.onerror=``;this.src=`/img/avatar.png`"></a>';
+                  h+='</div></div></div>';
+                })
+                $('#collectionItems').append(h);
+                if(data.data.length<15){
+                    isEnd = true
+                }
+            }else if(data.status_code == 0 && cates=='tuijianuser'){
+              page++;
+              $.each(list.finders,function(index, item){
+                h+='<div class="item">';
+                h+='<div class="users">';
+                h+='<div class="border-bottom1">';
+                h+='<div class="head">';
+                h+='<img width="100%" height="100%" src="'+item.icon+'" alt="头像"></div>';
+                h+='<h2>';
+                h+='<a href="#">'+item.name+'</a></h2>'+item.rank+'</div>';
+                h+='<div class="Statistics">';
+                h+='<ul>';
+                h+='<li><span>'+item.collections+'</span>收藏</li>';
+                h+='<li><span>'+item.fans+'</span>粉丝</li></ul>';
+                h+='</div><a class="Button3 user_follow_btn" data-id="'+item.id+'">关注</a></div></div>';
+              })
+              $('#users').append(h);
+              if(data.data.length<15){isEnd = true}
+            }else{
+                isEnd = true
+                alert(data.message);
+            }
+          }
+      });
+    }
+  })
+// })
+
 </script> 
 <?php $__env->stopSection(); ?> 
 <?php echo $__env->make('layouts.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
