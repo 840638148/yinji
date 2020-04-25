@@ -504,7 +504,7 @@ class UserFinder extends Model
             ->where('photo_url', $photo_url)
             ->where('is_sc',$is_sc)
             ->first();
-        dd($obj);    
+        // dd($obj);    
         if ($obj){
             return '你已经发现过了';
         }
