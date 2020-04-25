@@ -9,6 +9,7 @@ use App\Models\UserSubscription;
 use App\Models\UserDownRecord;
 use App\Models\UserExchangeRecord;
 use App\Models\PointSet;
+use App\Models\UserCollectFolder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
@@ -321,7 +322,7 @@ class User extends Authenticatable
      */
     public static function getCollectNum($user_id)
     {
-        return UserCollect::where('user_id', $user_id)->count();
+        return UserCollectFolder::where('user_id', $user_id)->count();
     }
 
 

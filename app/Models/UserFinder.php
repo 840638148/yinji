@@ -70,6 +70,7 @@ class UserFinder extends Model
 
 
     /**
+     * 发现页-》发现夹
      * 获取用户自己的发现
      * @param $user_id
      * @return string
@@ -85,7 +86,8 @@ class UserFinder extends Model
             ->orderBy('created_at', 'desc')
             ->get();
  
-        
+        // dd($user_finders);
+
         $my_folders = json_decode(UserFinder::getMyFolders($user_id));
 	 
         return self::formatFindersAll($user_finders,$my_folders);
