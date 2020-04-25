@@ -4,140 +4,136 @@
 @endsection
 @section('content')
 <style>
-
-
-h2{
-	margin:30px auto;
-	text-align: center;
-	  font-size: 2em; line-height:60px;
-}
-
-
-
-.box { 
-    -moz-column-count:4; /* Firefox */
-    -webkit-column-count:4; /* Safari 和 Chrome */
-    column-count:4;
-    -moz-column-gap: 2em;
-    -webkit-column-gap: 2em;
-    column-gap: 2em;
-    width: 100%;
-    margin:2em auto;
-}
-.itemww { 
-    margin-bottom: 2em;
-    -moz-page-break-inside: avoid;
-    -webkit-column-break-inside: avoid;
-    break-inside: avoid;
-    position: relative;
-}
-.titlename{
-	position: absolute;
-	background:rgba(250,250,250,.8);
-	width: 65%;
-	bottom: 0;
-	color: #000;
-	height: 33px;
-	line-height: 35px;
-	border-radius: 35px;
-	margin:0 0 5px 10px;
-	text-indent: 1em;
-	display: none;
-	cursor:pointer;
-}
-
-.scbtm{
-	background: #e1244e;
-    width: 50px;
-    height: 35px;
-    line-height: 35px;
+  h2{
+    margin:30px auto;
     text-align: center;
-    color: #fff;
-    display: inline-block;
-    border-radius: 30px;
+      font-size: 2em; line-height:60px;
+  }
+
+  .box { 
+      -moz-column-count:4; /* Firefox */
+      -webkit-column-count:4; /* Safari 和 Chrome */
+      column-count:4;
+      -moz-column-gap: 2em;
+      -webkit-column-gap: 2em;
+      column-gap: 2em;
+      width: 100%;
+      margin:2em auto;
+  }
+  .itemww { 
+      margin-bottom: 2em;
+      -moz-page-break-inside: avoid;
+      -webkit-column-break-inside: avoid;
+      break-inside: avoid;
+      position: relative;
+  }
+  .titlename{
     position: absolute;
-    bottom: 5px;
-    right: 18px;
+    background:rgba(250,250,250,.8);
+    width: 65%;
+    bottom: 0;
+    color: #000;
+    height: 33px;
+    line-height: 35px;
+    border-radius: 35px;
+    margin:0 0 5px 10px;
+    text-indent: 1em;
     display: none;
     cursor:pointer;
-}
-.scbtmlbt{
-	background: #e1244e;
-    width: 50px;
-    height: 35px;
-    line-height: 35px;
-    text-align: center;
-    color: #fff;
-    display: inline-block;
-    border-radius: 4px;
-    position: absolute;
-	z-index:999999999;
-    top: 5px;
-    left: 30%;
-	display:none;
-    cursor:pointer;
-}
-.swiper-slide:hover .scbtmlbt{
-	display:block;
-}
-.showscbtn{
-	position: fixed;
-    left: 50%;
-    top: 20%;
-    width: 620px;
-    margin-left: -330px;
-    height: 450px;
-    background: #fff;
-    z-index: 19999999;
-    padding: 20px;
-    border-radius: 5px;
-    display: none;
-}
-.showscbtnlbt{
-	position: fixed;
-    left: 50%;
-    top: 20%;
-    width: 620px;
-    margin-left: -330px;
-    height: 450px;
-    background: #fff;
-    z-index: 19999999;
-    padding: 20px;
-    border-radius: 5px;
-    display: none;
-}
+  }
 
-.lzcfg{
-    background: rgba(0,0,0,0.5);
+  .scbtm{
+    background: #e1244e;
+      width: 50px;
+      height: 35px;
+      line-height: 35px;
+      text-align: center;
+      color: #fff;
+      display: inline-block;
+      border-radius: 30px;
+      position: absolute;
+      bottom: 5px;
+      right: 18px;
+      display: none;
+      cursor:pointer;
+  }
+  .scbtmlbt{
+    background: #e1244e;
+      width: 50px;
+      height: 35px;
+      line-height: 35px;
+      text-align: center;
+      color: #fff;
+      display: inline-block;
+      border-radius: 4px;
+      position: absolute;
+    z-index:999999999;
+      top: 5px;
+      left: 30%;
+    display:none;
+      cursor:pointer;
+  }
+  .swiper-slide:hover .scbtmlbt{
+    display:block;
+  }
+  .showscbtn{
     position: fixed;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    display: none;
-    z-index: 99999999;
-}
+      left: 50%;
+      top: 20%;
+      width: 620px;
+      margin-left: -330px;
+      height: 450px;
+      background: #fff;
+      z-index: 19999999;
+      padding: 20px;
+      border-radius: 5px;
+      display: none;
+  }
+  .showscbtnlbt{
+    position: fixed;
+      left: 50%;
+      top: 20%;
+      width: 620px;
+      margin-left: -330px;
+      height: 450px;
+      background: #fff;
+      z-index: 19999999;
+      padding: 20px;
+      border-radius: 5px;
+      display: none;
+  }
 
-.swiper-container{
-	display:none;
-    top:10%;
-	position:fixed;
-	z-index:9999999999;
-}
+  .lzcfg{
+      background: rgba(0,0,0,0.5);
+      position: fixed;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      display: none;
+      z-index: 99999999;
+  }
 
-.itemww:hover .titlename,.itemww:hover .scbtm{
-	display: block;
-}
-@media screen and (max-width: 800px) { 
-    .box { 
-        column-count: 2; // two columns on larger phones 
-    } 
-} 
-@media screen and (max-width: 500px) { 
-    .box { 
-        column-count: 1; // two columns on larger phones 
-    } 
-}
+  .swiper-container{
+    display:none;
+      top:10%;
+    position:fixed;
+    z-index:9999999999;
+  }
+
+  .itemww:hover .titlename,.itemww:hover .scbtm{
+    display: block;
+  }
+  @media screen and (max-width: 800px) { 
+      .box { 
+          column-count: 2; // two columns on larger phones 
+      } 
+  } 
+  @media screen and (max-width: 500px) { 
+      .box { 
+          column-count: 1; // two columns on larger phones 
+      } 
+  }
 
 </style>
 <!--笼罩层-->
@@ -148,7 +144,7 @@ h2{
 <div class="swiper-container swiper-home">
   <div style="padding:5px;color:#fff;font-size:65px;position:fixed;z-index:999999999999;top:120px;right:20px;cursor: pointer;" class="closeltb"> × </div>
   <div class="swiper-wrapper"> @foreach ($folist as  $i =>$v)
-    <article class="swiper-slide slide-single" data-swiper-slide-index="{{$loop->iteration}}" > <img width="600px" height="600px" src="{{$v['photo_url']}}" data-id="{{$v['photo_source']}}" alt="{{$v['name']}}">
+    <article class="swiper-slide slide-single" data-swiper-slide-index="{{$loop->iteration}}" > <img id="btntp" width="600px" height="600px" src="{{$v['photo_url']}}" data-id="{{$v['photo_source']}}" alt="{{$v['name']}}">
       <div class="scbtmlbt" data-id="{{$v['photo_source']}}" data-pid-i="{{ $i }}" onclick="getID(this)">发现</div>
     </article>
     @endforeach </div>
@@ -163,7 +159,7 @@ h2{
   <div class="box"> @foreach ($folist as $i => $v)
     <div class="itemww"> <img id="boximg" class="img_{{$v['photo_source']}}" src="{{$v['photo_url']}}" data-photo-index="{{ $i }}" photoid="{{$v['photo_source']}}" alt="{{$v['name']}}">
       <div class="titlename" onclick="location='@if($v['static_url']) /article/{{$v['static_url']}} @else /article/detail/{{$v['id']}} @endif'">{{mb_substr($v['articlename'],0,14)}}</div>
-      <div class="scbtm" data-id="{{$v['photo_source']}}" data-pid-i="{{ $i }}" onclick="getID(this)">发现</div>
+      <div class="scbtm" photoid="{{$v['photo_source']}}" imgsrc="{{$v['photo_url']}}" data-id="{{$v['photo_source']}}" data-pid-i="{{ $i }}" onclick="getID(this)">收藏</div>
     </div>
     @endforeach </div>
   
@@ -182,10 +178,10 @@ h2{
         @foreach($userscname as $key => $value)
         <li>
           <h3>{{$value['name']}}</h3>
-          <span img='' floder_id='{{$value["id"]}}'  class='folderattr null' title='{{$value["name"]}}'></span> {{--@if($issc)
-          <div id="modal_btns"> <a href='javascript:void(0);' class='Button  asd' scid='{{$value["id"]}}'  data-img='' >已发现</a> </div>
+          <span  floder_id='{{$value["id"]}}'  class='folderattr null' title='{{$value["name"]}}'></span> {{--@if($issc)
+          <div id="modal_btns"> <a href='javascript:void(0);' class='Button  asd' scid='{{$value["id"]}}'  data-img='' >已收藏</a> </div>
           @else@endif--}}
-          <div id="modal_btns"> <a href='javascript:void(0);' class='Button2 to_find_floder_act asd' scid='{{$value["id"]}}'  data-img='' >发现</a> </div>
+          <div id="modal_btns"> <a href='javascript:void(0);' class='Button2 to_find_floder_act asd' scid='{{$value["id"]}}'  data-img='' >收藏</a> </div>
         </li>
         @endforeach
       </ul>
@@ -210,9 +206,9 @@ h2{
         <li>
           <h3>{{$value['name']}}</h3>
           <span img='' floder_id='{{$value["id"]}}'  class='folderattr null' title='{{$value["name"]}}'></span> {{--@if($issc)
-          <div id="modal_btns"> <a href='javascript:void(0);' class='Button  asd' scid='{{$value["id"]}}'  data-img='' >已发现</a> </div>
+          <div id="modal_btns"> <a href='javascript:void(0);' class='Button  asd' scid='{{$value["id"]}}'  data-img='' >已收藏</a> </div>
           @else@endif--}}
-          <div id="modal_btns"> <a href='javascript:void(0);' class='Button2 to_find_floder_act asd' scid='{{$value["id"]}}'  data-img='' >发现</a> </div>
+          <div id="modal_btns"> <a href='javascript:void(0);' class='Button2 to_find_floder_act asd' scid='{{$value["id"]}}'  data-img='' >收藏</a> </div>
         </li>
         @endforeach
       </ul>
@@ -328,7 +324,7 @@ h2{
 function getID(obj){
 	collect_id = $(obj).attr('data-id');
 	// that=$(obj);
-	console.log(collect_id);
+	// console.log(collect_id);
 }
 
 
@@ -401,60 +397,63 @@ $(document).ready(function(){
 
 	
 	//点击图片上的收藏按钮出现弹窗	
-	 $(document).on('click','.scbtm',function(ev){
-	 	if(!IS_LOGIN){
-            $('.login_box').show();
-	 	}else{
+	$(document).on('click','.scbtm',function(ev){
+	 	if (!IS_LOGIN) {
+       $('.login_box').show();
+	 	} else {
 		 	let photo_id_i = $(this).data('pid-i');
-			let tpsrc=$(`.itemww img[data-photo-index=${photo_id_i}]`).attr('src');	//获取图片路径	
-			let folder_id=$('.asd').attr('scid'); //获取收藏夹的id
+      let user_finder_folder_id = $('.to_find_floder_act ').attr('scid');//发现的收藏夹id
 			let folder_ids = [];
+      let source = $(this).attr('photoid');//图片所在的文章id
+      let is_sc=1;
+      let photo_url=$('#boximg').attr('src');//图片src
+      // console.log(user_finder_folder_id)
+      // photo_url=photo_url.substr(20)
 			$(".asd").each(function () {
 				folder_ids.push($(this).attr("scid"));
 			});
 			$(".asd").data("pid-i", photo_id_i);//这个啥意思，自定义属性？相当于attr('data-pid-i', photo_id_i),,好吧
+       
+      /*$.ajax({
+        async:false,
+        url: '/vip/scstatus',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          _token:'{{csrf_token()}}',
+          user_finder_folder_id:user_finder_folder_id,
+          photo_url:photo_url,
+          source:source,
+          is_sc:is_sc,
+        },
+        success: function (data) {
+          // 重置按钮
+          $('.asd[scid]').html('收藏')
+          .addClass('to_find_floder_act')
+          .addClass('Button2')
+          .removeClass('Button')
+          .removeClass('have-disalbed')
+          .removeClass('have-collect');
+          for (let i = 0; i < data.data.length; i++) {
+            // 为已收藏的按钮添加效果
+            const user_collect_folder_id = data.data[i];
+            let btn = $(`.asd[scid=${user_collect_folder_id}]`);
+            btn.html('已收藏')
+            .removeClass('to_find_floder_act')
+            .removeClass('Button2')
+            .addClass('Button')
+            .addClass('have-disalbed')
+            .addClass('have-collect');
+          }
+        }
+      });*/
 		 	
-		 	for (let i = 0;i < folder_ids.length;i++) {
-		 		let folder_id = folder_ids[i];
-		 		console.group(folder_id)
-		 		$.ajax({
-	                async:false,
-	                url: '/vip/scstatus',
-	                type: 'POST',
-	                dataType: 'json',
-	                data: {_token:'{{csrf_token()}}',collect_id:collect_id,tpsrc:tpsrc,folder_id:folder_id},
-	                success: function (data){
-	                	console.log(data);
-	                	let btn = $(`.asd[scid=${folder_id}]`);
-	                    if (data.status_code == 100001) {
-	                    	// let btn = $('.asd[scid=' . folder_id . ']');
-	                    	$('.showscbtn').css('display','none');
-	                    	$('.lzcfg').css('display','none');
-				          	btn.html('已收藏')
-				              	.removeClass('to_find_floder_act')
-				              	.removeClass('Button2')
-				              	.addClass('Button')
-				              	.addClass('have-disalbed')
-				              	.addClass('have-collect');
-	                    }else{
-	                    		btn.html('收藏')
-				              	.addClass('to_find_floder_act')
-				              	.addClass('Button2')
-				              	.removeClass('Button')
-				              	.removeClass('have-disalbed')
-				              	.removeClass('have-collect');
-	                    }
-	                }
-	            });
-	            console.groupEnd();
-		 	}
 		 	tpid=$('.scbtm').attr('data-id');
 		 	$('.lzcfg').css('display','block');
 		 	$('.showscbtn').css('display','block');
-		 	$('.showscbtn').css('z-index','999999999999');
-		 	
-	 	}
-    })
+       $('.showscbtn').css('z-index','999999999999');
+    }
+  })
 	
 	//点击轮播图片上的收藏按钮出现弹窗	
 	 $(document).on('click','.scbtmlbt',function(ev){
@@ -462,14 +461,51 @@ $(document).ready(function(){
             $('.login_box').show();
 	 	}else{
 		 	let photo_id_i = $(this).data('pid-i');
-			let tpsrc=$(`.itemww img[data-photo-index=${photo_id_i}]`).attr('src');	//获取图片路径	
-			let folder_id=$('.asd').attr('scid'); //获取收藏夹的id
+      let user_finder_folder_id = $('.to_find_floder_act ').attr('scid');//发现的收藏夹id
 			let folder_ids = [];
+      let source = $(this).attr('photoid');//图片所在的文章id
+      let photo_url=$('#btntp').attr('src');//图片src
+      // photo_url=photo_url.substr(20)
+      let is_sc=1;
 			$(".asd").each(function () {
 				folder_ids.push($(this).attr("scid"));
 			});
 			$(".asd").data("pid-i", photo_id_i);//这个啥意思，自定义属性？相当于attr('data-pid-i', photo_id_i),,好吧
-		 	
+       
+      /*$.ajax({
+        async:false,
+        url: '/vip/scstatus',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          _token:'{{csrf_token()}}',
+          user_finder_folder_id:user_finder_folder_id,
+          photo_url:photo_url,
+          source:source,
+          is_sc:is_sc,
+        },
+        success: function (data) {
+          // 重置按钮
+          $('.asd[scid]').html('收藏')
+          .addClass('to_find_floder_act')
+          .addClass('Button2')
+          .removeClass('Button')
+          .removeClass('have-disalbed')
+          .removeClass('have-collect');
+          for (let i = 0; i < data.data.length; i++) {
+            // 为已收藏的按钮添加效果
+            const user_collect_folder_id = data.data[i];
+            let btn = $(`.asd[scid=${user_collect_folder_id}]`);
+            btn.html('已收藏')
+            .removeClass('to_find_floder_act')
+            .removeClass('Button2')
+            .addClass('Button')
+            .addClass('have-disalbed')
+            .addClass('have-collect');
+          }
+        }
+      });
+
 		 	for (let i = 0;i < folder_ids.length;i++) {
 		 		let folder_id = folder_ids[i];
 		 		console.group(folder_id)
@@ -486,14 +522,14 @@ $(document).ready(function(){
 	                    	// let btn = $('.asd[scid=' . folder_id . ']');
 	                    	$('.showscbtn').css('display','none');
 	                    	$('.lzcfg').css('display','none');
-				          	btn.html('已发现')
+				          	    btn.html('已收藏')
 				              	.removeClass('to_find_floder_act')
 				              	.removeClass('Button2')
 				              	.addClass('Button')
 				              	.addClass('have-disalbed')
 				              	.addClass('have-collect');
 	                    }else{
-	                    		btn.html('发现')
+	                    	btn.html('收藏')
 				              	.addClass('to_find_floder_act')
 				              	.addClass('Button2')
 				              	.removeClass('Button')
@@ -503,7 +539,7 @@ $(document).ready(function(){
 	                }
 	            });
 	            console.groupEnd();
-		 	}
+		 	}*/
 		 	tpid=$('.scbtmlbt').attr('data-id');
 		 	$('.lzcfg').css('display','block');
 		 	$('.showscbtnlbt').css('display','block');
@@ -597,38 +633,42 @@ $(document).ready(function(){
 	 		var that=$(this);
 			//folder_id获取图片id
 			let photo_id_i = $(this).data('pid-i');
-			let tpsrc=$(`.itemww img[data-photo-index=${photo_id_i}]`).attr('src');
-			// let tpsrc=$(`.itemww img[photoid=${collect_id}]`).attr('src');	//获取图片路径	
-			let folder_id=$(this).attr('scid'); //获取收藏夹的id
-			// console.log(tpid,tpsrc,userfinderfolder_id)
-			// console.log(tpid);
-			console.log(folder_id, collect_id)
+			let user_finder_folder_id=$(this).attr('scid'); //获取收藏夹的id
+      let photo_url=$(this).attr('imgsrc');//图片src
+      let source = collect_id;//图片所在的文章id
+      let is_sc=1;
+			console.log(photo_url);
 			$.ajax({
 	            async:false,
-	            url: '/vip/addfolders',
+	            url: '/vip/finder_collect',
 	            type: 'POST',
 	            dataType: 'json',
-	            data: {_token:'{{csrf_token()}}',collect_id:collect_id,tpsrc:tpsrc,folder_id:folder_id},
+	            data: {
+                _token:'{{csrf_token()}}',
+                user_finder_folder_id:user_finder_folder_id,
+                photo_url:photo_url,
+                source:source,
+                is_sc:is_sc,
+              },
 	            success: function (data){
-	            	console.log(data);
+	            	// console.log(data);
 	                if(data.status_code == 0){
-	                	that.html('已发现')
-            			that.addClass('have-collect');
-						that.removeClass('Button2');
-						that.removeClass('to_find_floder_act');
-				        that.addClass('Button');
-				        that.addClass('have-disalbed');
-	                //     layer.closeAll();
+	                	that.html('已收藏')
+            			  that.addClass('have-collect');
+                    that.removeClass('Button2');
+                    that.removeClass('to_find_floder_act');
+				            that.addClass('Button');
+				            that.addClass('have-disalbed');
 	                }
 	                else{
-	                	layer.msg(data.message);
+	                	layer.msg('已经收藏过了',{skin: 'intro-login-class layui-layer-hui'})
 	                	$('.showscbtn').css('display','none');
 	                	$('.lzcfg').css('display','none');
-				      	that.text('已发现')
-				      	that.removeClass('to_find_floder_act');
-				        that.removeClass('Button2');
-				        that.addClass('Button');
-				        that.addClass('have-disalbed');
+                    that.text('已收藏')
+                    that.removeClass('to_find_floder_act');
+                    that.removeClass('Button2');
+                    that.addClass('Button');
+                    that.addClass('have-disalbed');
 	                	that.addClass('have-collect');
 	                }
 	            }

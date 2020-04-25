@@ -98,6 +98,7 @@ class UserFinder extends Model
     	
         $obj = self::formatFinders($user_finders);
         
+         
         foreach ($my_folders as $my_folder) {
             $is_have = false;
             foreach ($obj as $item) {
@@ -106,32 +107,36 @@ class UserFinder extends Model
                 }
             }
              
-            if(!$is_have){
-                $obj[$my_folder->id] = [
-                    'folder' => [
-                        'id'          => $my_folder->id,
-                        'name'        => $my_folder->title,
-                        'total' => 0,
-                    ],
-                    'finder' => [
-                        [
-                            'img'   => '',
-                            'url'   => '',
-                            'title' => '',
-                            'source' => '',
+            foreach($user_finders as $user_finder){
+                if(!$is_have){
+                    $obj[$my_folder->id] = [
+                        'folder' => [
+                            'id'          => $my_folder->id,
+                            'name'        => $my_folder->title,
+                            'total' => 0,
+                        ],
+                        'finder' => [
+                            [
+                                'img'   => '',
+                                'url'   => '',
+                                'title' => '',
+                                'source' => '',
+                            ]
+                        ],
+                        'who_find' => [
+                            'user_id'  => @ $user_finder->user_id,
+                            'nickname' => @ $user_finder->nickname ?? '',
+                            'avatar'   => @ $user_finder->avatar ?? '/img/avatar.png',
                         ]
-                    ],
-                    'who_find' => [
-                        'user_id'  => @ $user_finders[0]->user_id,
-                        'nickname' => @ $user_finders[0]->nickname ?? '',
-                        'avatar'   => @ $user_finders[0]->avatar ?? '/img/avatar.png',
-                    ]
-                ];
+                    ];
+                }
             }
+            
         }
-		
+		// dd($obj); 
         return $obj;
     }
+
 
     public static function formatFinders(& $user_finders)//& xxx是引用这个变量
     {
@@ -168,7 +173,7 @@ class UserFinder extends Model
     				continue;
     			}
 
-                $tinames=$tiname->title_designer_cn.' | '.$tiname->title_intro_cn;
+                $tinames=$tiname->title_name_cn;
                 $tinames=mb_substr($tinames,'0','21');
                 $obj[$user_finder->user_finder_folder_id] = [
                     'folder' => [
@@ -435,7 +440,11 @@ class UserFinder extends Model
         return $user_finders;
     }
 
-    //发现页->分页
+    /**
+     * 发现页->分页
+     * @param $request
+     * $cates 选项卡分类
+     */
     public static function getMoreTuijians(& $request,$cates)
     {   $user_id= Auth::id();
         switch ($cates) {
@@ -460,8 +469,58 @@ class UserFinder extends Model
                 return $data;
                 break;
         }
-        // $finders=json_decode($finders);
-        // $data = ['finders'=>$finders,'cates'=>$cates];
-        // return $data;
     }
+
+    
+    /**
+     * 发现页-》发现点击收藏
+     * @param $request
+     * @return bool
+     */
+    public static function findercollect($request)
+    {   
+        // dd($request->is_sc);
+        $is_sc=$request->is_sc;
+        $user_id = Auth::id();
+        if (empty($request->photo_url) || empty($user_id)) {
+            return '未登录或URL为空';
+        }
+
+        if (empty($request->user_finder_folder_id)) {
+            return '请选择文件夹';
+        }
+		
+		$start = strpos($request->photo_url, '/photo/images/');
+		if (false === $start) {
+			$photo_url = $request->photo_url;
+		} else {
+			$photo_url = substr($request->photo_url, $start);
+		}
+
+        
+		//查询文章详情->点击收藏后的是否收藏
+        $obj = self::where('user_id', $user_id)
+            ->where('user_finder_folder_id', $request->user_finder_folder_id)
+            ->where('photo_url', $photo_url)
+            ->where('is_sc',$is_sc)
+            ->first();
+        dd($obj);    
+        if ($obj){
+            return '你已经发现过了';
+        }
+        $data = [
+            'user_id' => $user_id,
+            'user_finder_folder_id' => $request->user_finder_folder_id,
+            'title' => $request->title ?? '',
+            'photo_url' => $photo_url,
+            'photo_source' => $request->source,
+            'is_sc'=>$is_sc,
+        ];
+        self::create($data);
+        return true;
+    }
+
+
+
+
 }

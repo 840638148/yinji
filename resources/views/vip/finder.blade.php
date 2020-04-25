@@ -526,24 +526,27 @@
 
 //发现-点击收藏ajax交互
   $('#discoveryItems').on('click','.add_finder_btn',function(){
-    console.log($(this).html());
+    // console.log($(this).html());
     if( $(this).html()=='收藏'){
-      var that = $(this)
-      var itemEle = $(this).closest('.item_content').find('.bg-img')
-      var folder_id = $(this).attr('data-id');
-      var collect_id = itemEle.attr('data-id');
-      var folder_name = $(this).parent().find('h3').text();
-      var is_sc=1;
+      let that = $(this)
+      let itemEle = $(this).closest('.item_content').find('.bg-img')
+      let user_finder_folder_id = $(this).attr('data-id');//发现的收藏夹id
+      let photo_url=itemEle.attr('src');//图片src
+          photo_url=photo_url.substr(20)
+      
+      let source = $(this).attr('data-source');//图片所在的文章id
+      let is_sc=1;
+      // console.log(source)
       $.ajax({
-        url: '/article/collect',
+        url: '/vip/finder_collect',
         type: 'POST',
         dataType: 'json',
         data: {
         	_token:'{{csrf_token()}}',
-        	folder_id:folder_id,
-        	folder_name:folder_name,
-        	collect_id:collect_id,
-        	// is_sc:is_sc,
+        	user_finder_folder_id:user_finder_folder_id,
+        	photo_url:photo_url,
+        	source:source,
+        	is_sc:is_sc,
         },
         success: function (data) {
 			// console.log(data)
@@ -668,7 +671,7 @@
       return h;
 
     }
-
+ 
 
 
     // 获取推荐用户每一项的Dom
@@ -995,7 +998,7 @@
   }
   
   // 发现页的分页
-// $(document).ready(function(){
+ // $(document).ready(function(){
   // let cate='finder';
   // $(document).on('click','.tabka',function(){
       // cate=$('#myTab1 .active').attr('cate');
@@ -1098,7 +1101,7 @@
       });
     }
   })
-// })
+ // })
 
 </script> 
 @endsection 

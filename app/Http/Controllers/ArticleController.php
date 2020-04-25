@@ -786,7 +786,7 @@ class ArticleController extends Controller
 
 
     /**
-     * 点击->收藏
+     * 文章详情页-》点击收藏
      *
      * @param Request $request
      * @return array
@@ -796,11 +796,9 @@ class ArticleController extends Controller
         if (!Auth::check()) {
             return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
         }
-		
 		//查询已经收藏的记录
 		// $findername = UserCollect::where('user_collect_folder_id', $request->folder_id)->where('collect_id', $request->collect_id)->first();
 		// dd($request);  
-		
         $result = UserCollect::collectById('0', $request);
 		
         if (true === $result) {

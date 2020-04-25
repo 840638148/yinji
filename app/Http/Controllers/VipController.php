@@ -153,6 +153,26 @@ class VipController extends Controller
         return view('vip.finder', $data);
     }
 
+
+    /**
+     * 发现页-》发现点击收藏
+     * @param finder_collect
+     */
+    public function finder_collect(Request $request){
+        // dd($request->all());
+        if (!Auth::check()) {
+            return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
+        }
+        
+        $result = UserFinder::findercollect($request);
+		
+        if (true === $result) {
+            return Output::makeResult($request, null);
+        }
+        return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
+    }
+
+
     // 发现页->分页
     public function finderajax(Request $request){
         $cates=$request->cate;
@@ -199,7 +219,7 @@ class VipController extends Controller
         return view('vip.folderlist', $data);
     } 
     
-    //推荐收藏中心的收藏api
+    //发现页-》推荐收藏中心的收藏
     public function addfolders(Request $request){
     	// dd('123');
     	$result = UserCollect::foldercollectById('0', $request);
@@ -210,23 +230,23 @@ class VipController extends Controller
         return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
     }
     
-    //推荐收藏中心的收藏的真实状态
+    /**
+     * 发现页-》推荐收藏-》显示收藏夹的目录
+     * @param request
+     */
     public function scstatus(Request $request){
-    	
-    	$result = UserCollect::where('user_id', Auth::id())->where('collect_id',$request->collect_id)
-    	    ->where('user_collect_folder_id', $request->folder_id)
-    	    ->where('photourl', $request->tpsrc)->first();
-    	if (is_null($result)) {
-    		// 没被收藏
-    		return Output::makeResult($request, null,ERROR::IS_OK);
-    	} else {
-    		//已收藏
-    		$result = $result->toArray();
-    		return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
-    	}
+        if (!Auth::check()) {
+            return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
+        }
+
+        $result = UserFinder::findercollect($request);
 		
-		
+        if (true === $result) {
+            return Output::makeResult($request, null);
+        }
+        return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
     }
+
     
 
     public function addFinder(Request $request)

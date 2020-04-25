@@ -80,7 +80,7 @@ Route::get('article/category/{id}', 'ArticleController@category');
 Route::get('interior/category/{id}', 'ArticleController@interiorCategory');
 Route::get('archs/category/{id}', 'ArticleController@archsCategory');
 Route::post('article/like', 'ArticleController@like');
-Route::post('article/collect', 'ArticleController@collect');
+Route::post('article/collect', 'ArticleController@collect');//文章详情收藏
 Route::post('article/vip_download', 'ArticleController@vipDownload');
 Route::post('article/allsortlist', 'ArticleController@allsortlist');    //点击进行排序
 
@@ -136,10 +136,12 @@ Route::post('vip/add_finder_folder', 'VipController@addFinderFolder');
 Route::post('vip/add_collect_folder', 'VipController@addCollectFolder');
 Route::post('vip/delete_folder', 'VipController@deleteFolder');
 Route::post('vip/edit_folder', 'VipController@editFolder');
-Route::post('vip/add_finder', 'VipController@addFinder');
+// Route::post('vip/add_finder', 'VipController@addFinder');
 Route::post('vip/get_folder_detail', 'VipController@getFolderDetail');
 Route::post('vip/get_folder_info', 'VipController@getFolderInfo');
 Route::post('vip/edit_folder_info', 'VipController@editFolderInfo');
+Route::post('vip/finder_collect', 'VipController@finder_collect');//发现页-》点击收藏
+
 
 Route::get('folderlist/{id}', 'VipController@folderlist');//推荐收藏夹列表
 Route::post('vip/addfolders', 'VipController@addfolders');//推荐收藏夹列表

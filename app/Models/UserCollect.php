@@ -177,7 +177,7 @@ class UserCollect extends Model
     }
 
     /**
-     * 获取收藏
+     * 个人中心页-》获取收藏
      * @param $user_id
      * @return string
      */
@@ -225,7 +225,7 @@ class UserCollect extends Model
     public static function formatCollectsAll(& $user_collects,& $my_collects){
         $obj = self::formatCollects($user_collects);
 		
-
+        // dd($obj);
         echo("<script>console.log(".json_encode($my_collects).");</script>");
         echo("<script>console.log(".json_encode($obj).");</script>");
         foreach ($my_collects as $my_collect) {
