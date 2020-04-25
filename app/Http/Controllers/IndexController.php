@@ -13,6 +13,7 @@ use App\Models\Article;
 use App\Models\Designer;
 use App\Models\ArticleTag;
 use App\Models\ArticleComment;
+use App\Models\CompanyWork;
 
 
 header('Access-Control-Allow-Origin:*');
@@ -43,6 +44,13 @@ class IndexController extends Controller
         }
         // dd($new_articles->toArray());
 
+        //获取最新的招聘信息18条
+        $joblist=CompanyWork::leftjoin('companies','company_works.company_id','=','companies.id')
+        ->select('companies.company_name','company_works.job_name','company_works.addr','company_works.updated_at','company_works.id')
+        ->orderby('company_works.updated_at','desc')
+        ->limit(18)
+        ->get()->toArray();
+        // dd($joblist);
 
         $hot_tags = ArticleTag::getHotTags();
         $data = [
@@ -58,6 +66,7 @@ class IndexController extends Controller
             'hot_tags' => $hot_tags,
             'lovely' => $lovely,
             'ads_8' => $ads_8,
+            'joblist' => $joblist,
         ];
 
         return view('index', $data);

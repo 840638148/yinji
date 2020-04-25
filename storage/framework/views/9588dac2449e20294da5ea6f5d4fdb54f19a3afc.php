@@ -663,24 +663,9 @@
         <h2><?php echo e(trans('index.latest_job')); ?></h2>
       </section>
       <ul>
-        <li>（上海）以靠建筑 – 项目建筑师 / 建筑师室内设计师</li>
-        <li>（北京）美国DeDeJ Architects – 建筑设项目建筑师项目建筑师</li>
-        <li>（上海）寻长设计 – 室内设计师 / 平面室内设计师</li>
-        <li>（北京）北京市建筑设计研究院有限公司室内设计师</li>
-        <li>（北京）众建筑 PAO – 项目建筑师 ...</li>
-        <li>（深圳）东木筑造设计事务所 – 室内设 ...</li>
-        <li>（北京/厦门）北京中合现代工程设计有 ...</li>
-        <li>（北京）未/WAY Studio建筑设计研究所 ...</li>
-        <li>（深圳/香港）华阳国际设计集团 – 集团 ...</li>
-        <li>（上海）CLD会筑景观 – 景观设计师 / 初 ...</li>
-        <li>（上海） 栋栖设计 dongqi Architects ...</li>
-        <li>（上海）Mur Mur Lab – 技术主管 / 项目 ...</li>
-        <li>（上海）或者设计 – 资深空间设计师 / 空 ...</li>
-        <li>（上海）华章置业(上海)米罗建筑设计事 ...</li>
-        <li>（北京）FESCH Beijing飞思建筑设计 ...</li>
-        <li>（深圳/香港）华阳国际设计集团 – 集团 ...</li>
-        <li>（深圳）耶格卡恩建筑设计 Jaeger Kahl ...</li>
-        <li>（北京）未/WAY Studio建筑设计研究所 ...</li>
+      <?php $__currentLoopData = $joblist; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $list): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <li><a target="_blank" href="/job/detail/<?php echo e($list['id']); ?>">(<?php echo e(mb_substr($list['addr'],0,2)); ?>) <?php echo e(mb_substr($list['company_name'],0,8)); ?> / <?php echo e(mb_substr($list['job_name'],0,10)); ?>...</a></li>
+      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>  
       </ul>
     </div>
   </div>
