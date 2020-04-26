@@ -36,7 +36,7 @@ class UserFinder extends Model
 
         if (empty($request->user_finder_folder_id)) {
             return '请选择文件夹';
-        }
+        }   
 		
 		$start = strpos($request->photo_url, '/photo/images/');
 		if (false === $start) {
