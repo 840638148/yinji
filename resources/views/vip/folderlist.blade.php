@@ -634,7 +634,7 @@ $(document).ready(function(){
 			//folder_id获取图片id
 			let photo_id_i = $(this).data('pid-i');
 			let user_finder_folder_id=$(this).attr('scid'); //获取收藏夹的id
-      let photo_url=$(this).attr('imgsrc');//图片src
+      let photo_url=$(`.itemww img[data-photo-index=${photo_id_i}]`).attr('src');
       let source = collect_id;//图片所在的文章id
       let is_sc=1;
 			console.log(photo_url);
