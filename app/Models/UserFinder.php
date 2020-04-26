@@ -14,7 +14,7 @@ class UserFinder extends Model
 {
 
     protected $fillable = [
-        'user_id', 'user_finder_folder_id', 'photo_url', 'view_time', 'title', 'photo_source',
+        'user_id', 'user_finder_folder_id', 'photo_url', 'view_time', 'title', 'photo_source','is_sc',
     ];
 
     public function folder()
