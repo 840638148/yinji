@@ -38,8 +38,8 @@ $(document).on('click','.create-new-folder',function(ev){
     
     $('#add_is_open').prop("checked","checked");
     
-    $('#newFolders .create_folder_title h2').html('创建' + (type == 'find' ? '发现' : '收藏')+ '文件夹')
-    ;    layer.open({
+    $('#newFolders .create_folder_title h2').html('创建' + (type == 'find' ? '发现' : '收藏')+ '文件夹');   
+    layer.open({
         type: 1,
         title: false,
         closeBtn: 0,
@@ -47,9 +47,9 @@ $(document).on('click','.create-new-folder',function(ev){
         isOutAnim: false,
         content: $('#newFolders'),
         success: function (layero, index) {
-        	// console.log(layero, index)
+        	console.log(layero, index)
             $('.newFolders').data("open", 1);
-            // window.location.reload;
+            window.location.reload;
         }
     })
     return false;
@@ -101,6 +101,7 @@ $(document).on('click','.add_folder_btn',function(ev){
                 layer.closeAll();
                 layer.msg('创建成功',{skin: 'intro-login-class layui-layer-hui'});
                 $('.folder_box ul').append(str);
+                // location.reload();
             } else {
                 layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
             }

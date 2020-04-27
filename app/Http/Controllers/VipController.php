@@ -296,10 +296,8 @@ class VipController extends Controller
 	            'name' => $request->finder_folder_name,
 	            'brief' => $request->finder_folder_brief,
 	            'is_open' => $request->is_open,
-	            'created_at' => now(),  
-	            'updated_at' => now(),
 	        ];  
-	        $result = UserFinderFolder::insertGetId($folder_data);
+	        $result = UserFinderFolder::create($folder_data);
         
 	        if ($result) {
 	        	$folder_data['kid'] = $result;    
@@ -327,10 +325,11 @@ class VipController extends Controller
             'brief' => $request->collect_folder_brief,
             'is_open' => $request->is_open,
         ];
-        $result = UserCollectFolder::insertgetid($collect_data);
+        $result = UserCollectFolder::create($collect_data);
+        
         if ($result) {
-        	return json_encode($collect_data);
-            //return Output::makeResult($request, null);
+        	// return json_encode($collect_data);
+            return Output::makeResult($request,$collect_data);
         } else {
             return Output::makeResult($request, null, Error::SYSTEM_ERROR);
         }
