@@ -1,98 +1,35 @@
 @extends('layouts.app')
 
-
-
 @section('title')
-
-
-
     {{trans('news.all_news')}}_{{trans('comm.yinji')}}
-
 @endsection
-
-
-
-
-
-
 
 @section('content')
 
-
-
     <div class="banner_news"> —— NEWS —— </div>
-
-
-
     <!------顶部大图结束----->
-
-
-
     <section class="wrapper ">
 
-
-
-
-
-
-
         <div class="cat-wrap left mt20 box">
-
-
-
             <div class="news_box">
-
-
-
                 @foreach ($newses as $news)
-
-
-
                     @if ($loop->iteration % 3 == 1)
 
-
-
                         <div class="news" >
-
-
-
                             <article class="postlist">
-
-
-
                                 <a href="/news/detail/{{$news->id}}">
-
-
-
                                     <figure>
-
                                         <img class="thumb" src="{{get_article_special($news)}}" data-original="{{get_article_special($news)}}" alt="{{get_article_title($news)}}" style="display: block;">
-
                                         <div>
-
                                             @foreach ($news['category'] as $category)
-
                                                 <span>{{$category['name']}}</span>
-
                                             @endforeach
-
                                         </div>
-
                                     </figure>
-
-
-
                                 </a>
 
-
-
                                 <h3> <a href="/news/detail/{{$news->id}}">{{get_article_title($news)}}</a></h3>
-
-
-
                                 <div class="news_brief"><a href="/news/detail/{{$news->id}}">{!!get_article_description($news)!!}</a></div>
-
-
 
                                 <div class="homeinfo">
 

@@ -1,95 +1,34 @@
 <?php $__env->startSection('title'); ?>
-
-
-
     <?php echo e(trans('news.all_news')); ?>_<?php echo e(trans('comm.yinji')); ?>
-
 
 <?php $__env->stopSection(); ?>
 
-
-
-
-
-
-
 <?php $__env->startSection('content'); ?>
 
-
-
     <div class="banner_news"> —— NEWS —— </div>
-
-
-
     <!------顶部大图结束----->
-
-
-
     <section class="wrapper ">
 
-
-
-
-
-
-
         <div class="cat-wrap left mt20 box">
-
-
-
             <div class="news_box">
-
-
-
                 <?php $__currentLoopData = $newses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $news): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-
-
-
                     <?php if($loop->iteration % 3 == 1): ?>
 
-
-
                         <div class="news" >
-
-
-
                             <article class="postlist">
-
-
-
                                 <a href="/news/detail/<?php echo e($news->id); ?>">
-
-
-
                                     <figure>
-
                                         <img class="thumb" src="<?php echo e(get_article_special($news)); ?>" data-original="<?php echo e(get_article_special($news)); ?>" alt="<?php echo e(get_article_title($news)); ?>" style="display: block;">
-
                                         <div>
-
                                             <?php $__currentLoopData = $news['category']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-
                                                 <span><?php echo e($category['name']); ?></span>
-
                                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
                                         </div>
-
                                     </figure>
-
-
-
                                 </a>
 
-
-
                                 <h3> <a href="/news/detail/<?php echo e($news->id); ?>"><?php echo e(get_article_title($news)); ?></a></h3>
-
-
-
                                 <div class="news_brief"><a href="/news/detail/<?php echo e($news->id); ?>"><?php echo get_article_description($news); ?></a></div>
-
-
 
                                 <div class="homeinfo">
 
