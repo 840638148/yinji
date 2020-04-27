@@ -216,12 +216,19 @@ class UserFinder extends Model
      * @return string
      */
     public static function recommendFinders($user_id = 0)
-    {
+    {   
+        $user_id=Auth::id();
         $recommend_finders = [];
         $user_finders = self::
             orderBy('user_finders.updated_at', 'desc')
             ->paginate(30);
 
+        //去除自己的收藏夹
+        $user_finders = $user_finders->reject(function ($value) use ($user_id) {
+            return $value->user_id == $user_id;
+        });
+
+        // dd($user_finders);
         $finders = self::formatFinders($user_finders);
         foreach($finders as $k=>$v){
             foreach($v['finder'] as $key=>$val){
@@ -270,7 +277,7 @@ class UserFinder extends Model
                     'title' => $img_finder->title,
                 ];
             }
-
+            // dump($finder);
 
             $user_info = User::find($finder->user_id);
             $recommend_folders[] = [
