@@ -247,23 +247,21 @@ class VipController extends Controller
         return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
     }
 
-    
+    /**
+     * 发现页搜索框
+     * @param request
+     */
 
-    public function addFinder(Request $request)
+    public function findersearch(Request $request)
     {
-        if (empty($request->user_finder_folder_id)) {
-            return Output::makeResult($request, null, 500, '请选择收藏夹');
-        }
-        if (empty($request->photo_url)) {
-            return Output::makeResult($request, null, 500, '请选择图片');
-        }
-        if (empty($request->photo_source)) {
-            return Output::makeResult($request, null, 500, '缺少文章来源');
+        if (!Auth::check()) {
+            return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
         }
 
-        $result = UserFinder::finderByUrl($request);
-        if (true === $result) {
-            return Output::makeResult($request, null);
+        $result = UserFinder::findersearch($request);
+        // dd($result);
+        if ($result){
+            return Output::makeResult($request,$result);
         } else {
             return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
         }

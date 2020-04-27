@@ -106,13 +106,14 @@
     
     <!-- 内容开始 -->
     
-    <div class="TabContent"> 
+    <div class="TabContent" style="padding-top:0;"> 
      
       <!--发现-->
       <div id="myTab1_Content0" style="padding-bottom: 20px">
-          <form style="" method="get" class="search_form" action="#">
-            <input  class="text_input" type="text" placeholder="输入关键字…" style=" width:1000px;">
-            <input  type="submit" class="search_btn" id="searchsubmit" value="搜索图片">
+          <form style="position:relative;" method="post" class="search_form" action="">
+            <input name="content" class="text_input" type="text" placeholder="输入关键字,例如收藏夹名，图片名" style=" width:1000px;margin-bottom:20px;">
+            <!-- <input  type="submit" class="search_btn" id="searchsubmit" value="搜索图片"> -->
+            <i style="position: absolute;right: 118px;top: 3px;padding: 5px;cursor: pointer;" id="findersearch" class="icon-search-1"></i>
           </form>
         <div class="masonry" id="discoveryItems">
           
@@ -823,6 +824,42 @@
         }
       })
     })
+
+    //搜索框
+    $(document).on('click','#findersearch',function(){
+      let content=$('.text_input').val();
+      let h='';
+
+      if(content==''){
+        // alert('请填写要搜索的内容')
+        layer.open({
+            title: ['温馨提示'],
+            content: '请填写要搜索的内容！',
+            btn: ['确定'],
+            shadeClose: true,
+        })
+      }else{
+        $.ajax({
+          async:false,
+          url: '/vip/findersearch',
+          type: 'POST',
+          //dataType: 'json',
+          data: {content:content,},
+          success:function(data) {
+            if(data.status_code==0){
+              layer.msg('查询成功',{skin: 'intro-login-class layui-layer-hui'});
+              $('#discoveryItems').empty();
+              $('#discoveryItems').append(data.data);
+            }else{
+              layer.msg('没有数据',{skin: 'intro-login-class layui-layer-hui'});
+              $('.text_input').val('');
+            }
+          }
+        });
+      }
+    });
+
+
 
   </script> 
 {{--会员购买模块--}} 

@@ -527,6 +527,57 @@ class UserFinder extends Model
         return true;
     }
 
+    /**
+     * 发现页搜索框
+     * @param $request
+     * 
+     */
+    public static function findersearch($request)
+    {   
+        $user_id = Auth::id();
+        $content=$request->content;
+        if (!Auth::check()) {
+            return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
+        }
+
+        //查询收藏夹名
+        $favorites=self::leftjoin('user_finder_folders','user_finder_folders.id','=','user_finders.user_finder_folder_id')
+            ->leftjoin('articles','articles.id','=','user_finders.photo_source')
+            ->leftjoin('users','users.id','=','user_finders.user_id')
+            ->select('user_finders.photo_source','articles.title_name_cn','user_finder_folders.name','user_finders.user_finder_folder_id','user_finders.user_id','users.avatar','users.nickname','user_finders.photo_url')
+            ->where("user_finder_folders.name","like","%$content%")
+            ->orwhere("articles.title_name_cn","like","%$content%")
+            ->get();
+
+        //查询出自己的收藏夹
+        $folders=UserFinderFolder::where('user_id',$user_id)->get();
+        $arr=[];
+        $html='';
+        foreach($favorites as $favorite){
+            
+            $html.='<div class="item discovery-item" style="display:flex">
+            <div class="item_content"> 
+            <img src="'.$favorite->photo_url.'" class="bg-img" data-id="'.$favorite->id.'" id="sourceimg" source="'.$favorite->photo_source.'" /> 
+            <div class="find_title" data-source="'.$favorite->photo_source.'">'.$favorite->title_name_cn.'<a href="javascript:;" class="find_info_more"></a></div>
+            <div class="who_find" style="display:none">
+            <img src="'.$favorite->avatar.'" />
+            <span> <a href="javascript:;">'.$favorite->nickname.'</a> 收藏到 <a href="#">'.$favorite->name.'</a></span></div>
+            <div class="folder" style="display: none;"><div class="fl folder_bj" style="width:80%">
+            选择文件夹<span class="fr show-more-selcect-item" style="background:url(images/arrow-ico.png); width:36px; height:36px;"></span></div>
+            <a href="javascript:void(0)" class="Button2 fr add-collection-btn">收藏</a></div>
+            <div class="folder_box" style="display: none;">   
+            <ul>';
+            foreach($folders as $folder){
+
+                $html.='<li><h3>'.$folder->name.'</h3> <span class="" title=""></span>
+                <a href="javascript:void(0)" class=" Button2 fr add_finder_btn" data-id="'.$folder->id.'" data-img="'.$favorite->photo_url.'" data-title="'.$favorite->title.'" data-source="'.$favorite->photo_source.'">收藏</a> </li> ';
+            }
+            $html.='</ul><a href="javascript:void(0)" class="create create-new-folder" data-type="find" id="sourcea" sourceid="'.$favorite->photo_source.'">创建收藏夹</a></div></div></div> ';
+        }
+        $arr[]=$html;
+        return $html;
+    }
+
 
 
 

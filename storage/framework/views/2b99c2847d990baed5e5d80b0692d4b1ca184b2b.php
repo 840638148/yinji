@@ -25,7 +25,7 @@ window.onload = function () {
     return [minutes , seconds ];
     }
 
-    var time = 5000;
+    var time = 10000;
     var int=0;
     int= setInterval(function(){
         time -= 1000

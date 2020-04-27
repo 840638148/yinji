@@ -136,7 +136,7 @@ Route::post('vip/add_finder_folder', 'VipController@addFinderFolder');
 Route::post('vip/add_collect_folder', 'VipController@addCollectFolder');
 Route::post('vip/delete_folder', 'VipController@deleteFolder');
 Route::post('vip/edit_folder', 'VipController@editFolder');
-// Route::post('vip/add_finder', 'VipController@addFinder');
+Route::post('vip/add_finder', 'VipController@addFinder');
 Route::post('vip/get_folder_detail', 'VipController@getFolderDetail');
 Route::post('vip/get_folder_info', 'VipController@getFolderInfo');
 Route::post('vip/edit_folder_info', 'VipController@editFolderInfo');
@@ -147,7 +147,8 @@ Route::get('folderlist/{id}', 'VipController@folderlist');//推荐收藏夹列�
 Route::post('vip/addfolders', 'VipController@addfolders');//推荐收藏夹列表
 Route::post('vip/scstatus', 'VipController@scstatus');//推荐收藏夹列表收藏的真实状态
 Route::post('vip/autodelpay', 'VipController@autodelpay');//半小时后未付款的自动取消订单
-Route::get('finder_ajax', 'VipController@finderajax');//发现页-->发现的分页
+Route::get('finder_ajax', 'VipController@finderajax');//发现页-->发现的分页 
+Route::post('vip/findersearch', 'VipController@findersearch');//发现页-->发现的分页 
 
 
 

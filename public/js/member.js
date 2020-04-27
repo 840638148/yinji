@@ -101,7 +101,7 @@ $(document).on('click','.add_folder_btn',function(ev){
                 layer.closeAll();
                 layer.msg('创建成功',{skin: 'intro-login-class layui-layer-hui'});
                 $('.folder_box ul').append(str);
-                // location.reload();
+                window.location.reload();
             } else {
                 layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
             }
