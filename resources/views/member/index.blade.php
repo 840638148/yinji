@@ -153,7 +153,7 @@
       <ul>
         @foreach ($user->follows as $key => $follow)
               @if ($key < 13)
-                <li class="guanzhu-item"> <a href="/user/index/{{$follow->id}}" target="_blank" title="{{$follow->nickname}}" onclick="selectItemGuanZhu({{$key}})"><span class="select-item"></span>  <img src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /> </a> </li>
+                <li class="guanzhu-item"> <a href="/user/index/{{$follow->id}}" target="_blank" title="{{$follow->nickname}}" onclick="selectItemGuanZhu({{$key}})"><span class="select-item"></span>  <img src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /> </a> </li>
               @elseif($key == 13)
                       <li><a href="/member/follow" class="more-content"></a></li>
                 @endif
