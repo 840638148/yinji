@@ -65,7 +65,7 @@ class MemberController extends Controller
         $lang = $request->session()->get('language') ?? 'zh-CN';
 
         $user = $this->getUserInfo();
-
+        // dd($user);
         $data = [
             'lang' => $lang,
             'user' => $user,
@@ -478,7 +478,9 @@ class MemberController extends Controller
 			$data = [
 				'status' => 0,
 				'path' => $path . '/' . $FileName //文件路径
-			];
+            ];
+            // dd(Auth::id());
+            User::where('id',Auth::id())->update(['zhuti' => $path . '/' . $FileName]);
 			return Output::makeResult($request, $data);
 		}
 		

@@ -106,15 +106,15 @@
     <!-- 内容开始 -->
     
     <div class="TabContent"> 
-      
+     
       <!--发现-->
       <div id="myTab1_Content0" style="padding-bottom: 20px">
-        <div class="masonry" id="discoveryItems">
-          <form method="get" class="search_form" action="#">
-            
-            
-            
+          <form style="" method="get" class="search_form" action="#">
+            <input  class="text_input" type="text" placeholder="输入关键字…" style=" width:1000px;">
+            <input  type="submit" class="search_btn" id="searchsubmit" value="搜索图片">
           </form>
+        <div class="masonry" id="discoveryItems">
+          
         </div>
       </div>
       

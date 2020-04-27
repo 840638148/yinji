@@ -152,7 +152,7 @@
       <ul>
         <?php $__currentLoopData = $user->follows; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $follow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
               <?php if($key < 13): ?>
-                <li class="guanzhu-item"> <a href="/user/index/<?php echo e($follow->id); ?>" target="_blank" title="<?php echo e($follow->nickname); ?>" /*onclick="selectItemGuanZhu(<?php echo e($key); ?>)*/"><span class="select-item"></span>  <img src="<?php if($follow->avatar): ?> <?php echo e($follow->avatar); ?> <?php else: ?> /img/avatar.png <?php endif; ?>" alt="<?php echo e($follow->nickname); ?>" /> </a> </li>
+                <li class="guanzhu-item"> <a href="/user/index/<?php echo e($follow->id); ?>" target="_blank" title="<?php echo e($follow->nickname); ?>" onclick="selectItemGuanZhu(<?php echo e($key); ?>)"><span class="select-item"></span>  <img src="<?php if($follow->avatar): ?> <?php echo e($follow->avatar); ?> <?php else: ?> /img/avatar.png <?php endif; ?>" alt="<?php echo e($follow->nickname); ?>" /> </a> </li>
               <?php elseif($key == 13): ?>
                       <li><a href="/member/follow" class="more-content"></a></li>
                 <?php endif; ?>

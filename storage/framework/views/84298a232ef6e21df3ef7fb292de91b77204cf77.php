@@ -80,7 +80,7 @@
             <img class="avatar" src="<?php if($user->avatar): ?> <?php echo e($user->avatar); ?> <?php else: ?> /img/avatar.png <?php endif; ?>" alt="<?php echo e($user->nickname); ?>" style="display: block;"> <a class="avatar_uploader" href="javascript:void(0)"> 点击更换头像 <input type="file" id="fileAvatar" class="filepath" onchange="changeAvatar(this)" accept="image/jpg,image/jpeg,image/png,image/PNG" /></a> <span>当前为<strong>自定义头像</strong>，建议大小：120*120。获取头像的顺序为：自定义头像、社交头像、全球通用头像、默认头像</span> </div>
           <div id="homepage_top_img" style="overflow:hidden">
             <label for="avatar">个人主图</label>
-            <img src="http://www.yinjispace.com/wp-content/uploads/2017/10/2017102803344214.jpg" alt="个人主图" width="600" hidden="200" style="display:block; width:200px; float:left; height:100px;" > <a class="avatar_uploader" href="javascript:void(0)" > 点击更换个人主图 <input type="file" id="fileSingleImg" class="filepath" onchange="changeSingleImg(this)" accept="image/jpg,image/jpeg,image/png,image/PNG" /></a> <span>当前为<strong>个人主页主图</strong>，建议大小：1920*300。</span> </div>
+            <img id="avimg" src="<?php echo e($user->zhuti); ?>" alt="个人主图" width="600" hidden="200" style="display:block; width:200px; float:left; height:100px;" > <a class="avatar_uploader" href="javascript:void(0)" > 点击更换个人主图 <input type="file" id="fileSingleImg" class="filepath" onchange="changeSingleImg(this)" accept="image/jpg,image/jpeg,image/png,image/PNG" /></a> <span>当前为<strong>个人主页主图</strong>，建议大小：1920*300。</span> </div>
           <p>
             <input name="avatar" type="hidden" value="<?php if($user->avatar): ?> <?php echo e($user->avatar); ?> <?php else: ?> /img/avatar.png <?php endif; ?>" />
             <input type="submit" value="保存更改" class="submit">
@@ -172,6 +172,7 @@ function changeSingleImg() {
     processData:false,
     success: function (data) {
       if (data.status_code == 0) {
+        console.log(data.data)
         $('#homepage_top_img img').attr('src',data.data.path)
       } else {
         layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
