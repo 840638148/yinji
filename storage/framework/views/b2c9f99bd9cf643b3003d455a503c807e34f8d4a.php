@@ -109,10 +109,10 @@
      
       <!--发现-->
       <div id="myTab1_Content0" style="padding-bottom: 20px">
-          <form style="position:relative;" method="post" class="search_form" action="">
-            <input name="content" class="text_input" type="text" placeholder="输入关键字,例如收藏夹名，图片名" style=" width:1000px;margin-bottom:20px;">
+          <form style="position:relative;padding:0;" method="post" class="search_form" action="">
+            <input name="content" class="text_input" type="text" placeholder="输入关键字,例如收藏夹名，图片名" style=" width:100%;margin-bottom:20px; padding-left:30px;height: 50px;">
             <!-- <input  type="submit" class="search_btn" id="searchsubmit" value="搜索图片"> -->
-            <i style="position: absolute;right: 118px;top: 3px;padding: 5px;cursor: pointer;" id="findersearch" class="icon-search-1"></i>
+            <i style="position: absolute;left: 10px;top: 6px;padding: 5px;cursor: pointer;" id="findersearch" class="icon-search-1"></i>
           </form>
         <div class="masonry" id="discoveryItems">
           
