@@ -1101,7 +1101,7 @@
             }else if(data.status_code == 0 && cates=='folder'){
                 page++; 
                 $.each(list.finders,function(index, item){
-                  // console.log(item.who_find[0]);
+                  console.log(item);
                   let ims=item.imgs;
                   h+='<div class="item collection-item" data-id="'+item.id+'">';
                   h+='<div class="item__content">';

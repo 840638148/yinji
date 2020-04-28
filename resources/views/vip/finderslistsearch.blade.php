@@ -18,15 +18,15 @@
         <h1 style="width:100%;text-align:center;margin:30px auto;">推荐发现<a style="padding: 10px;background: #636af3;color: #fff;float: right;font-size:16px;" href="javascript:history.go(-1);">返回</a></h1>
 
        <div class="masonry" id="discoveryItems"> 
-            @if($result['finder'])
+       {{--@if($result['finder'])
                 {!!$result['finder']!!}
             @endif
-            {{--@if($result['folder'])
+            @if($result['tuijianfolder'])
                 {!!$result['folder']!!}
-            @endif
-            @if($result['user'])
-                {!!$result['user']!!}
             @endif--}}
+            @if($result['tuijianuser'])
+                {!!$result['tuijianuser']!!}
+            @endif
             
         </div>
     </div>

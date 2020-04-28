@@ -265,7 +265,7 @@ class VipController extends Controller
 
         $result = UserFinder::finderslistsearch($request);
 
-
+        
         // dd($request->all());
         // dd($result['finder']);
 
