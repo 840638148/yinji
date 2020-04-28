@@ -835,14 +835,8 @@
           url: '/vip/findersearch',
           type: 'POST',
           //dataType: 'json',
-          data: {
-            content:content,
-          },
+          data: {content:content,},
           success:function(data) {
-            
-            // let finders=data.data.finders;
-            // let folders=data.data.folders;
-            // console.log(data.data);
             if(data.status_code==0){
               layer.msg('查询成功',{skin: 'intro-login-class layui-layer-hui'});
               $('#discoveryItems').empty();
@@ -851,13 +845,9 @@
               layer.msg('没有数据',{skin: 'intro-login-class layui-layer-hui'});
               $('.text_input').val('');
             }
-            
-            
-
           }
-        
         });
-    }
+      }
     });
 
 
