@@ -314,7 +314,7 @@ class MemberController extends Controller
         	
         	foreach ($tiname as $tinamearr){
 				$tinames=$tinamearr['title_designer_cn'].' | '.$tinamearr['title_name_cn'];
-				
+				$userfinderid['static_url']=$tinamearr['static_url'];
 				$userfinderid['titlename']=$tinames;
         	}
 			
