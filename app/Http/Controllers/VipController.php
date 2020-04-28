@@ -258,6 +258,10 @@ class VipController extends Controller
             return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
         }
 
+        if($request->cate==''){
+            return '请输入搜索的关键词！';
+        }
+
         $result = UserFinder::findersearch($request);
         // dd($result);
         if ($result){
@@ -266,6 +270,31 @@ class VipController extends Controller
             return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
         }
     }
+
+
+
+    
+    public function addFinder(Request $request)
+    {
+        if (empty($request->user_finder_folder_id)) {
+            return Output::makeResult($request, null, 500, '请选择收藏夹');
+        }
+        if (empty($request->photo_url)) {
+            return Output::makeResult($request, null, 500, '请选择图片');
+        }
+        if (empty($request->photo_source)) {
+            return Output::makeResult($request, null, 500, '缺少文章来源');
+        }
+
+        $result = UserFinder::finderByUrl($request);
+        if (true === $result) {
+            return Output::makeResult($request, null);
+        } else {
+            return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
+        }
+    }
+
+
 
     public function addFinderFolder(Request $request)
     {	
