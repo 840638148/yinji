@@ -157,7 +157,7 @@
 
         <section class="wrapper ">
   <div class="cat-wrap left">
-            <div class="content-post"> <?php echo get_article_content($article); ?> </div>
+            <div class="content-post" ca="<?php echo e($article->id); ?>"> <?php echo get_article_content($article); ?> </div>
             
             <!---------新闻内容结束-------->
             
@@ -198,7 +198,7 @@
             
             <!-- 模态框（Modal） -->
             
-            <div class="modal fade" id="qrcodeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="qrcodeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
                 <div class="modal-content">
           <div class="modal-header">
@@ -538,50 +538,26 @@
 
 
             //收藏
-
-
-
             $('.down-load-tip').click(function (e) {
-
                 e.stopPropagation();
-
             })
-
 
 
             $('html').click(function(e){
-
                 $('.down-load-tip').hide()
-
             })
 
-
-
-
-
             $('#article-collect').click(function(e){
-
                 if(!IS_LOGIN){
-
                     $('.login_box').show();
-
                 }else{
-
                     $('#collectFolder').modal({show:true})
-
                     // $('#collectFolder').show()
-
                 }
-
             });
-
-
-
-
 
             var wx_url = "<?php echo e(url('/article/detail/' . $article->id)); ?>";
             $("#qrcode").qrcode(wx_url);
-
 
 
             //点击小图片，显示表情
@@ -909,8 +885,7 @@
 </section>
 
         <!-- 发现到 -->
-
-        <div class="create_folder modal" id="discoveryFolders_1">
+<div class="create_folder modal" id="discoveryFolders_1">
   <div class="create_folder_title">
             <h2>图片发现到</h2>
           </div>
@@ -924,8 +899,8 @@
       <?php $__currentLoopData = $user_finder_folders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
       <li>
                 <h3><?php echo e($value); ?></h3>
-                <span img='' floder_id='<?php echo e($key); ?>'  class='folderattr null' title='<?php echo e($value); ?>'></span> 
-                <div id="modal_btns"> <a href='' class='Button2 fr to_find_floder_act add_finder_btn' data-id='<?php echo e($key); ?>' data-img='' data-source='<?php echo e($article->id); ?>'>收藏</a> </div>
+                <span img='' floder_id='<?php echo e($key); ?>'  class='folderattr null' title='<?php echo e($value); ?>'> </span> 
+                <div id="modal_btns"> <a href='' class='Button2 fr to_find_floder_act add_finder_btn' data-id='<?php echo e($key); ?>' data-img='' data-source=''>收藏</a> </div>
                 
                  </li>
       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -937,8 +912,7 @@
         </div>
 
         <!--创建发现文件夹-->
-
-        <div class="create_folder modal" id="new-find-model-folder">
+<div class="create_folder modal" id="new-find-model-folder">
   <div class="create_folder_title">
             <h2>创建发现文件夹</h2>
           </div>
@@ -963,7 +937,7 @@
 
         <!-- 登录 -->
 
-        <div class="login_box" style="display:none;">
+<div class="login_box" style="display:none;">
   <div class="new_folder_bj"></div>
   <div class="login_folder">
             <div id="login" class="login"> 
@@ -1047,7 +1021,7 @@
 
         <!--------选购会员弹窗------->
 
-        <div class="new_folder_box" style="display:none;">
+<div class="new_folder_box" style="display:none;">
   <div class="new_folder_bj"></div>
   <div class="create_folder">
             <div class="create_folder_title">
@@ -1241,9 +1215,11 @@ function disableSCBtn(img_url, folder_id) {
     //分享按钮点击
 
     //分享按钮点击
-
+    let photo_source;
     $(document).on('click','.share-img-btn',function(){
-
+        photo_source=$('.content-post').attr('ca');
+        $('.add_finder_btn').attr('data-source',photo_source)
+        // alert(photo_source)
 		 // 即将收藏的图片URL
         _img = $("#imageUrlJs").val();//$(this).parents(".img-container").find('img.alignnone.size-full').attr("src");
 
@@ -1400,103 +1376,60 @@ function disableSCBtn(img_url, folder_id) {
     
 
     //点“收藏”，发现收藏图片到文件夹内
-
-
-
     $(document).on('click','.to_find_floder_act',function(ev){
-
         if ($(".to_find_floder_act").data("open")==1) {
-
             return false;
-
         }
 
         $(".to_find_floder_act").data("open",1);
-
         $dom = $(this).parents("li");
-
         _floder_id = $dom.find(".folderattr").attr("floder_id");
-
         _title = $("#imgtitle").val();
-
         $data = {};
-
         $data.favor_id = _floder_id;
-
         $data.img =  $dom.find('.folderattr').attr("img");
-
         $data.img_title = _title;
-
         $data.url = "http://yinji.nenyes.com/nerihu-sz.html";
-
         $data.post_id = "17729";
 
-
-
-
+        console.log(_floder_id)
 
         $.post("http://yinji.nenyes.com/finderfuc?action=add_find_Collection",$data,function (_res) {
-
-
-
             setTimeout(function () {
-
                 $(".to_find_floder_act").removeData("open");
-
             },1000);
-
             _obj = eval("("+_res+")");
 
 
 
             if (_obj.msg) {
-
                 //$(this).parents(".discoveryFolders").find(".error_msg").html(_obj.msg);
-
                 alert(_obj.msg);
-
                 layer.closeAll();
-
             }
 
 
 
             if (_obj.error_code==1) {
-
                 return false;
-
             }
-
         })
-
         return false;
-
-
-
     })
 
 
 
     $(document).on('click','.more-img-item',function(){
-
         var src = '';
-
         //去除所有选中状态
 
         $('.more-img-item').each(function(){
-
             $(this).removeClass('selected');
-
         })
 
         // 添加选中状态
-
         $(this).addClass('selected');
-
-
-
         src = $(this).find('img').attr('src');
-
         $('#img-browse').find('.selected-image').attr('src',src);
 
     })
@@ -1504,57 +1437,29 @@ function disableSCBtn(img_url, folder_id) {
 
 
     function  class_find_layui_win() {
-
         $('#new-find-model-folder').removeData("open");
-
         $('#discoveryFolders_1').removeData("open");
-
         layer.closeAll();
-
     }
 
     
-
     function getDiscoveryFoldersDom(items,img){
-
-
-
         var folders = items || [];
-
         var h = '';
-
         h += '      <ul class="discover-folders ">';
-
-        
-
         // console.log(items,folders,img);
-
-        
-
         folders.map(function(folder,idx){
-
             h += '        <li>';
-
             h += '          <h3>'+ folder.favorite + '</h3>';
-
            // h += '          <span>图片标题：</span><input name="imgtitle"   />';
-
             h += '          <span ' +' img="'+img+'" floder_id="'+folder.id+'"';
-
             h += ' class="folderattr ' + (folder.isopen == 2 ? 'private' : null) +'" title="'+ (folder.favorite ? folder.favorite : '') + '" ></span> <a href="javascript:;" class="Button2 fr to_find_floder_act">收藏</a>';
-
             h += '        </li>';
-
         })
-
         h += '      </ul>';
-
         h += '<a href="#" class="create create-new-folder-btn">创建收藏夹</a>';
-
         h += '<div class="error_code"></div>';
-
         $('#discoveryFolders_1 .collection_to').html(h);
-
     }
 
 
@@ -1954,13 +1859,6 @@ function disableSCBtn(img_url, folder_id) {
 
 
 
- 
-<script type="text/javascript">
 
-
-
-    </script> 
-    
-   
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

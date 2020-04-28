@@ -236,7 +236,7 @@
         		<li> <img src="<?php echo e($detail['photo_url']); ?>" data-id="<?php echo e($detail['user_finder_folder_id']); ?>" alt="<?php echo e(mb_substr($detail['titlename'],0,30)); ?>"> </li>
           <div class="find_title">
 
-            <h2><a href="<?php echo e($detail['photo_url']); ?>" target="_blank"><?php echo e(mb_substr($detail['titlename'],0,20)); ?></a></h2>
+            <h2><a href="/article/<?php echo e($detail['static_url']); ?>" target="_blank"><?php echo e(mb_substr($detail['titlename'],0,20)); ?></a></h2>
 
             <a href="javascript:;" class="find-icon-trash remove_find_img" data-id="<?php echo e($detail['id']); ?>" tag="删除发现的图片"></a> </div>
 

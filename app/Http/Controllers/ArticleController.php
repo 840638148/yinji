@@ -211,7 +211,7 @@ class ArticleController extends Controller
             'articles' => $articles,
             // 'starsav'   =>$starsav,
         ];
-        // echo("<script>console.log(".json_encode($data).");</script>");
+        echo("<script>console.log(".json_encode($data).");</script>");
         return view('article.lists', $data);
     }
 
@@ -281,10 +281,10 @@ class ArticleController extends Controller
         $topics = ArticleCategory::getTopics($id);
 
         $articles = Article::getArticles($request, $category_ids);
-        // foreach($articles as $k=>$articleslist){
-        //     $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $articleslist['id'])->avg('stars');
-        //     $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
-        // }
+        foreach($articles as $k=>$articleslist){
+            $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $articleslist['id'])->avg('stars');
+            $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
+        }
         $data = [
             'user' => $this->getUserInfo(),
             'lang' => $lang,
@@ -367,7 +367,7 @@ class ArticleController extends Controller
 		$user_id = Auth::id();
         $issc = UserFinder::where('user_id', $user_id)->get()->toArray();
         
-        // $isvip=User::where('id',$user_id)->pluck('level')->first();
+        $isvip=User::where('id',$user_id)->pluck('level')->first();
 
         //求打分的平均值
         $starsaverage=$comments->toArray();
@@ -383,7 +383,7 @@ class ArticleController extends Controller
         	// $starsav=round($starsav);
         	$starsav=sprintf("%.1f",$starsav);//保留小数点一位
         }
- 
+
         $userstars=ArticleComment::where('user_id', $user_id)->where('comment_id',$id)->value('stars');
         // $userstars=sprintf("%.1f",$userstars);
         // dd($userstars);
@@ -392,7 +392,7 @@ class ArticleController extends Controller
         //     $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
         // }
         // dd($starssum,$starscount,$starsav);
-		// dd($userstars); 
+		// dd($article); 
         // $stars=ArticleComment::where('user');
         
         $data = [
@@ -418,7 +418,7 @@ class ArticleController extends Controller
             'season_price' => $season_price,
             'year_price' => $year_price,
             'issc' => $issc,
-            // 'isvip' => $isvip,
+            'isvip' => $isvip,
             'starsav' => $starsav,
             'userstars' => $userstars,
         ];
@@ -438,7 +438,7 @@ class ArticleController extends Controller
     {
         $type=$request->type;
         $sjx=$request->sjx;
-        // dd($_GET);
+        // dd($request->all());
 
         if($type=='starssort'){
             if($sjx=='desc'){
@@ -786,7 +786,7 @@ class ArticleController extends Controller
 
 
     /**
-     * 文章详情页-》点击收藏
+     * 点击->收藏
      *
      * @param Request $request
      * @return array
@@ -796,9 +796,11 @@ class ArticleController extends Controller
         if (!Auth::check()) {
             return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
         }
+		
 		//查询已经收藏的记录
 		// $findername = UserCollect::where('user_collect_folder_id', $request->folder_id)->where('collect_id', $request->collect_id)->first();
 		// dd($request);  
+		
         $result = UserCollect::collectById('0', $request);
 		
         if (true === $result) {

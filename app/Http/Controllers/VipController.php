@@ -195,16 +195,17 @@ class VipController extends Controller
         //通过user_id查出该收藏夹和收藏夹下的信息
         $folistname=UserFinderFolder::where('user_finder_folders.id',$request->id)->get()->toArray();//收藏夹文件名
         $folist=UserFinderFolder::where('user_finder_folders.id',$request->id)->leftjoin('user_finders','user_finder_folders.id','user_finders.user_finder_folder_id')->get()->toArray();
-        
+        // dd($folist);
         //通过遍历将文章的标题和跳转地址放进去
         foreach ($folist as $key =>$folists){
-        	$articleid=Article::where('id',$folists['photo_source'])->get()->toArray();
+            $articleid=Article::where('id',$folists['photo_source'])->get()->toArray();
 			foreach ($articleid as $aid){
         		$articlename=$aid['title_name_cn'].$aid['title_intro_cn'];
 		        $folist[$key]['articlename']=$articlename;
 		        $folist[$key]['static_url']=$aid['static_url'];
 			}
         }
+        // dd($folist);
     	//通过用户id获取收藏夹名字
     	$userscname = UserFinderFolder::where('user_finder_folders.user_id',$user_id)->get()->toArray();
         $data = [
@@ -252,23 +253,38 @@ class VipController extends Controller
      * @param request
      */
 
-    public function findersearch(Request $request)
+    public function finderslistsearch(Request $request)
     {
-        if (!Auth::check()) {
-            return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
-        }
+        $lang = $request->session()->get('language') ?? 'zh-CN';
+		$user_id = Auth::id();
+		$user = $this->getUserInfo();
 
-        if($request->cate==''){
+        if($request->content==''){
             return '请输入搜索的关键词！';
         }
 
-        $result = UserFinder::findersearch($request);
-        // dd($result);
-        if ($result){
-            return Output::makeResult($request,$result);
-        } else {
-            return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
-        }
+        $result = UserFinder::finderslistsearch($request);
+
+
+        // dd($request->all());
+        // dd($result['finder']);
+
+        // foreach($result as $v){
+        //     foreach($v['folder'] as $k){
+        //         dump($k);
+        //     }
+            
+            
+        // }
+
+        $data=[
+            'lang' => $lang,
+            'user' => $user,
+            'result' => $result,
+        ];
+
+        return view('vip.finderslistsearch', $data);
+
     }
 
 

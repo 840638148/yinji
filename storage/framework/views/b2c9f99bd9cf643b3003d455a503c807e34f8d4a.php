@@ -109,40 +109,46 @@
      
       <!--发现-->
       <div id="myTab1_Content0" style="padding-bottom: 20px">
-          <form style="position:relative;padding:0;" method="post" class="search_form" action="">
-            <input name="content" class="text_input" type="text" placeholder="输入关键字,例如收藏夹名，图片名" style=" width:100%;margin-bottom:20px; padding-left:30px;height: 50px;">
-            <!-- <input  type="submit" class="search_btn" id="searchsubmit" value="搜索图片"> -->
-            <i style="position: absolute;left: 10px;top: 6px;padding: 5px;cursor: pointer;" id="findersearch" class="icon-search-1"></i>
+          <form action="/vip/finderslistsearch"  style="position:relative;padding:0;" method="post" class="search_form" >
+            <input id="hiddenText" type="text" style="display:none" />
+            <input name="content" id="txt_name" class="text_input" type="text" placeholder="输入关键字,例如收藏夹名，图片名" style=" width:100%;margin-bottom:20px;height: 50px;" >
+            <input type="hidden" name='cate' value='finder'>
+            <input style="position: absolute;right: 10px;top: 6px;padding: 5px;cursor: pointer;border:none;" type="image" onClick = "formName.submit()" src="/images/findersearch.png" style="border:none;" cate='finer' id="findersearch" >
           </form>
         <div class="masonry" id="discoveryItems">
           
         </div>
       </div>
-      
       <!--发现结束--> 
       
-      <!--文件夹-->
+      <!--收藏夹开始-->
       <div id="myTab1_Content1" class="none">
+          <form action="/vip/finderslistsearch"  style="position:relative;padding:0;" method="post" class="search_form" >
+            <input id="hiddenText" type="text" style="display:none" />
+            <input name="content" id="txt_name" class="text_input" type="text" placeholder="输入关键字,例如收藏夹名，图片名" style=" width:100%;margin-bottom:20px;height: 50px;" >
+            <input type="hidden" name='cate' value='folder'>
+            <input style="position: absolute;right: 10px;top: 6px;padding: 5px;cursor: pointer;border:none;" type="image" onClick = "formName.submit()" src="/images/findersearch.png" style="border:none;" cate='finer' id="findersearch" >
+          </form>
         <div class="masonry" id="collectionItems">
-          <form method="get" class="search_form" action="#">
-            
-            
-            
-          </form>
+        
         </div>
       </div>
       
-      <!--文件夹结束-->
+      <!--收藏夹结束-->
       
+      <!-- 用户开始 -->
       <div id="myTab1_Content2" class="none">
-        <div class="masonry" id="users">
-          <form method="get" class="search_form" action="#">
-            
-            
-            
+          <form action="/vip/finderslistsearch"  style="position:relative;padding:0;" method="post" class="search_form" >
+            <input id="hiddenText" type="text" style="display:none" />
+            <input name="content" id="txt_name" class="text_input" type="text" placeholder="输入关键字,例如收藏夹名，图片名" style=" width:100%;margin-bottom:20px;height: 50px;" >
+            <input type="hidden" name='cate' value='user'>
+            <input style="position: absolute;right: 10px;top: 6px;padding: 5px;cursor: pointer;border:none;" type="image" onClick = "formName.submit()" src="/images/findersearch.png" style="border:none;" cate='finer' id="findersearch" >
           </form>
+        <div class="masonry" id="users">
+
         </div>
       </div>
+      <!-- 用户 end -->
     </div>
   </div>
   
@@ -816,39 +822,56 @@
       })
     })
 
-    //搜索框
-    $(document).on('click','#findersearch',function(){
-      let content=$('.text_input').val();
-      let h='';
 
-      if(content==''){
-        // alert('请填写要搜索的内容')
-        layer.open({
-            title: ['温馨提示'],
-            content: '请填写要搜索的内容！',
-            btn: ['确定'],
-            shadeClose: true,
-        })
+
+
+    //提交前检查
+    /*function checkForm(obj)
+    {
+      let name = document.getElementById('txt_name').value;
+      if (name == ''){     
+            alert('请填写要搜索的内容！');
+            return false;
       }else{
-        $.ajax({
-          async:false,
-          url: '/vip/findersearch',
-          type: 'POST',
-          //dataType: 'json',
-          data: {content:content,},
-          success:function(data) {
-            if(data.status_code==0){
-              layer.msg('查询成功',{skin: 'intro-login-class layui-layer-hui'});
-              $('#discoveryItems').empty();
-              $('#discoveryItems').append(data.data);
-            }else{
-              layer.msg('没有数据',{skin: 'intro-login-class layui-layer-hui'});
-              $('.text_input').val('');
+        //发现搜索框
+        // $(document).on('click','#findersearch',function(){
+          let content=$('.text_input').val();
+          let h='';
+          let cate=$(this).attr('cate');
+          console.log(cate)
+        
+          $.ajax({
+            async:false,
+            url: '/vip/finderslistsearch',
+            type: 'POST',
+            //dataType: 'json',
+            data: {content:content,cate:cate,},
+            success:function(data) {
+              
+              console.log(date)
+              if(data.status_code==0){
+                layer.msg('查询成功',{skin: 'intro-login-class layui-layer-hui'});
+                $('#discoveryItems').empty();
+                $('#discoveryItems').append(data.data);
+              }else{
+                layer.msg('没有数据',{skin: 'intro-login-class layui-layer-hui'});
+                $('.text_input').val('');
+              }
             }
-          }
-        });
+          });
+          return ture
       }
-    });
+    }
+
+
+    //文本框事件响应
+    function keydownEvent(e){
+      if (e.keyCode == 13){
+        // document.getElementById('myform').submit();
+        alert('请使用放大镜进行提交');
+        return false;
+      }
+    }*/
 
 
 
