@@ -49,7 +49,7 @@
           <li class="layout_li ajaxpost">
             <article class="postgrid">
             <span class="guojia2" >
-              <a style="position:absolute;bottom:60px;right:71px;z-index:9;" href="#" rel="tag">加拿大</a>
+              <a style="position:absolute;bottom:60px;right:71px;z-index:9;" href="#" rel="tag">{{$article->location_cn}}</a>
             </span>
               <figure> <a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif" title="{{get_article_title($article)}}" target="_blank"> <img class="thumb" src="{{get_article_thum($article)}}" data-original="{{get_article_thum($article)}}" alt="{{get_article_title($article)}}" style="display: block;"> </a> </figure>
               <h2> <a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif" title="{{get_article_title($article)}}" target="_blank">
