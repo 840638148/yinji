@@ -15,17 +15,13 @@
      
     <!--发现-->
     <div id="myTab1_Content0" style="width:1200px;padding-bottom: 20px;margin:30px auto;">
-        <h1 style="width:100%;text-align:center;margin:30px auto;">推荐发现<a style="padding: 10px;background: #636af3;color: #fff;float: right;font-size:16px;" href="javascript:history.go(-1);">返回</a></h1>
+        <h1 style="width:100%;text-align:center;margin:30px auto;">发现 - 搜索中心<a style="padding: 10px;background: #636af3;color: #fff;float: right;font-size:16px;" href="javascript:history.go(-1);">返回</a></h1>
 
        <div class="masonry" id="discoveryItems"> 
-       {{--@if($result['finder'])
-                {!!$result['finder']!!}
-            @endif
-            @if($result['tuijianfolder'])
-                {!!$result['folder']!!}
-            @endif--}}
-            @if($result['tuijianuser'])
-                {!!$result['tuijianuser']!!}
+            @if($result=='')
+            没有数据
+            @else
+                {!!$result!!}
             @endif
             
         </div>
@@ -65,8 +61,35 @@
         window.location.href = '/search?keyword=' + encodeURIComponent(value);
     });
 
-    //获取收藏图片的每一个
+    //点击关注用户
+    $('.users').on('click', '.user_follow_btn', function(){
+      var follow_id = $(this).attr('data-id');
+      var that = $(this)
+      $.ajax({
+        url: '/member/add_follow',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          _token:_token,
+          follow_id:follow_id
+        },
 
+        success: function (data) {
+          if (data.status_code == 0) {
+            layer.msg('关注成功！',{skin: 'intro-login-class layui-layer-hui'})
+            that.text('已关注')
+            that.removeClass('Button3')
+            that.addClass('Button')
+            that.addClass('have-disalbed')
+          } else {
+            layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+          }
+        }
+      });
+    });
+
+
+    //获取收藏图片的每一个
     function getImgBrowseImgsDom(imgs,id,index){
       var imgsArr = imgs || [];
       var idx = index || 0;

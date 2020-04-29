@@ -343,7 +343,7 @@ class UserFinder extends Model
                 'collections' => User::getCollectNum($user->id),
                 'fans' => User::getFansNum($user->id),
                 'rank' => $rank,
-
+                'vip_level'=>User::getVipLevel($user->id),
             ];
         }
 		// dd($recommend_users);
@@ -558,14 +558,12 @@ class UserFinder extends Model
             $folders=UserFinderFolder::where('user_id',$user_id)->get();
 
             $arr=[];
-
             $lists = $favorites->reject(function ($value) use ($user_id) {
                 return $value->user_id == $user_id;
             });
             
-
             foreach($lists as $k=>$favorite){
-                $arr[$k]['finder']=$favorite;
+                $arr[$k]['tuijianfinder']=$favorite;
                 $arr[$k]['folder']=$folders;
             }
             
@@ -575,94 +573,98 @@ class UserFinder extends Model
 
             $html.='<div class="item discovery-item" style="display:flex">
                         <div class="item_content"> 
-                            <img src="'.$favorite["finder"]->photo_url.'" class="bg-img" data-id="'.$favorite['finder']->id.'" id="sourceimg" source="'.$favorite['finder']->photo_source.'" /> 
-                            <div class="find_title" data-source="'.$favorite['finder']->photo_source.'">'.$favorite['finder']->title_name_cn.'<a href="javascript:;" class="find_info_more"></a></div>
+                            <img src="'.$favorite["tuijianfinder"]->photo_url.'" class="bg-img" data-id="'.$favorite['tuijianfinder']->id.'" id="sourceimg" source="'.$favorite['tuijianfinder']->photo_source.'" /> 
+                            <div class="find_title" data-source="'.$favorite['tuijianfinder']->photo_source.'">'.$favorite['tuijianfinder']->title_name_cn.'<a href="javascript:;" class="find_info_more"></a></div>
                             <div class="who_find" style="display:none">
-                                <img src="'.$favorite['finder']->avatar.'" />
-                                <span> <a href="javascript:;">'.$favorite['finder']->nickname.'</a> 收藏到 <a href="#">'.$favorite['finder']->name.'</a></span>
+                                <img src="'.$favorite['tuijianfinder']->avatar.'" />
+                                <span> <a href="javascript:;">'.$favorite['tuijianfinder']->nickname.'</a> 收藏到 <a href="#">'.$favorite['tuijianfinder']->name.'</a></span>
                             </div>
                             <div class="folder" style="display: none;">
                                 <div class="fl folder_bj" style="width:80%">选择文件夹<span class="fr show-more-selcect-item" style="background:url(images/arrow-ico.png); width:36px; height:36px;"></span>
                                 </div>
                                 <a href="javascript:void(0)" class="Button2 fr add-collection-btn">收藏</a>
-                            
                             </div>
                             <div class="folder_box" style="display: none;">   
                                 <ul>';
                                 foreach($favorite['folder'] as $folder){
                                     $html.='<li><h3>'.$folder['name'].'</h3> <span class="" title=""></span>
-                                    <a href="javascript:void(0)" class=" Button2 fr add_finder_btn" data-id="'.$folder['id'].'" data-img="'.$favorite['finder']->photo_url.'" data-title="'.$favorite['finder']->title.'" data-source="'.$favorite['finder']->photo_source.'">收藏</a> </li> ';
+                                    <a href="javascript:void(0)" class=" Button2 fr add_finder_btn" data-id="'.$folder['id'].'" data-img="'.$favorite['tuijianfinder']->photo_url.'" data-title="'.$favorite['tuijianfinder']->title.'" data-source="'.$favorite['tuijianfinder']->photo_source.'">收藏</a> </li> ';
                                 }
                                 $html.='</ul>
-                                <a href="javascript:void(0)" class="create create-new-folder" data-type="find" id="sourcea" sourceid="'.$favorite['finder']->photo_source.'">创建收藏夹</a>
+                                <a href="javascript:void(0)" class="create create-new-folder" data-type="find" id="sourcea" sourceid="'.$favorite['tuijianfinder']->photo_source.'">创建收藏夹</a>
                             </div>
                         </div>
                     </div>'; 
             }
-            $data['tuijianfinder']=$html;
-            return $data;
+            // $data['tuijianfinder']=$html;
+            return $html;
         }
 
         if($request->cate=='folder'){
             //查询收藏夹名
-            $favorites=self::leftjoin('user_finder_folders','user_finder_folders.id','=','user_finders.user_finder_folder_id')
-            ->leftjoin('articles','articles.id','=','user_finders.photo_source')
-            ->leftjoin('users','users.id','=','user_finders.user_id')
-            ->select('user_finder_folders.name','user_finder_folders.id','users.avatar','users.nickname','user_finders.photo_url')
-            ->where("user_finder_folders.name","like","%$content%")
-            ->get();
-            // dd($favorites);
+            $favorites=UserFinderFolder::leftjoin('users','users.id','=','user_finder_folders.user_id')
+                ->select('user_finder_folders.name','user_finder_folders.id','users.avatar','users.username','user_finder_folders.user_id')
+                ->where("user_finder_folders.name","like","%$content%")->get();
+            
             //查询出自己的收藏夹
             $folders=UserFinderFolder::where('user_id',$user_id)->get();
-
-            $arr=[];
-            $lists = $favorites->reject(function ($value) use ($user_id) {
-                return $value->user_id == $user_id;
-            });
             
 
-            foreach($lists as $k=>$favorite){
-                $arr[$k]['tuijianfolder']=$favorite;
-                $arr[$k]['folder']=$folders;
+            $arr=[];
+            foreach($folders as $folder){
+                $favorites = $favorites->reject(function ($value) use ($folder) {
+                    // dd($value->id,$folders->id);
+                    return $value->id == $folder->id;
+                });               
             }
-            // dd($arr);
+            $lists=$favorites;
+
+            foreach($lists as $k=>$v){
+                $lists[$k]['imgall']=self::where('user_finder_folder_id',$v['id'])->select('photo_url','photo_source')->limit(4)->get();
+            }
+            
             $html='';
             $data=[];
-            foreach($arr as $favorite){
-                // dump($favorite);
-                $html.='<div class="item collection-item" data-id="'.$favorite['tuijianfolder']->id.'">
+            foreach($lists as $favorite){
+                $html.='<div class="item collection-item" data-id="'.$favorite->id.'">
                         <div class="item__content">
-                        <ul onclick="location=\'/folderlist/'.$favorite['tuijianfolder']->id.'\'">';
-                        
-                // foreach($favorite['folder'] as $items){
-                    // dump($items);
-                    $html.='<li>
-                        <a href="folderlist/'.$favorite['tuijianfolder']->id.'">
-                        <img src="'.$favorite['tuijianfolder']->photo_url.'" alt="'.$favorite['tuijianfolder']->title.'"></a>
-                        </li>';
-                // }
+                        <ul onclick="location=\'/folderlist/'.$favorite->id.'\'">';
+                        foreach($favorite['imgall'] as $val){
+                            $html.='<li>
+                                    <a href="/folderlist/'.$favorite->id.'">
+                                    <img src="'.$val->photo_url.'" alt="'.$favorite->title.'"></a>
+                                    </li>';
+                        }
                 $html.='</ul><div class="find_title"><h2>
-                        <a href="folderlist/'.$favorite["tuijianfolder"]->id.'">'.$favorite['tuijianfolder']->name+'</a></h2>
+                        <a href="folderlist/'.$favorite->id.'">'.$favorite->name.'</a></h2>
                         <a href="javascript:void(0);" class="collect-user-icon">
-                        <img id="errimg" src="'.$favorite['tuijianfolder']->avatar.'" onerror="this.onerror=``;this.src=`/img/avatar.png`"></a>
+                        <img id="errimg" src="'.$favorite->avatar.'" onerror="this.onerror=``;this.src=`/img/avatar.png`"></a>
                         </div></div></div>';
             }
-            // $data['tuijianfolder']=$html;
-            // return $data;
+            // $data=$html;
+            return $html;
 
         }
 
         if($request->cate=='user'){
             //查询用户名
-            
-            $favorites=self::leftjoin('users','users.id','=','user_finders.user_id')
-            ->select('users.avatar','users.nickname','user_finders.photo_url','users.id')
-            ->where("users.nickname","like","%$content%")
+           
+            $favorites=User::select('users.avatar','users.nickname','users.username','users.id')
+            ->where("users.username","like","%$content%")
+            ->orwhere("users.nickname","like","%$content%")
             ->get();
 
-            $lists = $favorites->reject(function ($value) use ($user_id) {
-                return $value->id == $user_id;
-            });
+            $res=UserFollow::where('user_id',$user_id)->select('user_id','follow_id')->get();
+
+            $ss=$favorites->toArray();
+            $gz=$res->toArray();
+            foreach ($res as $follow) {
+                $favorites=$favorites->reject(function ($val) use ($follow) {
+                 return $val->id == $follow->follow_id;
+                });
+            }
+            $lists=$favorites;
+            $arr=[];
             $rank = User::isVip($user_id) ? 'VIP' : '普通用户';
             foreach($lists as $k=>$favorite){
                 $arr[$k]['tuijianuser']=$favorite;
@@ -670,29 +672,26 @@ class UserFinder extends Model
                 $favorite['fans'] = User::getFansNum($user_id);
                 $favorite['rank'] = $rank;
             }
-            // dd($arr);
+            
             $html='';
             $data=[];
             foreach($arr as $favorite){
-                // dump($favorite['tuijianuser']->avatar);
                 $html.='<div class="item">
                 <div class="users">
                 <div class="border-bottom1">
                 <div class="head">
                 <img width="100%" height="100%" src="'.$favorite['tuijianuser']->avatar.'" alt="头像"></div>
                 <h2>
-                <a href="#">'.$favorite['tuijianuser']->nickname.'</a></h2>'.$favorite['tuijianuser']->rank.'</div>
+                <a href="#">'.$favorite['tuijianuser']->nickname.'</a></h2><img class="vipimg" width="32px" scr="'.$favorite['tuijianuser']->vip_level.'" /></div>
                 <div class="Statistics">
                 <ul>
                 <li><span>'.$favorite['tuijianuser']->collections.'</span>收藏</li>
                 <li><span>'.$favorite['tuijianuser']->fans.'</span>粉丝</li></ul>
                 </div><a class="Button3 user_follow_btn" data-id="'.$favorite['tuijianuser']->id.'">关注</a></div></div>';
             }
-            $data['tuijianuser']=$html;
-            return $data;
+            // $data['tuijianuser']=$html;
+            return $html;
         }
-
-        
 
     }
 

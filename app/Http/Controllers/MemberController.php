@@ -41,7 +41,7 @@ class MemberController extends Controller
         $attendances = UserAttendance::getAttendanceLog();
         $last_days = UserAttendance::getLastDays($user->id);
         $tips = UserAttendance::getAttendanceTips();
-        // dd($user); 
+
         $data = [
             'lang' => $lang,
             'user' => $user,

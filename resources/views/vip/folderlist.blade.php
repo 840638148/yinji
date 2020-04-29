@@ -158,7 +158,8 @@
   <!-- 内容开始 -->
   <div class="box"> @foreach ($folist as $i => $v)
     <div class="itemww"> <img id="boximg" class="img_{{$v['photo_source']}}" src="{{$v['photo_url']}}" data-photo-index="{{ $i }}" photoid="{{$v['photo_source']}}" alt="{{$v['name']}}">
-      <div class="titlename" onclick="location='@if($v['static_url']) /article/{{$v['static_url']}} @else /article/detail/{{$v['id']}} @endif'">{{mb_substr($v['articlename'],0,14)}}</div>
+      <div class="titlename" onclick="location='@if($v['static_url']) /article/{{$v['static_url']}} @else /article/detail/{{$v['id']}} @endif'">
+      @if(strlen($v['articlename']) < 20) {{$v['articlename']}} @else {{mb_substr($v['articlename'],0,15)}} @endif</div>
       <div class="scbtm" photoid="{{$v['photo_source']}}" imgsrc="{{$v['photo_url']}}" data-id="{{$v['photo_source']}}" data-pid-i="{{ $i }}" onclick="getID(this)">收藏</div>
     </div>
     @endforeach </div>
@@ -620,7 +621,7 @@ $(document).ready(function(){
 		$('#new-find-model-folder').css('display','none');
 		$('.showscbtn').css('display','block');
 		$('.showscbtn').css('z-index','99999999999');
-		
+		location.reload();
     })
 
 	
@@ -651,20 +652,22 @@ $(document).ready(function(){
                 is_sc:is_sc,
               },
 	            success: function (data){
-	            	// console.log(data);
+	            	console.log(data);
 	                if(data.status_code == 0){
-	                	that.html('已收藏')
+                    layer.msg('收藏成功',{skin: 'intro-login-class layui-layer-hui'});
+	                	that.html('已收藏');
             			  that.addClass('have-collect');
                     that.removeClass('Button2');
                     that.removeClass('to_find_floder_act');
 				            that.addClass('Button');
 				            that.addClass('have-disalbed');
+                    // location.reload();
 	                }
 	                else{
-	                	layer.msg('已经收藏过了',{skin: 'intro-login-class layui-layer-hui'})
+	                	layer.msg('已经收藏过了',{skin: 'intro-login-class layui-layer-hui'});
 	                	$('.showscbtn').css('display','none');
 	                	$('.lzcfg').css('display','none');
-                    that.text('已收藏')
+                    that.text('已收藏');
                     that.removeClass('to_find_floder_act');
                     that.removeClass('Button2');
                     that.addClass('Button');

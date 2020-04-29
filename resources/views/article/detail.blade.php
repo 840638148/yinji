@@ -314,22 +314,20 @@
                         <dl>
                         <dt><img src="{{$comment->user->avatar}}" width="50" height="50"></dt>
                         
-                        <dd>{{$comment->user->nickname}}
-                        @if(App\User::isVip($comment->user->id))
-                        <i style="display: inline-block;width: 40px;height: 25px; background: #e1244e;margin-left: 10px;border-radius: 3px;color: #fff; font-size: 10px;line-height: 25px;text-align: center;">VIP{{App\User::getVipLevel($comment->user->id)}}</i>
-                        @else
-                        <i style="display: inline-block;width: 55px;height: 25px;background: #ccc;margin-left: 10px;border-radius: 3px;color: #fff;font-size: 10px;line-height: 25px;text-align: center;">普通用户</i>
-                        
-                        @endif
-                        <span>发布于：{{$comment->created_at}}</span></dd>
-                        <ul class="show_number clearfix">
-					       <li>
-					        <div class="atar_Show" style="left: -500px;top: -30px;">
+                        <dd><span style="float:left">{{$comment->user->nickname}} 
+                                <img src="{{App\User::getVipLevel($comment->user->id)}}" alt="">
+                            </span>
+                        <ul class="show_number clearfix" style=" float:left;margin:10px 0 0 30px;">
+					       <li style="width:185px;">
+					        <div class="atar_Show" style="">
 					          <p tip="{{$comment->stars}}"></p>
 					        </div>
-					        <span></span>
+					        <span style="margin-top:-20px;"></span>
 					       </li>
-					    </ul>
+					    </ul>  
+                        
+                        <span>发布于：{{$comment->created_at}}</span></dd>
+                       
                         
                         <div class="msgTxt">评语： {!!$comment->content!!}</div>
                         

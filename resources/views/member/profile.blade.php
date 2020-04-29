@@ -30,7 +30,7 @@
   <div class="home_personal"> <img src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}" />
    
   </div>
-   <h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> {{$user->nickname}}  @if($user->is_vip)<span class="vip1">VIP{{$user->vip_level}}</span>@else<span class="vip1" style="background-color:#ccc;color:#fff;">普通用户</span> @endif </h2>
+  <h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> {{$user->nickname}} <img src="{{$user->vip_level}}" alt=""></h2>
   <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">个人说明： {{$user->personal_note}}</p>
   <div class="home_nav">
     <ul>
@@ -72,8 +72,17 @@
             <input type="text" id="city" name="city" value="{{$user->city}}" >
           </p>
           <p>
-            <label for="url">个人主页</label>
-            <input type="text" id="url" name="url" value="{{$user->url}}">
+            <label for="url">职位</label>
+            <select value="职位">
+              <option name="jzs" id="">建筑师</option>
+              <option name="snsjs" id="">室内设计师</option>
+              <option name="rzsjs" id="">软装设计师</option>
+              <option name="cpsjs" id="">产品设计师</option>
+              <option name="sys" id="">摄影师</option>
+              <option name="gys" id="">供应商</option>
+              <option name="qt" id="">其他</option>
+            </select>
+            <!-- <input type="text" id="url" name="url" value="{{$user->url}}"> -->
           </p>
           <p>
             <label for="personal_note">个人说明</label>

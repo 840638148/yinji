@@ -91,6 +91,7 @@ class UserFollow extends Model
             $user->is_vip = User::isVip($user->id);
             $user->collect_num = User::getCollectNum($user->id);
             $user->fans_num = User::getFansNum($user->id);
+            $user->vip_level = User::getVipLevel($user->id);
         }
 // dd($user_follows);
         return $users;

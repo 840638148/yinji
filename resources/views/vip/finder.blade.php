@@ -87,7 +87,7 @@
     .img_browse .right .faxian_info{
       margin-top: 10px;
     }
-
+    .imgvip{ width:32px !important;}
 </style>
 <div class="banner_news" style="background-image:url(/images/find.jpg)"> —— NEWS —— </div>
 <section class="wrapper"> 
@@ -359,7 +359,7 @@
     <hr />
     <div class="discoverer">
       <div class="head"><img src="images/design_16-03.gif" alt="头像" /></div>
-      <h2><a href="#">大仁哥10327</a> <span class="vip1">VIP</span></h2>
+      <h2><a href="#">大仁哥10327</a> <span class="vip1"><img class="imgvip" width="32px" src="/images/v_0.png" />VIP</span></h2>
       <a class="Button">关注</a> </div>
     <hr />
     <div class="faxian_info">
@@ -409,7 +409,7 @@
     <hr />
     <div class="discoverer">
       <div class="head"><img src="images/design_16-03.gif" alt="头像" /></div>
-      <h2><a href="#">大仁哥1027</a> <span class="vip1">VIP</span></h2>
+      <h2><a href="#">大仁哥1027</a> <span class="vip1"><img class="imgvip" width="32px" src="/images/v_0.png" />VIP</span></h2>
       <a class="Button3">关注</a> </div>
     <hr />
     <div class="faxian_info">
@@ -453,30 +453,30 @@
 
 
         $('#users').on('click', '.user_follow_btn', function(){
-        var follow_id = $(this).attr('data-id');
-        var that = $(this)
-        $.ajax({
-          url: '/member/add_follow',
-          type: 'POST',
-          dataType: 'json',
-          data: {
-            _token:_token,
-            follow_id:follow_id
-          },
+          var follow_id = $(this).attr('data-id');
+          var that = $(this)
+          $.ajax({
+            url: '/member/add_follow',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+              _token:_token,
+              follow_id:follow_id
+            },
 
-          success: function (data) {
-            if (data.status_code == 0) {
-              layer.msg('关注成功！',{skin: 'intro-login-class layui-layer-hui'})
-              that.text('已关注')
-              that.removeClass('Button3')
-              that.addClass('Button')
-              that.addClass('have-disalbed')
-            } else {
-              layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+            success: function (data) {
+              if (data.status_code == 0) {
+                layer.msg('关注成功！',{skin: 'intro-login-class layui-layer-hui'})
+                that.text('已关注')
+                that.removeClass('Button3')
+                that.addClass('Button')
+                that.addClass('have-disalbed')
+              } else {
+                layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+              }
             }
-          }
+          });
         });
-      });
 
       //页面层-自定义
       //登录
@@ -672,13 +672,14 @@
     // 获取推荐用户每一项的Dom
 
     function getUsersDom(user){
+      // console.log(user.vip_level);
       var h= '';
       h += ' <div class="item">';
       h += '   <div class="users">';
       h += '     <div class="border-bottom1">';
       h += '       <div class="head"><img width="100%" height="100%" src="' + (user.icon?user.icon:'/img/avatar.png') + '" alt="头像" /></div>';
       h += '       <h2><a href="#">' + user.name.substr(0,12) + '</a> </h2>';
-      h += '       <div>' +user.gender+ '-' + user.addr + ' ' + user.rank ? user.rank : '' + '</div>';
+      h += '       <div>' +user.gender+ '-' + user.addr + ' <img class="imgvip" width="32px" scr="'+user.vip_level+'" /></div>';
       h += '     </div>';
       h += '     <div class="Statistics">';
       h += '       <ul>';
@@ -1132,7 +1133,7 @@
                 h+='<div class="head">';
                 h+='<img width="100%" height="100%" src="'+item.icon+'" alt="头像"></div>';
                 h+='<h2>';
-                h+='<a href="#">'+item.name+'</a></h2>'+item.rank+'</div>';
+                h+='<a href="#">'+item.name+'</a></h2><img class="imgvip" width="32px" src="'+item.vip_level+'"></div>';
                 h+='<div class="Statistics">';
                 h+='<ul>';
                 h+='<li><span>'+item.collections+'</span>收藏</li>';

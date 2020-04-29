@@ -135,7 +135,8 @@ class VipController extends Controller
             $user->recommend_users = UserFinder::recommendUsers();
             $user->my_folders = UserFinder::getMyFolders();
             
-		}
+        }
+        // dd($user);
         
 		//查出已经收藏的
 		$user_id = Auth::id();
@@ -266,17 +267,6 @@ class VipController extends Controller
         $result = UserFinder::finderslistsearch($request);
 
         
-        // dd($request->all());
-        // dd($result['finder']);
-
-        // foreach($result as $v){
-        //     foreach($v['folder'] as $k){
-        //         dump($k);
-        //     }
-            
-            
-        // }
-
         $data=[
             'lang' => $lang,
             'user' => $user,
@@ -843,14 +833,5 @@ class VipController extends Controller
         }
         
     }
-
-
-
-
-
-
-
-
-
 
 }

@@ -70,25 +70,50 @@ class User extends Authenticatable
         }
         $user = User::find($user_id);
         $level = 0;
-        if ($user) {
+        if ($user && $user->expire_time && $user->expire_time >= date('Y-m-d')) {
             if ($user->points >= 99999) {
                 $level = 6;
+                $level = '/images/v_6.png';
             } else if ($user->points >= 66666) {
                 $level = 5;
+                $level = '/images/v_5.png';
             } else if ($user->points >= 38888) {
                 $level = 4;
+                $level = '/images/v_4.png';
             } else if ($user->points >= 18888) {
                 $level = 3;
+                $level = '/images/v_3.png';
             } else if ($user->points >= 6666) {
                 $level = 2;
-            } else if ($user->points >= 1888) {
+                $level = '/images/v_2.png';
+            } else if ($user->points <= 1888) {
                 $level = 1;
-            }
+                $level = '/images/v_1.png';
+            } 
+        }else{
+            $level = 0;
+            $level = '/images/v_0.png';
         }
         return $level;
     }
     
-    
+
+
+    // /**
+    //  * 获取vip等级图片
+    //  * @param $user_id
+    //  */
+    // public static function getVipLevel($user_id = null)
+    // {
+    //     if (empty($user_id)) {
+    //         $user_id = Auth::id();
+    //     }
+    //     $user = User::find($user_id);
+    //     $level = 0;
+
+    // }    
+
+
 
     /**
      *  获取用户总共可用下载次数
