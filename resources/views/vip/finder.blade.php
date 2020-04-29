@@ -672,14 +672,14 @@
     // 获取推荐用户每一项的Dom
 
     function getUsersDom(user){
-      // console.log(user.vip_level);
+      console.log(user);
       var h= '';
       h += ' <div class="item">';
       h += '   <div class="users">';
       h += '     <div class="border-bottom1">';
       h += '       <div class="head"><img width="100%" height="100%" src="' + (user.icon?user.icon:'/img/avatar.png') + '" alt="头像" /></div>';
       h += '       <h2><a href="#">' + user.name.substr(0,12) + '</a> </h2>';
-      h += '       <div>' +user.gender+ '-' + user.addr + ' <img class="imgvip" width="32px" scr="'+user.vip_level+'" /></div>';
+      h += '       <div>' +user.gender+ '-' + user.addr + ' <img class="imgvip" width="32px" src="'+user.vip_level+'" /></div>';
       h += '     </div>';
       h += '     <div class="Statistics">';
       h += '       <ul>';
