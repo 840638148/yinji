@@ -99,22 +99,6 @@ class User extends Authenticatable
     
 
 
-    // /**
-    //  * 获取vip等级图片
-    //  * @param $user_id
-    //  */
-    // public static function getVipLevel($user_id = null)
-    // {
-    //     if (empty($user_id)) {
-    //         $user_id = Auth::id();
-    //     }
-    //     $user = User::find($user_id);
-    //     $level = 0;
-
-    // }    
-
-
-
     /**
      *  获取用户总共可用下载次数
      *

@@ -85,7 +85,7 @@ class MemberController extends Controller
         $this->checkLogin();
 
         $edit_info = [];
-        $fields = ['username', 'nickname', 'email', 'mobile', 'avatar', 'sex', 'city', 'url', 'personal_note'];
+        $fields = ['nickname', 'email', 'mobile', 'avatar', 'sex', 'city', 'url', 'personal_note'];
         foreach ($fields as $field) {
             if ($request->get($field)) {
                 $edit_info[$field] = $request->get($field);
@@ -105,11 +105,42 @@ class MemberController extends Controller
         }
             
         $result = User::editUser(Auth::id(), $edit_info);
+        // dd($result);
         if (true === $result) {
             return redirect('/member/profile');
         }
         return '请重试';
     }
+
+
+    /**
+     * 修改用户基本信息
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|string
+     */
+    public function baseedit(Request $request)
+    {
+        $this->checkLogin();
+        // dd($request->all());
+        $edit_info = [];
+        $fields = ['avatar', 'sex', 'city', 'zhiwei', 'personal_note'];
+        
+        foreach ($fields as $field) {
+           
+            if ($request->get($field)) {
+                $edit_info[$field] = $request->get($field);
+            }
+        }
+           
+        $result = User::where('id',Auth::id())->update($edit_info);
+        //  dd($result);
+        if ($result) {
+            return redirect('/member/profile');
+        }
+        return '请重试';
+    }
+
 
     public function interest(Request $request)
     {

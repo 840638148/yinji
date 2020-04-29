@@ -111,6 +111,7 @@ Route::post('member/delete_finder_item', 'MemberController@deleteFinderItem');  
 Route::post('member/delete_folder_item', 'MemberController@deleteFolderItem');  //删除个人收藏中心的一张图片
 Route::post('member/comment', 'MemberController@comment');
 Route::post('member/upload_img', 'MemberController@uploadImg');
+Route::post('member/baseedit', 'MemberController@baseedit');//修改用户的基本信息
 
 //用户中心 - 查看其它用户
 Route::get('user/index/{id}', 'MemberController@info');

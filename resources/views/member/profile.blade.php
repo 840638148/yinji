@@ -57,7 +57,7 @@
       <!---发现--->
       
       <div id="myTab1_Content0" >
-        <form id="info-form" class="contribute_form" role="form" method="POST" action="/member/edit">
+        <form id="info-form" class="contribute_form" role="form" method="POST" action="/member/baseedit">
           <input type="hidden" name="_token" value="{{csrf_token()}}">
           <p>
             <label for="sex">性别</label>
@@ -72,15 +72,15 @@
             <input type="text" id="city" name="city" value="{{$user->city}}" >
           </p>
           <p>
-            <label for="url">职位</label>
-            <select value="职位">
-              <option name="jzs" id="">建筑师</option>
-              <option name="snsjs" id="">室内设计师</option>
-              <option name="rzsjs" id="">软装设计师</option>
-              <option name="cpsjs" id="">产品设计师</option>
-              <option name="sys" id="">摄影师</option>
-              <option name="gys" id="">供应商</option>
-              <option name="qt" id="">其他</option>
+            <label for="zhiwei">职位</label>
+            <select name="zhiwei" value="职位">
+              <option name="jzs" value="建筑师" selected>建筑师</option>
+              <option name="snsjs" value="室内设计师">室内设计师</option>
+              <option name="rzsjs" value="软装设计师">软装设计师</option>
+              <option name="cpsjs" value="产品设计师">产品设计师</option>
+              <option name="sys" value="摄影师">摄影师</option>
+              <option name="gys" value="供应商">供应商</option>
+              <option name="qt" value="其他">其他</option>
             </select>
             <!-- <input type="text" id="url" name="url" value="{{$user->url}}"> -->
           </p>
@@ -103,10 +103,7 @@
       <div id="myTab1_Content1"  class="none">
         <form id="pass-form" class="contribute_form" role="form" method="post" action="/member/edit">
           <input type="hidden" name="_token" value="{{csrf_token()}}">
-          <p>
-            <label for="username">用户名(必填)</label>
-            <input type="text" id="username" name="username" value="{{$user->username}}" required="">
-          </p>
+          
           <p>
             <label for="nickname">昵称</label>
             <input type="text" id="nickname" name="nickname" value="{{$user->nickname}}" >
