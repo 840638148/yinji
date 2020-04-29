@@ -33,13 +33,13 @@
     vertical-align: top;
     background: #fff;
     padding: 0 5px;
-    border-radius: 6px;
+    border-radius: 36px;
     margin: 0 0 5px 7px;
     display: none;
     position: absolute;
     bottom: 2px;
     height: 35px;
-    line-height: 30px;
+    line-height: 35px;
     text-indent: 1em;
   }
   .find_title a{
@@ -239,7 +239,7 @@
 
             <h2><a href="/article/{{$detail['static_url']}}" target="_blank">{{mb_substr($detail['titlename'],0,20)}}</a></h2>
 
-            <a href="javascript:;" class="find-icon-trash remove_find_img" data-id="{{$detail['id']}}" tag="删除发现的图片"></a> </div>
+            <a style="padding-top: 1.5px;" href="javascript:;" class="find-icon-trash remove_find_img" data-id="{{$detail['id']}}" tag="删除发现的图片"></a> </div>
 
         </div>
 
