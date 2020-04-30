@@ -339,11 +339,12 @@ class UserFinder extends Model
                 'icon' => $user->avatar,
                 'name' => $user->nickname,
                 'gender' => $sex,
-                'addr' => $user->city,
+                'addr' => $user->city ? $user->city :'保密' ,
                 'collections' => User::getCollectNum($user->id),
                 'fans' => User::getFansNum($user->id),
                 'rank' => $rank,
                 'vip_level'=>User::getVipLevel($user->id),
+                'zhiwei'=>$user->zhiwei ? $user->zhiwei :'其他' ,
             ];
         }
 		// dd($recommend_users);
@@ -380,6 +381,7 @@ class UserFinder extends Model
                 'id' => '',
                 'nickname' => '',
                 'avatar' => '/img/avatar.png',
+                'vip_level'=>'',
             ],
             'images' => [],
             'article' => '',
@@ -387,7 +389,7 @@ class UserFinder extends Model
         ];
         $folders = UserFinder::where('user_finder_folder_id', $folder_id)->orderBy('created_at', 'desc')->get();
         
-       //dd($folders);
+    //    dd($folders);
         if ($folders) {
 
             $folder_detail['folder'] = [
@@ -401,6 +403,7 @@ class UserFinder extends Model
                     'id' => $user->id,
                     'nickname' => $user->nickname,
                     'avatar' => $user->avatar ?? '/img/avatar.png',
+                    'vip_level'=>User::getVipLevel($user->id),
                 ];
             }
 
@@ -566,14 +569,14 @@ class UserFinder extends Model
                 $arr[$k]['tuijianfinder']=$favorite;
                 $arr[$k]['folder']=$folders;
             }
-            
+            // dd($arr);
             $html='';
             $data=[];
             foreach($arr as $favorite){
 
             $html.='<div class="item discovery-item" style="display:flex">
                         <div class="item_content"> 
-                            <img src="'.$favorite["tuijianfinder"]->photo_url.'" class="bg-img" data-id="'.$favorite['tuijianfinder']->id.'" id="sourceimg" source="'.$favorite['tuijianfinder']->photo_source.'" /> 
+                            <img src="'.$favorite["tuijianfinder"]->photo_url.'" class="bg-img" data-id="'.$favorite['tuijianfinder']->user_finder_folder_id.'" id="sourceimg" source="'.$favorite['tuijianfinder']->photo_source.'" /> 
                             <div class="find_title" data-source="'.$favorite['tuijianfinder']->photo_source.'">'.$favorite['tuijianfinder']->title_name_cn.'<a href="javascript:;" class="find_info_more"></a></div>
                             <div class="who_find" style="display:none">
                                 <img src="'.$favorite['tuijianfinder']->avatar.'" />
@@ -649,7 +652,7 @@ class UserFinder extends Model
         if($request->cate=='user'){
             //查询用户名
            
-            $favorites=User::select('users.avatar','users.nickname','users.username','users.id')
+            $favorites=User::select('users.avatar','users.nickname','users.username','users.id','users.zhiwei','users.city')
             ->where("users.username","like","%$content%")
             ->orwhere("users.nickname","like","%$content%")
             ->get();
@@ -671,6 +674,9 @@ class UserFinder extends Model
                 $favorite['collections'] = User::getCollectNum($user_id);
                 $favorite['fans'] = User::getFansNum($user_id);
                 $favorite['rank'] = $rank;
+                $favorite['city'] = $favorite->city ? $favorite->city :'保密' ;
+                $favorite['vip_level']= User::getVipLevel($favorite->id);
+                $favorite['zhiwei'] = $favorite->zhiwei ? $favorite->zhiwei :'其他' ;
             }
             
             $html='';
@@ -682,7 +688,7 @@ class UserFinder extends Model
                 <div class="head">
                 <img width="100%" height="100%" src="'.$favorite['tuijianuser']->avatar.'" alt="头像"></div>
                 <h2>
-                <a href="#">'.$favorite['tuijianuser']->nickname.'</a></h2><img class="vipimg" width="32px" scr="'.$favorite['tuijianuser']->vip_level.'" /></div>
+                '.$favorite['tuijianuser']->nickname.'</h2><div>'.$favorite['tuijianuser']->zhiwei.' - '.$favorite['tuijianuser']->city.'<img class="vipimg" style="width:32px !important;" src="'.$favorite['tuijianuser']->vip_level.'" /></div></div>
                 <div class="Statistics">
                 <ul>
                 <li><span>'.$favorite['tuijianuser']->collections.'</span>收藏</li>

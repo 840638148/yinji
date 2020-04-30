@@ -23,6 +23,7 @@ use App\Http\Output;
 use App\User;
 use App\Models\VipPrice;
 use App\Models\Article;
+use Intervention\Image\Facades\Image;
 
 class MemberController extends Controller
 {
@@ -123,7 +124,7 @@ class MemberController extends Controller
     public function baseedit(Request $request)
     {
         $this->checkLogin();
-        // dd($request->all());
+        // dd($touxiang);
         $edit_info = [];
         $fields = ['avatar', 'sex', 'city', 'zhiwei', 'personal_note'];
         
@@ -496,7 +497,12 @@ class MemberController extends Controller
 	
 	public function uploadImg(Request $request)
 	{
-		$tmp = $request->file('file');
+        // dd($request->all());
+        $tmp = $request->file('file');
+
+        //图片宽度参数 可以写死也可传值接收  关闭false
+        $max_width = false;
+
 		$path = '/uploads/images'; //public下的
 		if ($tmp->isValid()) { //判断文件上传是否有效
 			$FileType = $tmp->getClientOriginalExtension(); //获取文件后缀
@@ -504,18 +510,46 @@ class MemberController extends Controller
 			$FilePath = $tmp->getRealPath(); //获取文件临时存放位置
 
 			$FileName = date('Y-m-d') . uniqid() . '.' . $FileType; //定义文件名
+			
+            //  图片剪裁逻辑  如果限制了图片宽度且不为gif格式，就进行裁剪
+            if ($max_width && $entension != 'gif') {
+                // 此类中封装的函数，用于裁剪图片
+                $this->reduceSize($FilePath, $max_width);
+            }
 
-			Storage::disk('upload_img')->put($FileName, file_get_contents($FilePath)); //存储文件
-
+            Storage::disk('upload_img')->put($FileName, file_get_contents($FilePath)); //存储文件
+// dd($paa);
 			$data = [
 				'status' => 0,
 				'path' => $path . '/' . $FileName //文件路径
             ];
             // dd(Auth::id());
-            User::where('id',Auth::id())->update(['zhuti' => $path . '/' . $FileName]);
+            // User::where('id',Auth::id())->update(['zhuti' => $path . '/' . $FileName]);
 			return Output::makeResult($request, $data);
 		}
 		
 		return Output::makeResult($request, null, Error::SYSTEM_ERROR);
-	}
+    }
+    
+    //图片按宽度剪裁
+    public function reduceSize($FilePath, $max_width)
+    {
+        // 先实例化，传参是文件的磁盘物理路径
+        $image = Image::make($FilePath);
+        // 进行大小调整的操作
+        $image->resize(120, 120, function ($constraint) {
+
+            // 设定宽度是 $max_width，高度等比例双方缩放
+            $constraint->aspectRatio();
+
+            // 防止裁图时图片尺寸变大
+            $constraint->upsize();
+        });
+
+        // 对图片修改后进行保存
+        $image->save();
+    }
+
+
+
 }

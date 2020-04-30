@@ -1,5 +1,5 @@
 <div class="close">关闭</div>
-<div class="left">
+<div class="left" style="width:480px;">
   <div style="height:48px;line-height: 48px">
 
       <div class="folder-fenxiang">
@@ -60,7 +60,7 @@
       <img width="100%" height="100%" src="{{$folder_detail['user']['avatar']}}" alt="头像" />
     </div>
     <div class='headright'>
-      <a href="#" style="font-size:18px;">{{$folder_detail['user']['nickname']=='' ? '匿名用户' : $folder_detail['user']['nickname']}}</a> <span class="vip1">@if($isvip)VIP{{$isvip['level']}}@else普通用户@endif</span>
+      <a href="#" style="font-size:18px;">{{$folder_detail['user']['nickname']=='' ? '匿名用户' : $folder_detail['user']['nickname']}}</a> <span style="background:none;" class="vip1"><img style="margin: -10px 0 0 -8px;" src="{{$folder_detail['user']['vip_level']}}" alt=""></span>
       <a class="Button user_follow_btn" data-id="{{$folder_detail['user']['id']}}">关注</a>
     </div>
   </div> 

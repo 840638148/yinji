@@ -672,14 +672,18 @@
     // 获取推荐用户每一项的Dom
 
     function getUsersDom(user){
-      console.log(user);
+      // console.log(user);
       var h= '';
       h += ' <div class="item">';
       h += '   <div class="users">';
       h += '     <div class="border-bottom1">';
       h += '       <div class="head"><img width="100%" height="100%" src="' + (user.icon?user.icon:'/img/avatar.png') + '" alt="头像" /></div>';
       h += '       <h2><a href="#">' + user.name.substr(0,12) + '</a> </h2>';
-      h += '       <div>' +user.gender+ '-' + user.addr + ' <img class="imgvip" width="32px" src="'+user.vip_level+'" /></div>';
+      if(user.vip_level==0){
+        h += '       <div>' +user.zhiwei+ '-' + user.addr + ' <img class="imgvip" width="32px" src="/images/v_0.png" /></div>';
+      }else{
+         h += '       <div>' +user.zhiwei+ '-' + user.addr + ' <img class="imgvip" width="32px" src="'+user.vip_level+'" /></div>';
+      }
       h += '     </div>';
       h += '     <div class="Statistics">';
       h += '       <ul>';
@@ -1127,14 +1131,20 @@
             }else if(data.status_code == 0 && cates=='tuijianuser'){
               page++;
               $.each(list.finders,function(index, item){
+                console.log(item);
+
+
+                
                 h+='<div class="item">';
-                h+='<div class="users">';
-                h+='<div class="border-bottom1">';
-                h+='<div class="head">';
-                h+='<img width="100%" height="100%" src="'+item.icon+'" alt="头像"></div>';
-                h+='<h2>';
-                h+='<a href="#">'+item.name+'</a></h2><img class="imgvip" width="32px" src="'+item.vip_level+'"></div>';
-                h+='<div class="Statistics">';
+                h+='  <div class="users">';
+                h+='    <div class="border-bottom1">';
+                h+='      <div class="head">';
+                h+='        <img width="100%" height="100%" src="'+item.icon+'" alt="头像">';
+                h+='      </div>';
+                h+='      <h2>'+item.name.substr(0,15)+'</h2>';
+                h+='      <div>'+item.zhiwei+'- '+item.addr+' <img class="imgvip" width="32px" src="'+item.vip_level+'"></div>';
+                h+='    </div>';
+                h+='    <div class="Statistics">';
                 h+='<ul>';
                 h+='<li><span>'+item.collections+'</span>收藏</li>';
                 h+='<li><span>'+item.fans+'</span>粉丝</li></ul>';

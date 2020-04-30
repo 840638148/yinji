@@ -8,6 +8,19 @@
 <title>印际 — 注册新用户</title>
 <style type="text/css">
 body.login div#login h1 a { -webkit-background-size: 85px 85px; background-size: 85px 85px; width: 85px; height: 85px; }
+#user_email,.click_phone{display:none;}
+.click_email,.click_phone{
+    color: #fff;
+    font-size: 14px;
+    font-weight: 100;
+    position: absolute;
+    top: 1px;
+    right: 9px;
+    padding: 15px 26px;
+    background: #1591ec;
+    border-radius: 3px;
+}
+
 </style>
 <link href="/css/login_new.css" rel="stylesheet" type="text/css">
 <script src="/js/jquery-1.10.1.min.js"></script>
@@ -23,11 +36,12 @@ body.login div#login h1 a { -webkit-background-size: 85px 85px; background-size:
   <form name="registerform" id="step1" class="" action="/user/register"
 
           method="post" novalidate>
-    <p>
+    <p style="position:relative;">
       <label for="user_phone">
-        <input type="text" name="user_phone" id="user_phone" class="input" value="" size="20"
-
-                       onkeyup="checkIsPhone(event)" placeholder="输入手机号/邮箱">
+        <input type="text" name="user_phone" id="user_phone" class="input" value="" size="20" onkeyup="checkIsPhone(event)" placeholder="输入手机号">
+        <span class="click_email">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱</span>
+        <input type="email" name="email" id="user_email" class="input" value="" size="20" onkeyup="checkIsEmail(event)" placeholder="输入邮箱">
+        <span style="padding: 15px 27px;" class="click_phone">手&nbsp;机&nbsp;号</span>
       </label>
     </p>
     <p>
@@ -35,7 +49,7 @@ body.login div#login h1 a { -webkit-background-size: 85px 85px; background-size:
         <input type="text" name="verification_code" id="verification_code" class="input" value="" size="20"
 
                        placeholder="输入验证码">
-        <input name="发送验证码" type="button" value="获取验证码" class="verification">
+        <input style="padding: 0 19px;" name="发送验证码" type="button" value="获取验证码" class="verification">
       </label>
     </p>
     <p class="forgetmenot">注册验证码将会以短信形式发送至你手机</p>
@@ -74,6 +88,22 @@ body.login div#login h1 a { -webkit-background-size: 85px 85px; background-size:
 </div>
 <script type="text/javascript">
 
+$('.click_email').click(function () {
+    $(this).css('display','none');
+    $('#user_phone').css('display','none');
+    $('#user_email').css('display','block');
+    $('.click_phone').css('display','block');
+})
+
+$('.click_phone').click(function () {
+    $(this).css('display','none');
+    $('#user_phone').css('display','block');
+    $('#user_email').css('display','none');
+    $('.click_phone').css('display','none');
+    $('.click_email').css('display','block');
+})
+
+
     // 判断是否为手机号
 
     function isPhoneAvailable(phone) {
@@ -97,123 +127,70 @@ body.login div#login h1 a { -webkit-background-size: 85px 85px; background-size:
     //按键抬起时验证是否为手机
 
     function checkIsPhone(event) {
-
         var phone = document.getElementById('user_phone').value;
-
         var verification = document.querySelector('.verification');
 
-
-
         if (isPhoneAvailable(phone)) {
-
             verification.style.background = '#4091EB';
-
             verification.style.color = '#FFF';
-
         } else {
-
             verification.style.background = '#d6d6d6';
-
             verification.style.color = '#666';
-
         }
-
     }
 
 
 
     function wp_attempt_focus() {
-
         setTimeout(function () {
-
             try {
-
                 d = document.getElementById('user_phone');
-
                 d.focus();
-
                 d.select();
-
             } catch (e) {
 
-
-
             }
-
         }, 200);
-
     }
 
 
 
     wp_attempt_focus();
-
     if (typeof wpOnload == 'function') wpOnload();
-
     //获取验证码
-
     var is_sending = false;
-
     var time_limit = 60;
-
     var next_time = time_limit;
-
     var cap_btn = $('.verification');
 
-
-
     cap_btn.sms({
-
         //laravel csrf token
-
         token       : "{{csrf_token()}}",
-
         //请求间隔时间
-
         interval    : 60,
-
         //请求参数
-
         requestData : {
-
             //手机号
-
             mobile : function () {
-
                 return $.trim($('#user_phone').val());
-
             },
-
             //手机号的检测规则
-
             mobile_rule : 'mobile_required'
-
         }
-
     });
 
 
 
-
-
     function wp_attempt_focus() {
-
         setTimeout(function () {
-
             try {
-
                 d = document.getElementById('user_login');
-
                 d.focus();
-
                 d.select();
-
             } catch (e) {
 
             }
-
         }, 200);
-
     }
 
 
@@ -221,71 +198,44 @@ body.login div#login h1 a { -webkit-background-size: 85px 85px; background-size:
     wp_attempt_focus();
 
     try {
-
         document.getElementById('user_login').focus();
-
     } catch (e) {
 
     }
 
     if (typeof wpOnload == 'function') wpOnload();
 
-
-
     //step1
 
     $("#wp-submit-1").click(function () {
-
         var mobile = $.trim($('#user_phone').val());
-
         var verification_code = $.trim($('#verification_code').val());
-
         if (!/1[3-8][0-9]{9}/.test(mobile)) {
-
             layer.msg('请输入正确手机号');
-
             return false;
-
         }
 
         $.ajax({
-
             url: '/user/verify_code',
-
             type: 'POST',
-
             dataType: 'json',
-
             data: {
-
                 user_phone: mobile,
-
                 verification_code: verification_code,
-
                 _token: "{{csrf_token()}}",
-
             },
 
             success: function (data) {
-
                 //console.log(data.status_code);
-
                 if (data.status_code == 0) {
-
+                    layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
                     $("#step1").addClass("hide");
-
                     $("#step2").removeClass("hide");
-
                     $("#userphone").val(mobile);
-
                 } else {
-
                     layer.msg(data.message);
-
                 }
-
             }
-
         });
 
     });

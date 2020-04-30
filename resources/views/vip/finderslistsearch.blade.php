@@ -5,7 +5,9 @@
 @endsection
 
 @section('content')
-
+<style>
+    .imgvip{ width:32px !important;}
+</style>
 <!--笼罩层-->
 <div class="lzcfg"  style="background: rgba(0,0,0,0.5);position: fixed;left: 0px;top: 0px;width: 100%;height: 100%;display: none;z-index: 99999999;"></div>
 <div class="banner_news" style="background-image:url(/images/find.jpg)"> —— NEWS —— </div>
@@ -19,7 +21,7 @@
 
        <div class="masonry" id="discoveryItems"> 
             @if($result=='')
-            没有数据
+            没有数据 
             @else
                 {!!$result!!}
             @endif
@@ -53,6 +55,55 @@
     </div>
 </div>
 
+
+
+
+<!-- 点击图片出现展示框 -->
+<div class="img_browse modal" id="discovery-img-browse" >
+  <div class="close">关闭</div>
+  <div class="left">
+    <div style="height:48px;">
+      <h2 class="fl" id="discovery-folder-name">文件夹名称</h2>
+      <span class="fr">分享到：</span> </div>
+    <div class="image"><img src="images/imges.jpg" alt="发现的图片" class="selected-image"/> </div>
+  </div>
+  <div class="right" style="margin-top:48px;">
+    <div class="more_img"> <a href="#" class="more-img-item selected"><img src="/images/imges.jpg" alt="图片一" />
+      <div class="cover"></div>
+      </a> <a href="#" class="more-img-item"><img src="images/ad_05.gif" alt="图片一" />
+      <div class="cover"></div>
+      </a> <a href="#" class="more-img-item"><img src="images/design_16-03.gif" alt="图片二" />
+      <div class="cover"></div>
+      </a> <a href="#" class="more-img-item"><img src="images/about_img.jpg" alt="图片一" />
+      <div class="cover"></div>
+      </a> <a href="#" class="more-img-item"><img src="images/ad_22.gif" alt="图片二" />
+      <div class="cover"></div>
+      </a> <a href="#" class="more-img-item"><img src="images/ad_05.gif" alt="图片一" />
+      <div class="cover"></div>
+      </a> <a href="#" class="more-img-item"><img src="images/design_16-03.gif" alt="图片二" />
+      <div class="cover"></div>
+      </a> <a href="#" class="more-img-item"><img src="images/about_img.jpg" alt="图片一" />
+      <div class="cover"></div>
+      </a> <a href="#" class="more-img-item"><img src="images/ad_22.gif" alt="图片二" />
+      <div class="cover"></div>
+      </a> <a href="#" class="more-img-item"><img src="images/ad_05.gif" alt="图片一" />
+      <div class="cover"></div>
+      </a> <a href="#" class="more-img-item"><img src="images/design_16-03.gif" alt="图片二" />
+      <div class="cover"></div>
+      </a> </div>
+    <hr />
+    <div class="discoverer">
+      <div class="head"><img src="images/design_16-03.gif" alt="头像" /></div>
+      <h2><a href="#">大仁哥10327</a> <span class="vip1"><img class="imgvip" width="32px" src="/images/v_0.png" />VIP</span></h2>
+      <a class="Button">关注</a> </div>
+    <hr />
+    <div class="faxian_info">
+      <p>从 <a href="#">严PPPPPPPP1</a> 收藏于 <a href="#">大厅</a></p>
+      <p>2017-06-02 14:59:57</p>
+      <p class="laiyuan"><a href="#">来源：Lera Brumina作品 | 80㎡ Apartmen...</a></p>
+    </div>
+  </div>
+</div>
 
 
 <script>
@@ -140,6 +191,7 @@
           folder_id:folder_id
         },
         success: function (data) {
+          console.log(data);
           $('#discovery-img-browse').html(data);
           //初始化相框
           //getImgBrowseImgsDom(browseImgs,'#discovery-img-browse');
@@ -227,9 +279,10 @@
 
 
 	  //创建收藏收藏夹窗口
-     $(document).on('click','.create-new-folder-btn',function(){
-     	$('.showscbtn').css('display','none');
-     	$('.showscbtn').css('z-index','-99999999');
+     $(document).on('click','.create-new-folder',function(){
+        $('.lzcfg').css('display','block');
+        $('.showscbtn').css('display','none');
+        $('.showscbtn').css('z-index','-99999999');
         $('#new-find-model-folder').css('display','block');
         $('#new-find-model-folder').css('position','position');
         $('#new-find-model-folder').css('z-index','99999999999');
@@ -256,7 +309,8 @@
 		$('#new-find-model-folder').css('display','none');
 		$('.showscbtn').css('display','block');
 		$('.showscbtn').css('z-index','99999999999');
-		
+		$('.lzcfg').css('display','none');
+    location.reload();
     })
 </script>
 
