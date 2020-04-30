@@ -79,8 +79,9 @@
               <option name="rzsjs" value="软装设计师">软装设计师</option>
               <option name="cpsjs" value="产品设计师">产品设计师</option>
               <option name="sys" value="摄影师">摄影师</option>
-              <option name="gys" value="供应商">供应商</option>
-              <option name="qt" value="其他">其他</option>
+              <option name="sys" value="媒体人">媒体人</option>
+              <option name="gys" value="地产开发">地产开发</option>
+              <option name="qt" value="其他">其他</option>    
             </select>
             <!-- <input type="text" id="url" name="url" value="{{$user->url}}"> -->
           </p>
