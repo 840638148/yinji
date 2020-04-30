@@ -223,10 +223,7 @@
                     <h4 class="modal-title" id="myModalLabel"> 请选择收藏文件夹 </h4>
                   </div>
           <div class="modal-body">
-                    <div class="new-collect">
-              <label>新建：</label>
-              <input type="text" id="folder_name" name="folder_name" value="" />
-              <a href=" " class="Button2 fr collect_article">收藏</a > </div>
+
                     {{--
                     <select id="folder_id" name="folder_id">
               --}}
@@ -245,6 +242,7 @@
 
                         {{--
             </select>
+         
                     --}}
                     <div class="collection_to">
               <ul class="discover-folders2">
@@ -255,6 +253,7 @@
                         @endforeach
                       </ul>
             </div>
+                <a href="#" class="create create-new-folder-btn">创建收藏文件夹</a>
                   </div>
           {{--
           <div class="modal-footer">--}}
@@ -302,39 +301,37 @@
                 <div class="qq_liuyan">
                     <a name="df"></a>
                     <h2 class="left">评语</h2>
-                    <span class=" right">共<span class=" c_red">{{$comments_total or '0'}}</span>条评语</span> 
+                    <span class=" right">共<span class=" c_red">{{$comments_all or '0'}}</span>条评语</span> 
                 </div>
                 <div class="msgCon"> 
                 
                     @foreach ($comments as $comment)
-                    
+                    @if($comment->content!='')
                     <div class="msgBox">
                         <!-- 只显示有评论的 -->
-                    @if($comment->content)
-                        <dl>
+                    
+                    <dl>
                         <dt><img src="{{$comment->user->avatar}}" width="50" height="50"></dt>
                         
-                        <dd><span style="float:left">{{$comment->user->nickname}} 
+                        <dd>
+                            <span style="float:left">{{$comment->user->nickname}}
                                 <img src="{{App\User::getVipLevel($comment->user->id)}}" alt="">
                             </span>
-                        <ul class="show_number clearfix" style=" float:left;margin:10px 0 0 30px;">
-					       <li style="width:185px;">
-					        <div class="atar_Show" style="">
-					          <p tip="{{$comment->stars}}"></p>
-					        </div>
-					        <span style="margin-top:-20px;"></span>
-					       </li>
-					    </ul>  
-                        
-                        <span>发布于：{{$comment->created_at}}</span></dd>
-                       
-                        
-                        <div class="msgTxt">评语： {!!$comment->content!!}</div>
-                        
-                        @endif
+                            <ul class="show_number clearfix" style=" float:left;margin:10px 0 0 30px;">
+                            <li style="width:200px;">
+                                <div class="atar_Show2">
+                                <p tip="{{$comment->stars}}"></p>
+                                </div>
+                                <span></span>
+                            </li>
+                            </ul>  
+                            <span>发布于：{{$comment->created_at}}</span>
+                        </dd>
+                        <div class="msgTxt">{!!$comment->content!!}</div>
+                    
                     </dl>
-                
-                </div> 
+                    </div> 
+                    @endif
                     @endforeach 
             </div>
                  <!----打分--->
@@ -350,7 +347,7 @@
     
       <div class="message" contentEditable='true'></div>
       <div class="But"> <span class='submit' data-comment-type="article">发表</span> <img src="/images/qq/ico-biaoqing.png" class='bq'/> 
-       <p style="#ccc;">（选填）</p>         
+       <p style=" color:#ccc;">（选填）</p>         
                 <!--face begin--> 
                 @component('face')
                 
@@ -896,8 +893,8 @@
           </div>
   <div class="close">关闭</div>
   <div class="pic-name" style="padding: 8px 0 8px 8px;">
-            <label for="" style="font-size: 14px;color: #333;"> 图片名称 </label>
-            <input type="text" name="imgtitle" id="imgtitle" value="" placeholder="图片名称" style="width: 500px;">
+            <!---label for="" style="font-size: 14px;color: #333;"> 图片名称 </label--->
+            <input type="text" name="imgtitle" id="imgtitle" value="" placeholder="图片说明" style="width: 100%;border-radius:5px;">
           </div>
   <div class="collection_to">
             <ul class="discover-folders2">
@@ -913,7 +910,7 @@
       @endforeach
     </ul>
           </div>
-  <a href="#" class="create create-new-folder-btn">创建收藏夹</a>
+  <a href="#" class="create create-new-folder-btn">创建发现文件夹</a>
   <div class="error_code"></div>
 </div>
         </div>

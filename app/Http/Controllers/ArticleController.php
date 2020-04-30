@@ -357,6 +357,8 @@ class ArticleController extends Controller
             $user_collect_folders = [];
         }
         $comments_total = ArticleComment::where('comment_id', $id)->where('display', '1')->count();
+        $comments_all=ArticleComment::where('comment_id', $id)->where('display', '1')->where('content','!=','')->count();//评论条数
+        // dd($comments_all);
         $comments = ArticleComment::where('comment_id', $id)
             ->where('display', '1')
             ->orderBy('created_at', 'desc')
@@ -385,15 +387,7 @@ class ArticleController extends Controller
         }
 
         $userstars=ArticleComment::where('user_id', $user_id)->where('comment_id',$id)->value('stars');
-        // $userstars=sprintf("%.1f",$userstars);
-        // dd($userstars);
-        // foreach($articles as $k=>$articleslist){
-        //     $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $articleslist['id'])->avg('stars');
-        //     $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
-        // }
-        // dd($starssum,$starscount,$starsav);
-		// dd($article); 
-        // $stars=ArticleComment::where('user');
+
         
         $data = [
             'user' => $this->getUserInfo(),
@@ -421,6 +415,7 @@ class ArticleController extends Controller
             'isvip' => $isvip,
             'starsav' => $starsav,
             'userstars' => $userstars,
+            'comments_all' => $comments_all,
         ];
         return view('article.detail', $data);
     }
