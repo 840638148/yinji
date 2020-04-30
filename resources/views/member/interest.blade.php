@@ -92,7 +92,21 @@
                 <div class="members_info">
                     <ul>
                         <li><i class="ico_vip1"><img src="@if($user->level==1) /images/32vip_03.png @elseif($user->level==2) /images/32vip_05.png @else /images/32vip_07.png @endif " alt="月VIP会员"></i>月VIP会员</li>
-                        <li><i class="ico_vip1"><img src="/images/v_r_{{$user->vip_level}}.png" alt="会员V1"></i>会员等级</li>
+                        @if($user->vip_level=='/images/v_0.png')
+                        <li><i class="ico_vip1"><img src="/images/v_r_0.png" alt="会员V0"></i>会员等级</li>
+                        @elseif($user->vip_level=='/images/v_1.png')
+                        <li><i class="ico_vip1"><img src="/images/v_r_1.png" alt="会员V1"></i>会员等级</li>
+                        @elseif($user->vip_level=='/images/v_2.png')
+                        <li><i class="ico_vip1"><img src="/images/v_r_2.png" alt="会员V2"></i>会员等级</li>
+                        @elseif($user->vip_level=='/images/v_3.png')
+                        <li><i class="ico_vip1"><img src="/images/v_r_3.png" alt="会员V3"></i>会员等级</li>
+                        @elseif($user->vip_level=='/images/v_4.png')
+                        <li><i class="ico_vip1"><img src="/images/v_r_4.png" alt="会员V4"></i>会员等级</li>
+                        @elseif($user->vip_level=='/images/v_5.png')
+                        <li><i class="ico_vip1"><img src="/images/v_r_5.png" alt="会员V5"></i>会员等级</li>
+                        @elseif($user->vip_level=='/images/v_6.png')
+                        <li><i class="ico_vip1"><img src="/images/v_r_6.png" alt="会员V6"></i>会员等级</li>
+                        @endif
                         <li><i>{{$user->points}}</i>我的积分</li>
                     </ul>
                 </div>

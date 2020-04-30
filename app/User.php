@@ -10,6 +10,7 @@ use App\Models\UserDownRecord;
 use App\Models\UserExchangeRecord;
 use App\Models\PointSet;
 use App\Models\UserCollectFolder;
+use App\Models\UserFinder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
@@ -69,29 +70,31 @@ class User extends Authenticatable
             $user_id = Auth::id();
         }
         $user = User::find($user_id);
-        $level = 0;
-        if ($user && $user->expire_time && $user->expire_time >= date('Y-m-d')) {
+        // dd($user);
+        // $level = 0;
+        $level = '/images/v_0.png';
+        if ($user->level !=0 && $user->expire_time >= date('Y-m-d')) {
             if ($user->points >= 99999) {
-                $level = 6;
+                // $level = 6;
                 $level = '/images/v_6.png';
             } else if ($user->points >= 66666) {
-                $level = 5;
+                // $level = 5;
                 $level = '/images/v_5.png';
             } else if ($user->points >= 38888) {
-                $level = 4;
+                // $level = 4;
                 $level = '/images/v_4.png';
             } else if ($user->points >= 18888) {
-                $level = 3;
+                // $level = 3;
                 $level = '/images/v_3.png';
             } else if ($user->points >= 6666) {
-                $level = 2;
+                // $level = 2;
                 $level = '/images/v_2.png';
             } else if ($user->points <= 1888) {
-                $level = 1;
+                // $level = 1;
                 $level = '/images/v_1.png';
             } 
         }else{
-            $level = 0;
+            // $level = 0;
             $level = '/images/v_0.png';
         }
         return $level;
@@ -325,13 +328,26 @@ class User extends Authenticatable
 
     /**
      * 获得收藏数量
-     *
+     *UserCollect
      * @param $user_id
      * @return mixed
      */
     public static function getCollectNum($user_id)
     {
-        return UserCollectFolder::where('user_id', $user_id)->count();
+        // return UserCollectFolder::where('user_id', $user_id)->count();
+        return UserCollect::where('user_id', $user_id)->count();
+    }
+
+    /**
+     * 获得发现数量
+     * UserFinder
+     * @param $user_id
+     * @return mixed
+     */
+    public static function getFinderNum($user_id)
+    {
+        // return UserCollectFolder::where('user_id', $user_id)->count();
+        return UserFinder::where('user_id', $user_id)->count();
     }
 
 

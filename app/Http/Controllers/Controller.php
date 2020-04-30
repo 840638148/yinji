@@ -48,6 +48,7 @@ class Controller extends BaseController
             $user->fans_num = User::getFansNum($user->id);
             $user->follow_num = User::getFollowNum($user->id);
             $user->subscription_num = User::getSubscriptionNum($user->id);
+            $user->finder_num = User::getFinderNum($user->id);
         }
         return $user;
     }

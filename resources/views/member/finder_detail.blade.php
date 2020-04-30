@@ -135,24 +135,15 @@
 
   <div class="home_tongji">
 
-    <ul>
-
-      <li> 订阅</br>
-
-        {{$user->subscription_num}} </li>
-
+  <ul>
+      <li>发现</br>
+        {{$user->finder_num}} </li>
       <li> 收藏</br>
-
         {{$user->collect_num}} </li>
-
-      <li> 积分</br>
-
-        {{$user->points}} </li>
-
+      <li> 订阅</br>
+        {{$user->subscription_num}} </li>
       <li> 关注</br>
-
         {{$user->follow_num}} </li>
-
     </ul>
 
   </div>
