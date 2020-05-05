@@ -227,7 +227,7 @@ class UserFinder extends Model
         $user_finders = $user_finders->reject(function ($value) use ($user_id) {
             return $value->user_id == $user_id;
         });
-
+        
         // dd($user_finders);
         $finders = self::formatFinders($user_finders);
         foreach($finders as $k=>$v){
@@ -453,29 +453,58 @@ class UserFinder extends Model
      * $cates 选项卡分类
      */
     public static function getMoreTuijians(& $request,$cates)
-    {   $user_id= Auth::id();
-        switch ($cates) {
-            case 'finder':
-                $finders = self::recommendFinders($user_id);
-                $folders = self::getMyFolders($user_id);
-                $finders=json_decode($finders);
-                $folders=json_decode($folders);
-                $data = ['finders'=>$finders,'cates'=>$cates,'folders'=>$folders];
-                return $data;
-                break;
-            case 'folder':
-                $finders = self::recommendFolders($user_id);
-                $finders=json_decode($finders);
-                $data = ['finders'=>$finders,'cates'=>$cates];
-                return $data;
-                break;
-            case 'tuijianuser':
-                $finders = self::recommendUsers($user_id);
-                $finders=json_decode($finders);
-                $data = ['finders'=>$finders,'cates'=>$cates];
-                return $data;
-                break;
+    {   
+        // dd($request->all());
+        $user_id= Auth::id();
+        if($request->searchcontent){
+            switch ($cates) {
+                case 'tjfinder':
+                    $finders = self::finsearch($request);
+                    $folders = self::getMyFolders($user_id);
+                    $finders=json_decode($finders);
+                    $folders=json_decode($folders);
+                    $data = ['finders'=>$finders,'cates'=>$cates,'folders'=>$folders];
+                    return $data;
+                    break;
+                case 'tjfolder':
+                    $finders = self::finsearch($request);
+                    $finders=json_decode($finders);
+                    $data = ['finders'=>$finders,'cates'=>$cates];
+                    return $data;
+                    break;
+                case 'tjuser':
+                    $finders = self::finsearch($request);
+                    $finders=json_decode($finders);
+                    $data = ['finders'=>$finders,'cates'=>$cates];
+                    return $data;
+                    break;
+            }
+        }else{
+            switch ($cates) {
+                case 'tjfinder':
+                    $finders = self::recommendFinders($user_id);
+                    $folders = self::getMyFolders($user_id);
+                    $finders=json_decode($finders);
+                    $folders=json_decode($folders);
+                    $data = ['finders'=>$finders,'cates'=>$cates,'folders'=>$folders];
+                    return $data;
+                    break;
+                case 'tjfolder':
+                    $finders = self::recommendFolders($user_id);
+                    $finders=json_decode($finders);
+                    $data = ['finders'=>$finders,'cates'=>$cates];
+                    return $data;
+                    break;
+                case 'tjuser':
+                    $finders = self::recommendUsers($user_id);
+                    $finders=json_decode($finders);
+                    $data = ['finders'=>$finders,'cates'=>$cates];
+                    return $data;
+                    break;
+            }
         }
+
+
     }
 
     
@@ -696,6 +725,169 @@ class UserFinder extends Model
     }
 
 
+    public static function finsearch($request)
+    {   
+        $user_id = Auth::id();
+        // dd($request->all());
+        $content=$request->content;
+        if (!Auth::check()) {
+            return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
+        }
+
+        if($request->cate=='tjfinder'){
+            //查询收藏夹名、图片名       
+            $favorites=self::leftjoin('user_finder_folders','user_finder_folders.id','=','user_finders.user_finder_folder_id')
+                ->leftjoin('articles','articles.id','=','user_finders.photo_source')
+                ->leftjoin('users','users.id','=','user_finders.user_id')
+                ->select('user_finders.photo_source','articles.title_name_cn','user_finder_folders.name','user_finders.user_finder_folder_id','user_finders.user_id','users.avatar','users.nickname','user_finders.photo_url')
+                ->where("user_finder_folders.name","like","%$content%")
+                ->orwhere("articles.title_name_cn","like","%$content%")
+                ->orwhere("articles.title_designer_cn","like","%$content%")
+                ->orwhere("articles.title_intro_cn","like","%$content%")
+                ->orwhere("articles.tag_ids","like","%$content%")
+                ->orwhere("articles.location_cn","like","%$content%")
+                ->get();
+
+            //查询出自己的收藏夹
+            $folders=UserFinderFolder::where('user_id',$user_id)->get();
+
+            $arr=[];
+            $lists = $favorites->reject(function ($value) use ($user_id) {
+                return $value->user_id == $user_id;
+            });
+            
+            foreach($lists as $k=>$favorite){
+                $arr[$k]['tuijianfinder']=$favorite;
+                $arr[$k]['folder']=$folders;
+            }
+            
+            $html='';
+            $data=[];
+            foreach($arr as $favorite){
+
+            $html.='<div class="item discovery-item" style="display:flex">
+                        <div class="item_content"> 
+                            <img src="'.$favorite["tuijianfinder"]->photo_url.'" class="bg-img" data-id="'.$favorite['tuijianfinder']->id.'" id="sourceimg" source="'.$favorite['tuijianfinder']->photo_source.'" /> 
+                            <div class="find_title" data-source="'.$favorite['tuijianfinder']->photo_source.'">'.$favorite['tuijianfinder']->title_name_cn.'<a href="javascript:;" class="find_info_more"></a></div>
+                            <div class="who_find" style="display:none">
+                                <img src="'.$favorite['tuijianfinder']->avatar.'" />
+                                <span> <a href="javascript:;">'.$favorite['tuijianfinder']->nickname.'</a> 收藏到 <a href="#">'.$favorite['tuijianfinder']->name.'</a></span>
+                            </div>
+                            <div class="folder" style="display: none;">
+                                <div class="fl folder_bj" style="width:80%">选择文件夹<span class="fr show-more-selcect-item" style="background:url(images/arrow-ico.png); width:36px; height:36px;"></span>
+                                </div>
+                                <a href="javascript:void(0)" class="Button2 fr add-collection-btn">收藏</a>
+                            </div>
+                            <div class="folder_box" style="display: none;">   
+                                <ul>';
+                                foreach($favorite['folder'] as $folder){
+                                    $html.='<li><h3>'.$folder['name'].'</h3> <span class="" title=""></span>
+                                    <a href="javascript:void(0)" class=" Button2 fr add_finder_btn" data-id="'.$folder['id'].'" data-img="'.$favorite['tuijianfinder']->photo_url.'" data-title="'.$favorite['tuijianfinder']->title.'" data-source="'.$favorite['tuijianfinder']->photo_source.'">收藏</a> </li> ';
+                                }
+                                $html.='</ul>
+                                <a href="javascript:void(0)" class="create create-new-folder" data-type="find" id="sourcea" sourceid="'.$favorite['tuijianfinder']->photo_source.'">创建收藏夹</a>
+                            </div>
+                        </div>
+                    </div>'; 
+            }
+            // $data['tuijianfinder']=$html;
+            return $html;
+        }
+
+        if($request->cate=='tjfolder'){
+            //查询收藏夹名
+            $favorites=UserFinderFolder::leftjoin('users','users.id','=','user_finder_folders.user_id')
+                ->select('user_finder_folders.name','user_finder_folders.id','users.avatar','users.username','user_finder_folders.user_id')
+                ->where("user_finder_folders.name","like","%$content%")->get();
+            
+            //查询出自己的收藏夹
+            $folders=UserFinderFolder::where('user_id',$user_id)->get();
+            
+
+            $arr=[];
+            foreach($folders as $folder){
+                $favorites = $favorites->reject(function ($value) use ($folder) {
+                    // dd($value->id,$folders->id);
+                    return $value->id == $folder->id;
+                });               
+            }
+            $lists=$favorites;
+
+            foreach($lists as $k=>$v){
+                $lists[$k]['imgall']=self::where('user_finder_folder_id',$v['id'])->select('photo_url','photo_source')->limit(4)->get();
+            }
+            
+            $html='';
+            $data=[];
+            foreach($lists as $favorite){
+                $html.='<div class="item collection-item" data-id="'.$favorite->id.'">
+                        <div class="item__content">
+                        <ul onclick="location=\'/folderlist/'.$favorite->id.'\'">';
+                        foreach($favorite['imgall'] as $val){
+                            $html.='<li>
+                                    <a href="/folderlist/'.$favorite->id.'">
+                                    <img src="'.$val->photo_url.'" alt="'.$favorite->title.'"></a>
+                                    </li>';
+                        }
+                $html.='</ul><div class="find_title"><h2>
+                        <a href="folderlist/'.$favorite->id.'">'.$favorite->name.'</a></h2>
+                        <a href="javascript:void(0);" class="collect-user-icon">
+                        <img id="errimg" src="'.$favorite->avatar.'" onerror="this.onerror=``;this.src=`/img/avatar.png`"></a>
+                        </div></div></div>';
+            }
+            // $data=$html;
+            return $html;
+
+        }
+
+        if($request->cate=='tjuser'){
+            //查询用户名
+           
+            $favorites=User::select('users.avatar','users.nickname','users.username','users.id')
+            ->where("users.username","like","%$content%")
+            ->orwhere("users.nickname","like","%$content%")
+            ->get();
+
+            $res=UserFollow::where('user_id',$user_id)->select('user_id','follow_id')->get();
+
+            $ss=$favorites->toArray();
+            $gz=$res->toArray();
+            foreach ($res as $follow) {
+                $favorites=$favorites->reject(function ($val) use ($follow) {
+                 return $val->id == $follow->follow_id;
+                });
+            }
+            $lists=$favorites;
+            $arr=[];
+            $rank = User::isVip($user_id) ? 'VIP' : '普通用户';
+            foreach($lists as $k=>$favorite){
+                $arr[$k]['tuijianuser']=$favorite;
+                $favorite['collections'] = User::getCollectNum($user_id);
+                $favorite['fans'] = User::getFansNum($user_id);
+                $favorite['rank'] = $rank;
+            }
+            
+            $html='';
+            $data=[];
+            foreach($arr as $favorite){
+                $html.='<div class="item">
+                <div class="users">
+                <div class="border-bottom1">
+                <div class="head">
+                <img width="100%" height="100%" src="'.$favorite['tuijianuser']->avatar.'" alt="头像"></div>
+                <h2>
+                <a href="#">'.$favorite['tuijianuser']->nickname.'</a></h2><img class="vipimg" width="32px" scr="'.$favorite['tuijianuser']->vip_level.'" /></div>
+                <div class="Statistics">
+                <ul>
+                <li><span>'.$favorite['tuijianuser']->collections.'</span>收藏</li>
+                <li><span>'.$favorite['tuijianuser']->fans.'</span>粉丝</li></ul>
+                </div><a class="Button3 user_follow_btn" data-id="'.$favorite['tuijianuser']->id.'">关注</a></div></div>';
+            }
+            // $data['tuijianuser']=$html;
+            return $html;
+        }
+
+    }
 
 
 }

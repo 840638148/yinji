@@ -277,6 +277,25 @@ class VipController extends Controller
 
     }
 
+    public function finlistsearch(Request $request)
+    {
+        $lang = $request->session()->get('language') ?? 'zh-CN';
+		$user_id = Auth::id();
+		$user = $this->getUserInfo();
+
+        if($request->content==''){
+            return '请输入搜索的关键词！';
+        }
+
+        $result = UserFinder::finsearch($request);
+
+        if($result==''){
+            return '没有数据';
+        }
+
+        return Output::makeResult($request, $result);
+
+    }
 
 
     
