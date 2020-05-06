@@ -77,6 +77,8 @@
             <select style="width: 100%;" name="zhiwei" value="职位">
               <option name="jzs" value="{{$user->zhiwei}}" selected>{{$user->zhiwei}}</option>
               <option name="jzs" value="建筑师" >建筑师</option>
+<<<<<<< HEAD
+=======
               <option name="snsjs" value="室内设计师">室内设计师</option>
               <option name="rzsjs" value="软装设计师">软装设计师</option>
               <option name="cpsjs" value="产品设计师">产品设计师</option>
@@ -85,6 +87,19 @@
               <option name="gys" value="地产开发">地产开发</option>
               <option name="qt" value="其他">其他</option>    
             </select>
+            @else
+            <select style="width: 100%;" name="zhiwei" value="职位">
+              <option name="jzs" value="建筑师" selected>建筑师</option>
+>>>>>>> d3bbdc1103a9493ae743be5a6e9e8ca9af57c7f9
+              <option name="snsjs" value="室内设计师">室内设计师</option>
+              <option name="rzsjs" value="软装设计师">软装设计师</option>
+              <option name="cpsjs" value="产品设计师">产品设计师</option>
+              <option name="sys" value="摄影师">摄影师</option>
+              <option name="sys" value="媒体人">媒体人</option>
+              <option name="gys" value="地产开发">地产开发</option>
+              <option name="qt" value="其他">其他</option>    
+            </select>
+<<<<<<< HEAD
             @else
             <select style="width: 100%;" name="zhiwei" value="职位">
               <option name="jzs" value="建筑师" >建筑师</option>
@@ -96,6 +111,8 @@
               <option name="gys" value="地产开发">地产开发</option>
               <option name="qt" value="其他" selected>其他</option>    
             </select>
+=======
+>>>>>>> d3bbdc1103a9493ae743be5a6e9e8ca9af57c7f9
             @endif
             <!-- <input type="text" id="url" name="url" value="{{$user->url}}"> -->
           </p>
