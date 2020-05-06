@@ -148,8 +148,9 @@ Route::get('folderlist/{id}', 'VipController@folderlist');//推荐收藏夹列�
 Route::post('vip/addfolders', 'VipController@addfolders');//推荐收藏夹列表
 Route::post('vip/scstatus', 'VipController@scstatus');//推荐收藏夹列表收藏的真实状态
 Route::post('vip/autodelpay', 'VipController@autodelpay');//半小时后未付款的自动取消订单
-Route::get('finder_ajax', 'VipController@finderajax');//发现页-->发现的分页 
+Route::post('finder_ajax', 'VipController@finderajax');//发现页-->发现的分页 
 Route::post('vip/finderslistsearch', 'VipController@finderslistsearch');//发现页-->搜索框
+Route::post('vip/finlistsearch', 'VipController@finlistsearch');//发现页-->搜索框
 
 
 
