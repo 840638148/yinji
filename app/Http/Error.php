@@ -25,6 +25,7 @@ class Error
 	const TOKEN_OVERTIME       = 100012;  //token过期absent
 	const TOKEN_CREATE_FAILED  = 100013;  //token创建失败
 	const TOKEN_ABSENT         = 100014;  //缺少token
+	const IMAGE_ERROR          = 100015;  //图片尺寸太大，请使用宽度或高度不超过500的图片
 
 
 	////////////////服务错误代码////////////////
@@ -96,7 +97,7 @@ class Error
 				self::TOKEN_OVERTIME       => 'token过期',
 				self::TOKEN_CREATE_FAILED  => 'token创建失败',
 				self::TOKEN_ABSENT         => '缺少token',
-					
+				self::IMAGE_ERROR		   => '图片尺寸太大，请使用宽度或高度不超过500的图片',
 					
 				////////////////服务错误代码////////////////
 				self::MISS_PARAM           => '参数验证错误',
