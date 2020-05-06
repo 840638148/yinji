@@ -56,7 +56,7 @@
                 <div style="font-size:12px; line-height:30px; color:#999; font-family:Georgia , Times, serif;">{{get_article_title($article, 1)}}</div>
                 <div style=" color:#666; line-height:24px;">{{get_article_title($article, 2)}}</div>
                 </a> </h2>
-                <a style="position: absolute;bottom: 60px;right: 30px;" href="javascript:;" class="find-icon-trash remove_find_img" data-id="{{$article->delid}}" tag="删除发现的图片"></a> </div>
+                <a style="position: absolute;bottom: 60px;right: 30px;" href="javascript:;" class="find-icon-trash remove_find_img" data-id="{{$article->delid}}" tag="删除发现的图片"></a> 
               <div class="homeinfo"> 
                 <!--分类--> 
                 @if ($article->category)
