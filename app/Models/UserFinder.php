@@ -459,25 +459,25 @@ class UserFinder extends Model
     {   
         // dd($request->all());
         $user_id= Auth::id();
-        if($request->searchcontent){
+        if($request->content){
             switch ($cates) {
                 case 'tjfinder':
                     $finders = self::finsearch($request);
                     $folders = self::getMyFolders($user_id);
-                    $finders=json_decode($finders);
+                    // $finders=json_decode($finders);
                     $folders=json_decode($folders);
                     $data = ['finders'=>$finders,'cates'=>$cates,'folders'=>$folders];
                     return $data;
                     break;
                 case 'tjfolder':
                     $finders = self::finsearch($request);
-                    $finders=json_decode($finders);
+                    // $finders=json_decode($finders);
                     $data = ['finders'=>$finders,'cates'=>$cates];
                     return $data;
                     break;
                 case 'tjuser':
                     $finders = self::finsearch($request);
-                    $finders=json_decode($finders);
+                    // $finders=json_decode($finders);
                     $data = ['finders'=>$finders,'cates'=>$cates];
                     return $data;
                     break;
@@ -752,7 +752,7 @@ class UserFinder extends Model
                 ->orwhere("articles.title_intro_cn","like","%$content%")
                 ->orwhere("articles.tag_ids","like","%$content%")
                 ->orwhere("articles.location_cn","like","%$content%")
-                ->get();
+                ->paginate(1);
 
             //查询出自己的收藏夹
             $folders=UserFinderFolder::where('user_id',$user_id)->get();
@@ -797,6 +797,7 @@ class UserFinder extends Model
                     </div>'; 
             }
             // $data['tuijianfinder']=$html;
+            // dd($html);
             return $html;
         }
 
@@ -804,7 +805,7 @@ class UserFinder extends Model
             //查询收藏夹名
             $favorites=UserFinderFolder::leftjoin('users','users.id','=','user_finder_folders.user_id')
                 ->select('user_finder_folders.name','user_finder_folders.id','users.avatar','users.username','user_finder_folders.user_id')
-                ->where("user_finder_folders.name","like","%$content%")->get();
+                ->where("user_finder_folders.name","like","%$content%")->paginate(5);
             
             //查询出自己的收藏夹
             $folders=UserFinderFolder::where('user_id',$user_id)->get();
@@ -852,7 +853,7 @@ class UserFinder extends Model
             $favorites=User::select('users.avatar','users.nickname','users.username','users.id')
             ->where("users.username","like","%$content%")
             ->orwhere("users.nickname","like","%$content%")
-            ->get();
+            ->paginate(5);
 
             $res=UserFollow::where('user_id',$user_id)->select('user_id','follow_id')->get();
 

@@ -292,7 +292,7 @@ class VipController extends Controller
         if($result==''){
             return '没有数据';
         }
-
+        // dd($result);
         return Output::makeResult($request, $result);
 
     }

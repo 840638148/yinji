@@ -12,13 +12,13 @@
 <div class="home_top">
   <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
   <div class="home_tongji">
-    <ul>
-      <li> 订阅</br>
-        <?php echo e($user->subscription_num); ?> </li>
+  <ul>
+      <li>发现</br>
+        <?php echo e($user->finder_num); ?> </li>
       <li> 收藏</br>
         <?php echo e($user->collect_num); ?> </li>
-      <li> 积分</br>
-        <?php echo e($user->points); ?> </li>
+      <li> 订阅</br>
+        <?php echo e($user->subscription_num); ?> </li>
       <li> 关注</br>
         <?php echo e($user->follow_num); ?> </li>
     </ul>
@@ -26,7 +26,7 @@
   <div class="home_personal"> <img src="<?php if($user->avatar): ?> <?php echo e($user->avatar); ?> <?php else: ?> /img/avatar.png <?php endif; ?>" alt="<?php echo e($user->nickname); ?>" />
    
   </div>
-   <h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> <?php echo e($user->nickname); ?>  <?php if($user->is_vip): ?><span class="vip1">VIP<?php echo e($user->vip_level); ?></span><?php else: ?><span class="vip1" style="background-color:#ccc;color:#fff;">普通用户</span> <?php endif; ?> </h2>
+  <h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> <?php echo e($user->nickname); ?> <img src="<?php echo e($user->vip_level); ?>" alt=""></h2>
   <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">个人说明： <?php echo e($user->personal_note); ?></p>
   <div class="home_nav">
     <ul>
@@ -53,7 +53,7 @@
       <!---发现--->
       
       <div id="myTab1_Content0" >
-        <form id="info-form" class="contribute_form" role="form" method="POST" action="/member/edit">
+        <form id="info-form" class="contribute_form" role="form" method="POST" action="/member/baseedit" >
           <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>">
           <p>
             <label for="sex">性别</label>
@@ -68,16 +68,42 @@
             <input type="text" id="city" name="city" value="<?php echo e($user->city); ?>" >
           </p>
           <p>
-            <label for="url">个人主页</label>
-            <input type="text" id="url" name="url" value="<?php echo e($user->url); ?>">
+            <label for="zhiwei">职位</label>
+            <?php if($user->zhiwei): ?>
+            <select style="width: 100%;" name="zhiwei" value="职位">
+              <option name="jzs" value="<?php echo e($user->zhiwei); ?>" selected><?php echo e($user->zhiwei); ?></option>
+              <option name="jzs" value="建筑师" >建筑师</option>
+              <option name="snsjs" value="室内设计师">室内设计师</option>
+              <option name="rzsjs" value="软装设计师">软装设计师</option>
+              <option name="cpsjs" value="产品设计师">产品设计师</option>
+              <option name="sys" value="摄影师">摄影师</option>
+              <option name="sys" value="媒体人">媒体人</option>
+              <option name="gys" value="地产开发">地产开发</option>
+              <option name="qt" value="其他">其他</option>    
+            </select>
+            <?php else: ?>
+            <select style="width: 100%;" name="zhiwei" value="职位">
+              <option name="jzs" value="建筑师" selected>建筑师</option>
+              <option name="snsjs" value="室内设计师">室内设计师</option>
+              <option name="rzsjs" value="软装设计师">软装设计师</option>
+              <option name="cpsjs" value="产品设计师">产品设计师</option>
+              <option name="sys" value="摄影师">摄影师</option>
+              <option name="sys" value="媒体人">媒体人</option>
+              <option name="gys" value="地产开发">地产开发</option>
+              <option name="qt" value="其他">其他</option>    
+            </select>
+            <?php endif; ?>
+            <!-- <input type="text" id="url" name="url" value="<?php echo e($user->url); ?>"> -->
           </p>
           <p>
             <label for="personal_note">个人说明</label>
-            <textarea rows="3" name="personal_note" id="personal_note"><?php echo e($user->personal_note); ?></textarea>
+            <!-- <div contenteditable>123</div> -->
+<!-- <br> -->
+            <textarea rows="5" style="resize:vertical;" name="personal_note" id="personal_note"><?php echo e($user->personal_note); ?></textarea>
           </p>
           <div id="profile_avatar">
             <label for="avatar">头像</label>
-            <img class="avatar" src="<?php if($user->avatar): ?> <?php echo e($user->avatar); ?> <?php else: ?> /img/avatar.png <?php endif; ?>" alt="<?php echo e($user->nickname); ?>" style="display: block;"> <a class="avatar_uploader" href="javascript:void(0)"> 点击更换头像 <input type="file" id="fileAvatar" class="filepath" onchange="changeAvatar(this)" accept="image/jpg,image/jpeg,image/png,image/PNG" /></a> <span>当前为<strong>自定义头像</strong>，建议大小：120*120。获取头像的顺序为：自定义头像、社交头像、全球通用头像、默认头像</span> </div>
+            <div class="avatar_img" style="width:128px;height:128px;border-radius:128px;"><img class="avatar img-responsive" src="<?php if($user->avatar): ?> <?php echo e($user->avatar); ?> <?php else: ?> /img/avatar.png <?php endif; ?>" alt="<?php echo e($user->nickname); ?>" style="display: block;"></div> <a class="avatar_uploader" href="javascript:void(0)"> 点击更换头像 <input type="file" id="fileAvatar" class="filepath" onchange="changeAvatar(this)" accept="image/jpg,image/jpeg,image/png,image/PNG" /></a> <span>当前为<strong>自定义头像</strong>，建议大小：120*120。获取头像的顺序为：自定义头像、社交头像、全球通用头像、默认头像</span> </div>
           <div id="homepage_top_img" style="overflow:hidden">
             <label for="avatar">个人主图</label>
             <img id="avimg" src="<?php echo e($user->zhuti); ?>" alt="个人主图" width="600" hidden="200" style="display:block; width:200px; float:left; height:100px;" > <a class="avatar_uploader" href="javascript:void(0)" > 点击更换个人主图 <input type="file" id="fileSingleImg" class="filepath" onchange="changeSingleImg(this)" accept="image/jpg,image/jpeg,image/png,image/PNG" /></a> <span>当前为<strong>个人主页主图</strong>，建议大小：1920*300。</span> </div>
@@ -90,10 +116,7 @@
       <div id="myTab1_Content1"  class="none">
         <form id="pass-form" class="contribute_form" role="form" method="post" action="/member/edit">
           <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>">
-          <p>
-            <label for="username">用户名(必填)</label>
-            <input type="text" id="username" name="username" value="<?php echo e($user->username); ?>" required="">
-          </p>
+          
           <p>
             <label for="nickname">昵称</label>
             <input type="text" id="nickname" name="nickname" value="<?php echo e($user->nickname); ?>" >

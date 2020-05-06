@@ -8,62 +8,48 @@
     .find_tab{
       margin-top:30px;
     }
-
     .folder_box{
       display: none;
       box-shadow: 0 4px 20px rgba(0,0,0,.2);
     }
-
     .discovery-item, .collection-item{
       margin: 10px 6px ;
       cursor: pointer; background-color:#fbfbfb;
     }
-
     .collection-item:first-of-type,.discovery-item:first-of-type{
       margin-top:0;
     }
-
     .collection-item .find_title,.discovery-item .find_title{
       padding:0px 10px;
       line-height: 48px;
     }
-
     .collection-item .who_find,.discovery-item .who_find{
       padding:4px 10px;
     }
-
     .collection-item .item__content,.discovery-item .item__content{
       position: relative;
     }
-
     .collection-item .folder,.discovery-item .folder{
       display: none;
     }
-
     .collection-item .folder_box ul,.discovery-item .folder_box ul{
       border-bottom: 1px solid #ddd;
     }
-
     .Find_login{
       margin-left:-165px;
     }
-
     .Find_login #login{
       padding:20px;
     }
-
     .modal{
       display:none;
     }
-
     .create_button input, .vip_pay p button{
       padding: 6px 50px;
     }
-
     .create_folder input[type=radio]{
       margin:0;
     }
-
     .img_browse{
       position: fixed;
       left: 50%;
@@ -78,12 +64,10 @@
       padding: 10px;
       border-radius: 5px;
     }
-
     .img_browse .right{
       width:260px;
       height: 100%;
     }
-
     .img_browse .right .faxian_info{
       margin-top: 10px;
     }
@@ -432,29 +416,22 @@
 <script src="/js/data.js"></script> 
 <script src="/js/member.js"></script> 
 <script type="text/javascript">
-
     $(document).ready(function(){
          // 发现
         var discoveryItems = {!!$user->finders!!};
         var folders = {!!$user->my_folders!!};
         // console.log()
         var discoveryItemsDom = discoveryItems.map(function( item){ return getDiscoveryItemDom(item, folders) }).join('');
-
         $('#discoveryItems').html(discoveryItemsDom);
-
         // $('#discoveryItems').append(discoveryItemsDom);
-
         // 收藏
         var collections = {!!$user->collections!!};
         var collectionItemsDom = collections.map(function( item ){ return getCollectionItemDom(item) }).join('');
         $('#collectionItems').html(collectionItemsDom);
-
         //推荐用户
         var recommendUsers = {!!$user->recommend_users!!};
         var users = recommendUsers.map(function( item ){ return getUsersDom(item) }).join('');
         $('#users').html(users);
-
-
         $('#users').on('click', '.user_follow_btn', function(){
           var follow_id = $(this).attr('data-id');
           var that = $(this)
@@ -466,7 +443,6 @@
               _token:_token,
               follow_id:follow_id
             },
-
             success: function (data) {
               if (data.status_code == 0) {
                 layer.msg('关注成功！',{skin: 'intro-login-class layui-layer-hui'})
@@ -480,7 +456,6 @@
             }
           });
         });
-
       //页面层-自定义
       //登录
       if(!IS_LOGIN){
@@ -494,18 +469,14 @@
           isOutAnim:false,
           content: $('#vip-img')
         });
-
       }
-
       $('.vip_prompt .vip_buy').click(function () {
         $(".new_folder_box").show();
         layer.closeAll();
       })
-
       $('.vip_prompt .vip_detail').click(function () {
         location.href='/vip/intro'
       })
-
       $(document).on("click",".vip_close",function () {
         $(".new_folder_box").hide();
         if(!IS_VIP){
@@ -520,8 +491,6 @@
         }
         return false;
       })
-
-
 //发现-点击收藏ajax交互
   $('#discoveryItems').on('click','.add_finder_btn',function(){
     // console.log($(this).html());
@@ -567,7 +536,6 @@
   })
   
 })
-
     // 获取各种各样的DOM
     // 获取发现每一项的Dom
     function getDiscoveryItemDom(item,folders){
@@ -582,7 +550,6 @@
       if(item.who_find && item.who_find.length > 0){
         h += '      <a href="javascript:;" class="find_info_more"></a>';
       }
-
       h += '    </div>';
       h += '    <div class="who_find" style="display:none">';
       item.who_find.map(function(user,index){
@@ -593,7 +560,6 @@
         	h += '      <span > <a href="javascript:;">匿名用户</a> 收藏到 <a href="#">'+ user.folderName + '</a></span>';
         }
       })
-
       h += '    </div>';
       h += '    <div class="folder">';
       h += '      <div class="fl folder_bj" style="width:80%" >选择文件夹';
@@ -603,7 +569,6 @@
       h += '    </div>';
       h += '    <div class="folder_box">';
       h += '      <ul>';
-
       foldersArr.map(function(folder,idx){
         h += '        <li>';
         h += '          <h3>'+ folder.title + '</h3>';
@@ -621,7 +586,6 @@
     		}
     	}
 		// console.log(isscarr,item,folder,uc);
-
         if(is_sc){
         	h += '          <span class="' + (folder.type == 'private' ? 'private' :'') +'" title="'+(folder.typeText ? folder.typeText : '') + '" ></span> <a style="width:50px;" href="javascript:void(0)" class="have-disalbed Button fr add_finder_btn" data-id="' + folder.id + '" data-img="' + item.img + '" data-title="' + item.title + '" data-source="' + item.source + '">已收藏</a>';
         }else{
@@ -629,7 +593,6 @@
         }
 	
         h += '        </li>';
-
       })
       
       h += '      </ul>';   
@@ -641,20 +604,16 @@
     }
 
 
-
     // 获取收藏每一项的Dom
-
     function getCollectionItemDom(item){
       var h= '';
       h += '<div class="item collection-item" data-id="' + item.id + '">';
       h += ' <div class="item__content">';
       h += '  <ul onclick="location=\'/folderlist/' + item.id+ '\'">';
-
       item.imgs.map(function(img){
       	
 			h += '    <li><a href="folderlist/'+ item.id+'"><img src="' + img.src +'" alt="' + img.alt + '" /></a></li>';
       })
-
       h += '  </ul>';
       h += '  <div class="find_title">';
       h += '    <h2><a href="folderlist/'+ item.id+'">'+ item.title + '</a></h2>';
@@ -667,13 +626,9 @@
       h += ' </div>';
       h += '</div>';
       return h;
-
     }
  
-
-
     // 获取推荐用户每一项的Dom
-
     function getUsersDom(user){
       // console.log(user);
       var h= '';
@@ -682,11 +637,7 @@
       h += '     <div class="border-bottom1">';
       h += '       <div class="head"><img width="100%" height="100%" src="' + (user.icon?user.icon:'/img/avatar.png') + '" alt="头像" /></div>';
       h += '       <h2><a href="#">' + user.name.substr(0,12) + '</a> </h2>';
-      if(user.vip_level==0){
-        h += '       <div>' +user.zhiwei+ '-' + user.addr + ' <img class="imgvip" width="32px" src="/images/v_0.png" /></div>';
-      }else{
-         h += '       <div>' +user.zhiwei+ '-' + user.addr + ' <img class="imgvip" width="32px" src="'+user.vip_level+'" /></div>';
-      }
+      h += '       <div>' +user.gender+ '-' + user.addr + ' <img class="imgvip" width="32px" src="'+user.vip_level+'" /></div>';
       h += '     </div>';
       h += '     <div class="Statistics">';
       h += '       <ul>';
@@ -699,11 +650,7 @@
       h += ' </div>';
       return h;
     }
-
-
-
     //获取收藏图片的每一个
-
     function getImgBrowseImgsDom(imgs,id,index){
       var imgsArr = imgs || [];
       var idx = index || 0;
@@ -714,8 +661,6 @@
       $( id + ' .selected-image').attr('src',imgsArr[idx].src);
       $(id + ' .more_img').html(h);
     }
-
-
     function wp_attempt_focus(){
       setTimeout( function(){ try{
         d = document.getElementById('user_login');
@@ -724,25 +669,18 @@
       } catch(e){}
       }, 200);
     }
-
-
-
     //切换图片
-
     $(document).on('click','.more-img-item',function(){
       var src = '';
       //去除所有选中状态
       $('.more-img-item').each(function(){
         $(this).removeClass('selected');
       })
-
       // 添加选中状态
       $(this).addClass('selected');
       src = $(this).find('img').attr('src');
       $(this).parents('.img_browse').find('.selected-image').attr('src',src);
     })
-
-
     // 发现展示图片框
     $(document).on('click','.discovery-item .bg-img',function(){
       var folder_id = $(this).attr('data-id');
@@ -770,17 +708,14 @@
         }
       });
     })
-
     //关闭所有展示框
     $(document).on('click','.modal .close',function(){
       layer.closeAll();
     })
-
     //关闭所有展示框
     $(document).on('click','.modal .concle-create-folder',function(){
       layer.closeAll();
     })
-
     $(document).on('click','.item_content .folder',function(){
       var moreEle =  $(this).find('.show-more-selcect-item')
       if(moreEle.hasClass('showbox')){
@@ -799,14 +734,10 @@
         $(this).find('.add-collection-btn').hide()
       }
     })
-
-
-
     // 发现页面展示收藏
     $(document).on('mouseenter','.discovery-item',function(){
       $(this).find('.folder').css('display','block');
     })
-
     $(document).on('mouseleave','.discovery-item',function(){
       $(this).find('.folder').css('display','none');
       $(this).find('.folder_box').css('display','none');
@@ -815,7 +746,6 @@
       $(this).find('.folder_bj .show-more-select-item').removeClass('showbox');
       $(this).find('.folder_bj .show-more-select-item').css('background-position','0px 0px');
     })
-
     //点击展示谁发现按钮
     $(document).on('click','.find_info_more',function(ev){
     	var dasou=$(this).parent().attr('data-source');
@@ -830,10 +760,6 @@
         }
       })
     })
-
-
-
-
     //提交前检查
     /*function checkForm(obj)
     {
@@ -870,9 +796,6 @@
       }
     }
     */
-
-
-
   </script> 
 {{--会员购买模块--}} 
 <script>
@@ -885,7 +808,6 @@
         return false;
       }
     });
-
     $(document).on("click",".vip_select li",function () {
       _self = $(this);
       _price = _self.attr("price");
@@ -898,8 +820,6 @@
       var c = parseInt(_omit)-parseInt(_price);
       $(".vip_pay_msg").html("应付：<span>"+_price+"</span>元 ( 立省"+c+"元)");
     });
-
-
     $(document).ready(function(){
       // listen if someone clicks 'Buy Now' button
       // if(!IS_LOGIN){
@@ -922,9 +842,6 @@
           payment_code : $('#payment_code').val(),
           pay_total : $('#pay_total').val(),
         };
-
-
-
         $.ajax({
           async:false,
           url: url,
@@ -946,9 +863,6 @@
         });
       });
     });
-
-
-
   </script> 
 {{--登录模块--}} 
 <script type="text/javascript">
@@ -959,35 +873,27 @@
         $(".ma_box").addClass("hide");
       }
     }
-
-
     function toLogin() {
       //以下为按钮点击事件的逻辑。注意这里要重新打开窗口
       //否则后面跳转到QQ登录，授权页面时会直接缩小当前浏览器的窗口，而不是打开新窗口
       var A = window.open("/auth/qq", "_self");
     }
-
-
     function wp_attempt_focus() {
       setTimeout(function () {
         try {
           d = document.getElementById('user_login');
           d.focus();
           d.select();
-
         } catch (e) {
-
         }
       }, 200);
     }
-
     //监听回车事件
     $(document).keyup(function(event){
       if(event.keyCode ==13){
         $('#wp-submit-login').trigger("click");
       }
     });
-
     $("#wp-submit-login").click(function () {
       // var loginform = new FormData();
       var url = $.trim($('#loginform').attr("action"));
@@ -1007,10 +913,8 @@
         }
       });
     });
-
     wp_attempt_focus();
     if (typeof wpOnload == 'function') wpOnload();
-
   </script> 
 <script type="text/javascript"> 
 	//头像中图片不存在，显示默认图片
@@ -1019,13 +923,11 @@
 	    $("img").attr('src','/img/avatar.png');
 	  });
 	});
-
   window.cate='tjfinder';
   function nTabs(thisObj,Num){
     if(thisObj.className == "active")return;
     var tabObj = thisObj.parentNode.id;
     var tabList = document.getElementById(tabObj).getElementsByTagName("li");
-
     for(i=0; i <tabList.length; i++){
       if (i == Num){
         thisObj.className = "active";
@@ -1044,7 +946,6 @@
   
   // 发现页的分页
   // if()
-
     //监听回车事件
     $(document).keyup(function(event){
       if(event.keyCode ==13){
@@ -1058,9 +959,7 @@
     // }else{
     //   没有点击事件或者回车事件就走分页
     // }
-
   // });
-
     // 点击搜索
     $(".findersearch_btn").click(function () {
       // var loginform = new FormData();
@@ -1091,7 +990,6 @@
           });
     })
   // }
-
     // 分页
     let page = 2;isEnd = false
     $(window).on('scroll',function(e){
@@ -1138,7 +1036,6 @@
                 })
                   $('#discoveryItems').append(h);
                   if(data.data.length<15){isEnd = true}
-
               }else if(data.status_code == 0 && cates=='tjfolder'){
                   page++; 
                   $.each(list.finders,function(index, item){
@@ -1180,52 +1077,16 @@
                   h+='<li><span>'+item.fans+'</span>粉丝</li></ul>';
                   h+='</div><a class="Button3 user_follow_btn" data-id="'+item.id+'">关注</a></div></div>';
                 })
-<<<<<<< HEAD
-                $('#collectionItems').append(h);
-                if(data.data.length<15){
-                    isEnd = true
-                }
-            }else if(data.status_code == 0 && cates=='tuijianuser'){
-              page++;
-              $.each(list.finders,function(index, item){
-                console.log(item);
-
-
-                
-                h+='<div class="item">';
-                h+='  <div class="users">';
-                h+='    <div class="border-bottom1">';
-                h+='      <div class="head">';
-                h+='        <img width="100%" height="100%" src="'+item.icon+'" alt="头像">';
-                h+='      </div>';
-                h+='      <h2>'+item.name.substr(0,15)+'</h2>';
-                h+='      <div>'+item.zhiwei+'- '+item.addr+' <img class="imgvip" width="32px" src="'+item.vip_level+'"></div>';
-                h+='    </div>';
-                h+='    <div class="Statistics">';
-                h+='<ul>';
-                h+='<li><span>'+item.collections+'</span>收藏</li>';
-                h+='<li><span>'+item.fans+'</span>粉丝</li></ul>';
-                h+='</div><a class="Button3 user_follow_btn" data-id="'+item.id+'">关注</a></div></div>';
-              })
-              $('#users').append(h);
-              if(data.data.length<15){isEnd = true}
-            }else{
-                isEnd = true
-                alert(data.message);
-=======
                 $('#users').append(h);
                 if(data.data.length<15){isEnd = true}
               }else{
                   isEnd = true
                   layer.msg(data.message);
               }
->>>>>>> 3ac4f0c651758551136d2c55c91d2bc509002dc3
             }
         });
       }
     })
-
  // })
-
 </script> 
 @endsection 
