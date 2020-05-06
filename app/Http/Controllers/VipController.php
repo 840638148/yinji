@@ -281,19 +281,25 @@ class VipController extends Controller
     {
         $lang = $request->session()->get('language') ?? 'zh-CN';
 		$user_id = Auth::id();
-		$user = $this->getUserInfo();
-
-        if($request->content==''){
+        $user = $this->getUserInfo();
+        $cates=$request->cate;
+// dd($request->all());
+        if($request->content=='' || $request->content==null){
             return '请输入搜索的关键词！';
         }
 
-        $result = UserFinder::finsearch($request);
 
+        if ($request->isMethod('post') && $request->page && $request->page > 1) {
+            $mores = UserFinder::getMoreTuijians($request,$cates);
+            return Output::makeResult($request, $mores);
+        }
+
+        $result = UserFinder::finsearch($request);
         if($result==''){
             return '没有数据';
         }
-        // dd($result);
-        return Output::makeResult($request, $result);
+        $data=['result'=>$result,'cate'=>$request->cate];
+        return Output::makeResult($request, $data);
 
     }
 

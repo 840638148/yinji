@@ -82,9 +82,9 @@
     <!-- 标题开始 -->
     <div class="TabTitle">
       <ul id="myTab1">
-        <li class="active tabka" cate='finder' onclick="nTabs(this,0);">发现</li>
-        <li class="normal tabka" cate='folder' onclick="nTabs(this,1);">推荐收藏夹</li>
-        <li class="normal tabka" cate='tuijianuser' onclick="nTabs(this,2);">推荐用户</li>
+        <li class="active tabka" cate='tjfinder' onclick="nTabs(this,0);">发现</li>
+        <li class="normal tabka" cate='tjfolder' onclick="nTabs(this,1);">推荐收藏夹</li>
+        <li class="normal tabka" cate='tjuser' onclick="nTabs(this,2);">推荐用户</li>
       </ul>
     </div>
     
@@ -96,9 +96,10 @@
       <div id="myTab1_Content0" style="padding-bottom: 20px">
           <form id="myform" action="/vip/finderslistsearch"  style="position:relative;padding:0;" method="post" class="search_form" >
             <input id="hiddenText" type="text" style="display:none" />
-            <input name="content" id="txt_name" class="text_input" type="text" placeholder="输入关键字,例如收藏夹名，图片名" style=" width:100%;margin-bottom:20px;height: 50px;text-indent: 3.5em;" >
-            <input type="hidden" name='cate' value='tjfinder'>
             <i class="findersearch_btn" cate="tjfinder" style="position: absolute;left: 10px;top: 10px;padding: 5px;cursor: pointer;border:none;background:url(/images/findersearch.png) center no-repeat;width: 30px;display: block;height: 30px;"></i>
+            <input name="content" id="txt_name" class="text_input" type="text" placeholder="输入关键字,例如收藏夹名，图片名" style=" width:100%;margin-bottom:20px;height: 50px;text-indent: 3.5em;border-radius: 50px;" >
+            <input type="hidden" name='cate' value='tjfinder'>
+            <a href="/finder" style="position: absolute;right: 10px;top: 10px;padding: 5px;cursor: pointer;border:none;width: 30px;display: block;height: 30px;line-height: 23px;background: #7fc4e4;text-align: center;border-radius: 30px;"><</a>
             <!-- <input style="position: absolute;right: 10px;top: 6px;padding: 5px;cursor: pointer;border:none;" type="image" onClick = "formName.submit()" src="/images/findersearch.png" style="border:none;" cate='finer' id="findersearch" > -->
           </form>
         <div class="masonry" id="discoveryItems">
@@ -924,6 +925,7 @@
 	  });
 	});
   window.cate='tjfinder';
+  // window.content='';
   function nTabs(thisObj,Num){
     if(thisObj.className == "active")return;
     var tabObj = thisObj.parentNode.id;
@@ -935,7 +937,9 @@
         
         window.cate=thisObj.getAttribute('cate');//获取tab的分类
         page = 2;isEnd = false
-        // console.log(cate);
+        // let a=document.getElementsByTagName('.text_input').value='';
+        // window.content=$('#myform').find('.text_input').val('');
+        // console.log(content);
       }else{
         
         tabList[i].className = "normal";
@@ -944,62 +948,65 @@
     }
   }
   
-  // 发现页的分页
-  // if()
-    //监听回车事件
-    $(document).keyup(function(event){
-      if(event.keyCode ==13){
-        $('.findersearch_btn').trigger("click");
+
+  //监听回车事件
+  $(document).keyup(function(event){
+    if(event.keyCode ==13){
+      return false;
+    }
+  });
+
+  //发现搜索框
+  window.content='';
+  $(document).on('click','.findersearch_btn',function(){
+    window.content=$(this).siblings('.text_input').val();
+    let h='';
+    let cate=$(this).attr('cate');
+    // console.log(content)
+    $.ajax({
+      async:false,
+      url: '/vip/finlistsearch',
+      type: 'POST',
+      //dataType: 'json',
+      data: {content:content,cate:cate,},
+      success:function(data) {
+        console.log(data.data)
+        if(data.status_code==0){
+          layer.msg('查询成功',{skin: 'intro-login-class layui-layer-hui'});
+          if(data.data.cate=='tjfinder'){
+            $('#discoveryItems').empty();
+            $('#discoveryItems').append(data.data.result); 
+            // $('.text_input').val('');
+          }else if(data.data.cate=='tjfolder'){
+            $('#collectionItems').empty();
+            $('#collectionItems').append(data.data.result);
+            // $('.text_input').val('');
+          }else if(data.data.cate=='tjuser'){
+            $('#users').empty();
+            $('#users').append(data.data.result);
+            // $('.text_input').val('');
+          }
+
+        }
+        else{
+          layer.msg(data,{skin: 'intro-login-class layui-layer-hui'});
+          $('.text_input').val('');
+        }
       }
     });
+  })
   
-  // $(document).on('click'， function() {
-    // if(判断如果有是点击动作或回车动作就先执行点击或者回车事件){
-      
-    // }else{
-    //   没有点击事件或者回车事件就走分页
-    // }
-  // });
-    // 点击搜索
-    $(".findersearch_btn").click(function () {
-      // var loginform = new FormData();
-      // var url = $.trim($('#loginform').attr("action")); 
-        //发现搜索框
-        // $(document).on('click','#findersearch',function(){
-          let content=$('.text_input').val();
-          let h='';
-          let cate=$(this).attr('cate');
-          // console.log(cate)
-          $.ajax({
-            async:false,
-            url: '/vip/finlistsearch',
-            type: 'POST',
-            //dataType: 'json',
-            data: {content:content,cate:cate,},
-            success:function(data) {
-              // console.log(data)
-              if(data.status_code==0){
-                layer.msg('查询成功',{skin: 'intro-login-class layui-layer-hui'});
-                $('#discoveryItems').empty();
-                $('#discoveryItems').append(data.data);
-              }else{
-                layer.msg('没有数据',{skin: 'intro-login-class layui-layer-hui'});
-                $('.text_input').val('');
-              }
-            }
-          });
-    })
-  // }
-    // 分页
+    //发现页的分页
     let page = 2;isEnd = false
     $(window).on('scroll',function(e){
       
       let bodyHeight=document.body.scrollHeight==0?document.documentElement.scrollHeight:document.body.scrollHeight;
       if(bodyHeight - $('body').scrollTop() -10 < window.innerHeight && !isEnd){
-        console.log(cate);
+        // console.log(content);
         let h  = '';
         let url = window.location.href;
-        let content=$('.text_input').val();
+        // content=$('.findersearch_btn').siblings('.text_input').val();
+        // console.log(content)
         $.ajax({
             async: false,
             url: url + '_ajax?page=' + page+'&cate='+cate+'&content='+content,
@@ -1007,81 +1014,97 @@
             dataType: 'json',
             data: {},
             success: function(data){
-              console.log(data);
+              // console.log(data);
               let list=data.data;
               let cates=data.data.cates;
               let arrs=list.folders;
-                // console.log(list);
-              if(data.status_code == 0 && cates=='tjfinder'){
+              // console.log(data.data.finders.length);
+              if(data.data.content && cates=='tjfinder'){
+                $('#discoveryItems').append(data.data.finders);
+                if(data.data.length<0){isEnd = true}else{isEnd = false}
+              }else if(data.data.content && cates=='tjfolder'){
+                $('#collectionItems').append(h);
+                if(data.data.length<1){isEnd = true}else{isEnd = false}
+              }else if(data.data.content && cates=='tjuser'){
+                $('#users').append(h);
+                if(data.data.length<1){isEnd = true}else{isEnd = false}
+              }else{
+              
+                if(data.status_code == 0 && cates=='tjfinder'){
+                    page++;
+                    $.each(list.finders,function(index, item){
+                      // console.log(arrs)
+                      h+='<div class="item discovery-item" style="display:flex">';
+                      h+='<div class="item_content"> ';
+                      h+='<img src="'+item.img+'" class="bg-img" data-id="'+item.id+'" id="sourceimg" source="'+item.source+'" /> ';
+                      h+='<div class="find_title" data-source="'+item.source+'">'+item.tinames+'<a href="javascript:;" class="find_info_more"></a></div>';
+                      h+='<div class="who_find" style="display:none">';
+                      h+='<img src="'+item.who_find[0].userIcon+'" />';
+                      h+='<span> <a href="javascript:;">'+item.who_find[0].userName+'</a> 收藏到 <a href="#">'+item.who_find[0].folderName+'</a></span></div>';
+                      h+='<div class="folder" style="display: none;"><div class="fl folder_bj" style="width:80%">';
+                      h+='选择文件夹<span class="fr show-more-selcect-item" style="background:url(images/arrow-ico.png); width:36px; height:36px;"></span></div>';
+                      h+='<a href="javascript:void(0)" class="Button2 fr add-collection-btn">收藏</a></div>';
+                      h+='<div class="folder_box" style="display: none;">';   
+                      h+='<ul>';
+                      $.each(arrs,function(indexs, value){
+                        h+='<li><h3>'+value.title+'</h3> <span class="" title=""></span>';
+                        h+='<a href="javascript:void(0)" class=" Button2 fr add_finder_btn" data-id="'+value.id+'" data-img="'+item.img+'" data-title="'+item.title+'" data-source="'+item.source+'">收藏</a> </li> '; 
+                      })
+                        h+='</ul><a href="javascript:void(0)" class="create create-new-folder" data-type="find" id="sourcea" sourceid="'+item.source+'">创建收藏夹</a></div></div></div> ';
+                  })
+                    $('#discoveryItems').append(h);
+                    if(data.data.length<15){isEnd = true}
+                }else if(data.status_code == 0 && cates=='tjfolder'){
+                    page++; 
+                    $.each(list.finders,function(index, item){
+                      console.log(item);
+                      let ims=item.imgs;
+                      h+='<div class="item collection-item" data-id="'+item.id+'">';
+                      h+='<div class="item__content">';
+                      h+='<ul onclick="location=\'/folderlist/'+item.id+'\'">';
+                      
+                      $.each(item.imgs,function(indexs, items){
+                        h+='<li>';
+                        h+='<a href="folderlist/'+item.id+'">';
+                        h+='<img src="'+items.src+'" alt="'+items.title+'"></a>';
+                        h+='</li>';
+                      })
+                      h+='</ul><div class="find_title"><h2>';
+                      h+='<a href="folderlist/'+item.id+'">'+item.who_find[0].folderName+'</a></h2>';
+                      h+='<a href="javascript:void(0);" class="collect-user-icon">';
+                      h+='<img id="errimg" src="'+item.who_find[0].userIcon+'" onerror="this.onerror=``;this.src=`/img/avatar.png`"></a>';
+                      h+='</div></div></div>';
+                    })
+                    $('#collectionItems').append(h);
+                    if(data.data.length<15){
+                        isEnd = true
+                    }
+                }else if(data.status_code == 0 && cates=='tjuser'){
                   page++;
                   $.each(list.finders,function(index, item){
-                    // console.log(arrs)
-                    h+='<div class="item discovery-item" style="display:flex">';
-                    h+='<div class="item_content"> ';
-                    h+='<img src="'+item.img+'" class="bg-img" data-id="'+item.id+'" id="sourceimg" source="'+item.source+'" /> ';
-                    h+='<div class="find_title" data-source="'+item.source+'">'+item.tinames+'<a href="javascript:;" class="find_info_more"></a></div>';
-                    h+='<div class="who_find" style="display:none">';
-                    h+='<img src="'+item.who_find[0].userIcon+'" />';
-                    h+='<span> <a href="javascript:;">'+item.who_find[0].userName+'</a> 收藏到 <a href="#">'+item.who_find[0].folderName+'</a></span></div>';
-                    h+='<div class="folder" style="display: none;"><div class="fl folder_bj" style="width:80%">';
-                    h+='选择文件夹<span class="fr show-more-selcect-item" style="background:url(images/arrow-ico.png); width:36px; height:36px;"></span></div>';
-                    h+='<a href="javascript:void(0)" class="Button2 fr add-collection-btn">收藏</a></div>';
-                    h+='<div class="folder_box" style="display: none;">';   
+                    h+='<div class="item">';
+                    h+='<div class="users">';
+                    h+='<div class="border-bottom1">';
+                    h+='<div class="head">';
+                    h+='<img width="100%" height="100%" src="'+item.icon+'" alt="头像">';
+                    h+='</div>';
+                    h+='<h2>'+item.name+'</h2>';
+                    h+='<div>'+item.zhiwei+'- '+item.addr+' <img class="imgvip" width="32px" src="'+item.vip_level+'"></div>';
+                    h+='</div>';
+                    h+='<div class="Statistics">';
                     h+='<ul>';
-                    $.each(arrs,function(indexs, value){
-                      h+='<li><h3>'+value.title+'</h3> <span class="" title=""></span>';
-                      h+='<a href="javascript:void(0)" class=" Button2 fr add_finder_btn" data-id="'+value.id+'" data-img="'+item.img+'" data-title="'+item.title+'" data-source="'+item.source+'">收藏</a> </li> '; 
-                    })
-                      h+='</ul><a href="javascript:void(0)" class="create create-new-folder" data-type="find" id="sourcea" sourceid="'+item.source+'">创建收藏夹</a></div></div></div> ';
-                })
-                  $('#discoveryItems').append(h);
-                  if(data.data.length<15){isEnd = true}
-              }else if(data.status_code == 0 && cates=='tjfolder'){
-                  page++; 
-                  $.each(list.finders,function(index, item){
-                    console.log(item);
-                    let ims=item.imgs;
-                    h+='<div class="item collection-item" data-id="'+item.id+'">';
-                    h+='<div class="item__content">';
-                    h+='<ul onclick="location=\'/folderlist/'+item.id+'\'">';
-                    
-                    $.each(item.imgs,function(indexs, items){
-                      h+='<li>';
-                      h+='<a href="folderlist/'+item.id+'">';
-                      h+='<img src="'+items.src+'" alt="'+items.title+'"></a>';
-                      h+='</li>';
-                    })
-                    h+='</ul><div class="find_title"><h2>';
-                    h+='<a href="folderlist/'+item.id+'">'+item.who_find[0].folderName+'</a></h2>';
-                    h+='<a href="javascript:void(0);" class="collect-user-icon">';
-                    h+='<img id="errimg" src="'+item.who_find[0].userIcon+'" onerror="this.onerror=``;this.src=`/img/avatar.png`"></a>';
-                    h+='</div></div></div>';
+                    h+='<li><span>'+item.collections+'</span>收藏</li>';
+                    h+='<li><span>'+item.fans+'</span>粉丝</li></ul>';
+                    h+='</div><a class="Button3 user_follow_btn" data-id="'+item.id+'">关注</a></div></div>';
                   })
-                  $('#collectionItems').append(h);
-                  if(data.data.length<15){
-                      isEnd = true
-                  }
-              }else if(data.status_code == 0 && cates=='tjuser'){
-                page++;
-                $.each(list.finders,function(index, item){
-                  h+='<div class="item">';
-                  h+='<div class="users">';
-                  h+='<div class="border-bottom1">';
-                  h+='<div class="head">';
-                  h+='<img width="100%" height="100%" src="'+item.icon+'" alt="头像"></div>';
-                  h+='<h2>';
-                  h+='<a href="#">'+item.name+'</a></h2><img class="imgvip" width="32px" src="'+item.vip_level+'"></div>';
-                  h+='<div class="Statistics">';
-                  h+='<ul>';
-                  h+='<li><span>'+item.collections+'</span>收藏</li>';
-                  h+='<li><span>'+item.fans+'</span>粉丝</li></ul>';
-                  h+='</div><a class="Button3 user_follow_btn" data-id="'+item.id+'">关注</a></div></div>';
-                })
-                $('#users').append(h);
-                if(data.data.length<15){isEnd = true}
-              }else{
-                  isEnd = true
-                  layer.msg(data.message);
+                  $('#users').append(h);
+                  if(data.data.length<15){isEnd = true}
+                }else{
+                    isEnd = false
+                    layer.msg(data.message);
+                }
+
+
               }
             }
         });

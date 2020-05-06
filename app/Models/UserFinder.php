@@ -389,7 +389,7 @@ class UserFinder extends Model
         ];
         $folders = UserFinder::where('user_finder_folder_id', $folder_id)->orderBy('created_at', 'desc')->get();
         
-    //    dd($folders);
+       dd($folders[0]->folder);
         if ($folders) {
 
             $folder_detail['folder'] = [
@@ -466,19 +466,19 @@ class UserFinder extends Model
                     $folders = self::getMyFolders($user_id);
                     // $finders=json_decode($finders);
                     $folders=json_decode($folders);
-                    $data = ['finders'=>$finders,'cates'=>$cates,'folders'=>$folders];
+                    $data = ['finders'=>$finders,'cates'=>$cates,'folders'=>$folders,'content'=>$request->content];
                     return $data;
                     break;
                 case 'tjfolder':
                     $finders = self::finsearch($request);
                     // $finders=json_decode($finders);
-                    $data = ['finders'=>$finders,'cates'=>$cates];
+                    $data = ['finders'=>$finders,'cates'=>$cates,'content'=>$request->content];
                     return $data;
                     break;
                 case 'tjuser':
                     $finders = self::finsearch($request);
                     // $finders=json_decode($finders);
-                    $data = ['finders'=>$finders,'cates'=>$cates];
+                    $data = ['finders'=>$finders,'cates'=>$cates,'content'=>$request->content];
                     return $data;
                     break;
             }
@@ -752,7 +752,7 @@ class UserFinder extends Model
                 ->orwhere("articles.title_intro_cn","like","%$content%")
                 ->orwhere("articles.tag_ids","like","%$content%")
                 ->orwhere("articles.location_cn","like","%$content%")
-                ->paginate(1);
+                ->paginate(15);
 
             //查询出自己的收藏夹
             $folders=UserFinderFolder::where('user_id',$user_id)->get();
@@ -797,7 +797,8 @@ class UserFinder extends Model
                     </div>'; 
             }
             // $data['tuijianfinder']=$html;
-            // dd($html);
+            // $data[]=$html;
+            // dd($datas);
             return $html;
         }
 
@@ -805,7 +806,7 @@ class UserFinder extends Model
             //查询收藏夹名
             $favorites=UserFinderFolder::leftjoin('users','users.id','=','user_finder_folders.user_id')
                 ->select('user_finder_folders.name','user_finder_folders.id','users.avatar','users.username','user_finder_folders.user_id')
-                ->where("user_finder_folders.name","like","%$content%")->paginate(5);
+                ->where("user_finder_folders.name","like","%$content%")->paginate(15);
             
             //查询出自己的收藏夹
             $folders=UserFinderFolder::where('user_id',$user_id)->get();
@@ -853,8 +854,8 @@ class UserFinder extends Model
             $favorites=User::select('users.avatar','users.nickname','users.username','users.id')
             ->where("users.username","like","%$content%")
             ->orwhere("users.nickname","like","%$content%")
-            ->paginate(5);
-
+            ->paginate(10);
+// dd($favorites);
             $res=UserFollow::where('user_id',$user_id)->select('user_id','follow_id')->get();
 
             $ss=$favorites->toArray();
@@ -872,6 +873,9 @@ class UserFinder extends Model
                 $favorite['collections'] = User::getCollectNum($user_id);
                 $favorite['fans'] = User::getFansNum($user_id);
                 $favorite['rank'] = $rank;
+                $favorite['city'] = $favorite->city ? $favorite->city :'保密' ;
+                $favorite['vip_level']= User::getVipLevel($favorite->id);
+                $favorite['zhiwei'] = $favorite->zhiwei ? $favorite->zhiwei :'其他' ;
             }
             
             $html='';
@@ -883,7 +887,8 @@ class UserFinder extends Model
                 <div class="head">
                 <img width="100%" height="100%" src="'.$favorite['tuijianuser']->avatar.'" alt="头像"></div>
                 <h2>
-                <a href="#">'.$favorite['tuijianuser']->nickname.'</a></h2><img class="vipimg" width="32px" scr="'.$favorite['tuijianuser']->vip_level.'" /></div>
+                <h2>
+                '.mb_substr($favorite['tuijianuser']->nickname,0,10).'</h2><div>'.$favorite['tuijianuser']->zhiwei.' - '.$favorite['tuijianuser']->city.'<img class="vipimg" style="width:32px !important;" src="'.$favorite['tuijianuser']->vip_level.'" /></div></div>
                 <div class="Statistics">
                 <ul>
                 <li><span>'.$favorite['tuijianuser']->collections.'</span>收藏</li>
