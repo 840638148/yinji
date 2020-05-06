@@ -200,7 +200,6 @@ class ArticleController extends Controller
             $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $articleslist['id'])->avg('stars');
             $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
         }
-   
         $data = [
             'user' => $this->getUserInfo(),
             'lang' => $lang,
@@ -211,7 +210,7 @@ class ArticleController extends Controller
             'articles' => $articles,
             // 'starsav'   =>$starsav,
         ];
-        echo("<script>console.log(".json_encode($data).");</script>");
+        // echo("<script>console.log(".json_encode($data).");</script>");
         return view('article.lists', $data);
     }
 
@@ -314,6 +313,12 @@ class ArticleController extends Controller
         $arr_ids = $article->designer_id;
         $designer_id = array_shift($arr_ids);
         $designer = Designer::getDesigner($designer_id);
+
+        if($article->article_status !=2){
+            abort(404);
+        }else if($article->display !=0){
+            abort(404);
+        }  
 
         $more_designer = [];
         foreach ($arr_ids as $tmp_id) {
