@@ -152,6 +152,7 @@ class UserFinder extends Model
             if (isset($obj[$user_finder->user_finder_folder_id])) {	
             	
                 if (count($obj[$user_finder->user_finder_folder_id]['finder']) < 4) {
+                    $tinames=Article::where('id',$user_finder->photo_source)->value('title_name_cn');
                     $obj[$user_finder->user_finder_folder_id]['finder'][] = [
                         'img'   => url($user_finder->photo_url),
                         'url'   => url($user_finder->photo_url),
@@ -168,12 +169,15 @@ class UserFinder extends Model
                 // $tiname=Article::where('id',$user_finder->photo_source)->find();find是whereId()和first的简写
                 
                 // dd($user_info);
-                $tiname=Article::find($user_finder->photo_source);
-    			if(is_null($tiname)){
-    				continue;
-    			}
+                // $tiname=Article::find($user_finder->photo_source);
+                $tinames=Article::where('id',$user_finder->photo_source)->value('title_name_cn');
+    			// if(is_null($tiname)){
+    			// 	continue;
+    			// }
+                // dd($tiname);
 
-                $tinames=$tiname->title_name_cn;
+
+                // $tinames=$tiname->title_name_cn;
                 $tinames=mb_substr($tinames,'0','21');
                 $obj[$user_finder->user_finder_folder_id] = [
                     'folder' => [
