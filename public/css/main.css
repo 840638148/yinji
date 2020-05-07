@@ -1837,7 +1837,7 @@ li.searchtype-list { line-height: 38px !important; text-rendering: optimizelegib
 .have-disalbed:hover { background: #eee; color: #666 }
 .folder_box li:hover a.Button2 { background: #636af3; color: #FFF; }
 .folder_box li:hover a.Button2.have-collect { background: #eee; color: #666; }
-.create { padding-left: 20px; margin: 10px auto; line-height: 36px; width: 100px; display: block; color: #999; background: url(/images/create_03.png) 0 10px no-repeat; }
+.create { padding-left: 20px; margin: 10px auto; line-height: 36px; width: 120px; display: block; color: #999; background: url(/images/create_03.png) 0 10px no-repeat; }
 .create:hover { background: url(/images/create_04.png) 0 10px no-repeat }
 .private { background: url(/images/private_03.gif) 0 10px no-repeat; width: 16px; height: 36px; display: inline-block }
 .new_folder_bj { background: #000; opacity: 0.5; width: 100%; height: 100%; left: 0; top: 0; position: fixed; z-index: 1; display: block; }
