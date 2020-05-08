@@ -1,18 +1,69 @@
 @extends('layouts.app')
 
-
-
 @section('title')
-
   {{trans('comm.yinji')}} - 个人资料中心
-
 @endsection
 
 
-
-
-
 @section('content')
+<style>
+  .container
+  {
+      position: absolute;
+      top: 5%; left: 36%; right: 0; bottom: 0;
+  }
+  .action
+  {
+      width: 400px;
+      height: 30px;
+      margin: 10px 0;
+  }
+  .cropped>img
+  {
+      margin-right: 10px;
+  }
+  .imageBox
+  {
+      position: relative;
+      height: 400px;
+      width: 400px;
+      border:1px solid #aaa;
+      background: #fff;
+      overflow: hidden;
+      background-repeat: no-repeat;
+      cursor:move;
+      display: none;
+      left: 400px;
+      top: -159px;
+  }
+
+  .imageBox .thumbBox
+  {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 120px;
+      height: 120px;
+      margin-top: -50px;
+      margin-left: -60px;
+      box-sizing: border-box;
+      border: 1px solid rgb(102, 102, 102);
+      box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5);
+      background: none repeat scroll 0% 0% transparent;
+  }
+
+  .imageBox .spinner
+  {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      text-align: center;
+      line-height: 400px;
+      background: rgba(0,0,0,0.7);
+  }
+</style>
 <div class="home_top">
   <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
   <div class="home_tongji">
@@ -57,7 +108,7 @@
       <!---发现--->
       
       <div id="myTab1_Content0" >
-        <form id="info-form" class="contribute_form" role="form" method="POST" action="/member/baseedit" >
+        <form id="info-form" class="contribute_form" role="form" method="POST" action="/member/baseedit" enctype="multipart/form-data">
           <input type="hidden" name="_token" value="{{csrf_token()}}">
           <p>
             <label for="sex">性别</label>
@@ -105,9 +156,88 @@
 <!-- <br> -->
             <textarea rows="5" style="resize:vertical;" name="personal_note" id="personal_note">{{$user->personal_note}}</textarea>
           </p>
+      {{--<div id="profile_avatar">
+            <label for="avatar">头像</label>
+            <div class="avatar_img" style="width:128px;height:128px;border-radius:128px;">
+              <img class="avatar img-responsive" src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}" style="display: block;">
+            </div> 
+            <a class="avatar_uploader" href="javascript:void(0)"> 点击更换头像 <input type="file" id="fileAvatar" class="filepath" onchange="changeAvatar(this)" accept="image/jpg,image/jpeg,image/png,image/PNG" /></a> 
+            <span>当前为<strong>自定义头像</strong>，建议大小：120*120。获取头像的顺序为：自定义头像、社交头像、全球通用头像、默认头像</span> 
+          </div>
+          --}}
+
+
           <div id="profile_avatar">
             <label for="avatar">头像</label>
-            <div class="avatar_img" style="width:128px;height:128px;border-radius:128px;"><img class="avatar img-responsive" src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}" style="display: block;"></div> <a class="avatar_uploader" href="javascript:void(0)"> 点击更换头像 <input type="file" id="fileAvatar" class="filepath" onchange="changeAvatar(this)" accept="image/jpg,image/jpeg,image/png,image/PNG" /></a> <span>当前为<strong>自定义头像</strong>，建议大小：120*120。获取头像的顺序为：自定义头像、社交头像、全球通用头像、默认头像</span> </div>
+            <div class="cropped" style="width: 120px;height: 120px;overflow: hidden;border: 1px solid red;">
+                <img style="width: 120px;height:120px;padding:0;margin:0;background:none;" src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}">
+            </div>            
+
+            <div class="imageBox">
+              <div class="thumbBox"></div>
+              <div class="spinner" style="display: none">Loading...</div>
+            </div>
+            <div class="action">
+                <input type="file" style="float:left; width: 250px" id="fileAvatar"  accept="image/jpg,image/jpeg,image/png,image/PNG" >
+            </div>
+            <div class="actionbtn" style="float:left;">
+                <input type="button" id="btnCrop" value="确定" style="float: right;width:50px;">
+                <input type="button" id="btnZoomIn" value="+" style="float: right;width:30px;">
+                <input type="button" id="btnZoomOut" value="-" style="float: right;width:30px;">
+            </div>
+            <br>
+            <span>当前为<strong>自定义头像</strong>，建议大小：120*120。获取头像的顺序为：自定义头像、社交头像、全球通用头像、默认头像</span> 
+          </div>
+
+
+<script src="/js/cropbox.js"></script>
+<script src="/js/cropbox-min.js"></script>
+<script type="text/javascript">
+  images = '';
+  var options =
+  {
+    thumbBox: '.thumbBox',
+    spinner: '.spinner',
+    imgSrc: '/img/avatar.png'
+  }
+  var cropper = $('.imageBox').cropbox(options);
+  $('#fileAvatar').on('change', function(){
+      $(".imageBox").css('display','block')
+      var reader = new FileReader();
+      reader.onload = function(e) {
+          options.imgSrc = e.target.result;
+          cropper = $('.imageBox').cropbox(options);
+      }
+      reader.readAsDataURL(this.files[0]);
+      // $('#fileAvatar').files = [];
+  })
+  $('#btnCrop').on('click', function(){
+      var img = cropper.getDataURL();
+      images = img;
+      console.log(images);
+      $.ajax({
+        type:"POST",
+        url:"/member/upload_img",
+        data:{images:images},
+        success: function (data) {
+          console.log(data)
+        }
+      })    // console.log(images);
+      $('.cropped').html('<img style="width: 120px;height:120px;padding:0;margin:0;background:none;" id="jiancai" src="'+img+'">');
+      $(".imageBox").css('display','none')
+
+      
+  })
+  $('#btnZoomIn').on('click', function(){
+      cropper.zoomIn();
+  })
+  $('#btnZoomOut').on('click', function(){
+      cropper.zoomOut();
+  })
+</script>
+
+
+
           <div id="homepage_top_img" style="overflow:hidden">
             <label for="avatar">个人主图</label>
             <img id="avimg" src="{{$user->zhuti}}" alt="个人主图" width="600" hidden="200" style="display:block; width:200px; float:left; height:100px;" > <a class="avatar_uploader" href="javascript:void(0)" > 点击更换个人主图 <input type="file" id="fileSingleImg" class="filepath" onchange="changeSingleImg(this)" accept="image/jpg,image/jpeg,image/png,image/PNG" /></a> <span>当前为<strong>个人主页主图</strong>，建议大小：1920*300。</span> </div>
@@ -150,6 +280,12 @@
   </div>
 </section>
 <script type="text/javascript">
+// function filebtn() 
+// { 
+//   changeAvatar(); 
+// }
+
+
 
 function changeAvatar() {
   // var reads = new FileReader();
@@ -159,8 +295,10 @@ function changeAvatar() {
   //   $('#profile_avatar .avatar').attr('src',this.result)
   // };
   var formdata=new FormData();
+  let a=$('#fileAvatar')[0].files[0];
   formdata.append('file',$('#fileAvatar')[0].files[0])
   formdata.append('_token',_token)
+  console.log(a);
   $.ajax({
     async: false,
     url: '/member/upload_img',
@@ -169,6 +307,7 @@ function changeAvatar() {
     data:formdata,
     processData:false,
     success: function (data) {
+      console.log(data)
       if (data.status_code == 0) {
         $('#profile_avatar .avatar').attr('src',data.data.path)
         $("[name='avatar']").val(data.data.path)

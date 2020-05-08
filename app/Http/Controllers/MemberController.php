@@ -126,7 +126,8 @@ class MemberController extends Controller
         $this->checkLogin();
         // dd($request->all());
         $edit_info = [];
-        $fields = ['avatar', 'sex', 'city', 'zhiwei', 'personal_note'];
+        // $fields = ['avatar', 'sex', 'city', 'zhiwei', 'personal_note'];
+        $fields = ['sex', 'city', 'zhiwei', 'personal_note'];
         
         foreach ($fields as $field) {
            
@@ -495,25 +496,26 @@ class MemberController extends Controller
 	
 	
 	
-	public function uploadImg(Request $request)
+	public function uploadImgs(Request $request)
 	{
         // dd($request->all());
         $tmp = $request->file('file');
-
+        
 		$path = '/uploads/images'; //public下的
 		if ($tmp->isValid()) { //判断文件上传是否有效
 			$FileType = $tmp->getClientOriginalExtension(); //获取文件后缀
-
+            
 			$FilePath = $tmp->getRealPath(); //获取文件临时存放位置
             $size=getimagesize($tmp);
 
-            if($size[0]>500 || $size[1]>500){
-                return Output::makeResult($request, null,Error::IMAGE_ERROR);
-            }
-            else{
+            // if($size[0]>500 || $size[1]>500){
+            //     return Output::makeResult($request, null,Error::IMAGE_ERROR);
+            // }
+            // else{
+
                 
                 $FileName = date('Y-m-d') . uniqid() . '.' . $FileType; //定义文件名
-                
+            //  dd($FileName);               
                 Storage::disk('upload_img')->put($FileName, file_get_contents($FilePath)); //存储文件
                 $data = [
                     'status' => 0,
@@ -523,11 +525,37 @@ class MemberController extends Controller
                 // User::where('id',Auth::id())->update(['zhuti' => $path . '/' . $FileName]);
                 return Output::makeResult($request, $data);
 
-            }
+            // }
 		}
 		
 		return Output::makeResult($request, null, Error::SYSTEM_ERROR);
     }
-    
 
+
+    public function uploadImg(Request $request)
+	{
+        if($request->images){
+            $base_img=$request->images;
+            $img_houzhui=substr($base_img,11,3);//获取后缀名
+
+            $base_img = substr($base_img,22);//去掉头
+
+            $path="/";
+            $FileName = date('Y-m-d'). uniqid() . '.' .$img_houzhui;//定义文件名
+            $path =$path.$FileName;
+            //  创建将数据流文件写入我们创建的文件内容中
+            Storage::disk('upload_img')->put($FileName, base64_decode($base_img)); //存储文件
+
+            $data = [
+                'status' => 0,
+                'path' => trim('/public/uploads/images' . $path) //文件路径
+            ];
+
+            User::where('id',Auth::id())->update(['avatar' => '/uploads/images' . $path]);
+
+            return Output::makeResult($request, $data);
+        }// dd($base_img);
+        return Output::makeResult($request, null, Error::SYSTEM_ERROR);
+    }
+    
 }
