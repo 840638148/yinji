@@ -94,12 +94,12 @@
      
       <!--发现-->
       <div id="myTab1_Content0" style="padding-bottom: 20px">
-          <form id="myform" action="/vip/finderslistsearch"  style="position:relative;padding:0;" method="post" class="search_form" >
+          <form id="myform" action="/vip/finderslistsearch"  style="position:relative;padding:0;" method="post" class="search_form" onkeydown="if (event.keyCode == 13) return false"  >
             <input id="hiddenText" type="text" style="display:none" />
             <i class="findersearch_btn" cate="tjfinder" style="position: absolute;left: 10px;top: 10px;padding: 5px;cursor: pointer;border:none;background:url(/images/findersearch.png) center no-repeat;width: 30px;display: block;height: 30px;"></i>
             <input name="content" id="txt_name" class="text_input" type="text" placeholder="输入关键字,例如收藏夹名，图片名" style=" width:100%;margin-bottom:20px;height: 50px;text-indent: 3.5em;border-radius: 50px;" >
             <input type="hidden" name='cate' value='tjfinder'>
-            <a href="/finder" style="position: absolute;right: 10px;top: 10px;padding: 5px;cursor: pointer;border:none;width: 30px;display: block;height: 30px;line-height: 23px;background: #7fc4e4;text-align: center;border-radius: 30px;"><</a>
+            <!-- <a href="/finder" style="position: absolute;right: 10px;top: 10px;padding: 5px;cursor: pointer;border:none;width: 30px;display: block;height: 30px;line-height: 23px;background: #7fc4e4;text-align: center;border-radius: 30px;"><</a> -->
             <!-- <input style="position: absolute;right: 10px;top: 6px;padding: 5px;cursor: pointer;border:none;" type="image" onClick = "formName.submit()" src="/images/findersearch.png" style="border:none;" cate='finer' id="findersearch" > -->
           </form>
         <div class="masonry" id="discoveryItems">
@@ -110,11 +110,12 @@
       
       <!--收藏夹开始-->
       <div id="myTab1_Content1" class="none">
-          <form id="myform"  action="/vip/finderslistsearch"  style="position:relative;padding:0;" method="post" class="search_form" >
+          <form id="myform"  action="/vip/finderslistsearch"  style="position:relative;padding:0;" method="post" class="search_form" onkeydown="if (event.keyCode == 13) return false" >
             <input id="hiddenText" type="text" style="display:none" />
-            <input name="content" id="txt_name" class="text_input" type="text" placeholder="输入关键字,例如收藏夹名，图片名" style=" width:100%;margin-bottom:20px;height: 50px;text-indent: 3.5em;" >
-            <input type="hidden" name='cate' value='tjfolder'>
             <i class="findersearch_btn" cate="tjfolder" style="position: absolute;left: 10px;top: 10px;padding: 5px;cursor: pointer;border:none;background:url(/images/findersearch.png) center no-repeat;width: 30px;display: block;height: 30px;"></i>
+            <input name="content" id="txt_name" class="text_input" type="text" placeholder="输入关键字,例如收藏夹名，图片名" style=" width:100%;margin-bottom:20px;height: 50px;text-indent: 3.5em;border-radius: 50px;"  >
+            <input type="hidden" name='cate' value='tjfolder'>
+            
             <!-- <input style="position: absolute;right: 10px;top: 6px;padding: 5px;cursor: pointer;border:none;" type="image" onClick = "formName.submit()" src="/images/findersearch.png" style="border:none;" cate='finer' id="findersearch" > -->
           </form>
         <div class="masonry" id="collectionItems">
@@ -126,11 +127,12 @@
       
       <!-- 用户开始 -->
       <div id="myTab1_Content2" class="none">
-          <form id="myform"  action="/vip/finderslistsearch"  style="position:relative;padding:0;" method="post" class="search_form" >
+          <form id="myform"  action="/vip/finderslistsearch"  style="position:relative;padding:0;" method="post" class="search_form" onkeydown="if (event.keyCode == 13) return false"  >
             <input id="hiddenText" type="text" style="display:none" />
-            <input name="content" id="txt_name" class="text_input" type="text" placeholder="输入关键字,例如收藏夹名，图片名" style=" width:100%;margin-bottom:20px;height: 50px;text-indent: 3.5em;" >
-            <input type="hidden" name='cate' value='tjuser'>
             <i class="findersearch_btn" cate="tjuser" style="position: absolute;left: 10px;top: 10px;padding: 5px;cursor: pointer;border:none;background:url(/images/findersearch.png) center no-repeat;width: 30px;display: block;height: 30px;"></i>
+            <input name="content" id="txt_name" class="text_input" type="text" placeholder="输入关键字,例如收藏夹名，图片名" style=" width:100%;margin-bottom:20px;height: 50px;text-indent: 3.5em;border-radius: 50px;"  >
+            <input type="hidden" name='cate' value='tjuser'>
+            
             <!-- <input style="position: absolute;right: 10px;top: 6px;padding: 5px;cursor: pointer;border:none;" type="image" onClick = "formName.submit()" src="/images/findersearch.png" style="border:none;" cate='finer' id="findersearch" > -->
           </form>
         <div class="masonry" id="users">
@@ -145,6 +147,16 @@
   
 </section>
 
+<script type="text/javascript">
+// function checkenter(e){
+//   if (e.keyCode == 13) {
+//         // alert(1231);
+//         return false;
+//   }
+// }
+</script>
+
+
 <!--弹窗--> 
 
 <!-- 登录 -->
@@ -153,7 +165,6 @@
   <div class="new_folder_bj"></div>
   <div class="login_folder">
     <div id="login" class="login"> 
-      
       <!--		<h1><a href="--><!--" title="--><!--" tabindex="-1">--><!--</a></h1>-->
       
       <h1><a href="/indx" title="{{trans('comm.yinji')}}" tabindex="-1">{{trans('comm.yinji')}}</a></h1>
@@ -165,11 +176,7 @@
         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
         <p>
           <label for="user_login">
-            <input type="text" name="user_login" id="user_login" class="input" value="" size="20"
-
-
-
-                     placeholder="{{trans('login.input_username')}}">
+            <input type="text" name="user_login" id="user_login" class="input" value="" size="20" placeholder="{{trans('login.input_username')}}">
           </label>
         </p>
         <p>
@@ -179,55 +186,31 @@
         </p>
         <p class="forgetmenot">
           <label for="rememberme">
-            <input name="rememberme" type="checkbox" id="rememberme"
-
-
-
-                     value="forever">
+            <input name="rememberme" type="checkbox" id="rememberme" value="forever">
             {{trans('login.remember_me')}} </label>
         </p>
         <p class="submit">
-          <input type="button" name="wp-submit" id="wp-submit-login" class="button button-primary button-large"
-
-
-
-                   value="{{trans('login.login')}}">
+          <input type="button" name="wp-submit" id="wp-submit-login"  class="button button-primary button-large" value="{{trans('login.login')}}">
           <input type="hidden" name="redirect_to" value="/user/index">
           <input type="hidden" name="testcookie" value="1">
         </p>
       </form>
       <div style=" overflow:hidden">
-        <p id="nav" class="fr"> <a href="/user/register">{{trans('login.register')}}</a> | <a
-
-
-
-                    href="/user/forgot_password">{{trans('login.forgot_password')}}</a> </p>
+        <p id="nav" class="fr"> <a href="/user/register">{{trans('login.register')}}</a> | <a href="/user/forgot_password">{{trans('login.forgot_password')}}</a> </p>
         <p class="fl"> <a href="/"> ← {{trans('login.return')}} </a> </p>
       </div>
       <div class=""> <span style="float:left; line-height:36px;color: #999;"> {{trans('login.other_login')}}：</span> <a href="javascript:void(0);" onclick="WeChatLogin();" title="使用微信登录"><img src="/img/tl_weixin.png"></a> </div>
-      <div class="login_ico"> <a href="javascript:void(0);" onclick="WeChatLogin();"><img src="/img/erweima.gif" width="51"
-
-
-
-                                                                                            height="51" alt="二维码登陆"></a> </div>
+      <div class="login_ico"> <a href="javascript:void(0);" onclick="WeChatLogin();"><img src="/img/erweima.gif" width="51" height="51" alt="二维码登陆"></a> </div>
       <div class="ma_box hide">
         <h1><a href="/index" title="{{trans('comm.yinji')}}" tabindex="-1">{{trans('comm.yinji')}}</a></h1>
         
         <!-- <h2>微信扫码登陆</h2> -->
         
         <p>
-          <iframe frameborder="0" scrolling="no" width="365" height="395"
-
-
-
-                                src="/auth/weixin"></iframe>
+          <iframe frameborder="0" scrolling="no" width="365" height="395" src="/auth/weixin"></iframe>
         </p>
         <p class="backtoblog" style="text-align:center"> <a href="/"> ← {{trans('login.return')}} </a> </p>
-        <div class="login_ico"><a href="javascript:void(0);" onclick="WeChatLogin();"><img
-
-
-
-                      src="/img/diannao_03.gif" width="51" height="51" alt="账号登陆"></a></div>
+        <div class="login_ico"><a href="javascript:void(0);" onclick="WeChatLogin();"><img src="/img/diannao_03.gif" width="51" height="51" alt="账号登陆"></a></div>
       </div>
     </div>
   </div>
@@ -492,6 +475,7 @@
         }
         return false;
       })
+      
 //发现-点击收藏ajax交互
   $('#discoveryItems').on('click','.add_finder_btn',function(){
     // console.log($(this).html());
@@ -540,7 +524,7 @@
     // 获取各种各样的DOM
     // 获取发现每一项的Dom
     function getDiscoveryItemDom(item,folders){
-      // console.log(item,'aaaaaaaaaaa')
+      console.log(item,'aaaaaaaaaaa')
       var foldersArr = folders ||  [];
       var h = '';
       h += '<div class="item discovery-item" style="display:flex">'
@@ -864,7 +848,7 @@
         });
       });
     });
-  </script> 
+</script> 
 {{--登录模块--}} 
 <script type="text/javascript">
     function WeChatLogin() {
@@ -890,11 +874,20 @@
       }, 200);
     }
     //监听回车事件
-    $(document).keyup(function(event){
-      if(event.keyCode ==13){
+    // $(document).keyup(function(event){
+    //   if(event.keyCode ==13){
+    //     $('#wp-submit-login').trigger("click");
+    //   }
+    // });
+       
+    document.onkeydown=function(e) {
+      if(e.keyCode ==13){
+        console.log(e);
+        // alert(12313)
         $('#wp-submit-login').trigger("click");
       }
-    });
+    }
+
     $("#wp-submit-login").click(function () {
       // var loginform = new FormData();
       var url = $.trim($('#loginform').attr("action"));
@@ -916,7 +909,7 @@
     });
     wp_attempt_focus();
     if (typeof wpOnload == 'function') wpOnload();
-  </script> 
+</script> 
 <script type="text/javascript"> 
 	//头像中图片不存在，显示默认图片
 	$(document).ready(function(){
@@ -949,51 +942,52 @@
   }
   
 
-  //监听回车事件
-  $(document).keyup(function(event){
-    if(event.keyCode ==13){
-      return false;
-    }
-  });
 
   //发现搜索框
   window.content='';
   $(document).on('click','.findersearch_btn',function(){
-    window.content=$(this).siblings('.text_input').val();
-    let h='';
-    let cate=$(this).attr('cate');
-    // console.log(content)
-    $.ajax({
-      async:false,
-      url: '/vip/finlistsearch',
-      type: 'POST',
-      //dataType: 'json',
-      data: {content:content,cate:cate,},
-      success:function(data) {
-        console.log(data.data)
-        if(data.status_code==0){
-          layer.msg('查询成功',{skin: 'intro-login-class layui-layer-hui'});
-          if(data.data.cate=='tjfinder'){
-            $('#discoveryItems').empty();
-            $('#discoveryItems').append(data.data.result); 
-            // $('.text_input').val('');
-          }else if(data.data.cate=='tjfolder'){
-            $('#collectionItems').empty();
-            $('#collectionItems').append(data.data.result);
-            // $('.text_input').val('');
-          }else if(data.data.cate=='tjuser'){
-            $('#users').empty();
-            $('#users').append(data.data.result);
-            // $('.text_input').val('');
-          }
+    if(!IS_LOGIN){
+        $('.login_box').show();
+    }else{
 
+    
+
+      window.content=$(this).siblings('.text_input').val();
+      let h='';
+      let cate=$(this).attr('cate');
+      // console.log(content)
+      $.ajax({
+        async:false,
+        url: '/vip/finlistsearch',
+        type: 'POST',
+        //dataType: 'json',
+        data: {content:content,cate:cate,},
+        success:function(data) {
+          console.log(data.data)
+          if(data.status_code==0){
+            layer.msg('查询成功',{skin: 'intro-login-class layui-layer-hui'});
+            if(data.data.cate=='tjfinder'){
+              $('#discoveryItems').empty();
+              $('#discoveryItems').append(data.data.result); 
+              // $('.text_input').val('');
+            }else if(data.data.cate=='tjfolder'){
+              $('#collectionItems').empty();
+              $('#collectionItems').append(data.data.result);
+              // $('.text_input').val('');
+            }else if(data.data.cate=='tjuser'){
+              $('#users').empty();
+              $('#users').append(data.data.result);
+              // $('.text_input').val('');
+            }
+
+          }
+          else{
+            layer.msg(data,{skin: 'intro-login-class layui-layer-hui'});
+            $('.text_input').val('');
+          }
         }
-        else{
-          layer.msg(data,{skin: 'intro-login-class layui-layer-hui'});
-          $('.text_input').val('');
-        }
-      }
-    });
+      });
+    }
   })
   
     //发现页的分页
