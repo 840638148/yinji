@@ -154,6 +154,15 @@
 //         return false;
 //   }
 // }
+
+$("#txt_name").keydown(function (e) { 
+    var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode; //兼容IE 火狐 谷歌
+    if (keyCode == 13) {
+        $(".findersearch_btn").trigger("click");
+        return false;
+    }
+});
+
 </script>
 
 
@@ -880,13 +889,19 @@
     //   }
     // });
        
-    document.onkeydown=function(e) {
-      if(e.keyCode ==13){
-        console.log(e);
-        // alert(12313)
-        $('#wp-submit-login').trigger("click");
-      }
+
+  //焦点放在第一个文本输入框
+  $('input:text:first').focus(); 
+  //获取所有的输入框
+  var $inp=$('input');
+  //定义所有输入框的案件事件
+  $inp.keypress(function(e){
+    var key=e.which;
+    if(key==13){
+      $('#wp-submit-login').trigger("click");
     }
+  }) 
+
 
     $("#wp-submit-login").click(function () {
       // var loginform = new FormData();
