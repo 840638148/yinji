@@ -284,9 +284,9 @@ class VipController extends Controller
         $user = $this->getUserInfo();
         $cates=$request->cate;
 // dd($request->all());
-        if($request->content=='' || $request->content==null){
-            return '请输入搜索的关键词！';
-        }
+        // if($request->content=='' || $request->content==null){
+        //     return '请输入搜索的关键词！';
+        // }
 
 
         if ($request->isMethod('post') && $request->page && $request->page > 1) {

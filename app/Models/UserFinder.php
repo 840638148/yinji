@@ -510,8 +510,6 @@ class UserFinder extends Model
                     break;
             }
         }
-
-
     }
 
     
@@ -757,7 +755,7 @@ class UserFinder extends Model
                 ->orwhere("articles.tag_ids","like","%$content%")
                 ->orwhere("articles.location_cn","like","%$content%")
                 ->paginate(15);
-
+            // dd($favorites->toArray());
             //查询出自己的收藏夹
             $folders=UserFinderFolder::where('user_id',$user_id)->get();
 
@@ -802,7 +800,7 @@ class UserFinder extends Model
             }
             // $data['tuijianfinder']=$html;
             // $data[]=$html;
-            // dd($datas);
+            // dd($html);
             return $html;
         }
 
@@ -859,7 +857,7 @@ class UserFinder extends Model
             ->where("users.username","like","%$content%")
             ->orwhere("users.nickname","like","%$content%")
             ->paginate(10);
-// dd($favorites);
+        // dd($favorites);
             $res=UserFollow::where('user_id',$user_id)->select('user_id','follow_id')->get();
 
             $ss=$favorites->toArray();

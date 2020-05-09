@@ -154,11 +154,12 @@
 //         return false;
 //   }
 // }
-
-$("#txt_name").keydown(function (e) { 
+//绑定回车事件
+$("#myform #txt_name").keydown(function (e) { 
     var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode; //兼容IE 火狐 谷歌
     if (keyCode == 13) {
-        $(".findersearch_btn").trigger("click");
+      $(this).siblings('.findersearch_btn').trigger("click");
+        // $(".findersearch_btn").trigger("click");
         return false;
     }
 });
@@ -925,6 +926,7 @@ $("#txt_name").keydown(function (e) {
     wp_attempt_focus();
     if (typeof wpOnload == 'function') wpOnload();
 </script> 
+{{--搜索分页模块--}}
 <script type="text/javascript"> 
 	//头像中图片不存在，显示默认图片
 	$(document).ready(function(){
@@ -964,44 +966,46 @@ $("#txt_name").keydown(function (e) {
     if(!IS_LOGIN){
         $('.login_box').show();
     }else{
-
-    
-
       window.content=$(this).siblings('.text_input').val();
-      let h='';
-      let cate=$(this).attr('cate');
-      // console.log(content)
-      $.ajax({
-        async:false,
-        url: '/vip/finlistsearch',
-        type: 'POST',
-        //dataType: 'json',
-        data: {content:content,cate:cate,},
-        success:function(data) {
-          console.log(data.data)
-          if(data.status_code==0){
-            layer.msg('查询成功',{skin: 'intro-login-class layui-layer-hui'});
-            if(data.data.cate=='tjfinder'){
-              $('#discoveryItems').empty();
-              $('#discoveryItems').append(data.data.result); 
-              // $('.text_input').val('');
-            }else if(data.data.cate=='tjfolder'){
-              $('#collectionItems').empty();
-              $('#collectionItems').append(data.data.result);
-              // $('.text_input').val('');
-            }else if(data.data.cate=='tjuser'){
-              $('#users').empty();
-              $('#users').append(data.data.result);
-              // $('.text_input').val('');
-            }
+      if(content=='' || content==null){
+        layer.msg('请填写搜索关键词!!!',{skin: 'intro-login-class layui-layer-hui'});
+      }else{
 
+        let h='';
+        let cate=$(this).attr('cate');
+        // console.log(content)
+        $.ajax({
+          async:false,
+          url: '/vip/finlistsearch',
+          type: 'POST',
+          //dataType: 'json',
+          data: {content:content,cate:cate,},
+          success:function(data) {
+            console.log(data.data)
+            if(data.status_code==0){
+              layer.msg('查询成功',{skin: 'intro-login-class layui-layer-hui'});
+              if(data.data.cate=='tjfinder'){
+                $('#discoveryItems').empty();
+                $('#discoveryItems').append(data.data.result); 
+                // $('.text_input').val('');
+              }else if(data.data.cate=='tjfolder'){
+                $('#collectionItems').empty();
+                $('#collectionItems').append(data.data.result);
+                // $('.text_input').val('');
+              }else if(data.data.cate=='tjuser'){
+                $('#users').empty();
+                $('#users').append(data.data.result);
+                // $('.text_input').val('');
+              }
+
+            }
+            else{
+              layer.msg(data,{skin: 'intro-login-class layui-layer-hui'});
+              $('.text_input').val('');
+            }
           }
-          else{
-            layer.msg(data,{skin: 'intro-login-class layui-layer-hui'});
-            $('.text_input').val('');
-          }
-        }
-      });
+        });
+      }  
     }
   })
   
@@ -1029,12 +1033,15 @@ $("#txt_name").keydown(function (e) {
               let arrs=list.folders;
               // console.log(data.data.finders.length);
               if(data.data.content && cates=='tjfinder'){
+                page++;
                 $('#discoveryItems').append(data.data.finders);
                 if(data.data.length<0){isEnd = true}else{isEnd = false}
               }else if(data.data.content && cates=='tjfolder'){
+                page++;
                 $('#collectionItems').append(h);
                 if(data.data.length<1){isEnd = true}else{isEnd = false}
               }else if(data.data.content && cates=='tjuser'){
+                page++;
                 $('#users').append(h);
                 if(data.data.length<1){isEnd = true}else{isEnd = false}
               }else{
