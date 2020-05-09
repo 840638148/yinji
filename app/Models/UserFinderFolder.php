@@ -31,16 +31,29 @@ class UserFinderFolder extends Model
     }
     
     
-    public static function getSelectOptionsByUserId($user_id)
+    public static function getSelectOptionsByUserId($user_id,$article_id=null)
     {
     	//根据用户id查出创建的收藏夹名
         $options = self::where('user_id', $user_id)->select('id','name as text')->get();
         $selectOption = [];
-        foreach ($options as $option){
+        foreach ($options as $k=>$option){
+            $selectOption[$k]['id'] = $option->id;
+            $selectOption[$k]['name'] = $option->text;
+        }
+        return $selectOption;
+    }
+
+    public static function getSelectOptionsByUserIds($user_id,$article_id=null)
+    {
+    	//根据用户id查出创建的收藏夹名
+        $options = self::where('user_id', $user_id)->select('id','name as text')->get();
+        $selectOption = [];
+        foreach ($options as $k=>$option){
             $selectOption[$option->id] = $option->text;
         }
         return $selectOption;
     }
+
 
     public static function getFinderFolders(& $request, $keyword = null)
     {

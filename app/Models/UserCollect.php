@@ -164,11 +164,16 @@ class UserCollect extends Model
         if (empty($article_id) || empty($user_id)) {
             return false;
         }
-        $obj = self::where('user_id', $user_id)
-            ->where('collect_type', '0')
-            ->where('collect_id', $article_id)
-            ->first();
 
+        $obj = UserCollectFolder::leftjoin('user_collects','user_collect_folders.id','=','user_collects.user_collect_folder_id')
+            ->select('user_collect_folders.name','user_collects.user_collect_folder_id','user_collects.collect_id','user_collects.is_sc','user_collects.user_id')
+            ->where('user_collects.user_id', $user_id)
+            ->where('user_collects.collect_type', '0')
+            ->where('user_collects.collect_id', $article_id)
+            ->where('user_collects.is_sc',1)
+            ->get();
+
+        // dd($obj);
         if ($obj){
             return true;
         } else {

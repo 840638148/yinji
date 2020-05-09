@@ -305,7 +305,6 @@ class ArticleController extends Controller
      */
     public function detail(Request $request, $id)
     {
-    	
         $lang = $request->session()->get('language') ?? 'zh-CN';
         Article::where('id', $id)->increment('view_num');
         $article = Article::getArticle($id);
@@ -369,7 +368,7 @@ class ArticleController extends Controller
             ->orderBy('created_at', 'desc')
             ->limit(100)
             ->get();
-            // dd($comments);
+        
 		//根据图片	id查出该id所有的记录
 		$user_id = Auth::id();
         $issc = UserFinder::where('user_id', $user_id)->get()->toArray();
@@ -387,13 +386,30 @@ class ArticleController extends Controller
         	$starsav=0;
         }else{
         	$starsav=$starssum/$starscount;
-        	// $starsav=round($starsav);
         	$starsav=sprintf("%.1f",$starsav);//保留小数点一位
         }
 
         $userstars=ArticleComment::where('user_id', $user_id)->where('comment_id',$id)->value('stars');
 
-        
+        foreach($user_collect_folders as $key => $value){
+            $iscollects=UserCollect::where('user_collect_folder_id',$value['id'])
+                ->where('user_collects.user_id', $user_id)
+                ->where('user_collects.collect_type', '0')
+                ->where('user_collects.collect_id', $id)
+                ->where('user_collects.is_sc',1)
+                ->first();
+
+            $user_collect_folders[$key]['iscollects']=$iscollects;
+            if($user_collect_folders[$key]['iscollects']){
+                $user_collect_folders[$key]['iscollects']='1';
+            }else{
+                $user_collect_folders[$key]['iscollects']='2';
+            }
+            // dump($user_collect_folders);
+                       
+        }
+
+        // dd($user_finder_folders);
         $data = [
             'user' => $this->getUserInfo(),
             'lang' => $lang,
@@ -408,6 +424,7 @@ class ArticleController extends Controller
             'hot_tags' => $hot_tags,
             'is_like' => $is_like,
             'is_collect' => $is_collect,
+            // 'iscollects' => $iscollects,
             'is_subscription' => $is_subscription,
             'user_collect_folders' => $user_collect_folders,
             'user_finder_folders' => $user_finder_folders,

@@ -175,11 +175,11 @@
             </div>
                   </div>
         </li>
-                @if($is_collect)
+                {{--@if($is_collect)
                 <li><i class="icon-bookmark"></i>已收藏</li>
-                @else
+                @else@endif--}}
                 <li data-toggle="modal"  id="article-collect"><i class="icon-bookmark"></i>收藏</li>
-                @endif
+                
                 <li style=" border-right:none" id="vip-download"> <a href="javascript:void(0)" ><i class="icon-download"></i>下载</a>
           <div class="down-load-tip">
                     <div class="down-jiantou"></div>
@@ -214,66 +214,53 @@
     </div>
             
             <!-- 模态框（Modal） -->
-            
-            <div class="modal fade" id="collectFolder" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
+        <div class="modal fade" id="collectFolder" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
                 <div class="modal-content">
-          <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"> &times; </button>
-                    <h4 class="modal-title" id="myModalLabel"> 请选择收藏文件夹 </h4>
-                  </div>
-          <div class="modal-body">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">请选择收藏文件夹</h4></div>
+                    <div class="modal-body">
+                        <div class="new-collect">
+                        <label>新建：</label>
+                        <input type="text" id="folder_name" name="folder_name" value="" />
+                        <a href=" " class="Button2 fr collect_article">收藏</a></div>
+                        {{--<select id="folder_id" name="folder_id">
+                            <option value="0">请选择</option>
+                            @foreach($user_collect_folders as $key => $value)
+                            <option value="{{$key}}">{{$value}}</option>
+                            @endforeach
+                        </select>--}}
 
-                    {{--
-                    <select id="folder_id" name="folder_id">
-              --}}
-
-                            {{--
-              <option value="0">请选择</option>
-              --}}
-
-                            {{--@foreach($user_collect_folders as $key => $value)--}}
-
-                                {{--
-              <option value="{{$key}}">{{$value}}</option>
-              --}}
-
-                            {{--@endforeach--}}
-
-                        {{--
-            </select>
-         
-                    --}}
-                    <div class="collection_to">
-              <ul class="discover-folders2">
-                        @foreach($user_collect_folders as $key => $value)
-                        <li>
-                  <h3>{{$value}}</h3>
-                  <span img="" floder_id="{{$key}}" class="folderattr null" title="{{$value}}"></span> <a href=" " class="Button2 fr collect_article" data-id="{{$key}}">收藏</a > </li>
-                        @endforeach
-                      </ul>
+                        <div class="collection_to">
+                        <ul class="discover-folders2">
+                            @foreach($user_collect_folders as  $value)
+                                @if($value['iscollects']=='1')
+                                <li>
+                                    <h3>{{$value['name']}}</h3>
+                                    <span img="" floder_id="{{$value['id']}}" class="folderattr null" title="{{$value['name']}}"></span>
+                                    <a href="javascript:void(0);" class="Button fr have-disalbed" data-id="{{$value['id']}}">已收藏</a>
+                                </li>
+                                @else
+                                <li>
+                                    <h3>{{$value['name']}}</h3>
+                                    <span img="" floder_id="{{$value['id']}}" class="folderattr null" title="{{$value['name']}}"></span>
+                                    <a href="javascript:void(0);" class="Button2 fr collect_article" data-id="{{$value['id']}}">收藏</a>
+                                </li>
+                                @endif
+                            @endforeach
+                        </ul>
+                        </div>
+                    </div>
+                    {{--<div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary collect_article">确定</button>
+                    </div>--}}
+                </div>
             </div>
-                <a href="#" class="create create-new-folder-btn">创建收藏文件夹</a>
-                  </div>
-          {{--
-          <div class="modal-footer">--}}
-                    
-                    {{--
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    --}}
-                    
-                    {{--
-                    <button type="button" class="btn btn-primary collect_article">确定</button>
-                    --}}
-                    
-                    {{--</div>
-          --}} </div>
-                <!-- /.modal-content --> 
-                
-              </div>
-      <!-- /.modal --> 
-      
-    </div>
+        </div>
+
+            
             <div class="article">
       <ul>
                 @if($previous_article)
@@ -405,19 +392,20 @@
 
             //收藏
             $(".collect_article").click(function(e){
-                var collect_id = '{{$article->id}}';
-                var folder_id = $(this).attr('data-id');
-                var folder_name = $('#folder_name').val();
+                let collect_id = '{{$article->id}}';
+                let folder_id = $(this).attr('data-id');
+                let folder_name = $('#folder_name').val();
+                let is_sc = 1;
                 $.ajax({
                     url: '/article/collect',
                     type: 'POST',
                     dataType: 'json',
-                    data: {_token:'{{csrf_token()}}',folder_id:folder_id,folder_name:folder_name,collect_id:collect_id},
+                    data: {_token:'{{csrf_token()}}',folder_id:folder_id,folder_name:folder_name,collect_id:collect_id,is_sc:is_sc},
                     success: function (data) {
                         if (data.status_code == 0) {
                             window.location.reload();
                         } else {
-                            alert(data.message);
+                            layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
                         }
                     }
                 });
@@ -898,11 +886,11 @@
           </div>
   <div class="collection_to">
             <ul class="discover-folders2">
-      @foreach($user_finder_folders as $key => $value)
+      @foreach($user_finder_folders as $value)
       <li>
-                <h3>{{$value}}</h3>
-                <span img='' floder_id='{{$key}}'  class='folderattr null' title='{{$value}}'> </span> 
-                <div id="modal_btns"> <a href='' class='Button2 fr to_find_floder_act add_finder_btn' data-id='{{$key}}' data-img='' data-source=''>收藏</a> </div>
+                <h3>{{$value['name']}}</h3>
+                <span img='' floder_id='{{$value["id"]}}'  class='folderattr null' title='{{$value["name"]}}'> </span> 
+                <div id="modal_btns"> <a href='' class='Button2 fr to_find_floder_act add_finder_btn' data-id='{{$value["id"]}}' data-img='' data-source=''>收藏</a> </div>
                 
                 {{--@foreach($issc as $issckey=>$isscval)
                 	<a href='' class='Button2 fr to_find_floder_act add_finder_btn' data-id='{{$key}}' data-img='' data-source=''>收藏</a > 

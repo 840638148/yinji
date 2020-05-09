@@ -34,10 +34,14 @@ class UserCollectFolder extends Model
     public static function getSelectOptionsByUserId($user_id)
     {
         $options = self::where('user_id', $user_id)->select('id','name as text')->get();
+        
         $selectOption = [];
-        foreach ($options as $option){
-            $selectOption[$option->id] = $option->text;
+        foreach ($options as $k=>$option){
+            // $selectOption[$option->id] = $option->text;
+            $selectOption[$k]['id'] = $option->id;
+            $selectOption[$k]['name'] = $option->text;
         }
+        // dd($selectOption);
         return $selectOption;
     }
 
