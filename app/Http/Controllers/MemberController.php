@@ -506,26 +506,17 @@ class MemberController extends Controller
 			$FileType = $tmp->getClientOriginalExtension(); //获取文件后缀
             
 			$FilePath = $tmp->getRealPath(); //获取文件临时存放位置
-            $size=getimagesize($tmp);
 
-            // if($size[0]>500 || $size[1]>500){
-            //     return Output::makeResult($request, null,Error::IMAGE_ERROR);
-            // }
-            // else{
-
+            $FileName = date('Y-m-d') . uniqid() . '.' . $FileType; //定义文件名
                 
-                $FileName = date('Y-m-d') . uniqid() . '.' . $FileType; //定义文件名
-            //  dd($FileName);               
-                Storage::disk('upload_img')->put($FileName, file_get_contents($FilePath)); //存储文件
-                $data = [
-                    'status' => 0,
-                    'path' => $path . '/' . $FileName //文件路径
-                ];
-                // dd(Auth::id());
-                // User::where('id',Auth::id())->update(['zhuti' => $path . '/' . $FileName]);
-                return Output::makeResult($request, $data);
-
-            // }
+            Storage::disk('upload_img')->put($FileName, file_get_contents($FilePath)); //存储文件
+            $data = [
+                'status' => 0,
+                'path' => $path . '/' . $FileName //文件路径
+            ];
+        
+            User::where('id',Auth::id())->update(['zhuti' => $path . '/' . $FileName]);
+            return Output::makeResult($request, $data);
 		}
 		
 		return Output::makeResult($request, null, Error::SYSTEM_ERROR);

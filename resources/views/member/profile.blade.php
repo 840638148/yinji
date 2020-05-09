@@ -331,7 +331,7 @@ function changeSingleImg() {
   formdata.append('_token',_token)
   $.ajax({
     async: false,
-    url: '/member/upload_img',
+    url: '/member/upload_imgs',
     type: 'POST',
     contentType:false,
     data:formdata,

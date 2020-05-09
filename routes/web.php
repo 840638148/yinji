@@ -110,10 +110,9 @@ Route::post('member/attendance', 'MemberController@attendance');
 Route::post('member/delete_finder_item', 'MemberController@deleteFinderItem');  //删除个人发现的一张图片
 Route::post('member/delete_folder_item', 'MemberController@deleteFolderItem');  //删除个人收藏中心的一张图片
 Route::post('member/comment', 'MemberController@comment');
-Route::post('member/upload_img', 'MemberController@uploadImg');
+Route::post('member/upload_img', 'MemberController@uploadImg');//修改用户的上传头像
+Route::post('member/upload_imgs', 'MemberController@uploadImgs');//修改用户的个人主图
 Route::post('member/baseedit', 'MemberController@baseedit');//修改用户的基本信息
-Route::post('crop/upload', 'CropController@upload');//用于头像上传
-Route::post('crop/crop', 'CropController@crop');//头像裁剪
 
 
 
