@@ -5,8 +5,7 @@
       <div class="folder-fenxiang">
       	{{--@foreach($folder_detail['images'] as $val)--}}
         <span class="select-img-name" id="discovery-folder-name">
-        <svg xml:space="preserve" style="background: #e1244e;width: 40px;height: 40px;text-align: center;color: #fff;display: inline-block;border-radius: 4px;"> <image id="image0" width="50%" height="50%" x="10" y="10" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACUAAAAlCAQAAABvl+iIAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfiDA0XHTkZwnQUAAAAVUlEQVRIx2P8z0AtwEQ1k0aNGjWKJkaxYIhgS/6MWMUZh6YHsToeTRxrGTA4PTg4jcIV7KgBy0jYoAFNDPRx1bA3ivTEgLMOHpweZBxtM4waNbiNAgDn9QhSF9pevwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0xMi0xM1QyMzoyOTo1NyswODowMMypGaQAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMTItMTNUMjM6Mjk6NTcrMDg6MDC99KEYAAAAAElFTkSuQmCC"></image></svg>
-        
+        {{$folder_detail['images'][0]['articletitle']}}
         </span>
         {{--@endforeach--}}
         <span style="position: absolute;right: 430px;top:10px;" >分享到：</span>
@@ -37,8 +36,15 @@
       </div>
 
   </div>
-  @if ($folder_detail['images'])
-  <div class="image content-post"><img src="{{$folder_detail['images'][0]['photo_url']}}" alt="{{$folder_detail['images'][0]['title']}}" class="selected-image"/></div>
+  {{--@if ($folder_detail['images'])       
+  <div class="image content-post"><a href="article/{{$folder_detail['images'][0]['static_url']}}"><img onclick="location.href='{{'article/'.$folder_detail['images'][0]['static_url']}}'" static_url="article/{{$folder_detail['images'][0]['static_url']}}" src="{{$folder_detail['images'][0]['photo_url']}}" alt="{{$folder_detail['images'][0]['title']}}" class="selected-image"/></a></div>
+  @endif--}}
+
+
+
+
+  @if ($folder_detail['images'])       
+  <div class="image content-post"><a target="_blank" href="article/{{$folder_detail['images'][0]['static_url']}}"><img atitle="{{$folder_detail['images'][0]['articletitle']}}" static_url="article/{{$folder_detail['images'][0]['static_url']}}" src="{{$folder_detail['images'][0]['photo_url']}}" alt="{{$folder_detail['images'][0]['title']}}" class="selected-image"/></a></div>
   @endif
 </div>
 <div class="right" >
@@ -48,9 +54,9 @@
     @foreach ($folder_detail['images'] as $image)
     
       @if ($loop->first)
-        <a href="javascript:void(0)" class="more-img-item item-inner selected"><img src="{{$image['photo_url']}}" alt="{{$image['title']}}" /> <div class="cover"></div></a>
+        <a href="javascript:void(0)" class="more-img-item item-inner selected"><img atitle="{{$image['articletitle']}}" static_url="article/{{$image['static_url']}}" src="{{$image['photo_url']}}" alt="{{$image['title']}}" /> <div class="cover"></div></a>
       @else
-        <a href="javascript:void(0)" class="more-img-item item-inner"><img src="{{$image['photo_url']}}" alt="{{$image['title']}}" /> <div class="cover"></div></a>
+        <a href="javascript:void(0)" class="more-img-item item-inner"><img atitle="{{$image['articletitle']}}" static_url="article/{{$image['static_url']}}" src="{{$image['photo_url']}}" alt="{{$image['title']}}" /> <div class="cover"></div></a>
       @endif
     @endforeach
   </div>
@@ -102,15 +108,15 @@
   </div>
   <div class="collection_to">
     <ul class="discover-folders2">
-        @foreach($folder_detail['user_finder_folders'] as $key => $value)
+        @foreach($folder_detail['user_finder_folders'] as $value)
             <li>
-                <h3>{{$value}}</h3>
-                <span img="" floder_id="{{$key}}" class="folderattr null" title="{{$value}}"></span>
+                <h3>{{$value['name']}}</h3>
+                <span img="" floder_id="{{$folder_detail['article']['id']}}" class="folderattr null" title="{{$value['name']}}"></span>
                 {{--@foreach($issc as $isscs)
                 @if($isscs)--}}
-                <a href=" " class="Button2 fr to_find_floder_act add_finder_btn" data-id="{{$key}}" data-img="" data-source="{{$folder_detail['article']['id']}}">收藏</a >
+                <a href=" " class="Button2 fr to_find_floder_act add_finder_btn" data-id="{{$value['id']}}" data-img="" data-source="{{$folder_detail['article']['id']}}">收藏</a >
                 {{--@else
-                <a href=" " class="Button fr to_find_floder_act add_finder_btn have-disalbed" data-id="{{$key}}" data-img="" data-source="{{$folder_detail['article']['id']}}">已收藏</a >
+                <a href=" " class="Button fr to_find_floder_act add_finder_btn have-disalbed" data-id="{{$value['id']}}" data-img="" data-source="{{$folder_detail['article']['id']}}">已收藏</a >
                 @endif
                 @endforeach--}}
             </li>
@@ -307,11 +313,12 @@ $(document).on("click",".layui-layer-shade",function () {
 
 
 $(".add_finder_btn").click(function () {
-  var that = $(this)
-  var user_finder_folder_id = $(this).attr('data-id');
-  var title = $(this).attr('data-title');
-  var photo_url = $(this).attr('data-img');
-  var photo_source = $(this).attr('data-source');
+  let that = $(this)
+  let user_finder_folder_id = $(this).attr('data-id');
+  let title = $(this).attr('data-title');
+  let photo_url = $(this).attr('data-img');
+  let photo_source = $(this).attr('data-source');
+  let is_sc=1;
   if (photo_url == '') {
     photo_url = $("#imageUrlJs").val();
   }
@@ -327,7 +334,8 @@ $(".add_finder_btn").click(function () {
       user_finder_folder_id:user_finder_folder_id,
       title:title,
       photo_url:photo_url,
-      photo_source:photo_source
+      photo_source:photo_source,
+      is_sc:is_sc,
     },
     success: function (data) {
       if (data.status_code == 0) {

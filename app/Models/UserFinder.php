@@ -390,10 +390,11 @@ class UserFinder extends Model
             'images' => [],
             'article' => '',
             'finder_time' => '',
+            'static_url' => '',
         ];
         $folders = UserFinder::where('user_finder_folder_id', $folder_id)->orderBy('created_at', 'desc')->get();
         
-       dd($folders[0]->folder);
+    //    dd($folders[0]->folder);
         if ($folders) {
 
             $folder_detail['folder'] = [
@@ -423,14 +424,20 @@ class UserFinder extends Model
             }
 
             foreach ($folders as $folder) {
+                
+                $articleid=Article::where('id',$folder->photo_source)->value('static_url');
+                $articletitle=Article::where('id',$folder->photo_source)->value('title_name_cn');
+                // dd($articleid);
                 $folder_detail['images'][] = [
                     'photo_url' => $folder->photo_url,
                     'title' => $folder->title,
+                    'static_url' => $articleid,
+                    'articletitle' => $articletitle,
                 ];
             }
         }
 
-
+        // dd($folder_detail);
         return $folder_detail;
     }
 
@@ -548,17 +555,19 @@ class UserFinder extends Model
         // dd($obj);    
         if ($obj){
             return '你已经发现过了';
+        }else{
+            $data = [
+                'user_id' => $user_id,
+                'user_finder_folder_id' => $request->user_finder_folder_id,
+                'title' => $request->title ?? '',
+                'photo_url' => $photo_url,
+                'photo_source' => $request->source,
+                'is_sc'=>$is_sc,
+            ];
+            self::create($data);
+            return true;            
         }
-        $data = [
-            'user_id' => $user_id,
-            'user_finder_folder_id' => $request->user_finder_folder_id,
-            'title' => $request->title ?? '',
-            'photo_url' => $photo_url,
-            'photo_source' => $request->source,
-            'is_sc'=>$is_sc,
-        ];
-        self::create($data);
-        return true;
+
     }
 
     /**
@@ -772,10 +781,10 @@ class UserFinder extends Model
             $html='';
             $data=[];
             foreach($arr as $favorite){
-
+                // dd($favorite['tuijianfinder']);
             $html.='<div class="item discovery-item" style="display:flex">
                         <div class="item_content"> 
-                            <img src="'.$favorite["tuijianfinder"]->photo_url.'" class="bg-img" data-id="'.$favorite['tuijianfinder']->id.'" id="sourceimg" source="'.$favorite['tuijianfinder']->photo_source.'" /> 
+                            <img src="'.$favorite["tuijianfinder"]->photo_url.'" class="bg-img" data-id="'.$favorite['tuijianfinder']->user_finder_folder_id.'" id="sourceimg" source="'.$favorite['tuijianfinder']->photo_source.'" /> 
                             <div class="find_title" data-source="'.$favorite['tuijianfinder']->photo_source.'">'.$favorite['tuijianfinder']->title_name_cn.'<a href="javascript:;" class="find_info_more"></a></div>
                             <div class="who_find" style="display:none">
                                 <img src="'.$favorite['tuijianfinder']->avatar.'" />

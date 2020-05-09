@@ -256,11 +256,7 @@
         <input type="hidden" name="_token" value="{{-- csrf_token() --}}" />
         <p>
           <label for="user_login">
-            <input type="text" name="user_login" id="user_login" class="input" value="" size="20"
-
-
-
-                           placeholder="{{trans('login.input_username')}}">
+            <input type="text" name="user_login" id="user_login" class="input" value="" size="20" placeholder="{{trans('login.input_username')}}">
           </label>
         </p>
         <p>
@@ -270,11 +266,7 @@
         </p>
         <p class="forgetmenot">
           <label for="rememberme">
-            <input name="rememberme" type="checkbox" id="rememberme"
-
-
-
-                           value="forever">
+            <input name="rememberme" type="checkbox" id="rememberme" value="forever">
             {{trans('login.remember_me')}} </label>
         </p>
         <p class="submit">
@@ -288,11 +280,7 @@
         </p>
       </form>
       <div style=" overflow:hidden">
-        <p id="nav" class="fr"> <a href="/user/register">{{trans('login.register')}}</a> | <a
-
-
-
-                        href="/user/forgot_password">{{trans('login.forgot_password')}}</a> </p>
+        <p id="nav" class="fr"> <a href="/user/register">{{trans('login.register')}}</a> | <a href="/user/forgot_password">{{trans('login.forgot_password')}}</a> </p>
         <p class="fl"> <a href="/"> ← {{trans('login.return')}} </a> </p>
       </div>
       <div class=""> <span style="float:left; line-height:36px;color: #999;"> {{trans('login.other_login')}}：</span> <a href="javascript:void(0);" onclick="WeChatLogin();" title="使用微信登录"><img src="/img/tl_weixin.png"></a> </div>
@@ -301,18 +289,10 @@
         <h1><a href="/index" title="{{trans('comm.yinji')}}" tabindex="-1">{{trans('comm.yinji')}}</a></h1>
         <h2>微信扫码登陆</h2>
         <p>
-          <iframe frameborder="0" scrolling="no" width="365" height="395"
-
-
-
-                        src="/auth/weixin"></iframe>
+          <iframe frameborder="0" scrolling="no" width="365" height="395" src="/auth/weixin"></iframe>
         </p>
         <p class="backtoblog" style="text-align:center"> <a href="/"> ← {{trans('login.return')}} </a> </p>
-        <div class="login_ico"><a href="javascript:void(0);" onclick="WeChatLogin();"><img
-
-
-
-                            src="/img/diannao_03.gif" width="51" height="51" alt="账号登陆"></a></div>
+        <div class="login_ico"><a href="javascript:void(0);" onclick="WeChatLogin();"><img src="/img/diannao_03.gif" width="51" height="51" alt="账号登陆"></a></div>
       </div>
     </div>
   </div>

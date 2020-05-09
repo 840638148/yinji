@@ -136,7 +136,7 @@ class VipController extends Controller
             $user->my_folders = UserFinder::getMyFolders();
             
         }
-        // dd($user);
+        // dd($user->recommend_users);
         
 		//查出已经收藏的
 		$user_id = Auth::id();
@@ -488,7 +488,8 @@ class VipController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function getFolderDetail(Request $request)
-    {
+    {   
+        // dd($request->all());
         $folder_id = $request->folder_id;
         $folder_detail = UserFinder::getFolderDetail($folder_id);
         // $folder_details = UserFinder::where('user_finder_folder_id',$folder_id)->get()->toArray();
@@ -517,7 +518,7 @@ class VipController extends Controller
 		$issc=UserFinder::where('user_finders.user_id',$user_id)->leftjoin('user_finder_folders','user_finder_folders.id','user_finders.user_finder_folder_id')->get()->toArray();
 
 		
-	
+        // dd($folder_detail);
 		$data=[
 			'folder_detail'=>$folder_detail,
 			'isvip'=>$isvip,

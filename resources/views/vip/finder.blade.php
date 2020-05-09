@@ -630,7 +630,7 @@ $("#myform #txt_name").keydown(function (e) {
       h += ' <div class="item">';
       h += '   <div class="users">';
       h += '     <div class="border-bottom1">';
-      h += '       <div class="head"><img width="100%" height="100%" src="' + (user.icon?user.icon:'/img/avatar.png') + '" alt="头像" /></div>';
+      h += '       <div class="head"><img width="100%" height="100%" src="' + (user.icon?user.icon:'/img/avatar.png') + '" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" /></div>';
       h += '       <h2><a href="#">' + user.name.substr(0,12) + '</a> </h2>';
       h += '       <div>' +user.gender+ '-' + user.addr + ' <img class="imgvip" width="32px" src="'+user.vip_level+'" /></div>';
       h += '     </div>';
@@ -645,6 +645,8 @@ $("#myform #txt_name").keydown(function (e) {
       h += ' </div>';
       return h;
     }
+
+
     //获取收藏图片的每一个
     function getImgBrowseImgsDom(imgs,id,index){
       var imgsArr = imgs || [];
@@ -664,9 +666,11 @@ $("#myform #txt_name").keydown(function (e) {
       } catch(e){}
       }, 200);
     }
+
+
     //切换图片
     $(document).on('click','.more-img-item',function(){
-      var src = '';
+      let src = '';
       //去除所有选中状态
       $('.more-img-item').each(function(){
         $(this).removeClass('selected');
@@ -674,11 +678,21 @@ $("#myform #txt_name").keydown(function (e) {
       // 添加选中状态
       $(this).addClass('selected');
       src = $(this).find('img').attr('src');
+      static_url = $(this).find('img').attr('static_url');
+      atitle = $(this).find('img').attr('atitle');
+      console.log(atitle)
       $(this).parents('.img_browse').find('.selected-image').attr('src',src);
+      $(this).parents('.img_browse').find('.selected-image').attr('static_url',static_url);
+      $('.content-post').find('a').attr('href',static_url);
+      $(this).parents('.img_browse').find('.selected-image').attr('atitle',atitle);
+      $('.folder-fenxiang').find('.select-img-name').html(atitle)
     })
+
+
     // 发现展示图片框
-    $(document).on('click','.discovery-item .bg-img',function(){
-      var folder_id = $(this).attr('data-id');
+    $(document).on('click','.discovery-item #sourceimg',function(){
+      let folder_id = $(this).attr('data-id');
+      // let folder_id = $('.discovery-item .item_content').find('img').attr('data-id');
       $.ajax({
         async:false,
         url: 'vip/get_folder_detail',
@@ -1102,7 +1116,7 @@ $("#myform #txt_name").keydown(function (e) {
                     h+='<div class="users">';
                     h+='<div class="border-bottom1">';
                     h+='<div class="head">';
-                    h+='<img width="100%" height="100%" src="'+item.icon+'" alt="头像">';
+                    h+='<img width="100%" height="100%" src="'+item.icon+'" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`">';
                     h+='</div>';
                     h+='<h2>'+item.name+'</h2>';
                     h+='<div>'+item.zhiwei+'- '+item.addr+' <img class="imgvip" width="32px" src="'+item.vip_level+'"></div>';
