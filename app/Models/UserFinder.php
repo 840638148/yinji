@@ -223,17 +223,25 @@ class UserFinder extends Model
     {   
         $user_id=Auth::id();
         $recommend_finders = [];
-        $user_finders = self::
-            orderBy('user_finders.updated_at', 'desc')
-            ->paginate(30);
+        $user_finders = self::orderBy('user_finders.created_at', 'desc')->paginate(30);
+
 
         //去除自己的收藏夹
-        $user_finders = $user_finders->reject(function ($value) use ($user_id) {
-            return $value->user_id == $user_id;
+        $user_finders = $user_finders->reject(function ($val) use ($user_id) {
+            return $val->user_id == $user_id;
         });
+
+        //显示图片最后一次被用户收藏得记录
+        $userfinders=[];
+        $ufinders=$user_finders->groupby('photo_url');
         
-        // dd($user_finders);
-        $finders = self::formatFinders($user_finders);
+        foreach($ufinders as $k=>$v){
+            $userfinders[] = $v->take(1)->all();
+        }        
+        $userfinderss=collect($userfinders)->collapse();
+
+// dd($user_finders,$userfinders,$userfinderss);        
+        $finders = self::formatFinders($userfinderss);
         foreach($finders as $k=>$v){
             foreach($v['finder'] as $key=>$val){
                 $recommend_finders[] = [
@@ -254,6 +262,7 @@ class UserFinder extends Model
                 ];         
             }
         }
+        // dd($recommend_finders);
         return json_encode($recommend_finders);
     }
 
@@ -787,7 +796,7 @@ class UserFinder extends Model
                             <img src="'.$favorite["tuijianfinder"]->photo_url.'" class="bg-img" data-id="'.$favorite['tuijianfinder']->user_finder_folder_id.'" id="sourceimg" source="'.$favorite['tuijianfinder']->photo_source.'" /> 
                             <div class="find_title" data-source="'.$favorite['tuijianfinder']->photo_source.'">'.$favorite['tuijianfinder']->title_name_cn.'<a href="javascript:;" class="find_info_more"></a></div>
                             <div class="who_find" style="display:none">
-                                <img src="'.$favorite['tuijianfinder']->avatar.'" />
+                                <img src="'.$favorite['tuijianfinder']->avatar.'" onerror="this.onerror=``;this.src=`/img/avatar.png`" alt="头像"/>
                                 <span> <a href="javascript:;">'.$favorite['tuijianfinder']->nickname.'</a> 收藏到 <a href="#">'.$favorite['tuijianfinder']->name.'</a></span>
                             </div>
                             <div class="folder" style="display: none;">
@@ -896,7 +905,7 @@ class UserFinder extends Model
                 <div class="users">
                 <div class="border-bottom1">
                 <div class="head">
-                <img width="100%" height="100%" src="'.$favorite['tuijianuser']->avatar.'" alt="头像"></div>
+                <img width="100%" height="100%" src="'.$favorite['tuijianuser']->avatar.'" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" ></div>
                 <h2>
                 <h2>
                 '.mb_substr($favorite['tuijianuser']->nickname,0,10).'</h2><div>'.$favorite['tuijianuser']->zhiwei.' - '.$favorite['tuijianuser']->city.'<img class="vipimg" style="width:32px !important;" src="'.$favorite['tuijianuser']->vip_level.'" /></div></div>

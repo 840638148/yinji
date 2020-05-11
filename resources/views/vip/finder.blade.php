@@ -534,7 +534,7 @@ $("#myform #txt_name").keydown(function (e) {
     // 获取各种各样的DOM
     // 获取发现每一项的Dom
     function getDiscoveryItemDom(item,folders){
-      console.log(item,'aaaaaaaaaaa')
+      // console.log(item,'aaaaaaaaaaa')
       var foldersArr = folders ||  [];
       var h = '';
       h += '<div class="item discovery-item" style="display:flex">'
@@ -550,9 +550,9 @@ $("#myform #txt_name").keydown(function (e) {
       item.who_find.map(function(user,index){
         h += '      <img src="' + user.userIcon + '"  />';
 		if(user.userName){
-        	h += '      <span > <a href="javascript:;">'+ user.userName +'</a> 收藏到 <a href="#">'+ user.folderName + '</a></span>';
+        	h += '      <span > <a href="javascript:;">'+ user.userName +'</a> 收藏到 <a href="folderlist/'+ item.id+'">'+ user.folderName + '</a></span>';
         }else{
-        	h += '      <span > <a href="javascript:;">匿名用户</a> 收藏到 <a href="#">'+ user.folderName + '</a></span>';
+        	h += '      <span > <a href="javascript:;">匿名用户</a> 收藏到 <a href="folderlist/'+ item.id+'">'+ user.folderName + '</a></span>';
         }
       })
       h += '    </div>';
@@ -940,7 +940,7 @@ $("#myform #txt_name").keydown(function (e) {
     wp_attempt_focus();
     if (typeof wpOnload == 'function') wpOnload();
 </script> 
-{{--搜索分页模块--}}
+{{--搜索、分页模块--}}
 <script type="text/javascript"> 
 	//头像中图片不存在，显示默认图片
 	$(document).ready(function(){
@@ -1069,7 +1069,7 @@ $("#myform #txt_name").keydown(function (e) {
                       h+='<img src="'+item.img+'" class="bg-img" data-id="'+item.id+'" id="sourceimg" source="'+item.source+'" /> ';
                       h+='<div class="find_title" data-source="'+item.source+'">'+item.tinames+'<a href="javascript:;" class="find_info_more"></a></div>';
                       h+='<div class="who_find" style="display:none">';
-                      h+='<img src="'+item.who_find[0].userIcon+'" />';
+                      h+='<img src="'+item.who_find[0].userIcon+'" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" />';
                       h+='<span> <a href="javascript:;">'+item.who_find[0].userName+'</a> 收藏到 <a href="#">'+item.who_find[0].folderName+'</a></span></div>';
                       h+='<div class="folder" style="display: none;"><div class="fl folder_bj" style="width:80%">';
                       h+='选择文件夹<span class="fr show-more-selcect-item" style="background:url(images/arrow-ico.png); width:36px; height:36px;"></span></div>';
