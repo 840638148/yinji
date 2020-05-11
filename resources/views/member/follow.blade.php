@@ -58,34 +58,14 @@
         <div class="users">
           <div class="border-bottom1">
             {{--<div class="head"><a href="/vip/index/{{$follow->id}}"><img src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>--}}
-            <div class="head"><a href="javascript:void(0)" onclick="showNoEnter()"><img src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>
+            <div class="head"><a href="javascript:void(0)" onclick="showNoEnter()"><img alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>
             <h2><a href="/vip/index/{{$follow->id}}">{{$follow->nickname}}</a> </h2>
-            <p> @if (1 == $follow->sex)
+            <p> 
               
-              男
-              
-              @elseif (2 == $follow->sex)
-              
-              女
-              
-              @else
-              
-              保密
-              
-              @endif
-              
-              
-              
-              @if($follow->city)
-              
+              @if($follow->zhiwei){{$follow->zhiwei}} @else 其他 @endif
               -
-              
-              {{$follow->city}}
-              
-              @endif
-              
-              
-              
+              @if($follow->city){{$follow->city}} @else 保密 @endif
+
             <span style="background:none;" class="vip1"><img style="width:32px;" src="{{$follow->vip_level}}" alt=""></span> </p>
             </div>
           <div class="Statistics">

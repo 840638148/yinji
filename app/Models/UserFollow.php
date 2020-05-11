@@ -81,6 +81,11 @@ class UserFollow extends Model
 
         $user_follows = self::where('user_id', $user_id)->get();
 
+        //去除自己
+        $user_follows = $user_follows->reject(function ($val) use ($user_id) {
+            return $val->follow_id == $user_id;
+        });
+
         $follow_ids = [];
         foreach ($user_follows as $user_follow) {
             $follow_ids[] = $user_follow->follow_id;
