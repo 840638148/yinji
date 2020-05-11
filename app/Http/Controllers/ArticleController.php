@@ -71,6 +71,7 @@ class ArticleController extends Controller
             $category_ids[] = $category->id;
         }
         $more_articles = Article::getMoreArticles($request, $category_ids);
+        // dd($more_articles);
         return Output::makeResult($request, $more_articles);
     }
 
@@ -459,15 +460,15 @@ class ArticleController extends Controller
 
         if($type=='starssort'){
             if($sjx=='desc'){
-                $articles = Article::join('article_comments','articles.id','article_comments.comment_id')->orderBy('article_comments.stars','desc')->limit(99)->get();
-                // dd($articles);
+                $articles = Article::orderBy('article_avg','desc')->paginate(30);
+                // dd($articles->toArray());
                 $data = [];
                 foreach ($articles as $k=>$article) {
                     $category_html = '';
                     // $a=ArticleComment::where('article_comments.comment_id', $article['id'])->avg('stars');
                     // dump($a);
-                    $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['comment_id'])->avg('stars');
-                    $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
+                    // $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['comment_id'])->avg('stars');
+                    // $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
                     // dd($articles);
                     if ($article->category) {
                         foreach ($article->category as $category) {
@@ -480,9 +481,14 @@ class ArticleController extends Controller
                         $url = url('/article/detail/'.$article->id);
                     }
                     $tmp_html = '<li class="layout_li ajaxpost">
-                    <article class="postgrid">
-                    <div class="interior_dafen">'.($article->starsavg !=0 ? $article->starsavg : "5.0").'</div>
-                        <figure>
+                    <article class="postgrid">';
+
+                    if($article->article_avg!=''){
+                        $tmp_html .='<div class="interior_dafen">'.$article->article_avg.'.0</div>';
+                    }else{
+                        $tmp_html .='<div class="interior_dafen">5.0</div>';
+                    }
+                    $tmp_html .='<figure>
                             <a href="'.$url.'" title="'.get_article_title($article).'" target="_blank">
                                 <img class="thumb" src="'.get_article_thum($article).'" data-original="'.get_article_thum($article).'" alt="'.get_article_title($article).'" style="display: block;">
                             </a>
@@ -503,27 +509,27 @@ class ArticleController extends Controller
                             <span title="" class="like"><i class="icon-eye"></i><span class="count">'.$article->view_num.'</span></span> </div>
                         </article>
                     </li>';
-                    $data[] = [
-                        'starsavg' => $article->starsavg,
-                        'html' => $tmp_html
-                    ];
-
+                    // $data[] = [
+                        // 'starsavg' => $article->starsavg,
+                        // 'html' => $tmp_html
+                    // ];
+                    $data[]=$tmp_html;
                 }
                 // dd($data); 
-                $data = collect($data)->sortByDesc('starsavg')->values()->all();
-                $html = '';
-                foreach ($data as $item) {
-                    $html .= $item['html'];
-                }
+                // $data = collect($data)->sortByDesc('starsavg')->values()->all();
+                // $html = '';
+                // foreach ($data as $item) {
+                    // $html .= $item['html'];
+                // }
 
-                return Output::makeResult($request, $html);
+                return Output::makeResult($request, $data);
             }else{
-                $articles = Article::join('article_comments','articles.id','article_comments.comment_id')->orderBy('article_comments.stars','asc')->limit(99)->get();
+                $articles = Article::orderby('article_avg','asc')->paginate(30);
                 // dd($articles);
                 foreach ($articles as $k=>$article) {
                     $category_html = '';
-                    $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['comment_id'])->avg('stars');
-                    $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
+                    // $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['comment_id'])->avg('stars');
+                    // $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
                     // dd($articles);
                     if ($article->category) {
                         foreach ($article->category as $category) {
@@ -536,9 +542,14 @@ class ArticleController extends Controller
                         $url = url('/article/detail/' . $article->id);
                     }
                     $tmp_html = '<li class="layout_li ajaxpost">
-                    <article class="postgrid">
-                    <div class="interior_dafen">'.($article->starsavg !=0 ? $article->starsavg : "5.0").'</div>
-                        <figure>
+                    <article class="postgrid">';
+
+                    if($article->article_avg!=''){
+                        $tmp_html .='<div class="interior_dafen">'.$article->article_avg.'.0</div>';
+                    }else{
+                        $tmp_html .='<div class="interior_dafen">5.0</div>';
+                    }
+                    $tmp_html .='<figure>
                             <a href="' . $url . '" title="'.get_article_title($article).'" target="_blank">
                                 <img class="thumb" src="'.get_article_thum($article).'" data-original="'.get_article_thum($article).'" alt="' .get_article_title($article) . '" style="display: block;">
                             </a>
@@ -560,28 +571,29 @@ class ArticleController extends Controller
                         </article>
                     </li>';
  
-                    $data[] = [
-                        'starsavg' => $article->starsavg,
-                        'html' => $tmp_html
-                    ];
+                    // $data[] = [
+                    //     'starsavg' => $article->starsavg,
+                    //     'html' => $tmp_html
+                    // ];
+                    $data[]=$tmp_html;
                 }
-                $data = collect($data)->sortBy('starsavg')->values()->all();
-                $html = '';
-                foreach ($data as $item) {
-                    $html .= $item['html'];
-                }
-                return Output::makeResult($request, $html);
+                // $data = collect($data)->sortBy('starsavg')->values()->all();
+                // $html = '';
+                // foreach ($data as $item) {
+                //     $html .= $item['html'];
+                // }
+                return Output::makeResult($request, $data);
             }
         }
                
         if($type=='timesort'){
             if($sjx=='desc' ){
-                $articles = Article::orderBy('updated_at','desc')->limit(51)->get();
+                $articles = Article::orderBy('updated_at','desc')->paginate(30);
              
                 foreach ($articles as $k=>$article) {
                     $category_html = '';
-                    $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['id'])->avg('stars');
-                    $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
+                    // $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['id'])->avg('stars');
+                    // $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
                     // dd($articles);
                     if ($article->category) {
                         foreach ($article->category as $category) {
@@ -594,9 +606,14 @@ class ArticleController extends Controller
                         $url = url('/article/detail/' . $article->id);
                     }
                     $tmp_html = '<li class="layout_li ajaxpost">
-                    <article class="postgrid">
-                    <div class="interior_dafen">'.($article->starsavg !=0 ? $article->starsavg : "5.0").'</div>
-                        <figure>
+                    <article class="postgrid">';
+
+                    if($article->article_avg!=''){
+                        $tmp_html .='<div class="interior_dafen">'.$article->article_avg.'.0</div>';
+                    }else{
+                        $tmp_html .='<div class="interior_dafen">5.0</div>';
+                    }
+                    $tmp_html .='<figure>
                             <a href="' . $url . '" title="' .get_article_title($article) . '" target="_blank">
                                 <img class="thumb" src="' .get_article_thum($article) . '" data-original="' .get_article_thum($article) . '" alt="' .get_article_title($article) . '" style="display: block;">
                             </a>
@@ -621,11 +638,11 @@ class ArticleController extends Controller
                 }
                 return Output::makeResult($request, $data);
             }else{
-                $articles = Article::orderBy('updated_at','asc')->limit(51)->get();
+                $articles = Article::orderBy('updated_at','asc')->paginate(30);
                 foreach ($articles as $k=>$article) {
                     $category_html = '';
-                    $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['id'])->avg('stars');
-                    $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
+                    // $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['id'])->avg('stars');
+                    // $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
                     // dd($articles);
                     if ($article->category) {
                         foreach ($article->category as $category) {
@@ -638,9 +655,14 @@ class ArticleController extends Controller
                         $url = url('/article/detail/' . $article->id);
                     }
                     $tmp_html = '<li class="layout_li ajaxpost">
-                    <article class="postgrid">
-                    <div class="interior_dafen">'.($article->starsavg !=0 ? $article->starsavg : "5.0").'</div>
-                        <figure>
+                    <article class="postgrid">';
+
+                    if($article->article_avg!=''){
+                        $tmp_html .='<div class="interior_dafen">'.$article->article_avg.'.0</div>';
+                    }else{
+                        $tmp_html .='<div class="interior_dafen">5.0</div>';
+                    }
+                    $tmp_html .='<figure>
                             <a href="' . $url . '" title="' .get_article_title($article) . '" target="_blank">
                                 <img class="thumb" src="' .get_article_thum($article) . '" data-original="' .get_article_thum($article) . '" alt="' .get_article_title($article) . '" style="display: block;">
                             </a>
@@ -669,13 +691,13 @@ class ArticleController extends Controller
 
         
         if($type=='llsort'){
-            if($sjx=='desc' ){
-                $articles = Article::orderBy('view_num','desc')->limit(51)->get();
+            if($sjx=='desc'){
+                $articles = Article::orderBy('view_num','desc')->paginate(30);
                 
                 foreach ($articles as $k=>$article) {
                     $category_html = '';
-                    $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['id'])->avg('stars');
-                    $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
+                    // $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['id'])->avg('stars');
+                    // $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
                     // dd($articles);
                     if ($article->category) {
                         foreach ($article->category as $category) {
@@ -688,9 +710,14 @@ class ArticleController extends Controller
                         $url = url('/article/detail/' . $article->id);
                     }
                     $tmp_html = '<li class="layout_li ajaxpost">
-                    <article class="postgrid">
-                    <div class="interior_dafen">'.($article->starsavg !=0 ? $article->starsavg : "5.0").'</div>
-                        <figure>
+                    <article class="postgrid">';
+
+                    if($article->article_avg!=''){
+                        $tmp_html .='<div class="interior_dafen">'.$article->article_avg.'.0</div>';
+                    }else{
+                        $tmp_html .='<div class="interior_dafen">5.0</div>';
+                    }
+                    $tmp_html .='<figure>
                             <a href="' . $url . '" title="' .get_article_title($article) . '" target="_blank">
                                 <img class="thumb" src="' .get_article_thum($article) . '" data-original="' .get_article_thum($article) . '" alt="' .get_article_title($article) . '" style="display: block;">
                             </a>
@@ -715,11 +742,11 @@ class ArticleController extends Controller
                 }
                 return Output::makeResult($request, $data);
             }else{
-                $articles = Article::orderBy('view_num','asc')->limit(51)->get();
+                $articles = Article::orderBy('view_num','asc')->paginate(30);
                 foreach ($articles as $k=>$article) {
                     $category_html = '';
-                    $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['id'])->avg('stars');
-                    $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
+                    // $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['id'])->avg('stars');
+                    // $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
                     // dd($articles);
                     if ($article->category) {
                         foreach ($article->category as $category) {
@@ -732,9 +759,14 @@ class ArticleController extends Controller
                         $url = url('/article/detail/' . $article->id);
                     }
                     $tmp_html = '<li class="layout_li ajaxpost">
-                    <article class="postgrid">
-                    <div class="interior_dafen">'.($article->starsavg !=0 ? $article->starsavg : "5.0").'</div>
-                        <figure>
+                    <article class="postgrid">';
+
+                    if($article->article_avg!=''){
+                        $tmp_html .='<div class="interior_dafen">'.$article->article_avg.'.0</div>';
+                    }else{
+                        $tmp_html .='<div class="interior_dafen">5.0</div>';
+                    }
+                    $tmp_html .='<figure>
                             <a href="' . $url . '" title="' .get_article_title($article) . '" target="_blank">
                                 <img class="thumb" src="' .get_article_thum($article) . '" data-original="' .get_article_thum($article) . '" alt="' .get_article_title($article) . '" style="display: block;">
                             </a>

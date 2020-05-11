@@ -57,7 +57,13 @@
                 <ul class="layout_ul ajaxposts article-content">
                     @foreach ($articles as $article)
                         <li class="layout_li ajaxpost" id="ajaxpost" >
-                        <div class="interior_dafen">{{$article->starsavg !=0 ? $article->starsavg : '5.0'}}</div>
+                        <div class="interior_dafen">{{--$article->article_avg !=0 ? $article->article_avg : '5.0'--}}
+                        @if($article->article_avg !='') 
+                            {{$article->article_avg}}.0
+                        @else
+                            5.0
+                        @endif
+                        </div>
                             <article class="postgrid">
                                 <figure>
                                     <a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif" title="{{get_article_title($article)}}" target="_blank">
@@ -104,11 +110,12 @@
     $(document).on('click','.sort',function(){
         $('.sortlist').toggle(500);
     })
-
+    window.type='';
+    window.sjx='';
     $(document).on('click','.allsort',function(){
         let that=$(this);
-        let type=that.attr('so');
-        let sjx=that.find(".arrow").attr('aw');
+        type=that.attr('so');
+        sjx=that.find(".arrow").attr('aw');
         // let category=that.find(".arrow").attr('aw');
         var r = window.location.href.substr(21);
         
@@ -205,24 +212,37 @@
         $(window).on('scroll',function(e){
             var bodyHeight=document.body.scrollHeight==0?document.documentElement.scrollHeight:document.body.scrollHeight;
                 if(bodyHeight - $('body').scrollTop() -10 < window.innerHeight && !isEnd){
-                    var h  = '';
-                    var url = window.location.href;
+                    let h  = '';
+                    let url = window.location.href;
+                    // let types =url.split('/').slice(3).join('/');
+                    console.log(type,sjx)
+                    if(type == '' || sjx =='' ){
+                        urls=url + '_ajax?page=' + page;
+                        
+                    }else{
+                        urls=url + '_ajax?page=' + page+'&type='+type+'&sjx='+sjx;
+                    }
                     $.ajax({
                         async: false,
-                        url: url + '_ajax?page=' + page,
-                        type: 'GET',
+
+                        url: urls,
+                        type: 'POST',
                         dataType: 'json',
-                        data: {},
+                        data: {type:type,sjx:sjx},
                         success: function (data) {
                             console.log(data);
                             if (data.status_code == 0) {
-                                page++;
-                                // h =  data.data.join('')
-                                h =  data.data
-                                $('.article-content').append(h)
-                                if(data.data.length<15){
-                                    isEnd = true
-                                }
+                                if(data.data.content && cates=='tjuser'){
+                                    page++;
+                                    $('.article-content').append(h)
+                                    if(data.data.length<15){isEnd = true}else{isEnd = false}
+                                }else{
+                                    page++;
+                                    // h =  data.data.join('')
+                                    h =  data.data
+                                    $('.article-content').append(h)
+                                    if(data.data.length<15){isEnd = true}else{isEnd=false}
+                                }   
                             } else {
                                 isEnd = true
                                 alert(data.message);
