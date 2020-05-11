@@ -191,20 +191,8 @@
 
           <div id="profile_avatar" style="position:relative;">
             <label for="avatar">头像</label>
-            {{--<div class="cropped" style="float:left;width: 120px;height: 120px;overflow: hidden;border: 1px solid red;">
-                <img style="width: 120px;height:120px;padding:0;margin:0;background:none;" src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}">
-            </div> --}}        
-
               <style>
-                .photo-clip-rotateLayer img{
-                  width:  auto !important;
-                  height:  auto !important;
-                  padding: unset !important;
-                  border: unset !important;
-                  float: unset !important;
-                  background-color:unset !important;
-                  margin-right: unset !important;
-                }
+                .photo-clip-rotateLayer img{width:  auto !important;height:  auto !important;padding: unset !important;border: unset !important;float: unset !important;background-color:unset !important;margin-right: unset !important;}
                 .photo-clip-rotateLayer{margin-top:-5px;}
                 .photo-clip-view{width:120px !important;height:120px !important;}
               </style>
@@ -281,43 +269,35 @@
 <script src="/js/plugins/cover_js/lrz.all.bundle.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/plugins/cover_js/jquery.photoClip.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
-// $(document).on('click','#clipArea',function(){
-//上传封面
-//document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-let clipArea = new bjj.PhotoClip("#clipArea", {
-	size: [428, 321],// 截取框的宽和高组成的数组。默认值为[260,260]
-	outputSize: [428, 321], // 输出图像的宽和高组成的数组。默认值为[0,0]，表示输出图像原始大小
-	//outputType: "jpg", // 指定输出图片的类型，可选 "jpg" 和 "png" 两种种类型，默认为 "jpg"
-	file: "#file", // 上传图片的<input type="file">控件的选择器或者DOM对象
-	view: "#view", // 显示截取后图像的容器的选择器或者DOM对象
-	ok: "#clipBtn", // 确认截图按钮的选择器或者DOM对象
-	loadStart: function() {
-		// 开始加载的回调函数。this指向 fileReader 对象，并将正在加载的 file 对象作为参数传入
-		$('.cover-wrap').fadeIn();
-		console.log("照片读取中");
-	},
-	loadComplete: function() {
-		 // 加载完成的回调函数。this指向图片对象，并将图片地址作为参数传入
-		console.log("照片读取完成");
-	},
-	loadError: function(event) {}, // 加载失败的回调函数。this指向 fileReader 对象，并将错误事件的 event 对象作为参数传入
-	clipFinish: function(dataURL) {
-		 // 裁剪完成的回调函数。this指向图片对象，会将裁剪出的图像数据DataURL作为参数传入
-		$('.cover-wrap').fadeOut();
-		// $('#view').css('background-size','100% 100%');
-    console.log(dataURL);
-    images = dataURL;
-	}
-});
-// })
+  //上传封面
+  //document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+  let clipArea = new bjj.PhotoClip("#clipArea", {
+    size: [428, 321],// 截取框的宽和高组成的数组。默认值为[260,260]
+    outputSize: [428, 321], // 输出图像的宽和高组成的数组。默认值为[0,0]，表示输出图像原始大小
+    //outputType: "jpg", // 指定输出图片的类型，可选 "jpg" 和 "png" 两种种类型，默认为 "jpg"
+    file: "#file", // 上传图片的<input type="file">控件的选择器或者DOM对象
+    view: "#view", // 显示截取后图像的容器的选择器或者DOM对象
+    ok: "#clipBtn", // 确认截图按钮的选择器或者DOM对象
+    loadStart: function() {
+      // 开始加载的回调函数。this指向 fileReader 对象，并将正在加载的 file 对象作为参数传入
+      $('.cover-wrap').fadeIn();
+      console.log("照片读取中");
+    },
+    loadComplete: function() {
+      // 加载完成的回调函数。this指向图片对象，并将图片地址作为参数传入
+      console.log("照片读取完成");
+    },
+    loadError: function(event) {}, // 加载失败的回调函数。this指向 fileReader 对象，并将错误事件的 event 对象作为参数传入
+    clipFinish: function(dataURL) {
+      // 裁剪完成的回调函数。this指向图片对象，会将裁剪出的图像数据DataURL作为参数传入
+      $('.cover-wrap').fadeOut();
+      // $('#view').css('background-size','100% 100%');
+      console.log(dataURL);
+      images = dataURL;
+    }
+  });
 
-// $('#clipBtn').on('click', function(){
-//   clipArea;
-//   $('.caijian').css('display','block');
-//   // $('.cover-wrap').css('display','none');
-// })
-
-$('#clipBtn').on('click', function(){
+  $('#clipBtn').on('click', function(){
       console.log(images);
       $.ajax({
         type:"POST",
@@ -329,14 +309,44 @@ $('#clipBtn').on('click', function(){
       })    
       $('#view').html('<img style="width: 120px;height:120px;padding:0;margin:0;background:none;" id="jiancai" src="'+images+'">');
   })
-
-
-// $("#cannelbtn").click(function () {
-// 	$('.caijian').css('display','none');
-// 	$('.cover-wrap').css('display','none');
-// })
-//clipArea.destroy();
+  //clipArea.destroy();
 </script>
+
+<script type="text/javascript">
+  var options = {
+    thumbBox: '.thumbBox',
+    spinner: '.spinner',
+    imgSrc: 'img/avatar.png',
+      imageBox: document.querySelector('.imageBox')
+  };
+  var cropper = cropbox(options);
+  document.querySelector('#upload-file').onchange = function(){
+      var reader = new FileReader();
+    reader.onload = function(e) {
+      options.imgSrc = e.target.result;
+      cropper = cropbox(options);
+    };
+    reader.readAsDataURL(this.files[0]);
+  }
+
+  document.querySelector('#btnCrop').onclick = function(){
+    var img = cropper.getDataURL();
+    document.querySelector('.cropped').innerHTML = '';
+    document.querySelector('.cropped').innerHTML = '<img src="'+img+'" align="absmiddle" style="width:180px;margin-top:4px;box-shadow:0px 0px 12px #7E7E7E;"><p>180px*180px</p>';
+    var str=img.split("base64,")[1];
+    alert('裁剪上传');
+  };
+
+  document.querySelector('#btnZoomIn').onclick = function() {
+      cropper.zoomIn();
+  }
+
+  document.querySelector('#btnZoomOut').onclick = function() {
+      cropper.zoomOut();
+  }
+
+</script>
+
 
 
           <div id="homepage_top_img" style="overflow:hidden">
