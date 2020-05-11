@@ -167,7 +167,7 @@
           --}}
 
 
-          <div id="profile_avatar">
+          {{--<div id="profile_avatar">
             <label for="avatar">头像</label>
             <div class="cropped" style="width: 120px;height: 120px;overflow: hidden;border: 1px solid red;">
                 <img style="width: 120px;height:120px;padding:0;margin:0;background:none;" src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}">
@@ -187,7 +187,49 @@
             </div>
             <br>
             <span>当前为<strong>自定义头像</strong>，建议大小：120*120。获取头像的顺序为：自定义头像、社交头像、全球通用头像、默认头像</span> 
+          </div>--}}
+
+          <div id="profile_avatar" style="position:relative;">
+            <label for="avatar">头像</label>
+            {{--<div class="cropped" style="float:left;width: 120px;height: 120px;overflow: hidden;border: 1px solid red;">
+                <img style="width: 120px;height:120px;padding:0;margin:0;background:none;" src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}">
+            </div> --}}        
+
+              <style>
+                .photo-clip-rotateLayer img{
+                  width:  auto !important;
+                  height:  auto !important;
+                  padding: unset !important;
+                  border: unset !important;
+                  float: unset !important;
+                  background-color:unset !important;
+                  margin-right: unset !important;
+                }
+                .photo-clip-rotateLayer{margin-top:-5px;}
+                .photo-clip-view{width:120px !important;height:120px !important;}
+              </style>
+            <div class="cover-wrap" style="display:none;position:fixed;left:0;top:0;width:100%;height:100%;background: rgba(0, 0, 0, 0.4);z-index: 10000000;text-align:center;">	
+              <div class="caijian" style="width:900px;height:600px;margin:100px auto;background-color:#FFFFFF;overflow: hidden;border-radius:4px;">
+                <div id="clipArea" style="margin:10px;height: 520px;"></div>
+                <div class="" style="height:56px;line-height:36px;text-align: center;padding-top:8px;position: relative;left: 365px;">
+                  <!-- <span id="cannelbtn" style="width:120px;height: 36px;border-radius: 4px;background-color:#ff8a00;color: #FFFFFF;font-size: 14px;text-align: center;line-height: 30px;outline: none;float:left;margin:0 10px;">取消</span> -->
+                  <span id="clipBtn" style="width:120px;height: 36px;border-radius: 4px;background-color:#ff8a00;color: #FFFFFF;font-size: 14px;text-align: center;line-height: 30px;outline: none;float:left;">保存头像</span>
+                  
+                </div>
+              </div>
+            </div>
+            <div id="view" style="width:120px;height:120px;" title="请上传 120*120 的图片">
+            <img style="width: 120px;height:120px;padding:0;margin:0;background:none;" src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}">
+            </div>
+            <div style="height:10px;"></div>
+
+            <div class="avatar_uploader" style="float:left;width:140px;height:32px;border-radius: 4px;background-color:#ff8a00;color: #FFFFFF;font-size: 14px;text-align:center;line-height:32px;outline:none;margin-left:37px;position:relative;left: 120px;top: -120px;">
+              点击更换头像
+              <input type="file" id="file" style="cursor:pointer;opacity:0;filter:alpha(opacity=0);width:100%;height:100%;position:absolute;top:0;left:0;">
+            </div><br>
+            <span style="position: absolute;top: 87px;left: 151px;">当前为<strong>自定义头像</strong>，建议大小：120*120。获取头像的顺序为：自定义头像、社交头像、全球通用头像、默认头像</span> 
           </div>
+
 
 
 <script src="/js/cropbox.js"></script>
@@ -224,9 +266,7 @@
         }
       })    // console.log(images);
       $('.cropped').html('<img style="width: 120px;height:120px;padding:0;margin:0;background:none;" id="jiancai" src="'+img+'">');
-      $(".imageBox").css('display','none')
-
-      
+      $(".imageBox").css('display','none')  
   })
   $('#btnZoomIn').on('click', function(){
       cropper.zoomIn();
@@ -236,6 +276,67 @@
   })
 </script>
 
+<script src="/js/plugins/cover_js/iscroll-zoom.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/plugins/cover_js/hammer.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/plugins/cover_js/lrz.all.bundle.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/plugins/cover_js/jquery.photoClip.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+// $(document).on('click','#clipArea',function(){
+//上传封面
+//document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+let clipArea = new bjj.PhotoClip("#clipArea", {
+	size: [428, 321],// 截取框的宽和高组成的数组。默认值为[260,260]
+	outputSize: [428, 321], // 输出图像的宽和高组成的数组。默认值为[0,0]，表示输出图像原始大小
+	//outputType: "jpg", // 指定输出图片的类型，可选 "jpg" 和 "png" 两种种类型，默认为 "jpg"
+	file: "#file", // 上传图片的<input type="file">控件的选择器或者DOM对象
+	view: "#view", // 显示截取后图像的容器的选择器或者DOM对象
+	ok: "#clipBtn", // 确认截图按钮的选择器或者DOM对象
+	loadStart: function() {
+		// 开始加载的回调函数。this指向 fileReader 对象，并将正在加载的 file 对象作为参数传入
+		$('.cover-wrap').fadeIn();
+		console.log("照片读取中");
+	},
+	loadComplete: function() {
+		 // 加载完成的回调函数。this指向图片对象，并将图片地址作为参数传入
+		console.log("照片读取完成");
+	},
+	loadError: function(event) {}, // 加载失败的回调函数。this指向 fileReader 对象，并将错误事件的 event 对象作为参数传入
+	clipFinish: function(dataURL) {
+		 // 裁剪完成的回调函数。this指向图片对象，会将裁剪出的图像数据DataURL作为参数传入
+		$('.cover-wrap').fadeOut();
+		// $('#view').css('background-size','100% 100%');
+    console.log(dataURL);
+    images = dataURL;
+	}
+});
+// })
+
+// $('#clipBtn').on('click', function(){
+//   clipArea;
+//   $('.caijian').css('display','block');
+//   // $('.cover-wrap').css('display','none');
+// })
+
+$('#clipBtn').on('click', function(){
+      console.log(images);
+      $.ajax({
+        type:"POST",
+        url:"/member/upload_img",
+        data:{images:images},
+        success: function (data) {
+          console.log(data)
+        }
+      })    
+      $('#view').html('<img style="width: 120px;height:120px;padding:0;margin:0;background:none;" id="jiancai" src="'+images+'">');
+  })
+
+
+// $("#cannelbtn").click(function () {
+// 	$('.caijian').css('display','none');
+// 	$('.cover-wrap').css('display','none');
+// })
+//clipArea.destroy();
+</script>
 
 
           <div id="homepage_top_img" style="overflow:hidden">
