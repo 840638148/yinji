@@ -44,7 +44,9 @@ class UserController extends BaseController
         });
 
         $grid->id('ID')->sortable();
+        $img='/img/avatar.png';
         $grid->avatar('头像')->image(30,30);
+        // dd($grid->avatar('头像'));
         $grid->username('用户名')->sortable();
         $grid->nickname('昵称');
         $grid->mobile('手机');
@@ -71,7 +73,19 @@ class UserController extends BaseController
         $form->text('mobile', '手机');
         $form->radio('sex', '性别')->options(['0' => '保密', '1' => '男', '2' => '女'])->default('0');
         $form->text('city', '城市');
-        $form->text('url', '个人主页');
+        // $form->text('url', '个人主页');
+        $form->select('zhiwei', '职位')->options(
+            [
+                '建筑师' => '建筑师',
+                '室内设计师' => '室内设计师',
+                '软装设计师' => '软装设计师',
+                '产品设计师' => '产品设计师',
+                '摄影师' => '摄影师',
+                '媒体人' => '媒体人',
+                '地产开发' => '地产开发',                
+                '其他' => '其他',
+            ]
+        );        
         $form->text('personal_note', '个人说明');
         $form->select('level', '会员种类')->options(
             [
