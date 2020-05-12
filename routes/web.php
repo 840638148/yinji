@@ -71,10 +71,10 @@ Route::get('article', 'ArticleController@lists');      //所有
 Route::get('interiors', 'ArticleController@interior');  //室内
 Route::get('interior', 'ArticleController@interior');  //室内
 Route::post('interior_ajax', 'ArticleController@interiorAjax');  //室内
-Route::get('interior/category/{id}_ajax', 'ArticleController@interiorCategoryAjax');  //室内更多带分页
+Route::post('interior/category/{id}_ajax', 'ArticleController@interiorCategoryAjax');  //室内更多带分页
 Route::get('archs', 'ArticleController@archs');        //建筑
 Route::post('archs_ajax', 'ArticleController@archsAjax');        //建筑
-Route::get('archs/category/{id}_ajax', 'ArticleController@archsCategoryAjax');        //建筑更多带分页
+Route::post('archs/category/{id}_ajax', 'ArticleController@archsCategoryAjax');        //建筑更多带分页
 Route::get('article/detail/{id}', 'ArticleController@detail');
 Route::get('article/category/{id}', 'ArticleController@category');
 Route::get('interior/category/{id}', 'ArticleController@interiorCategory');

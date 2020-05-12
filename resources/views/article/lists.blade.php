@@ -56,13 +56,10 @@
             <section class="post_list box post_bottom triangle wow bounceInUp animated" style="visibility: visible; animation-name: bounceInUp;">
                 <ul class="layout_ul ajaxposts article-content">
                     @foreach ($articles as $article)
+                    @if($article->article_status==2 && $article->display==0)
+                    {{--dd($article)--}}
                         <li class="layout_li ajaxpost" id="ajaxpost" >
-                        <div class="interior_dafen">{{--$article->article_avg !=0 ? $article->article_avg : '5.0'--}}
-                        @if($article->article_avg !='') 
-                            {{$article->article_avg}}.0
-                        @else
-                            5.0
-                        @endif
+                        <div class="interior_dafen">{{$article->article_avg !='' ||  $article->article_avg !=null ? sprintf("%.1f",$article->article_avg) : '5.0'}}
                         </div>
                             <article class="postgrid">
                                 <figure>
@@ -91,7 +88,8 @@
                                 </div>
                             </article>
                         </li>
-                @endforeach
+                    @endif    
+                    @endforeach
 
                 <!-- 分页 -->
 
@@ -116,20 +114,19 @@
         let that=$(this);
         type=that.attr('so');
         sjx=that.find(".arrow").attr('aw');
-        // let category=that.find(".arrow").attr('aw');
-        var r = window.location.href.substr(21);
+        let url = window.location.href;
+ 
+        // let types=url.split('/')[3];//分类名
+        let category_id=url.split('/')[5];//分类id
         
-        
-        console.log(r); 
-        console.log(type,sjx); 
-        console.log(that.find(".arrow").html()); 
+        console.log(type,sjx,category_id); 
 
         layer.closeAll();  
             $.ajax({
                 url: '/article/allsortlist',
                 type: 'POST',
                 dataType: 'json',
-                data: {type:type,sjx:sjx},
+                data: {type:type,sjx:sjx,category_id:category_id},
                 success: function (data) {
                     // window.vm.$data.list=data.data;
                     console.log(data)
@@ -214,35 +211,32 @@
                 if(bodyHeight - $('body').scrollTop() -10 < window.innerHeight && !isEnd){
                     let h  = '';
                     let url = window.location.href;
-                    // let types =url.split('/').slice(3).join('/');
-                    console.log(type,sjx)
-                    if(type == '' || sjx =='' ){
+                    // let category=
+                    let types =url.split('/').slice(3).join('/');
+                    let category_id=url.split('/')[5];
+                    // category_id =types.substr(-2,2);
+                    // console.log(newurl)
+                    if(type == '' || sjx =='' || category_id==''){
                         urls=url + '_ajax?page=' + page;
-                        
+                    }else if(category_id != ''){
+                        urls=url + '_ajax?page=' + page+'&category_id='+category_id+'&type='+type+'&sjx='+sjx;
                     }else{
-                        urls=url + '_ajax?page=' + page+'&type='+type+'&sjx='+sjx;
+                        urls=url + '_ajax?page=' + page+''+'&type='+type+'&sjx='+sjx;
                     }
                     $.ajax({
                         async: false,
-
                         url: urls,
                         type: 'POST',
                         dataType: 'json',
-                        data: {type:type,sjx:sjx},
+                        data: {type:type,sjx:sjx,category_id:category_id},
                         success: function (data) {
                             console.log(data);
                             if (data.status_code == 0) {
-                                if(data.data.content && cates=='tjuser'){
-                                    page++;
-                                    $('.article-content').append(h)
-                                    if(data.data.length<15){isEnd = true}else{isEnd = false}
-                                }else{
-                                    page++;
-                                    // h =  data.data.join('')
-                                    h =  data.data
-                                    $('.article-content').append(h)
-                                    if(data.data.length<15){isEnd = true}else{isEnd=false}
-                                }   
+                                page++;
+                                // h =  data.data.join('')
+                                h =  data.data
+                                $('.article-content').append(h)
+                                if(data.data.length<15){isEnd = true}else{isEnd=false}
                             } else {
                                 isEnd = true
                                 alert(data.message);
