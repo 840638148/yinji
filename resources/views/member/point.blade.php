@@ -163,6 +163,14 @@
     overflow: auto;
     height: calc( 100% - 50px);
   }
+  .point-duihuan{
+    cursor:pointer;
+  }
+  .point-duihuan:hover{
+    background: #636af3 !important;
+    color: #fff !important;
+  }
+
 </style>
 <section class="wrapper">
   <div class="mt30 home_box">
@@ -209,28 +217,29 @@
                             @endif
                             
                         </p>
-                        <p><span>点赞：</span>{{ $today_point['like'] }}/10</p>
-                        <p><span>留言：</span>{{ $today_point['comment'] }}/20</p>
+                        <p><span>评分：</span>{{ $today_point['pingfen'] }}/100</p>
+                        <p><span>留言：</span>{{ $today_point['comment'] }}/500</p>
                     </div>
                 </div>
                 <div class="bar"><span class="bar-length" style="width: {{($today_point['today']/$today_point['total'])*100}}%"></span><p><span>{{ $today_point['today'] }}</span>/{{ $today_point['total'] }}</p></div>
             </li>
             <li class="ico_jftj-inner">
                 <div class="tj_shuzi">
-                    <span class="point-title">月度会员兑换</span>
-                    <span class="point-duihuan activity">25+50印币兑换</span>
+                    <span class="point-title vip_type">月度会员兑换</span>
+                    <!-- <span class="point-duihuan activity">25+50印币兑换</span> -->
+                    <span class="point-duihuan" yb="50">25+50印币兑换</span>
                 </div>
             </li>
             <li class="ico_jftj-inner">
                 <div class="tj_shuzi">
-                    <span class="point-title">季度会员兑换</span>
-                    <span class="point-duihuan">25+50印币兑换</span>
+                    <span class="point-title vip_type">季度会员兑换</span>
+                    <span class="point-duihuan" yb="280">140+280印币兑换</span>
                 </div>
             </li>
             <li class="ico_jftj-inner">
                 <div class="tj_shuzi">
-                    <span class="point-title">年度会员兑换</span>
-                    <span class="point-duihuan">25+50印币兑换</span>
+                    <span class="point-title vip_type">年度会员兑换</span>
+                    <span class="point-duihuan" yb="880">911+880印币兑换</span>
                 </div>
             </li>
         </ul>
@@ -244,33 +253,33 @@
           <ul class="clearfix">
 
               @foreach($user->point_logs as $log)
-                  {{--<tr class="points-event">--}}
-                      {{--<td class="points-rewards-event-description">{{$log->remark}}</td>--}}
-                      {{--<td class="points-rewards-event-date"><abbr title="{{$log->created_at}}">{{$log->created_at}}</abbr></td>--}}
-                      {{--<td class="points-rewards-event-points" width="1%"> @if (1 == $log->type)--}}
-                              {{---{{$log->point}}--}}
-                          {{--@else--}}
-                              {{--+{{$log->point}}--}}
-                          {{--@endif </td>--}}
-                  {{--</tr>--}}
-                  <li>
-                      <a href="javascript:void(0)">
-                          <div>
-                              <p class="point-kind">{{$log->remark}}</p>
-                              <span class="point-num" style="@if (1 == $log->type) color: #35d32d @else color: #fb8f5f" @endif> @if (1 == $log->type)
-                                      -{{$log->point}}
-                                  @else
-                                      +{{$log->point}}
-                                  @endif
-                            </span>
-                          </div>
-                          <div>
-                              {{$log->created_at}}
-                          </div>
-                      </a>
-
-
-                  </li>
+                <li>
+                @if ($log->type == 1)
+                    <a href="javascript:void(0)">
+                        <div>
+                        <p class="point-kind">{{$log->remark}}</p>
+                        <span class="point-num" style="color: #35d32d"> 
+                            -{{$log->point}}
+                        </span>
+                        </div>
+                        <div>
+                            {{$log->created_at}}
+                        </div>
+                    </a>
+                @else
+                <a href="javascript:void(0)">
+                        <div>
+                            <p class="point-kind">{{$log->remark}}</p>
+                            <span class="point-num" style="color: #fb8f5f"> 
+                            +{{$log->point}}
+                        </span>
+                        </div>
+                        <div>
+                            {{$log->created_at}}
+                        </div>
+                    </a>
+                @endif
+                </li>
               @endforeach
 
 
@@ -309,11 +318,17 @@
                 <h2 class="left">印币：<span id="user-point">{{$user->points}}</span>分</h2>
                 <p class="left" style="width:316px; margin-left:20px;">已连续签到<span id="last-day">{{$last_days or '0'}}</span>天</p>
             </div>
-            <a href="#" class="fr Button3 mt10" id="attendance">签到</a> </div>
+            @if($is_qiandao)
+                <a href="javascript:void(0);" class="fr Button6 mt10" disabled="disabled" id="attendances" style="width:80px;height:36px;background: #ccc;color: #fff;display: block;text-align: center;line-height: 36px;border-radius: 3px;cursor: no-drop;">已签到</a> 
+            @else
+                <a href="javascript:void(0);" class="fr Button3 mt10" id="attendance">签到</a> 
+            @endif
+            
+            </div>
         <div class="sign_tab">
             <ul>
                 <li class="active record_tab">签到记录</li>
-                <li class="change_tab">印币兑换</li>
+                <li class="change_tab">签到规则</li>
             </ul>
         </div>
         <!------签到记录---------->
@@ -347,7 +362,7 @@
                                     <tr>
                                         <td>{{$attendance->user->nickname or ''}}</td>
                                         <td>+{{$attendance->point or ''}}</td>
-                                        <td>VIP{{$attendance->vip_level or ''}}</td>
+                                        <td><img src="{{$attendance->vip_level}}" alt=""></td>
                                         <td>{{$attendance->created_at->toDateString()}}</td>
                                     </tr>
                                 @endforeach
@@ -362,48 +377,142 @@
                 使用规则：即10印币=1元，每增加一次下载次数使用10印币！</div>
         </div>
         <!------签到记录结束---------->
-        <!--------印币兑换--------->
+        <!--------签到规则--------->
         <div class="change_box tab_box">
             <div class="change">
-                <ul>
-                    <li><img src="../images/book.jpg" alt="商品图片">
-                        <dl>
-                            <dt>印际月度会员兑换</dt>
-                            <dd><span>￥23.00+500</span>印币</dd>
-                            <del>原价:28.00</del>
-                        </dl>
-                        <ul>
-                            <li><a href="#" class="Button3">兑换</a></li>
-                            <li>已<span>78</span>人兑换</li>
-                        </ul>
-                    </li>
-                    <li><img src="../images/book.jpg" alt="商品图片">
-                        <dl>
-                            <dt>印际季度会员兑换</dt>
-                            <dd><span>￥76.00+1200</span>印币</dd>
-                            <del>原价:88.00</del>
-                        </dl>
-                        <ul>
-                            <li><a href="#" class="Button3">兑换</a></li>
-                            <li>已<span>78</span>人兑换</li>
-                        </ul>
-                    </li>
-                    <li><img src="../images/book.jpg" alt="商品图片">
-                        <dl>
-                            <dt>印际年度会员兑换</dt>
-                            <dd><span>￥250.00+3000</span>印币</dd>
-                            <del>原价:288.00</del>
-                        </dl>
-                        <ul>
-                            <li><a href="#" class="Button3">兑换</a></li>
-                            <li>已<span>78</span>人兑换</li>
-                        </ul>
-                    </li>
-                </ul></div>
+                <table style="text-align:center">
+                    <tr>
+                        <td>连续签到天数</td>
+                        <td>1~4</td>
+                        <td>5</td>
+                        <td>6~14</td>
+                        <td>15</td>
+                        <td>16~29</td>
+                        <td>30</td>
+                        <td>31+</td>
+                        <td>30+15*n</td>
+                    </tr>
+
+                    <tr>
+                        <td>基础印币</td>
+                        <td>10</td>
+                        <td>25</td>
+                        <td>20</td>
+                        <td>40</td>
+                        <td>20</td>
+                        <td>70</td>
+                        <td>30</td>
+                        <td>130</td>
+                    </tr>
+
+                    <tr>
+                        <td>会员种类</td>
+                        <td colspan='3'>月会员</td>
+                        <td colspan='2'>季会员</td>
+                        <td colspan='3'>年会员</td>
+                    </tr>
+
+                    <tr>
+                        <td>会员额外印币</td>
+                        <td colspan='3'>+5</td>
+                        <td colspan='2'>+10</td>
+                        <td colspan='3'>+15</td>
+                    </tr>
+
+                    <tr>
+                        <td>会员等级</td>
+                        <td>VIP1</td>
+                        <td>VIP2</td>
+                        <td>VIP3</td>
+                        <td>VIP4</td>
+                        <td>VIP5</td>
+                        <td>VIP6</td>
+                        <td>VIP7</td>
+                        <td>VIP8</td>
+                    </tr>
+
+                    <tr>
+                        <td>等级额外印币</td>
+                        <td>+2</td>
+                        <td>+4</td>
+                        <td>+6</td>
+                        <td>+8</td>
+                        <td>+10</td>
+                        <td>+13</td>
+                        <td>+16</td>
+                        <td>+20</td>
+                    </tr>
+                    <tr><td colspan='9'>说明：签到最终积分=基础积分+会员额外积分+等级额外积分，节日更多惊喜等着你哦！</td></tr>
+                </table>
+            </div>
         </div>
     </div>
-        <!--------印币兑换结束--------->
+        <!--------签到规则结束--------->
 </section>
+
+<script>
+    //点击兑换VIP出现确定弹窗
+    $('.point-duihuan').click(function(){
+        let yb=$(this).attr('yb');
+        let vip_type=$(this).siblings('.vip_type').html();
+        vip_types=vip_type.substr(0,4);
+        layer.open({
+            title: ['温馨提示'],
+            content: '确定兑换'+vip_types,
+            btn: ['确定','取消'],
+            shadeClose: true,
+            //回调函数
+            yes: function(index){
+                // self.location='/vip/intro';//确定按钮跳转地址
+                $.ajax({
+                    url: '/member/is_enough_points',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        _token:_token,
+                        yb:yb,
+                    },
+                    success: function (data) {
+                        console.log(data)
+                        if (data.status_code == 0) {
+                            
+                            layer.msg(data.data.msg,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+                        } else {
+                            // alert(data.message);
+                            layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+
+                        }
+                    }
+                });
+            }
+        })
+
+
+        /*$.ajax({
+            url: '/member/duihuanvip',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                _token:_token,
+                yb:yb,
+            },
+            success: function (data) {
+                console.log(data)
+                if (data.status_code == 0) {
+                    
+                    layer.msg(data.data.remark,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+                } else {
+                    // alert(data.message);
+                    layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+
+                }
+            }
+        });*/
+    })
+
+</script>
+
+
 <script src="/js/layer.js"></script> 
 <script src="/js/member.js"></script> 
 @endsection

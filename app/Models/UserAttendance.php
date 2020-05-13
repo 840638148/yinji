@@ -45,6 +45,57 @@ class UserAttendance extends Model
             $user->left_points = $user->left_points + $point;
             $user->continuity_day = $last_days + 1;
             $user->save();
+            $points=0;
+            $po=0;
+            
+            if($user->expire_time >= date('Y-m-d')){
+                $viplevel=User::getVipLevel($user->id);
+                if($viplevel=='/images/v_1.png'){
+                    $points=2;
+                }else if($viplevel=='/images/v_2.png'){
+                    $points=4;
+                }else if($viplevel=='/images/v_3.png'){
+                    $points=6;
+                }else if($viplevel=='/images/v_4.png'){
+                    $points=8;
+                }else if($viplevel=='/images/v_5.png'){
+                    $points=10;
+                }else if($viplevel=='/images/v_6.png'){
+                    $points=13;
+                }else if($viplevel=='/images/v_7.png'){
+                    $points=16;
+                }else if($viplevel=='/images/v_8.png'){
+                    $points=20;
+                }
+
+                if($points!=0){
+                    $das=[
+                        'user_id' => $user_id,
+                        'type' => '0',
+                        'point' => $points,
+                        'remark' => 'VIP等级签到额外分',
+                    ];
+                    UserPoint::create($das);                
+                }
+
+                if($user->level==1){
+                    $po=5;
+                }else if($user->level==2){
+                    $po=10;
+                }else if($user->level==3){
+                    $po=15;
+                }
+
+                if($po!=0){
+                    $da=[
+                        'user_id' => $user_id,
+                        'type' => '0',
+                        'point' => $po,
+                        'remark' => '会员签到额外分',
+                    ];
+                    UserPoint::create($da);                
+                }
+            }
 
             $point_data = [
                 'user_id' => $user_id,

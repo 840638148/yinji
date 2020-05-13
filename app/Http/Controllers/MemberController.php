@@ -224,6 +224,7 @@ class MemberController extends Controller
         // dd($attendances);
         $last_days = UserAttendance::getLastDays($user->id);
         $tips = UserAttendance::getAttendanceTips();
+        // dd($user->point_logs);
         $data = [
             'lang' => $lang,
             'user' => $user,
@@ -426,6 +427,69 @@ class MemberController extends Controller
     }
 
 
+    /**
+     * 兑换会员
+     * 
+     */
+    public function duihuanvip(Request $request){
+        $this->checkLogin();
+        $user = $this->getUserInfo();
+        if($request->yb){
+            $remark='';
+            if($request->yb==50){
+                $remark='兑换月会员';
+            }else if($request->yb==280){
+                $remark='兑换季会员';
+            }else if($request->yb==880){
+                $remark='兑换年会员';
+            }
+            
+            if($remark!=''){
+                $das=[
+                    'user_id' => $user->id,
+                    'type' => '1',
+                    'point' => $request->yb,
+                    'remark' => $remark,
+                ];
+                $re=UserPoint::create($das);
+                if($re){
+                    $left_points=User::where('id',$user->id)->value('left_points');
+                    $a=User::where('id',$user->id)->update(['left_points'=>$left_points-$request->yb]);
+                    // dd($a);
+                }  
+                             
+            }
+
+            $data=[
+                'remark'=>$remark.'成功',
+            ];
+
+            return Output::makeResult($request, $data);
+            
+        }
+
+        return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
+    }
+
+
+    /**
+     * 是否够印币兑换
+     */
+    public function is_enough_points(Request $request){
+        $this->checkLogin();
+
+        $user_id=Auth::id();
+        $yb=$request->yb;
+        $result=User::where('id',$user_id)->where('left_points','>',$yb)->first();
+        // dd($result);
+        if($result){
+            $data=['msg'=>'即将跳转支付页面'];
+            return Output::makeResult($request, $data);
+        }
+        
+        return Output::makeResult($request, null,500, '印币不够');
+    }
+
 
     //打分评论
     public function comment(Request $request)
@@ -510,17 +574,17 @@ class MemberController extends Controller
             
             // dd($is_pingyu);
             
-            // $user->points = $user->points + 10;
-            // $user->left_points = $user->left_points + 10;
-            // $user->save();
+            $user->points = $user->points + 10;
+            $user->left_points = $user->left_points + 10;
+            $user->save();
     
-            // $point_log = [
-            //     'user_id' => $user->id,
-            //     'type' => '0',
-            //     'point' => 10,
-            //     'remark' => '评语',
-            // ];
-            // UserPoint::create($point_log);  
+            $point_log = [
+                'user_id' => $user->id,
+                'type' => '0',
+                'point' => 10,
+                'remark' => '评语',
+            ];
+            UserPoint::create($point_log);  
             
 
         }

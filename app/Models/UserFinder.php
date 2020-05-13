@@ -579,7 +579,8 @@ class UserFinder extends Model
             $today_start = date('Y-m-d 00:00:00');
             $today_end   = date('Y-m-d 23:59:59');
             $fx_sum = UserPoint::where('user_id', $user_id)->where('remark','发现')->where('created_at', '>=', $today_start)->where('created_at', '<=', $today_end)->count();
-            // dd($fx_sum);
+            
+            //每天只能发现10次图片加印币，超过10次后不加印币
             if($fx_sum<=10){
                 $point_log = [
                     'user_id' => $user_id,

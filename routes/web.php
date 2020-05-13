@@ -113,6 +113,8 @@ Route::post('member/comment', 'MemberController@comment');
 Route::post('member/upload_img', 'MemberController@uploadImg');//修改用户的上传头像
 Route::post('member/upload_imgs', 'MemberController@uploadImgs');//修改用户的个人主图
 Route::post('member/baseedit', 'MemberController@baseedit');//修改用户的基本信息
+Route::post('member/duihuanvip', 'MemberController@duihuanvip');//兑换会员
+Route::post('member/is_enough_points', 'MemberController@is_enough_points');//积分是否够
 
 
 
