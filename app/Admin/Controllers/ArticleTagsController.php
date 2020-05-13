@@ -32,6 +32,17 @@ class ArticleTagsController extends BaseController
     {
         $grid = new Grid(new $this->currentModel);
 
+
+        $grid->filter(function($filter){
+
+            // 去掉默认的id过滤器
+            $filter->disableIdFilter();
+
+            // 在这里添加字段过滤器
+            $filter->like('name_cn', '名称（中）');
+
+        });
+
         $grid->id('ID')->sortable();
         $grid->name_cn('名称（中）')->sortable();
         $grid->name_en('名称（英）')->sortable();
