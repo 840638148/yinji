@@ -112,7 +112,7 @@
 	      <li><a href="/member/collect">我的收藏</a></li>
 	      <li><a href="/member/subscription">我的订阅</a></li>
 	      <li><a href="/member/follow">我的关注</a></li>
-	      <li><a href="/member/point">我的积分</a></li>
+	      <li><a href="/member/point">我的印币</a></li>
 	      <li><a href="/member/profile">个人资料</a></li>
     </ul>
   </div>
@@ -121,9 +121,10 @@
   <div class="mt30 home_box">
     <div class="order_center">
       <ul>
-        <li class="order1"><a href="/vip/index/{{$user->id}}">我的主页</a><i class="order1_bj"></i> </li>
+        <!-- <li class="order1"><a href="/vip/index/{{$user->id}}">我的主页</a><i class="order1_bj"></i> </li> -->
+        <li class="order1"><a href="javascript:alert1();">我的主页</a><i class="order1_bj"></i> </li>
         <li class="order2"><a href="/vip/intro">成为会员</a><i class="order1_bj"></i> </li>
-        <li class="order3"><a href="/member/point">我的积分</a><i class="order1_bj"></i> </li>
+        <li class="order3"><a href="/member/point">我的印币</a><i class="order1_bj"></i> </li>
         <li class="order4 bookInSign"><a href="javascript:;">签到</a></li>
       </ul>
     </div>
@@ -217,14 +218,19 @@
 <div class="sign_integral_box" style=" height:100px;">
   <div class="left integral" style="width:400px;">
     <div class="sign_ico left"></div>
-    <h2 class="left">积分：<span id="user-point">{{$user->points}}</span>分</h2>
+    <h2 class="left">印币：<span id="user-point">{{$user->points}}</span>分</h2>
     <p class="left" style="width:316px; margin-left:20px;">已连续签到<span id="last-day">{{$last_days or '0'}}</span>天</p>
   </div>
-  <a href="#" class="fr Button3 mt10" id="attendance">签到</a> </div>
+  @if($is_qiandao)
+    <a href="javascript:void(0);" class="fr Button6 mt10" disabled="disabled" id="attendances" style="width:80px;height:36px;background: #ccc;color: #fff;display: block;text-align: center;line-height: 36px;border-radius: 3px;cursor: no-drop;">已签到</a> 
+  @else
+    <a href="javascript:void(0);" class="fr Button3 mt10" id="attendance">签到</a> 
+  @endif
+  </div>
 <div class="sign_tab">
   <ul>
     <li class="active record_tab">签到记录</li>
-    <li class="change_tab">积分兑换</li>
+    <li class="change_tab">签到规则</li>
   </ul>
 </div>
 <!------签到记录---------->
@@ -233,8 +239,9 @@
     <ul>
       @foreach ($tips as $tip)
       @if ($loop->first && $last_days > 0)
-      <li class="active"> @else
-      
+      <li class="active"> 
+      @else
+
       <li> @endif
         <h3>{{$tip['title']}}</h3>
         <p>+{{$tip['point']}}</p>
@@ -247,7 +254,7 @@
     
     <tr>
       <th>用户名</th>
-      <th>获得积分</th>
+      <th>获得印币</th>
       <th>等级</th>
       <th>签到时间</th>
     </tr>
@@ -259,7 +266,7 @@
           <tr>
             <td>{{$attendance->user->nickname or ''}}</td>
             <td>+{{$attendance->point or ''}}</td>
-            <td>VIP{{$attendance->vip_level or ''}}</td>
+            <td><img src="{{$attendance->vip_level}}" alt=""></td>
             <td>{{$attendance->created_at->toDateString()}}</td>
           </tr>
           @endforeach
@@ -271,66 +278,114 @@
       </tbody>
     
   </table>
-  <div class="shuomin">说明：连续签到可获得更多积 ，本站积分可增加下载次数和会员费用抵扣。<br>
-   使用规则：即10积分=1元，每增加一次下载次数使用10积分！</div>
+  <div class="shuomin">说明：连续签到可获得更多积 ，本站印币可增加下载次数和会员费用抵扣。<br>
+   使用规则：即10印币=1元，每增加一次下载次数使用10印币！</div>
 </div>
 <!------签到记录结束---------->
-<!--------积分兑换--------->
+<!--------签到规则--------->
 <div class="change_box tab_box">
   <div class="change">
-  <ul>
-  <li><img src="images/book.jpg" alt="商品图片">
-  <dl>
-  <dt>印际月度会员兑换</dt>
-  <dd><span>￥23.00+500</span>积分</dd>
-  <del>原价:28.00</del>
-  </dl>
-  <ul>
-  <li><a href="#" class="Button3">兑换</a></li>
-  <li>已<span>78</span>人兑换</li>
-  </ul>
-  </li>
-   <li><img src="images/book.jpg" alt="商品图片">
-  <dl>
-  <dt>印际季度会员兑换</dt>
-  <dd><span>￥76.00+1200</span>积分</dd>
-  <del>原价:88.00</del>
-  </dl>
-  <ul>
-  <li><a href="#" class="Button3">兑换</a></li>
-  <li>已<span>78</span>人兑换</li>
-  </ul>
-  </li>
-   <li><img src="images/book.jpg" alt="商品图片">
-  <dl>
-  <dt>印际年度会员兑换</dt>
-  <dd><span>￥250.00+3000</span>积分</dd>
-  <del>原价:288.00</del>
-  </dl>
-  <ul>
-  <li><a href="#" class="Button3">兑换</a></li>
-  <li>已<span>78</span>人兑换</li>
-  </ul>
-  </li>
-  </ul></div>
+    <table style="text-align:center">
+      <tr>
+        <td>连续签到天数</td>
+        <td>1~4</td>
+        <td>5</td>
+        <td>6~14</td>
+        <td>15</td>
+        <td>16~29</td>
+        <td>30</td>
+        <td>31+</td>
+        <td>30+15*n</td>
+      </tr>
+
+      <tr>
+        <td>基础印币</td>
+        <td>10</td>
+        <td>25</td>
+        <td>20</td>
+        <td>40</td>
+        <td>20</td>
+        <td>70</td>
+        <td>30</td>
+        <td>130</td>
+      </tr>
+
+      <tr>
+        <td>会员种类</td>
+        <td colspan='3'>月会员</td>
+        <td colspan='2'>季会员</td>
+        <td colspan='3'>年会员</td>
+      </tr>
+
+      <tr>
+        <td>会员额外印币</td>
+        <td colspan='3'>+5</td>
+        <td colspan='2'>+10</td>
+        <td colspan='3'>+15</td>
+      </tr>
+
+      <tr>
+        <td>会员等级</td>
+        <td>VIP1</td>
+        <td>VIP2</td>
+        <td>VIP3</td>
+        <td>VIP4</td>
+        <td>VIP5</td>
+        <td>VIP6</td>
+        <td>VIP7</td>
+        <td>VIP8</td>
+      </tr>
+
+      <tr>
+        <td>等级额外印币</td>
+        <td>+2</td>
+        <td>+4</td>
+        <td>+6</td>
+        <td>+8</td>
+        <td>+10</td>
+        <td>+13</td>
+        <td>+16</td>
+        <td>+20</td>
+      </tr>
+      <tr><td colspan='9'>说明：签到最终积分=基础积分+会员额外积分+等级额外积分，节日更多惊喜等着你哦！</td></tr>
+    </table>
+  </div>
 </div>
-<!--------积分兑换结束--------->
+<!--------签到规则结束--------->
 </div>
     
-
   <script type="text/javascript">
+    function alert1(){
+      layer.msg('尽请期待！',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+    }
+    
+    // 签到
+    // $(document).on('click','.bookInSign',function(){
+    //     layer.open({
+    //         type: 1,
+    //         title: false,
+    //         closeBtn: 0,
+    //         anim: -1,
+    //         shadeClose: true,
+    //         isOutAnim: false,
+    //         content: $('#bookInSign')
+    //     })
+    // })
 
-      function selectItem(index){
-          $('.dingyue-item .select-item').hide()
-          $($('.dingyue-item')[index]).find('.select-item').show()
-          localStorage.setItem("selectdD", index);
-      }
 
-      function selectItemGuanZhu(index){
-          $('.guanzhu-item .select-item').hide()
-          $($('.guanzhu-item')[index]).find('.select-item').show()
-          localStorage.setItem("selectdG", index);
-      }
+
+
+    function selectItem(index){
+        $('.dingyue-item .select-item').hide()
+        $($('.dingyue-item')[index]).find('.select-item').show()
+        localStorage.setItem("selectdD", index);
+    }
+
+    function selectItemGuanZhu(index){
+        $('.guanzhu-item .select-item').hide()
+        $($('.guanzhu-item')[index]).find('.select-item').show()
+        localStorage.setItem("selectdG", index);
+    }
 
 
 

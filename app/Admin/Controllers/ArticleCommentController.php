@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Controllers\BaseController;
 use App\Models\Article;
 use App\Models\ArticleComment;
+use App\Models\UserPoint;
 use App\User;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
@@ -13,6 +14,7 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Illuminate\Http\Request;
 use Validator;
+use DB;
 use Encore\Admin\Facades\Admin;
 
 use App\Models\ArticleComment as CurrentModel;
@@ -69,6 +71,7 @@ class ArticleCommentController extends BaseController
             'on'  => ['value' => 1, 'text' => '通过', 'color' => 'success'],
             'off' => ['value' => 0, 'text' => '未审核', 'color' => 'default'],
         ];
+        // $grid->column('display', '审核状态')->switch($states)->increment('user_points.point', 10);
         $grid->column('display', '审核状态')->switch($states);
         //$grid->display('审核状态')->switch($states);
         $grid->created_at('添加时间')->sortable();
@@ -95,6 +98,8 @@ class ArticleCommentController extends BaseController
             'off' => ['value' => 0, 'text' => '未审核', 'color' => 'default'],
         ];
         $form->switch('display', '审核状态')->states($states);
+        
+        // Db::table('article_comments')->where('comment_id',comment_id)
 
         return $form;
     }

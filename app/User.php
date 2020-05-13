@@ -75,24 +75,27 @@ class User extends Authenticatable
         $level = '/images/v_0.png';
         if ($user->level !=0 && $user->expire_time >= date('Y-m-d')) {
             if ($user->points >= 99999) {
+                // $level = 7;
+                $level = '/images/v_7.png';
+            } else if ($user->points >= 60000) {
                 // $level = 6;
                 $level = '/images/v_6.png';
-            } else if ($user->points >= 66666) {
+            } else if ($user->points >= 36666) {
                 // $level = 5;
                 $level = '/images/v_5.png';
-            } else if ($user->points >= 38888) {
+            } else if ($user->points >= 18888) {
                 // $level = 4;
                 $level = '/images/v_4.png';
-            } else if ($user->points >= 18888) {
+            } else if ($user->points >= 6666) {
                 // $level = 3;
                 $level = '/images/v_3.png';
-            } else if ($user->points >= 6666) {
+            } else if ($user->points >= 1888) {
                 // $level = 2;
                 $level = '/images/v_2.png';
-            } else if ($user->points <= 1888) {
+            } else if ($user->points >= 0) {
                 // $level = 1;
                 $level = '/images/v_1.png';
-            } 
+            }
         }else{
             // $level = 0;
             $level = '/images/v_0.png';

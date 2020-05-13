@@ -511,8 +511,9 @@ $("#myform #txt_name").keydown(function (e) {
         	is_sc:is_sc,
         },
         success: function (data) {
-			// console.log(data)
+			  console.log(data)
           if (data.status_code == 0) {
+            layer.msg('收藏成功',{skin: 'intro-login-class layui-layer-hui'})
             that.html('已收藏')
             that.addClass('have-collect');
           }

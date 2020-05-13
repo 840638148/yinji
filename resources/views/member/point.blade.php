@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-  {{trans('comm.yinji')}} - 个人中心 -积分中心
+  {{trans('comm.yinji')}} - 个人中心 -印币中心
 @endsection
 
 @section('content')
@@ -30,7 +30,7 @@
       <li><a href="/member/collect">我的收藏</a></li>
       <li><a href="/member/subscription">我的订阅</a></li>
       <li><a href="/member/follow">我的关注</a></li>
-      <li class="current"><a href="/member/point">我的积分</a></li>
+      <li class="current"><a href="/member/point">我的印币</a></li>
       <li><a href="/member/profile">个人资料</a></li>
     </ul>
   </div>
@@ -170,34 +170,34 @@
       <ul>
         <li class="ico_jftj01">
           <div class="tj_shuzi">
-            <span class="point-title">我的积分</span>
+            <span class="point-title">我的印币</span>
             <p>{{$user->points}}</p>
 
           </div>
         </li>
         <li class="ico_jftj02">
           <div class="tj_shuzi">
-            <span class="point-title">剩余积分</span>
+            <span class="point-title">剩余印币</span>
             <p>{{$user->left_points}}</p>
            </div>
         </li>
         <li class="ico_jftj03">
              <div class="tj_shuzi">
-                <span class="point-title">已用积分</span>
+                <span class="point-title">已用印币</span>
                 <p>{{$user->points - $user->left_points}}</p>
             </div>
         </li>
-        <li class="ico_jftj04">
+        <li class="ico_jftj04" style="font-size:13px;">
           <div class="tj_shuzi">
             <span class="point-title">可下载次数</span>
             </div>
-            <p class="down-show">{{$user->download_num}}<span>免费下载次数</span></p><p class="down-show">{{$user->download_num - $user->use_download_num}}<span>可下载次数</span></p>
+            <p class="down-show">{{$user->download_num - $user->use_download_num}}<span style="font-size:13px;">剩余下载次数</span></p><p class="down-show">{{$user->download_num}}<span style="font-size:13px;">印币抵扣次数</span></p>
         </li>
       </ul>
        <ul>
             <li class="ico_jftj-inner">
                 <div class="tj_shuzi">
-                    <span class="point-title-small">今日积分</span>
+                    <span class="point-title-small">今日印币</span>
                     <div class="today-point">{{ $today_point['today'] }}</div>
                     <div class="qiandao">
                         <p>
@@ -218,26 +218,26 @@
             <li class="ico_jftj-inner">
                 <div class="tj_shuzi">
                     <span class="point-title">月度会员兑换</span>
-                    <span class="point-duihuan activity">25+50积分兑换</span>
+                    <span class="point-duihuan activity">25+50印币兑换</span>
                 </div>
             </li>
             <li class="ico_jftj-inner">
                 <div class="tj_shuzi">
                     <span class="point-title">季度会员兑换</span>
-                    <span class="point-duihuan">25+50积分兑换</span>
+                    <span class="point-duihuan">25+50印币兑换</span>
                 </div>
             </li>
             <li class="ico_jftj-inner">
                 <div class="tj_shuzi">
                     <span class="point-title">年度会员兑换</span>
-                    <span class="point-duihuan">25+50积分兑换</span>
+                    <span class="point-duihuan">25+50印币兑换</span>
                 </div>
             </li>
         </ul>
     </div>
     <div class="title">
-      <h2 class="fl">积分记录</h2>
-      {{--<a class="fr" href="/static/integral.html" style="line-height:48px; color:#06C">如何积分?</a>--}}
+      <h2 class="fl">印币记录</h2>
+      {{--<a class="fr" href="/static/integral.html" style="line-height:48px; color:#06C">如何印币?</a>--}}
     </div>
 
       <div class="pont-list">
@@ -306,14 +306,14 @@
         <div class="sign_integral_box" style=" height:100px;">
             <div class="left integral" style="width:400px;">
                 <div class="sign_ico left"></div>
-                <h2 class="left">积分：<span id="user-point">{{$user->points}}</span>分</h2>
+                <h2 class="left">印币：<span id="user-point">{{$user->points}}</span>分</h2>
                 <p class="left" style="width:316px; margin-left:20px;">已连续签到<span id="last-day">{{$last_days or '0'}}</span>天</p>
             </div>
             <a href="#" class="fr Button3 mt10" id="attendance">签到</a> </div>
         <div class="sign_tab">
             <ul>
                 <li class="active record_tab">签到记录</li>
-                <li class="change_tab">积分兑换</li>
+                <li class="change_tab">印币兑换</li>
             </ul>
         </div>
         <!------签到记录---------->
@@ -335,7 +335,7 @@
                 <tbody>
                 <tr>
                     <th>用户名</th>
-                    <th>获得积分</th>
+                    <th>获得印币</th>
                     <th>等级</th>
                     <th>签到时间</th>
                 </tr>
@@ -358,18 +358,18 @@
                 </tbody>
 
             </table>
-            <div class="shuomin">说明：连续签到可获得更多积 ，本站积分可增加下载次数和会员费用抵扣。<br>
-                使用规则：即10积分=1元，每增加一次下载次数使用10积分！</div>
+            <div class="shuomin">说明：连续签到可获得更多积 ，本站印币可增加下载次数和会员费用抵扣。<br>
+                使用规则：即10印币=1元，每增加一次下载次数使用10印币！</div>
         </div>
         <!------签到记录结束---------->
-        <!--------积分兑换--------->
+        <!--------印币兑换--------->
         <div class="change_box tab_box">
             <div class="change">
                 <ul>
                     <li><img src="../images/book.jpg" alt="商品图片">
                         <dl>
                             <dt>印际月度会员兑换</dt>
-                            <dd><span>￥23.00+500</span>积分</dd>
+                            <dd><span>￥23.00+500</span>印币</dd>
                             <del>原价:28.00</del>
                         </dl>
                         <ul>
@@ -380,7 +380,7 @@
                     <li><img src="../images/book.jpg" alt="商品图片">
                         <dl>
                             <dt>印际季度会员兑换</dt>
-                            <dd><span>￥76.00+1200</span>积分</dd>
+                            <dd><span>￥76.00+1200</span>印币</dd>
                             <del>原价:88.00</del>
                         </dl>
                         <ul>
@@ -391,7 +391,7 @@
                     <li><img src="../images/book.jpg" alt="商品图片">
                         <dl>
                             <dt>印际年度会员兑换</dt>
-                            <dd><span>￥250.00+3000</span>积分</dd>
+                            <dd><span>￥250.00+3000</span>印币</dd>
                             <del>原价:288.00</del>
                         </dl>
                         <ul>
@@ -402,7 +402,7 @@
                 </ul></div>
         </div>
     </div>
-        <!--------积分兑换结束--------->
+        <!--------印币兑换结束--------->
 </section>
 <script src="/js/layer.js"></script> 
 <script src="/js/member.js"></script> 

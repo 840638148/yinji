@@ -123,7 +123,7 @@
                     <ul class="layout_ul ajaxposts article-content">
                         @foreach ($articles as $article)
                             <li class="layout_li ajaxpost">
-                            <div class="interior_dafen">{{$article->starsavg !=0 ? $article->starsavg : '5.0'}}</div>
+                            <div class="interior_dafen">{{$article->article_avg !='' ||  $article->article_avg !=null ? sprintf("%.1f",$article->article_avg) : '5.0'}}</div>
                                 <article class="postgrid">
                                     <figure>
                                         <a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif" title="{{get_article_title($article)}}" target="_blank">

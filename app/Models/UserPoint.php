@@ -14,7 +14,7 @@ class UserPoint extends Model
     
     public static function getPointLogs($user_id, $limit = 50)
     {
-        $point_logs = self::where('user_id', $user_id)->limit($limit)->get();
+        $point_logs = self::where('user_id', $user_id)->orderby('created_at','desc')->limit($limit)->get();
         return $point_logs;
     }
     

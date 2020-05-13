@@ -42,14 +42,18 @@ class MemberController extends Controller
         $attendances = UserAttendance::getAttendanceLog();
         $last_days = UserAttendance::getLastDays($user->id);
         $tips = UserAttendance::getAttendanceTips();
-        // $user->vip_level=User::getVipLevel($user->id);
-// dd($user);
+
+        $today_start = date('Y-m-d 00:00:00');
+        $today_end   = date('Y-m-d 23:59:59');
+        $is_qiandao = UserAttendance::where('user_id', $user->id)->where('created_at', '>=', $today_start)->where('created_at', '<=', $today_end)->first();
+        // dd($tips);
         $data = [
             'lang' => $lang,
             'user' => $user,
             'attendances' => $attendances,
             'last_days' => $last_days,
             'tips' => $tips,
+            'is_qiandao' => $is_qiandao,
         ];
         return view('member.index', $data);
     }
@@ -214,6 +218,10 @@ class MemberController extends Controller
         $user->point_logs = UserPoint::getPointLogs($user->id);
         $today_point = UserPoint::getTodayPoint($user->id);
         $attendances = UserAttendance::getAttendanceLog();
+        $today_start = date('Y-m-d 00:00:00');
+        $today_end   = date('Y-m-d 23:59:59');
+        $is_qiandao = UserAttendance::where('user_id', $user->id)->where('created_at', '>=', $today_start)->where('created_at', '<=', $today_end)->first();
+        // dd($attendances);
         $last_days = UserAttendance::getLastDays($user->id);
         $tips = UserAttendance::getAttendanceTips();
         $data = [
@@ -223,6 +231,7 @@ class MemberController extends Controller
             'today_point' => $today_point,
             'last_days' => $last_days,
             'tips' => $tips,
+            'is_qiandao' => $is_qiandao,
         ];
         return view('member.point', $data);
     }
@@ -457,6 +466,29 @@ class MemberController extends Controller
                 'stars' => $request->stars,
                 'display' => 1,
             ];
+
+            $result = $obj::create($data);
+
+            $user = User::find(Auth::id());
+            $user_info = [
+                'id' => $user->id,
+                'nickname' => $user->nickname,
+                'vip_level' => 'level' . $user->vip_level,
+                'avatar' => $user->avatar ?? '/img/avatar.png',
+            ];
+            
+            $user->points = $user->points + 2;
+            $user->left_points = $user->left_points + 2;
+            $user->save();
+    
+            $point_log = [
+                'user_id' => $user->id,
+                'type' => '0',
+                'point' => 2,
+                'remark' => '评分',
+            ];
+            UserPoint::create($point_log);
+
         }else{
             $data = [
                 'comment_id' => $request->comment_id,
@@ -464,31 +496,37 @@ class MemberController extends Controller
                 'content' => $request->comment,
                 'stars' => $request->stars,
             ];
+
+            $result = $obj::create($data);
+
+            $user = User::find(Auth::id());
+            $user_info = [
+                'id' => $user->id,
+                'nickname' => $user->nickname,
+                'vip_level' => 'level' . $user->vip_level,
+                'avatar' => $user->avatar ?? '/img/avatar.png',
+            ];
+            
+            
+            // dd($is_pingyu);
+            
+            // $user->points = $user->points + 10;
+            // $user->left_points = $user->left_points + 10;
+            // $user->save();
+    
+            // $point_log = [
+            //     'user_id' => $user->id,
+            //     'type' => '0',
+            //     'point' => 10,
+            //     'remark' => '评语',
+            // ];
+            // UserPoint::create($point_log);  
+            
+
         }
 
 
-        $result = $obj::create($data);
 
-        $user = User::find(Auth::id());
-        //$user = $this->getUserInfo();
-        $user_info = [
-            'id' => $user->id,
-            'nickname' => $user->nickname,
-            'vip_level' => 'level' . $user->vip_level,
-            'avatar' => $user->avatar ?? '/img/avatar.png',
-        ];
-        
-        $user->points = $user->points + 2;
-        $user->left_points = $user->left_points + 2;
-        $user->save();
-
-        $point_log = [
-            'user_id' => $user->id,
-            'type' => '0',
-            'point' => 2,
-            'remark' => '评论',
-        ];
-        UserPoint::create($point_log);
 
         return Output::makeResult($request, ['user_info' => $user_info, 'comment_info' => $result]);
 

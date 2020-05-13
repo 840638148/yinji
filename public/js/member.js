@@ -243,18 +243,7 @@ function deleteData(folder_type,folder_id){
     });
 }
 
-// 签到
-$(document).on('click','.bookInSign',function(){
-    layer.open({
-        type: 1,
-        title: false,
-        closeBtn: 0,
-        anim: -1,
-        shadeClose: true,
-        isOutAnim: false,
-        content: $('#bookInSign')
-    })
-})
+
 
 //切换签到tab
 $(document).on('click','.sign_tab li',function(){
@@ -269,17 +258,17 @@ $(document).on('click','.sign_tab li',function(){
     }
 
 })
-$(document).on('click','.record li',function(){
-    var index = $(this).index();
-    if(!$(this).hasClass('active')){
-        $(this).addClass('active');
-        $(this).siblings().removeClass('active');
-    }
+// $(document).on('click','.record li',function(){
+//     var index = $(this).index();
+//     if(!$(this).hasClass('active')){
+//         $(this).addClass('active');
+//         $(this).siblings().removeClass('active');
+//     }
 
-})
+// })
 
 $(document).on('click','.my-finder .item_content > li',function(){
-// alert('安顺达杀手');
+    // alert('安顺达杀手');
     var folder_id = $(this).attr('data-id');
     
     $.ajax({
@@ -325,6 +314,7 @@ $(document).on('click','.more-img-item',function(){
     $(this).parents('.img_browse').find('.selected-image').attr('src',src);
 })
 
+qddays=0;
 $(document).on('click','#attendance',function(){
     $.ajax({
         url: '/member/attendance',
@@ -334,17 +324,45 @@ $(document).on('click','#attendance',function(){
             _token:_token
         },
         success: function (data) {
+            qddays=data.data.last_days;
             if (data.status_code == 0) {
                 $('#user-point').html(data.data.points);
                 $('#last-day').html(data.data.last_days);
-                alert('签到成功！');
+                // $('.record').find('ul li').attr('id','qd_'+data.data.last_days);
+                // alert('签到成功！');
+                layer.msg('签到成功！印币+2',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
             } else {
-                alert(data.message);
+                // alert(data.message);
+                layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+
             }
         }
     });
+    
+})
+
+// 签到
+$(document).on('click','.bookInSign',function(){
+    layer.open({
+        type: 1,
+        title: false,
+        closeBtn: 0,
+        anim: -1,
+        shadeClose: true,
+        isOutAnim: false,
+        content: $('#bookInSign')
+    })
+    //签到的天数
+    for (let i = 0;i <= qddays; i++) {
+        // 给#sign-i加上红色样式
+        $(this).addClass('active');
+        // $(this).siblings().removeClass('active');
+    }
+    console.log(qddays);
+
 
 })
+
 
 
 //删除发现图片

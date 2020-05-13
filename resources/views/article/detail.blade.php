@@ -607,7 +607,7 @@
                             //$msg += '<div class="msgTxt">' + comment + '</div></dl></div>';
                             //$(".msgCon").prepend($msg);
                             if(comment==""){
-                                layer.msg('评分成功',{skin: 'intro-login-class layui-layer-hui'});
+                                layer.msg('评分成功,印币+2',{skin: 'intro-login-class layui-layer-hui'});
                                 location.reload();
                             }else{
                                 $(".message").html('');
