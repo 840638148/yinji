@@ -468,7 +468,7 @@ class ArticleController extends Controller
         if($request->category_id){
             $category_ids = [$request->category_id];
             $articles =Article::getArticles($request, $category_ids);
-
+            
             foreach ($articles as $k=>$article) {
                 $category_html = '';
                 if ($article->category) {
@@ -509,27 +509,28 @@ class ArticleController extends Controller
             }
 
         }else{
+            $articles = Article::where('article_status', '2')->where('display', '0');
             if($request->type=='starssort'){
                 if($request->sjx=='desc'){
-                    $articles = Article::orderBy('article_avg','desc')->paginate(30);
+                    $articles = $articles->orderBy('article_avg','desc')->paginate(15);
                 }else{
-                    $articles = Article::orderby('article_avg','asc')->paginate(30);
+                    $articles = $articles->orderby('article_avg','asc')->paginate(15);
                 }
             }
                 
             if($request->type=='timesort'){
                 if($request->sjx=='desc' ){
-                    $articles = Article::orderBy('updated_at','desc')->paginate(30);
+                    $articles = $articles->orderBy('release_time','desc')->paginate(15);
                 }else{
-                    $articles = Article::orderBy('updated_at','asc')->paginate(30);
+                    $articles = $articles->orderBy('release_time','asc')->paginate(15);
                 }
             }
 
             if($request->type=='llsort'){
                 if($request->sjx=='desc'){
-                    $articles = Article::orderBy('view_num','desc')->paginate(30);
+                    $articles = $articles->orderBy('view_num','desc')->paginate(15);
                 }else{
-                    $articles = Article::orderBy('view_num','asc')->paginate(30);
+                    $articles = $articles->orderBy('view_num','asc')->paginate(15);
                 }
             }
             
