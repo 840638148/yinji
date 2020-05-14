@@ -145,6 +145,27 @@
       </ul>
     </div>
     
+    <!-- 我的下载 -->
+    <div class="title  mt30">
+      <h2 class="fl">我的下载 <b style="margin-left:50px;color:red;">(温馨提示:所有的下载链接只显示三天时间,三天过后自动过期,需要再次去相应文章下载兑换哦!)</b></h2>
+      <span class="fr"><a href="/member/downmore">更多</a></span>
+    </div>
+    @foreach($down as $v)
+    <div class="down" style="height:130px;">
+
+      <div class="downleft" style="float: left;width: 160px;margin-bottom:20px;">
+        <a href="/article/{{$v->static_url}}" target="_blank"><img src="/uploads/{{$v->custom_thum}}" alt="{{$v->title_designer_cn}} - {{$v->title_name_cn}}"></a>
+      </div>
+      <div class="downright" style="float: left;margin-left: 100px;">
+        <p style="margin-top:10px;">百度网盘地址:<a href="{{mb_substr($v->vip_download,0,-10)}}" target="_blank">{{mb_substr($v->vip_download,0,-10)}}</a> </p>
+        <p style="margin-top:10px;">密码:{{substr($v->vip_download,-5)}}</p>
+      </div>
+
+    </div>
+    @endforeach
+    <!-- 我的下载结束 -->
+
+
     <!----------设计师订阅结束------->
     @if($user->is_vip)
     <div class="title mt30">
@@ -221,10 +242,11 @@
     <h2 class="left">印币：<span id="user-point">{{$user->points}}</span>分</h2>
     <p class="left" style="width:316px; margin-left:20px;">已连续签到<span id="last-day">{{$last_days or '0'}}</span>天</p>
   </div>
+  <span class="closebtn" onclick="layer.closeAll();" style="position: absolute;right:0;top:0;padding: 10px 10px 5px 10px;cursor: pointer;">╳</span>
   @if($is_qiandao)
-    <a href="javascript:void(0);" class="fr Button6 mt10" disabled="disabled" id="attendances" style="width:80px;height:36px;background: #ccc;color: #fff;display: block;text-align: center;line-height: 36px;border-radius: 3px;cursor: no-drop;">已签到</a> 
+      <a href="javascript:void(0);" class="fr Button6 mt10" disabled="disabled" id="attendances" style="position:absolute;right:30px;top:50px;width:80px;height:36px;background: #ccc;color: #fff;display: block;text-align: center;line-height: 36px;border-radius: 3px;cursor:no-drop;">已签到</a> 
   @else
-    <a href="javascript:void(0);" class="fr Button3 mt10" id="attendance">签到</a> 
+      <a href="javascript:void(0);" class="fr Button3 mt10" id="attendance" style="position: absolute;right:30px;top:50px;">签到</a> 
   @endif
   </div>
 <div class="sign_tab">
@@ -542,8 +564,5 @@
 
 <script src="/js/layer.js"></script>
 <script src="/js/member.js"></script>
-
-
-
 
 @endsection

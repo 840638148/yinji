@@ -49,6 +49,9 @@ class Controller extends BaseController
             $user->follow_num = User::getFollowNum($user->id);
             $user->subscription_num = User::getSubscriptionNum($user->id);
             $user->finder_num = User::getFinderNum($user->id);
+            $user->getKouDownloadNum=User::getKouDownloadNum($user->id);
+            $user->getFreeDownloadNum=User::getFreeDownloadNum($user->id);
+            $user->getLeftDownloadNum=User::getLeftDownloadNum($user->id);
         }
         return $user;
     }

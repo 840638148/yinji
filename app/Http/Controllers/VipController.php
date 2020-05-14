@@ -167,8 +167,10 @@ class VipController extends Controller
         
         $result = UserFinder::findercollect($request);
 		
-        if (true === $result) {
-            return Output::makeResult($request, null);
+        if ($result<=10) {
+            return Output::makeResult($request, null, 0, '收藏成功,印币+2');
+        }else{
+            return Output::makeResult($request, null,0,'收藏成功!');
         }
         return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
     }

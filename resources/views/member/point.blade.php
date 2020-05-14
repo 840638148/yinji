@@ -197,9 +197,9 @@
         </li>
         <li class="ico_jftj04" style="font-size:13px;">
           <div class="tj_shuzi">
-            <span class="point-title">可下载次数</span>
+            <span class="point-title">总下载次数: <b style="color:red">{{$user->download_num}}</b></span>
             </div>
-            <p class="down-show">{{$user->download_num - $user->use_download_num}}<span style="font-size:13px;">剩余下载次数</span></p><p class="down-show">{{$user->download_num}}<span style="font-size:13px;">印币抵扣次数</span></p>
+            <p class="down-show">{{$user->getLeftDownloadNum}}<span style="font-size:13px;">剩余下载次数</span></p><p class="down-show">{{$user->getKouDownloadNum}}<span style="font-size:13px;">印币抵扣次数</span></p>
         </li>
       </ul>
        <ul>
@@ -217,29 +217,29 @@
                             @endif
                             
                         </p>
-                        <p><span>评分：</span>{{ $today_point['pingfen'] }}/100</p>
+                        <p><span>发现：</span>{{ $today_point['faxian'] }}/100</p>
                         <p><span>留言：</span>{{ $today_point['comment'] }}/500</p>
                     </div>
                 </div>
-                <div class="bar"><span class="bar-length" style="width: {{($today_point['today']/$today_point['total'])*100}}%"></span><p><span>{{ $today_point['today'] }}</span>/{{ $today_point['total'] }}</p></div>
+                <div class="bar"><span class="bar-length" style="width: {{($today_point['today']/600)*100}}%"></span><p><span>{{ $today_point['today'] }}</span>/600</p></div>
             </li>
             <li class="ico_jftj-inner">
                 <div class="tj_shuzi">
                     <span class="point-title vip_type">月度会员兑换</span>
                     <!-- <span class="point-duihuan activity">25+50印币兑换</span> -->
-                    <span class="point-duihuan" yb="50">25+50印币兑换</span>
+                    <span class="point-duihuan" yb="50" money="25">25+50印币兑换</span>
                 </div>
             </li>
             <li class="ico_jftj-inner">
                 <div class="tj_shuzi">
                     <span class="point-title vip_type">季度会员兑换</span>
-                    <span class="point-duihuan" yb="280">140+280印币兑换</span>
+                    <span class="point-duihuan" yb="280" money="140">140+280印币兑换</span>
                 </div>
             </li>
             <li class="ico_jftj-inner">
                 <div class="tj_shuzi">
                     <span class="point-title vip_type">年度会员兑换</span>
-                    <span class="point-duihuan" yb="880">911+880印币兑换</span>
+                    <span class="point-duihuan" yb="880" money="911">911+880印币兑换</span>
                 </div>
             </li>
         </ul>
@@ -318,10 +318,11 @@
                 <h2 class="left">印币：<span id="user-point">{{$user->points}}</span>分</h2>
                 <p class="left" style="width:316px; margin-left:20px;">已连续签到<span id="last-day">{{$last_days or '0'}}</span>天</p>
             </div>
+            <span class="closebtn" onclick="layer.closeAll();" style="position: absolute;right:0;top:0;padding: 10px 10px 5px 10px;cursor: pointer;">╳</span>
             @if($is_qiandao)
-                <a href="javascript:void(0);" class="fr Button6 mt10" disabled="disabled" id="attendances" style="width:80px;height:36px;background: #ccc;color: #fff;display: block;text-align: center;line-height: 36px;border-radius: 3px;cursor: no-drop;">已签到</a> 
+                <a href="javascript:void(0);" class="fr Button6 mt10" disabled="disabled" id="attendances" style="position:absolute;right:30px;top:50px;width:80px;height:36px;background: #ccc;color: #fff;display: block;text-align: center;line-height: 36px;border-radius: 3px;cursor:no-drop;">已签到</a> 
             @else
-                <a href="javascript:void(0);" class="fr Button3 mt10" id="attendance">签到</a> 
+                <a href="javascript:void(0);" class="fr Button3 mt10" id="attendance" style="position: absolute;right:30px;top:50px;">签到</a> 
             @endif
             
             </div>
@@ -475,10 +476,8 @@
                     success: function (data) {
                         console.log(data)
                         if (data.status_code == 0) {
-                            
                             layer.msg(data.data.msg,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
                         } else {
-                            // alert(data.message);
                             layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
 
                         }

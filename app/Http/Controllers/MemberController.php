@@ -13,6 +13,7 @@ use App\Models\UserFinderFolder;
 use App\Models\UserFollow;
 use App\Models\UserSubscription;
 use App\Models\UserPoint;
+use App\Models\UserDownRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -45,14 +46,19 @@ class MemberController extends Controller
 
         $today_start = date('Y-m-d 00:00:00');
         $today_end   = date('Y-m-d 23:59:59');
+        $today_starts = date('Y-m-d H:i:s', strtotime('-3 days'));
+        $today_ends   = date('Y-m-d H:i:s');
         $is_qiandao = UserAttendance::where('user_id', $user->id)->where('created_at', '>=', $today_start)->where('created_at', '<=', $today_end)->first();
-        // dd($tips);
+
+        $down=UserDownRecord::leftjoin('articles','user_down_records.down_id','=','articles.id')->select('articles.static_url','articles.custom_thum','user_down_records.id','articles.title_name_cn','articles.title_designer_cn','articles.vip_download')->where('user_down_records.user_id',$user->id)->where('user_down_records.created_at', '>=', $today_starts)->where('user_down_records.created_at', '<=', $today_ends)->get();
+        // dd($down);
         $data = [
             'lang' => $lang,
             'user' => $user,
             'attendances' => $attendances,
             'last_days' => $last_days,
             'tips' => $tips,
+            'down' => $down,
             'is_qiandao' => $is_qiandao,
         ];
         return view('member.index', $data);
@@ -573,19 +579,6 @@ class MemberController extends Controller
             
             
             // dd($is_pingyu);
-            
-            $user->points = $user->points + 10;
-            $user->left_points = $user->left_points + 10;
-            $user->save();
-    
-            $point_log = [
-                'user_id' => $user->id,
-                'type' => '0',
-                'point' => 10,
-                'remark' => '评语',
-            ];
-            UserPoint::create($point_log);  
-            
 
         }
 

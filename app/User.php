@@ -119,26 +119,93 @@ class User extends Authenticatable
             return $num;
         }
         $user = User::find($user_id);
+        $freenum=self::getFreeDownloadNum($user_id);
+        $kounum=self::getKouDownloadNum($user_id);
         $num = 0;
-        $is_vip = self::isVip($user_id);
-        if ($is_vip && $user) {
+        // $is_vip = self::isVip($user_id);
+        if ($user) {
             if ($user->level == 0) {
-                $num = 0;
+                $num = $freenum+$kounum;
             } else if ($user->level == 1) {
-                $num = 5;
+                $num = $freenum+$kounum;
             } else if ($user->level == 2) {
-                $num = 8;
+                $num = $freenum+$kounum;
             } else if ($user->level == 3) {
-                $num = 10;
+                $num = $freenum+$kounum;
             } else if ($user->level == 4) {
-                $num = 50;
+                $num = $freenum+$kounum;
             } else if ($user->level == 5) {
-                $num = 88;
+                $num = $freenum+$kounum;
             }
         }
         return $num;
     }
     
+    /**
+     * 用户可以免费下载次数
+     * @param null $user_id
+     */
+    public static function getFreeDownloadNum($user_id = null)
+    {
+        $freenum = 0;
+        
+        if (empty($user_id)) {
+            return $freenum;
+        }
+        $user = User::find($user_id);
+
+        if ($user) {
+            if ($user->level == 0) {
+                $freenum = 0;
+            } else if ($user->level == 1) {
+                $freenum = 5;
+            } else if ($user->level == 2) {
+                $freenum = 10;
+            } else if ($user->level == 3) {
+                $freenum = 15;
+            } else if ($user->level == 4) {
+                $freenum = 50;
+            } else if ($user->level == 5) {
+                $freenum = 88;
+            }
+        }
+        return $freenum;
+    }
+
+
+    
+    /**
+     * 用户使用印币抵扣下载次数
+     * @param null $user_id
+     */
+    public static function getKouDownloadNum($user_id = null)
+    {   
+        $kounum = 0;
+        if (empty($user_id)) {
+            return $kounum;
+        }
+        $user = User::find($user_id);
+       
+        if ($user) {
+            if ($user->level == 0) {
+                $kounum = 1;
+            } else if ($user->level == 1) {
+                $kounum = 3;
+            } else if ($user->level == 2) {
+                $kounum = 5;
+            } else if ($user->level == 3) {
+                $kounum = 10;
+            } else if ($user->level == 4) {
+                $kounum = 50;
+            } else if ($user->level == 5) {
+                $kounum = 88;
+            }
+        }
+        // dd($kounum);
+        return $kounum;
+    }
+
+
 
     /**
      *  获取用户已用下载次数
@@ -167,6 +234,7 @@ class User extends Authenticatable
     {
         $total   = self::getDownloadNum($user_id);
         $use_num = self::getUseDownloadNum($user_id);
+        // dd($total,$use_num);
         return $total - $use_num;
     }
     

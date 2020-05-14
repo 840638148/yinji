@@ -17,6 +17,7 @@ use App\Models\ArticleTag;
 use App\Models\ArticleCategory;
 use App\Models\Article;
 use App\Models\Designer;
+use App\Models\UserPoint;
 use App\User;
 use DB;
 use App\Models\UserDownRecord;
@@ -638,61 +639,68 @@ class ArticleController extends Controller
 
 
     /**
-     * 下载
+     * 免费下载
      *
      * @param Request $request
      * @return array
      */
     public function vipDownload(Request $request)
     {
-        //return Output::makeResult($request, null, 501, '您当前没有可用的下载次数！');
         if (!Auth::check()) {
             return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
         }
 
         $user = $this->getUserInfo();
         
-        $left_down_num = User::getLeftDownloadNum($user->id);
-        if ($left_down_num <= 0) {
-            return Output::makeResult($request, null, 501, '您当前没有可用的下载次数！');
-        }
+        $freedown=User::getFreeDownloadNum($user->id);
+        $leftdown=User::getLeftDownloadNum($user->id);
         
-        if (true == $user->is_vip) {
-            $article = Article::find($request->article_id);
-            if ($article->vip_download) {
-                $today_start = date('Y-m-d H:i:s', strtotime('-3 days'));
-                $today_end   = date('Y-m-d H:i:s');
-                $today_down = UserDownRecord::where('user_id', $user->id)
-                    ->where('down_type', '1')
-                    ->where('down_id', $request->article_id)
-                    ->where('created_at', '>=', $today_start)
-                    ->where('created_at', '<', $today_end)
-                    ->count();
-                if ($today_down <= 0) {
-                    $data = [
-                        'user_id' => $user->id,
-                        'down_type' => '1',
-                        'down_id' => $request->article_id,
-                    ];
-                    UserDownRecord::create($data);
-                }
-                
+        
+
+        //查出用户下载次数
+        $today_starts = date('Y-m-d H:i:s', strtotime('-3 days'));
+        $today_ends   = date('Y-m-d H:i:s');
+        $today_start = date('Y-m-d 00:00:00');
+        $today_end   = date('Y-m-d 23:59:59');
+        //当天兑换下载次数
+        $has_freedown=UserDownRecord::where('user_id', $user->id)->where('is_free','1')->where('created_at', '>=', $today_start)->where('created_at', '<', $today_end)->count();
+        // dd($freedown,$has_freedown,$freedown-$has_freedown);
+        $article = Article::find($request->article_id);
+        $sandays=UserDownRecord::where('user_id', $user->id)->where('is_free','1')->where('down_id',$request->article_id)->where('created_at', '>=', $today_starts)->where('created_at', '<', $today_ends)->get();
+
+        if($sandays){
+            return Output::makeResult($request, null, 999, '您已经兑换过,请您移步到个人中心查看!');
+        }else
+
+        if($leftdown>0){
+            
+
+            if($article->vip_download){
+                $data = [
+                    'user_id' => $user->id,
+                    'down_type' => '1',
+                    'is_free' => 1,
+                    'down_id' => $request->article_id,
+                ];
+                UserDownRecord::create($data);
+
                 $return_data = [
                     'vip_download' => $article->vip_download,
-                    'left_down_num' => $left_down_num
+                    'left_down_num' => $freedown,
+                    'msg'=>'免费兑换成功',
                 ];
-                return Output::makeResult($request, $return_data);
-            } else {
+                return Output::makeResult($request,null, 10000, $return_data);
+            }else{
                 return Output::makeResult($request, null, 500, '该作品暂未提供下载，请联系管理员！');
             }
 
         }
-        return Output::makeResult($request, null, Error::SYSTEM_ERROR, '您不是VIP');
+        return Output::makeResult($request, null, 501, '您当前没有免费的下载次数！');
 
     }
 
     /**
-     * 积分兑换下载次数
+     * 印币兑换下载
      *
      * @param Request $request
      * @return array
@@ -709,33 +717,55 @@ class ArticleController extends Controller
         if (!$article->vip_download) {
             return Output::makeResult($request, null, 500, '该作品暂未提供下载，请联系管理员！');
         }
-        
+        $leftdown=User::getLeftDownloadNum($user->id);
+        $today_start = date('Y-m-d 00:00:00');
+        $today_end   = date('Y-m-d 23:59:59');
+        $koudown=User::getKouDownloadNum($user->id);
+        $has_koudown=UserDownRecord::where('user_id', $user->id)->where('is_free','2')->where('created_at', '>=', $today_start)->where('created_at', '<', $today_end)->count();
+
+        // dd($user->left_points);
         //检查是否可以兑换
-        if (User::getLeftExchangeNum($user->id)) {
-            $data_exchange = [
-                'user_id' => $user->id,
-            ];
-            UserExchangeRecord::create($data_exchange);
-            
-            //$user->points = $user->points - 10;
-            $user->left_points = $user->left_points - 10;
-            $user->save();
-            
-            $data_down = [
-                'user_id' => $user->id,
-                'down_type' => '1',
-                'down_id' => $request->article_id,
-            ];
-            UserDownRecord::create($data_down);
-            
-            $left_down_num = User::getLeftDownloadNum($user->id);
-            $return_data = [
-                'vip_download' => $article->vip_download,
-                'left_down_num' => $left_down_num
-            ];
-            return Output::makeResult($request, $return_data);
-        } else {
-            return Output::makeResult($request, null, 500, '兑换失败，请确认是否超过兑换次数或联系管理员！');
+        if($user->left_points>10){
+
+            if ($leftdown>0) {
+                $data_exchange = [
+                    'user_id' => $user->id,
+                ];
+                UserExchangeRecord::create($data_exchange);
+                
+                //$user->points = $user->points - 10;
+
+                $das=[
+                    'user_id' => $user->id,
+                    'type' => '1',
+                    'point' => 10,
+                    'remark' => '印币抵扣下载',
+                ];
+                $re=UserPoint::create($das);
+
+                $user->left_points = $user->left_points - 10;
+                $user->save();
+                
+                $data_down = [
+                    'user_id' => $user->id,
+                    'down_type' => '1',
+                    'is_free' => 2,
+                    'down_id' => $request->article_id,
+                ];
+                UserDownRecord::create($data_down);
+                
+                $return_data = [
+                    'vip_download' => $article->vip_download,
+                    'left_down_num' => $koudown-$has_koudown,
+                    'msg'=>'抵扣成功,扣除10印币',
+                ];
+                return Output::makeResult($request, $return_data);
+            }else{
+                return Output::makeResult($request, null, 500, '兑换失败，请确认是否超过兑换次数或联系管理员！');
+            }
+
+
         }
+        return Output::makeResult($request, null, 500, '兑换失败，您的印币不足！');
     }
 }

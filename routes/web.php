@@ -81,7 +81,8 @@ Route::get('interior/category/{id}', 'ArticleController@interiorCategory');
 Route::get('archs/category/{id}', 'ArticleController@archsCategory');
 Route::post('article/like', 'ArticleController@like');
 Route::post('article/collect', 'ArticleController@collect');//文章详情收藏
-Route::post('article/vip_download', 'ArticleController@vipDownload');
+Route::post('article/vip_download', 'ArticleController@vipDownload');//用户免费下载
+Route::post('article/exchange', 'ArticleController@exchange');//用户使用印币抵扣下载
 Route::post('article/allsortlist', 'ArticleController@allsortlist');    //点击进行排序
 
 
@@ -136,8 +137,8 @@ Route::get('vip/job_service', 'VipController@job_service');
 Route::get('finder', 'VipController@finder');
 Route::post('vip/buy', 'VipController@buy');
 Route::get('vip/pay', 'VipController@pay');
-Route::post('vip/wxbuy', 'VipController@wxbuy');
-Route::get('vip/pre_pay', 'VipController@prePay');
+Route::post('vip/wxbuy', 'VipController@wxbuy');   
+Route::get('vip/pre_pay', 'VipController@prePay');// 支付前检查
 Route::post('vip/add_finder_folder', 'VipController@addFinderFolder');
 Route::post('vip/add_collect_folder', 'VipController@addCollectFolder');
 Route::post('vip/delete_folder', 'VipController@deleteFolder');

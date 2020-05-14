@@ -590,7 +590,7 @@ class UserFinder extends Model
                 ];
                 UserPoint::create($point_log);  
             }
-            return true;            
+            return $fx_sum;            
         }
 
     }

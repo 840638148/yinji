@@ -169,7 +169,7 @@
 
       <li><a href="/member/follow">我的关注</a></li>
 
-      <li><a href="/member/point">我的积分</a></li>
+      <li><a href="/member/point">我的印币</a></li>
 
       <li><a href="/member/profile">个人资料</a></li>
 

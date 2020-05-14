@@ -513,11 +513,10 @@ $("#myform #txt_name").keydown(function (e) {
         success: function (data) {
 			  console.log(data)
           if (data.status_code == 0) {
-            layer.msg('收藏成功',{skin: 'intro-login-class layui-layer-hui'})
+            layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
             that.html('已收藏')
             that.addClass('have-collect');
-          }
-          if(data.status_code == 100001){
+          }else{
           	layer.msg('已经收藏过了',{skin: 'intro-login-class layui-layer-hui'})
             that.text('已收藏')
             that.css('width','50px')
