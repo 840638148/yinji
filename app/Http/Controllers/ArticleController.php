@@ -667,8 +667,8 @@ class ArticleController extends Controller
         // dd($freedown,$has_freedown,$freedown-$has_freedown);
         $article = Article::find($request->article_id);
         $sandays=UserDownRecord::where('user_id', $user->id)->where('is_free','1')->where('down_id',$request->article_id)->where('created_at', '>=', $today_starts)->where('created_at', '<', $today_ends)->get();
-
-        if($sandays){
+        // dd($sandays);
+        if(empty($sandays)){
             return Output::makeResult($request, null, 999, '您已经兑换过,请您移步到个人中心查看!');
         }else
 

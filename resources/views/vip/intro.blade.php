@@ -672,75 +672,39 @@
           return false;
 
         }
-
         window.location = '/vip/pay?vip_type=' + vip_type;
-
         return;
-
-
-
         //submit the form
-
-
-
         //$('form.cart').submit();
-
         var url = '/vip/wxbuy';
-
         var folder_data = {
-
           _token:_token,
-
           vip_type : $('#vip_type').val(),
-
           payment_code : $('#payment_code').val(),
-
           pay_total : $('#pay_total').val(),
-
         };
 
 
 
         $.ajax({
-
           async:false,
-
           url: url,
-
           type: 'POST',
-
           dataType: 'json',
-
           data: folder_data,
-
           success: function (data) {
-
             if (data.status_code == 0) {
-
               if ('alipay' == data.data.payment_code) {
-
                 window.location = data.data.redirect_url;
-
               } else {
-
                 alert('微信支付返回二维码地址');
-
               }
-
               layer.closeAll();
-
             } else {
-
               alert(data.message);
-
             }
-
           }
-
         });
-
-
-
       });
 
 

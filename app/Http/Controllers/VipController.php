@@ -546,7 +546,8 @@ class VipController extends Controller
         }
 		
 		$wx_url = VipPrice::wxpay($request);
-		$alipay_url = VipPrice::alipay($request);
+        $alipay_url = VipPrice::alipay($request);
+        // dd($alipay_url);
 		return Output::makeResult($request, ['wx_url' => $wx_url, 'alipay_url' => $alipay_url]);
 	}
 
@@ -586,6 +587,140 @@ class VipController extends Controller
         ];
         return view('vip.pay', $data);
     }
+
+
+
+    /**
+     * 兑换会员
+     * 
+     */
+    /*public function duihuanvip(Request $request){
+        $user = $this->getUserInfo();
+        $vip_type = $request->yb;
+
+        $pay_total = $pay_total = VipPrice::getPrice($vip_type);
+
+        switch ($vip_type) {
+			case '50':
+				$order_title = '印际月度会员';
+				break;
+			case '280':
+				$order_title = '印际季度会员';
+				break;
+			case '880':
+				$order_title = '印际年度会员';
+				break;
+			default:
+			    $order_title = '印际月度会员';
+		}
+
+
+        if($request->yb){
+            $remark='';
+            if($request->yb==50){
+                $remark='兑换月会员';
+            }else if($request->yb==280){
+                $remark='兑换季会员';
+            }else if($request->yb==880){
+                $remark='兑换年会员';
+            }
+            $point_total = 1;
+            $wx_code_url = '';
+            $data = [
+                'lang' => $lang,
+                'user' => $user,
+                'pay_total' => $pay_total,
+                'point_total' => $point_total,
+                'order_title' => $order_title,
+                'wx_code_url' => $wx_code_url,
+            ];
+            
+            if($remark!=''){
+                $das=[
+                    'user_id' => $user->id,
+                    'type' => '1',
+                    'point' => $request->yb,
+                    'remark' => $remark,
+                ];
+                $re=UserPoint::create($das);
+                if($re){
+                    $left_points=User::where('id',$user->id)->value('left_points');
+                    $a=User::where('id',$user->id)->update(['left_points'=>$left_points-$request->yb]);
+                    // dd($a);
+                }  
+                             
+            }
+
+            $data=[
+                'remark'=>$remark.'成功',
+            ];
+
+            $payment = Payment::where('payment_code', $request->payment_code)->firstOrFail();
+            $prefix = 'YJVIP';
+            $order_no = $this->generateOrderNo($prefix, Auth::id());
+            $pay_total = VipPrice::getPrice($request->vip_type);
+            $record = [
+                'user_id'         => Auth::id(),
+                'order_no'        => $order_no,
+                'vip_type'        => $request->vip_type,
+                'payment_code'    => $request->payment_code,
+                'payment_name'    => $payment->payment_name,
+                'pay_status'      => '0',
+                'pay_status_name' => '未支付',
+                'pay_total'       => $pay_total,
+                'pay_no'          => '',
+            ];
+            $ret  = VipBuyOrder::create($record);
+            //微信支付
+            //gateways: WechatPay_App, WechatPay_Native, WechatPay_Js, WechatPay_Pos, WechatPay_Mweb
+            $gateway    = Omnipay::create('WechatPay_Native');
+            $gateway->setAppId(env('WECHATPAY_APP_ID'));
+            $gateway->setMchId(env('WECHATPAY_MCH_ID'));
+            $gateway->setApiKey(env('WECHATPAY_MCH_API_KEY'));//注意这里的 ApiKey 是我们在微信商户后台设置的一个32位的随机字符串，和微信公众号里面的 AppSecret 不是一回事。
+            $gateway->setNotifyUrl(env('APP_URL') . '/notify/weixin');
+    
+            $order = [
+                'body'              => 'VIP',
+                'out_trade_no'      => $record['order_no'],
+                'total_fee'         => intval($record['pay_total'] * 100),
+                'spbill_create_ip'  => $request->getClientIp(),
+                'fee_type'          => 'CNY',
+                //'open_id'           => $request->open_id,
+            ];
+    
+            $response    = $gateway->purchase($order)->send();
+    
+            //available methods
+            //$response->isSuccessful();
+            //$response->getData(); //For debug
+            //$response->getAppOrderData(); //For WechatPay_App
+            //$response->getJsOrderData(); //For WechatPay_Js
+            //$response->getCodeUrl(); //For Native Trade Type
+            //dd($order);
+    
+            if ($response->isSuccessful()) {
+                $tmp_data = $response->getData();
+                $payment_info = [
+                        'prepay_id' => $tmp_data['prepay_id'],
+                ];
+                $ret->pay_no = $tmp_data['prepay_id'];
+                $ret->save();
+                $code_url = $response->getCodeUrl(); //For Native Trade Type
+                return Output::makeResult($request, ['code_url' => $code_url, 'payment_info' => $payment_info]);
+            } else {
+                return Output::makeResult($request, $response->getData(), Error::CREATE_ORDER_FAIL);
+            }
+    
+
+            return Output::makeResult($request, $data);
+            
+        }
+
+        return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
+    }*/
+
+
+
 
     public function buy(Request $request)
     {

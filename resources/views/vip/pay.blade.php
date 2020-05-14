@@ -21,19 +21,19 @@
             <div id="clock" style="clear: both;font-size: 18px;color:red;margin-left:90px;" >订单还有 <span id="mintue">01分</span><span id="second">00秒</span> 后自动取消订单</div>
         </div>
 <script type="text/javascript">
-window.onload = function () {
-    function formatDuring(mss) {
-    var minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = (mss % (1000 * 60)) / 1000;
-    return [minutes , seconds ];
-    }
+// window.onload = function () {
+    // function formatDuring(mss) {
+    // var minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));
+    // var seconds = (mss % (1000 * 60)) / 1000;
+    // return [minutes , seconds ];
+    // }
 
-    var time = 10000;
-    var int=0;
-    int= setInterval(function(){
-        time -= 1000
-        if(time ==0){
-            clearInterval(int);
+    // var time = 10000;
+    // var int=0;
+    // int= setInterval(function(){
+        // time -= 1000
+        // if(time ==0){
+            // clearInterval(int);
             $.ajax({
                 url: '/vip/autodelpay',
                 type: 'POST',
@@ -49,16 +49,16 @@ window.onload = function () {
                         // ,closeBtn: 0
                         // })
 
-                        layer.open({
-                            title: ['温馨提示'],
-                            content: '订单超时，请重新开通会员！',
-                            btn: ['确定'],
-                            shadeClose: true,
-                            //回调函数
-                            yes: function(index){
-                            self.location='/vip/intro';//确定按钮跳转地址
-                            }
-                        })
+                        // layer.open({
+                        //     title: ['温馨提示'],
+                        //     content: '订单超时，请重新开通会员！',
+                        //     btn: ['确定'],
+                        //     shadeClose: true,
+                        //     //回调函数
+                        //     yes: function(index){
+                        //     self.location='/vip/intro';//确定按钮跳转地址
+                        //     }
+                        // })
  
 
 
@@ -70,17 +70,17 @@ window.onload = function () {
                 }
             });
             
-        }
-        console.log(formatDuring(time));
-        $('#mintue').text(formatDuring(time)[0]+"分");
-        $('#second').text(formatDuring(time)[1]+"秒");
+        // }
+        // console.log(formatDuring(time));
+        // $('#mintue').text(formatDuring(time)[0]+"分");
+        // $('#second').text(formatDuring(time)[1]+"秒");
 
-    },1000)
-
-
+    // },1000)
 
 
-}
+
+
+// }
 
 
 
@@ -113,6 +113,7 @@ window.onload = function () {
                 dataType: 'json',
                 data: {},
                 success: function (data) {
+                    console.log(data)
                     if (data.status_code == 0) {
                         var value = data.data;
                         var wx_url = value.wx_url;
@@ -122,7 +123,9 @@ window.onload = function () {
                             height: 162,
                             text: wx_url
                         })
-                        $('.alipay .qr-code').attr('href',value.alipay_url)
+
+                        let qwe=$('.alipay .qr-code').attr('href',value.alipay_url);
+                        console.log(qwe)
 
                     } else {
                         layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})

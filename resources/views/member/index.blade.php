@@ -158,7 +158,7 @@
       </div>
       <div class="downright" style="float: left;margin-left: 100px;">
         <p style="margin-top:10px;">百度网盘地址:<a href="{{mb_substr($v->vip_download,0,-10)}}" target="_blank">{{mb_substr($v->vip_download,0,-10)}}</a> </p>
-        <p style="margin-top:10px;">密码:{{substr($v->vip_download,-5)}}</p>
+        <p style="margin-top:10px;">密码:{{mb_substr($v->vip_download,-4)}}</p>
       </div>
 
     </div>

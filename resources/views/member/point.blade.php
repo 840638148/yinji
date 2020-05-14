@@ -457,6 +457,14 @@
         let yb=$(this).attr('yb');
         let vip_type=$(this).siblings('.vip_type').html();
         vip_types=vip_type.substr(0,4);
+        let viptype=0;
+        if(yb=='50'){
+            viptype=1;
+        }else if(yb=='280'){
+            viptype=2;
+        }else if(yb=='880'){
+            viptype=3;
+        }
         layer.open({
             title: ['温馨提示'],
             content: '确定兑换'+vip_types,
@@ -477,6 +485,8 @@
                         console.log(data)
                         if (data.status_code == 0) {
                             layer.msg(data.data.msg,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+                            window.location = '/vip/pay?vip_type=' + viptype;
+                            return;
                         } else {
                             layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
 
