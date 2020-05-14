@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Validator;
 use DB;
 use Encore\Admin\Facades\Admin;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\ArticleComment as CurrentModel;
 
@@ -25,7 +26,7 @@ class ArticleCommentController extends BaseController
     
     public $strHeader    = '文章评论';
     public $currentModel = CurrentModel::class;
-
+    private $comid ;
 
 
     /**
@@ -54,6 +55,7 @@ class ArticleCommentController extends BaseController
         });
         $grid->user_id('评论用户')->sortable()->display(function ($user_id) {
             $obj = User::find($user_id);
+            
             if ($obj) {
                 return $obj->nickname;
             }
@@ -71,7 +73,6 @@ class ArticleCommentController extends BaseController
             'on'  => ['value' => 1, 'text' => '通过', 'color' => 'success'],
             'off' => ['value' => 0, 'text' => '未审核', 'color' => 'default'],
         ];
-        // $grid->column('display', '审核状态')->switch($states)->increment('user_points.point', 10);
         $grid->column('display', '审核状态')->switch($states);
         //$grid->display('审核状态')->switch($states);
         $grid->created_at('添加时间')->sortable();
@@ -90,7 +91,7 @@ class ArticleCommentController extends BaseController
         $form = new Form(new $this->currentModel);
         
         $form->display('id', 'ID');
-        $form->text('comment_id', '文章ID');
+        $comid=$form->text('comment_id', '文章ID');
         $form->text('content', '评论内容');
 
         $states = [
@@ -98,9 +99,6 @@ class ArticleCommentController extends BaseController
             'off' => ['value' => 0, 'text' => '未审核', 'color' => 'default'],
         ];
         $form->switch('display', '审核状态')->states($states);
-        
-        // Db::table('article_comments')->where('comment_id',comment_id)
-
         return $form;
     }
     
@@ -119,7 +117,30 @@ class ArticleCommentController extends BaseController
         return $show;
     }
     
-    
+
+
+    public function putEdits(Request $request, $id)
+    {   
+
+    	$validator = $this->valid($request);
+    	if ($validator->fails()) {
+    		return back()->withInput()->withErrors($validator);
+        }
+        
+        if($request->display=='on'){
+            $user=ArticleComment::leftjoin('users','article_comments.user_id','=','users.id')->where('article_comments.id',$id)->first();
+
+            $das=[
+                'user_id' => $user->user_id,
+                'type' => '0',
+                'point' => 10,
+                'remark' => '评语',
+            ];
+            $re=UserPoint::where('id',$user->user_id)->create($das);
+        }
+    	return $this->form($request)->update($id);
+    }
+
     protected function valid(Request $request)
     {	 
     	return Validator::make($request->all(), [

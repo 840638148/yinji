@@ -224,7 +224,8 @@ Route::group([
     $router->get('/article_comment/{id}', 'ArticleCommentController@show');
     $router->post('/article_comment', 'ArticleCommentController@postCreate');
     $router->get('/article_comment/{id}/edit', 'ArticleCommentController@getEdit');
-    $router->put('/article_comment/{id}', 'ArticleCommentController@putEdit');
+    // $router->put('/article_comment/{id}', 'ArticleCommentController@putEdit');
+    $router->put('/article_comment/{id}', 'ArticleCommentController@putEdits');
     $router->delete('/article_comment/{id}', 'ArticleCommentController@remove');
 
     //设计师评论
