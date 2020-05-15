@@ -17,75 +17,10 @@
         <div class="pay_box clearfix">
             <i class="pay_ico fl mr20" ></i>
             <div style="float: left" class="pay-title"><h2 class="mt10">您的订单已提交成功！付款咯 </h2><p>购买：<span class="c_orange">{{$order_title}}</span></p></div>
-            <div style="float: right" class="pay-money"><h2 class="mt10">应付：<span class="c_red">{{$pay_total}}</span>元</h2><p>积分抵扣:<span class="c_red">{{$point_total}}</span>元</p></div>
-            <div id="clock" style="clear: both;font-size: 18px;color:red;margin-left:90px;" >订单还有 <span id="mintue">01分</span><span id="second">00秒</span> 后自动取消订单</div>
+            <div style="float: right" class="pay-money"><h2 class="mt10">应付：<span class="c_red">{{$pay_total}}</span>元</h2><p>积分抵扣:<span class="c_reds">{{$point_total}}</span>元</p></div>
+            <!-- <div id="clock" style="clear: both;font-size: 18px;color:red;margin-left:90px;" >订单还有 <span id="mintue">01分</span><span id="second">00秒</span> 后自动取消订单</div> -->
         </div>
-<script type="text/javascript">
-// window.onload = function () {
-    // function formatDuring(mss) {
-    // var minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));
-    // var seconds = (mss % (1000 * 60)) / 1000;
-    // return [minutes , seconds ];
-    // }
 
-    // var time = 10000;
-    // var int=0;
-    // int= setInterval(function(){
-        // time -= 1000
-        // if(time ==0){
-            // clearInterval(int);
-            $.ajax({
-                url: '/vip/autodelpay',
-                type: 'POST',
-                dataType: 'json',
-                data: {},
-                success: function (data) {
-                    if (data.status_code == 0) {
-                        // layer.msg('订单超时，请重新开通会员！',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-                        //墨绿深蓝风
-
-                        // layer.alert('订单超时，请重新开通会员！', {
-                        // skin: 'layui-layer-molv' //样式类名
-                        // ,closeBtn: 0
-                        // })
-
-                        // layer.open({
-                        //     title: ['温馨提示'],
-                        //     content: '订单超时，请重新开通会员！',
-                        //     btn: ['确定'],
-                        //     shadeClose: true,
-                        //     //回调函数
-                        //     yes: function(index){
-                        //     self.location='/vip/intro';//确定按钮跳转地址
-                        //     }
-                        // })
- 
-
-
-                        // window.location.href='/vip/intro';
-                    }else{
-                        layer.msg('操作错误，请重新开通会员',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-                        window.location.href='/vip/intro';
-                    }
-                }
-            });
-            
-        // }
-        // console.log(formatDuring(time));
-        // $('#mintue').text(formatDuring(time)[0]+"分");
-        // $('#second').text(formatDuring(time)[1]+"秒");
-
-    // },1000)
-
-
-
-
-// }
-
-
-
-
-</script>
         <div class="pay_box pay_box-content mt30">
             <div class="pay_title"> 选择支付方式 </div>
             <ul class="pay">
@@ -97,26 +32,44 @@
     <script>
 
         function getUrlParam(name){
-            var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-            var r = window.location.search.substr(1).match(reg);
+            let reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+            let r = window.location.search.substr(1).match(reg);
             if (r!=null) return unescape(r[2]); return null;
         }
 
-
-
         $(document).ready(function(){
-            var vip_type = getUrlParam('vip_type')
-            var url =  '/vip/pre_pay?vip_type='+vip_type
+            let vip_type = getUrlParam('vip_type');
+            let dkyb =getUrlParam('yb');
+            let ybs=0;
+            if(dkyb){
+                let money=0;
+                
+                if(vip_type==1){
+                    money=94;
+                    ybs=5;
+                }else if(vip_type==2){
+                    money=260;
+                    ybs=28;
+                }else if(vip_type==3){
+                    money=911;
+                    ybs=88;
+                }
+                // console.log(dkyb);
+                $(".c_red").html(money);
+                $(".c_reds").html(ybs);
+            }
+            $(".c_reds").html(ybs);
+            let url =  '/vip/pre_pay?vip_type='+vip_type+'&dkyb='+dkyb;
             $.ajax({
                 url: url,
                 type: 'GET',
                 dataType: 'json',
                 data: {},
                 success: function (data) {
-                    console.log(data)
+                    // console.log(data)
                     if (data.status_code == 0) {
-                        var value = data.data;
-                        var wx_url = value.wx_url;
+                        let value = data.data;
+                        let wx_url = value.wx_url;
                         $('.weixin .qr-code').qrcode({
                             render: "canvas", //也可以替换为table
                             width: 162,
@@ -125,7 +78,7 @@
                         })
 
                         let qwe=$('.alipay .qr-code').attr('href',value.alipay_url);
-                        console.log(qwe)
+                        // console.log(qwe)
 
                     } else {
                         layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})

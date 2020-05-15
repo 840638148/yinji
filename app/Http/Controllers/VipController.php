@@ -558,23 +558,24 @@ class VipController extends Controller
         $vip_type = $request->input('vip_type', '1');
 
         $pay_total = $pay_total = VipPrice::getPrice($vip_type);
+        $point_total = 1;
 		switch ($vip_type) {
 			case '1':
-				$order_title = '印际月度会员';
+                $order_title = '印际月度会员';
+                $point_total = 5;
 				break;
 			case '2':
-				$order_title = '印际季度会员';
+                $order_title = '印际季度会员';
+                $point_total = 28;
 				break;
 			case '3':
-				$order_title = '印际年度会员';
+                $order_title = '印际年度会员';
+                $point_total = 88;
 				break;
 			default:
 			    $order_title = '印际月度会员';
-		}
+        }
         
-        $point_total = 1;
-		
-		
         $wx_code_url = '';
 
         $data = [
@@ -907,10 +908,11 @@ class VipController extends Controller
      * @param Request $request
      */
     public function alipayNotify(Request $request)
-    {
+    {   
+        dd($request->all());
         $post_data = array_merge($_POST, $_GET);
-		file_put_contents('/tmp/alipay.log', var_export($post_data, true), FILE_APPEND);
-
+		$a=file_put_contents('/tmp/alipay.log', var_export($post_data, true), FILE_APPEND);
+        
         $gateway = Omnipay::create('Alipay_AopPage');
         $gateway->setSignType('RSA2'); //RSA/RSA2
         $gateway->setAppId(env('ALIPAY_APP_ID'));

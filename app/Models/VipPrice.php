@@ -37,7 +37,18 @@ class VipPrice extends Model
 		$payment = Payment::where('payment_code', $payment_code)->firstOrFail();
         $prefix = 'YJVIP';
         $order_no = self::generateOrderNo($prefix, Auth::id());
-        $pay_total = VipPrice::getPrice($vip_type);
+        $pay_total=0;
+        if($request->dkyb==50){
+            $pay_total=94;
+        }else if($request->dkyb==280){
+            $pay_total=260;
+        }else if($request->dkyb==880){
+            $pay_total=911;
+            
+        }else{
+            $pay_total = VipPrice::getPrice($vip_type);
+        }
+        
         $record = [
             'user_id'         => Auth::id(),
             'order_no'        => $order_no,
@@ -87,7 +98,19 @@ class VipPrice extends Model
 		$payment = Payment::where('payment_code', $payment_code)->firstOrFail();
         $prefix = 'YJVIP';
         $order_no = self::generateOrderNo($prefix, Auth::id());
-        $pay_total = VipPrice::getPrice($request->vip_type);
+
+        $pay_total=0;
+        if($request->dkyb==50){
+            $pay_total=94;
+        }else if($request->dkyb==280){
+            $pay_total=260;
+        }else if($request->dkyb==880){
+            $pay_total=911;
+            
+        }else{
+            $pay_total = VipPrice::getPrice($request->vip_type);
+        }
+
         $record = [
                 'user_id'         => Auth::id(),
                 'order_no'        => $order_no,
@@ -123,6 +146,7 @@ class VipPrice extends Model
         $ali_response = $ali_request->send();
 
 		if ($ali_response) {
+            // dd($ali_response->getRedirectUrl());
 			return $ali_response->getRedirectUrl();
 		} else {
 			return false;
