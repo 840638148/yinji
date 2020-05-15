@@ -153,11 +153,9 @@ class User extends Authenticatable
             return $freenum;
         }
         $user = User::find($user_id);
-
-        if ($user) {
-            if ($user->level == 0) {
-                $freenum = 0;
-            } else if ($user->level == 1) {
+        $is_vip = self::isVip($user_id);
+        if ($user && $is_vip) {
+            if ($user->level == 1) {
                 $freenum = 5;
             } else if ($user->level == 2) {
                 $freenum = 10;
@@ -168,6 +166,8 @@ class User extends Authenticatable
             } else if ($user->level == 5) {
                 $freenum = 88;
             }
+        }else{
+            $freenum = 0;
         }
         return $freenum;
     }
@@ -185,11 +185,9 @@ class User extends Authenticatable
             return $kounum;
         }
         $user = User::find($user_id);
-       
-        if ($user) {
-            if ($user->level == 0) {
-                $kounum = 1;
-            } else if ($user->level == 1) {
+        $is_vip = self::isVip($user_id);
+        if ($user && $is_vip) {
+            if ($user->level == 1) {
                 $kounum = 3;
             } else if ($user->level == 2) {
                 $kounum = 5;
@@ -200,7 +198,10 @@ class User extends Authenticatable
             } else if ($user->level == 5) {
                 $kounum = 88;
             }
-        }
+        }else{
+            $kounum = 1;
+        } 
+        
         // dd($kounum);
         return $kounum;
     }

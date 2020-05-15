@@ -24,6 +24,8 @@ use App\Http\Output;
 use App\User;
 use App\Models\VipPrice;
 use App\Models\Article;
+use Carbon\Carbon;
+
 use Intervention\Image\Facades\Image;
 
 class MemberController extends Controller
@@ -46,19 +48,14 @@ class MemberController extends Controller
 
         $today_start = date('Y-m-d 00:00:00');
         $today_end   = date('Y-m-d 23:59:59');
-        $today_starts = date('Y-m-d H:i:s', strtotime('-3 days'));
-        $today_ends   = date('Y-m-d H:i:s');
         $is_qiandao = UserAttendance::where('user_id', $user->id)->where('created_at', '>=', $today_start)->where('created_at', '<=', $today_end)->first();
 
-        $down=UserDownRecord::leftjoin('articles','user_down_records.down_id','=','articles.id')->select('articles.static_url','articles.custom_thum','user_down_records.id','articles.title_name_cn','articles.title_designer_cn','articles.vip_download')->where('user_down_records.user_id',$user->id)->where('user_down_records.created_at', '>=', $today_starts)->where('user_down_records.created_at', '<=', $today_ends)->get();
-        // dd($down);
         $data = [
             'lang' => $lang,
             'user' => $user,
             'attendances' => $attendances,
             'last_days' => $last_days,
             'tips' => $tips,
-            'down' => $down,
             'is_qiandao' => $is_qiandao,
         ];
         return view('member.index', $data);
@@ -188,6 +185,29 @@ class MemberController extends Controller
             'user' => $user,
         ];
         return view('member.follow', $data);
+    }
+
+    public function mydown(Request $request){
+        $this->checkLogin();
+
+        $lang = $request->session()->get('language') ?? 'zh-CN';
+
+        $user = $this->getUserInfo();
+
+        $today_starts = date('Y-m-d H:i:s', strtotime('-3 days'));
+        $today_ends   = date('Y-m-d H:i:s');
+        $down=UserDownRecord::leftjoin('articles','user_down_records.down_id','=','articles.id')->select('articles.static_url','articles.custom_thum','user_down_records.id','articles.title_name_cn','articles.title_designer_cn','articles.vip_download','user_down_records.created_at')->where('user_down_records.user_id',$user->id)->where('user_down_records.created_at', '>=', $today_starts)->where('user_down_records.created_at', '<=', $today_ends)->get();
+
+        foreach($down as $k=>$v){
+            $down[$k]['guoqitime']=Carbon::parse($v->created_at)->addDays(3)->toDateTimeString();
+        }
+
+        $data = [
+            'lang' => $lang,
+            'user' => $user,
+            'down' => $down,
+        ];
+        return view('member.mydown', $data);
     }
 
     public function addFollow(Request $request)

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-  {{trans('comm.yinji')}} - 个人中心 -印币中心
+  {{trans('comm.yinji')}} - 个人中心 -积分中心
 @endsection
 
 @section('content')
@@ -30,7 +30,7 @@
       <li><a href="/member/collect">我的收藏</a></li>
       <li><a href="/member/subscription">我的订阅</a></li>
       <li><a href="/member/follow">我的关注</a></li>
-      <li class="current"><a href="/member/point">我的印币</a></li>
+      <li><a href="/member/mydown">我的下载</a></li>
       <li><a href="/member/profile">个人资料</a></li>
     </ul>
   </div>
@@ -226,14 +226,14 @@
             <li class="ico_jftj-inner">
                 <div class="tj_shuzi">
                     <span class="point-title vip_type">月度会员兑换</span>
-                    <!-- <span class="point-duihuan activity">25+50印币兑换</span> -->
-                    <span class="point-duihuan" yb="50" money="25">25+50印币兑换</span>
+                    <!-- <span class="point-duihuan activity">25+50积分兑换</span> -->
+                    <span class="point-duihuan" yb="50" money="94">94+50印币兑换</span>
                 </div>
             </li>
             <li class="ico_jftj-inner">
                 <div class="tj_shuzi">
                     <span class="point-title vip_type">季度会员兑换</span>
-                    <span class="point-duihuan" yb="280" money="140">140+280印币兑换</span>
+                    <span class="point-duihuan" yb="280" money="260">260+280印币兑换</span>
                 </div>
             </li>
             <li class="ico_jftj-inner">
@@ -245,7 +245,7 @@
         </ul>
     </div>
     <div class="title">
-      <h2 class="fl">印币记录</h2>
+      <h2 class="fl">积分记录</h2>
       {{--<a class="fr" href="/static/integral.html" style="line-height:48px; color:#06C">如何印币?</a>--}}
     </div>
 
@@ -290,7 +290,7 @@
         {{--<tr>--}}
           {{--<th class="points-rewards-event-description"><span class="nobr">事件</span></th>--}}
           {{--<th class="points-rewards-event-date"><span class="nobr">日期</span></th>--}}
-          {{--<th class="points-rewards-event-points"><span class="nobr">印币</span></th>--}}
+          {{--<th class="points-rewards-event-points"><span class="nobr">积分</span></th>--}}
         {{--</tr>--}}
       {{--</thead>--}}
       {{--<tbody>--}}
@@ -315,7 +315,7 @@
         <div class="sign_integral_box" style=" height:100px;">
             <div class="left integral" style="width:400px;">
                 <div class="sign_ico left"></div>
-                <h2 class="left">印币：<span id="user-point">{{$user->points}}</span>分</h2>
+                <h2 class="left">积分：<span id="user-point">{{$user->points}}</span>分</h2>
                 <p class="left" style="width:316px; margin-left:20px;">已连续签到<span id="last-day">{{$last_days or '0'}}</span>天</p>
             </div>
             <span class="closebtn" onclick="layer.closeAll();" style="position: absolute;right:0;top:0;padding: 10px 10px 5px 10px;cursor: pointer;">╳</span>
@@ -344,7 +344,7 @@
                                 <h3>{{$tip['title']}}</h3>
                                 <p>+{{$tip['point']}}</p>
                             </li>
-                            @endforeach
+                    @endforeach
                 </ul>
             </div>
             <table width="100%" border="0" cellspacing="0" cellpadding="0" class="record_details">
@@ -374,7 +374,7 @@
                 </tbody>
 
             </table>
-            <div class="shuomin">说明：连续签到可获得更多积 ，本站印币可增加下载次数和会员费用抵扣。<br>
+            <div class="shuomin">说明：连续签到可获得更多印币 ，本站印币可增加下载次数和会员费用抵扣。<br>
                 使用规则：即10印币=1元，每增加一次下载次数使用10印币！</div>
         </div>
         <!------签到记录结束---------->
@@ -433,7 +433,7 @@
                     </tr>
 
                     <tr>
-                        <td>等级额外印币</td>
+                        <td>等级额外积分</td>
                         <td>+2</td>
                         <td>+4</td>
                         <td>+6</td>
@@ -443,7 +443,7 @@
                         <td>+16</td>
                         <td>+20</td>
                     </tr>
-                    <tr><td colspan='9'>说明：签到最终积分=基础积分+会员额外积分+等级额外积分，节日更多惊喜等着你哦！</td></tr>
+                    <tr><td colspan='9'>说明：签到最终印币=基础印币+会员额外印币+等级额外印币，节日更多惊喜等着你哦！</td></tr>
                 </table>
             </div>
         </div>
@@ -485,7 +485,7 @@
                         console.log(data)
                         if (data.status_code == 0) {
                             layer.msg(data.data.msg,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-                            window.location = '/vip/pay?vip_type=' + viptype;
+                            window.location = '/vip/pay?vip_type=' + viptype+'&yb='+yb;
                             return;
                         } else {
                             layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});

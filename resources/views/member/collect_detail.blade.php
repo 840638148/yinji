@@ -31,7 +31,7 @@
       <li class="current"><a href="/member/collect">我的收藏</a></li>
       <li><a href="/member/subscription">我的订阅</a></li>
       <li><a href="/member/follow">我的关注</a></li>
-      <li><a href="/member/point">我的印币</a></li>
+      <li><a href="/member/mydown">我的下载</a></li>
       <li><a href="/member/profile">个人资料</a></li>
     </ul>
   </div>

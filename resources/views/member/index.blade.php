@@ -112,7 +112,7 @@
 	      <li><a href="/member/collect">我的收藏</a></li>
 	      <li><a href="/member/subscription">我的订阅</a></li>
 	      <li><a href="/member/follow">我的关注</a></li>
-	      <li><a href="/member/point">我的印币</a></li>
+	      <li><a href="/member/mydown">我的下载</a></li>
 	      <li><a href="/member/profile">个人资料</a></li>
     </ul>
   </div>
@@ -124,7 +124,7 @@
         <!-- <li class="order1"><a href="/vip/index/{{$user->id}}">我的主页</a><i class="order1_bj"></i> </li> -->
         <li class="order1"><a href="javascript:alert1();">我的主页</a><i class="order1_bj"></i> </li>
         <li class="order2"><a href="/vip/intro">成为会员</a><i class="order1_bj"></i> </li>
-        <li class="order3"><a href="/member/point">我的印币</a><i class="order1_bj"></i> </li>
+        <li class="order3"><a href="/member/point">我的积分</a><i class="order1_bj"></i> </li>
         <li class="order4 bookInSign"><a href="javascript:;">签到</a></li>
       </ul>
     </div>
@@ -145,25 +145,7 @@
       </ul>
     </div>
     
-    <!-- 我的下载 -->
-    <div class="title  mt30">
-      <h2 class="fl">我的下载 <b style="margin-left:50px;color:red;">(温馨提示:所有的下载链接只显示三天时间,三天过后自动过期,需要再次去相应文章下载兑换哦!)</b></h2>
-      <span class="fr"><a href="/member/downmore">更多</a></span>
-    </div>
-    @foreach($down as $v)
-    <div class="down" style="height:130px;">
 
-      <div class="downleft" style="float: left;width: 160px;margin-bottom:20px;">
-        <a href="/article/{{$v->static_url}}" target="_blank"><img src="/uploads/{{$v->custom_thum}}" alt="{{$v->title_designer_cn}} - {{$v->title_name_cn}}"></a>
-      </div>
-      <div class="downright" style="float: left;margin-left: 100px;">
-        <p style="margin-top:10px;">百度网盘地址:<a href="{{mb_substr($v->vip_download,0,-10)}}" target="_blank">{{mb_substr($v->vip_download,0,-10)}}</a> </p>
-        <p style="margin-top:10px;">密码:{{mb_substr($v->vip_download,-4)}}</p>
-      </div>
-
-    </div>
-    @endforeach
-    <!-- 我的下载结束 -->
 
 
     <!----------设计师订阅结束------->
@@ -369,7 +351,7 @@
         <td>+16</td>
         <td>+20</td>
       </tr>
-      <tr><td colspan='9'>说明：签到最终积分=基础积分+会员额外积分+等级额外积分，节日更多惊喜等着你哦！</td></tr>
+      <tr><td colspan='9'>说明：签到最终印币=基础印币+会员额外印币+等级额外印币，节日更多惊喜等着你哦！</td></tr>
     </table>
   </div>
 </div>
@@ -381,22 +363,6 @@
       layer.msg('尽请期待！',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
     }
     
-    // 签到
-    // $(document).on('click','.bookInSign',function(){
-    //     layer.open({
-    //         type: 1,
-    //         title: false,
-    //         closeBtn: 0,
-    //         anim: -1,
-    //         shadeClose: true,
-    //         isOutAnim: false,
-    //         content: $('#bookInSign')
-    //     })
-    // })
-
-
-
-
     function selectItem(index){
         $('.dingyue-item .select-item').hide()
         $($('.dingyue-item')[index]).find('.select-item').show()
