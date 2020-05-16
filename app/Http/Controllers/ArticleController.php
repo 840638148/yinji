@@ -412,7 +412,7 @@ class ArticleController extends Controller
             }
                        
         }
-        
+
         $articleqwe=Article::where('id',$id)->get();
         foreach($articleqwe as $k=>$articleqqq){
             $topics = Topic::query();
@@ -678,7 +678,7 @@ class ArticleController extends Controller
         // dd($freedown,$has_freedown,$freedown-$has_freedown);
         $article = Article::find($request->article_id);
         //三天内重复下载
-        $sandays=UserDownRecord::where('user_id', $user->id)->where('is_free','1')->where('down_id',$request->article_id)->where('created_at', '>=', $today_starts)->where('created_at', '<', $today_ends)->get();
+        $sandays=UserDownRecord::where('user_id', $user->id)->where('is_free','1')->where('down_id',$request->article_id)->where('created_at', '>=', $today_starts)->where('created_at', '<', $today_ends)->get()->toArray();
         // dd($sandays);
         if(!empty($sandays)){
             return Output::makeResult($request, null, 999, '您已经兑换过,请您移步到个人中心查看!');
