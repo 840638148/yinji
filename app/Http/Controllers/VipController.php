@@ -547,7 +547,7 @@ class VipController extends Controller
 		
 		$wx_url = VipPrice::wxpay($request);
         $alipay_url = VipPrice::alipay($request);
-        // dd($alipay_url);
+        // dd($request);
 		return Output::makeResult($request, ['wx_url' => $wx_url, 'alipay_url' => $alipay_url]);
 	}
 
@@ -855,7 +855,7 @@ class VipController extends Controller
             $requestData = $response->getRequestData();
 
             $logger = new Logger('alipay-notify-log');
-            $logger->pushHandler(new StreamHandler('/tmp/weixin-notify.log', Logger::DEBUG));
+            $logger->pushHandler(new StreamHandler('./tmp/weixin-notify.log', Logger::DEBUG));
             $logInfo = ['ali_response' => $requestData];
             $logger->info('', $logInfo);
 
@@ -909,10 +909,8 @@ class VipController extends Controller
      */
     public function alipayNotify(Request $request)
     {   
-        dd($request->all());
         $post_data = array_merge($_POST, $_GET);
-		$a=file_put_contents('/tmp/alipay.log', var_export($post_data, true), FILE_APPEND);
-        
+        file_put_contents('./tmp/alipay.log', var_export($post_data, true), FILE_APPEND);
         $gateway = Omnipay::create('Alipay_AopPage');
         $gateway->setSignType('RSA2'); //RSA/RSA2
         $gateway->setAppId(env('ALIPAY_APP_ID'));
@@ -920,21 +918,55 @@ class VipController extends Controller
         $gateway->setAlipayPublicKey(env('ALIPAY_PUBLIC_KEY'));
 
         $ali_request = $gateway->completePurchase();
+        
         $ali_request->setParams($post_data); //Don't use $_REQUEST for may contain $_COOKIE
+
+        // $str = file_get_contents('./tmp/alipay.log');
+        if($post_data['trade_status']=='TRADE_SUCCESS'){
+            // file_put_contents('./tmp/alipay.log',$user->id);
+            $order = VipBuyOrder::where('order_no', $post_data['out_trade_no'])->first();
+            if ($order) {
+                if (2 == $order->pay_status) {
+                    $logInfo = ['status' => '已经支付', 'request' => $post_data, 'order_info' => $order];
+                    $logger->info('', $logInfo);
+                    return 'success';
+                }
+
+                if ($post_data['total_amount'] != $order->pay_total) {
+                    $logInfo = ['status' => '支付金额不符', 'request' => $post_data, 'order_info' => $order];
+                    $logger->info('', $logInfo);
+
+                    return 'success';
+                }
+                $order->pay_status      = '2';
+                $order->pay_status_name = '已支付';
+                $order->pay_no          = $post_data['trade_no'];
+                $order->pay_time        = $post_data['gmt_payment'];
+                $order->save();
+                VipBuyOrder::dealVip($order->order_no,$post_data['buyer_pay_amount']);
+            
+
+            }  
+            die('success');
+        }else{
+            die('fail');
+        }
 
         /**
          * @var AopCompletePurchaseResponse $response
          */
-        try {
+        /*try {
             $ali_response = $ali_request->send();
-
+            
             $logger = new Logger('alipay-notify-log');
             $logger->pushHandler(new StreamHandler('/tmp/alipay-notify.log', Logger::DEBUG));
             $logInfo = ['ali_response' => $ali_response];
             $logger->info('', $logInfo);
 
 
-            if($ali_response->isPaid()){
+            if($ali_response->isPaid()){ 
+                @chmod('./tmp/alipay.log',0777);
+                file_put_contents('./tmp/alipay.log',111);
                 $order = VipBuyOrder::where('order_no', $post_data['out_trade_no'])->first();
                 if ($order) {
                     if (2 == $order->pay_status) {
@@ -959,17 +991,19 @@ class VipController extends Controller
                 }  
                 die('success'); //The notify response should be 'success' only
             }else{
-                /**
-                 * Payment is not successful
-                 */
+                @chmod('./tmp/alipay.log',0777);
+                file_put_contents('./tmp/alipay.log',222);
+                // Payment is not successful
+                
                 die('fail'); //The notify response
             }
         } catch (Exception $e) {
-            /**
-             * Payment is not successful
-             */
+            
+            file_put_contents('./tmp/alipay.log',$e);
+            // Payment is not successful
+            
             die('fail'); //The notify response
-        }
+        }*/
     }
 
     /**

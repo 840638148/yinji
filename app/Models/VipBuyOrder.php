@@ -14,7 +14,7 @@ class VipBuyOrder extends Model
 	 */
 	protected $guarded = [];
 
-	public static function dealVip($order_no)
+	public static function dealVip($order_no,$buyer_pay_amount)
     {
         $order = VipBuyOrder::where('order_no', $order_no)->first();
         if (!$order) {
@@ -65,6 +65,50 @@ class VipBuyOrder extends Model
             'remark' => $point_set->title,
         ];
         UserPoint::create($point_log);
+
+
+        if($buyer_pay_amount=='94'){
+            $user->left_points = $user->left_points - 50;
+            $user->save();
+    
+            $point_log = [
+                'user_id' => $user->id,
+                'type' => '1',
+                'point' => 50,
+                'remark' => '兑换月会员抵扣',
+            ];
+            UserPoint::create($point_log);
+        }else if($buyer_pay_amount=='260'){
+
+            $user->left_points = $user->left_points - 280;
+            $user->save();
+    
+            $point_log = [
+                'user_id' => $user->id,
+                'type' => '1',
+                'point' => 280,
+                'remark' => '兑换季会员抵扣',
+            ];
+            UserPoint::create($point_log);
+        }else if($buyer_pay_amount=='911'){
+ 
+            $user->left_points = $user->left_points - 880;
+            $user->save();
+    
+            $point_log = [
+                'user_id' => $user->id,
+                'type' => '1',
+                'point' => 880,
+                'remark' => '兑换年会员抵扣',
+            ];
+            UserPoint::create($point_log);
+        }
+
+
+
+
+
+
 
         return true;
 

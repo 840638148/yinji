@@ -19,14 +19,11 @@
 @endsection
 
 
-
 @section('seo_description')
 
     {{get_article_description($article)}}
 
 @endsection
-
-
 
 @section('seo_keywords')
 
@@ -35,41 +32,18 @@
 @endsection
 
 
-
 @section('content')
 
-
-
     @php
-
         $first_img_url = get_html_first_imgurl($article->detail->content_cn);
-
-
-
         if ($first_img_url) {
-
-
-
             $first_img_url = url($first_img_url);
-
-
-
         }
-
     @endphp 
-        <script src="/js/jquery.qrcode.min.js"></script>
-        <style>
+<script src="/js/jquery.qrcode.min.js"></script>
+<style>.users{min-height: 216px;visibility: hidden;}</style>
 
-.users{
-
-    min-height: 216px;
-
-    visibility: hidden;
-
-}
-
-</style>
-        <div class="banner" style="background-image:url({{get_article_special($article)}});">
+<div class="banner" style="background-image:url({{get_article_special($article)}});">
   <div class="banner_bj"></div>
   <section class="wrapper banner_title">
             <div class="new_title">
@@ -587,12 +561,8 @@
   
   <!-------左边新闻结束--->
   
-  <div class="sidebar right cat4_sidebar" style="margin-top:-220px;    position: absolute;
-
-    right: 50%;
-
-    margin-right: -600px;">
-            <article designerid="2690">
+  <div class="sidebar right cat4_sidebar" style="margin-top:-220px;position:absolute;right: 50%;margin-right: -600px;">
+    <article designerid="2690">
       <div class="item author-info" style=" padding:0">
                 <div class="users"> @if ($designer)
           <div class="border-bottom1" style="position:relative">
@@ -612,16 +582,8 @@
                   </div>
           @if($is_subscription) <span class="Button wpfp_designer_act designer have-disalbed " title=""> 已订阅 </span> @else <span class="Button3 wpfp_designer_act designer subscription_designer" designer_id="{{$designer->id}}" title=""> 订阅 </span> @endif
           
-          
-          
-          
-          
+    
           @endif
-          
-          
-          
-          
-          
           
           
           @if ($more_designer)
@@ -645,6 +607,21 @@
           @endif </div>
               </div>
     </article>
+
+    @if($topics)
+    <!-- <div class="zhuanti_zhuti"> -->
+    @foreach($topics as $topic)
+        <div class="zhuanti">
+            <ul class="zhuanti-inner">
+                <li style="width:288px;margin:5px 0;">
+                    <a href="/topic/{{$topic->id}}"><img class="img-responsive" src="/uploads/{{$topic->special_photo}}" />
+                    <span class="title-topic">专题</span>
+                </li>
+            </ul>
+        </div>
+    <!-- </div> -->
+    @endforeach
+    @endif
             <script type="text/javascript">
 
           $(document).ready(function(){

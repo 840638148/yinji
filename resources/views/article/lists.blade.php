@@ -36,19 +36,15 @@
                         {{--@else--}}
                             {{--<li class="right"><a href="/topic/{{$topic->id}}"><img src="/uploads/{{$topic->custom_thum}}" />{{get_topic_title($topic)}}</a></li>--}}
                         {{--@endif--}}
-                        <li><a href="/topic/{{$topic->id}}"><img src="/uploads/{{$topic->custom_thum}}" />
+                        <li>
+                            <a href="/topic/{{$topic->id}}"><img src="/uploads/{{$topic->custom_thum}}" />
                                 <span class="title-topic">专题</span>
-                            </a></li>
-
+                            </a>
+                        </li>
                     @endforeach
-
-
-
                 </ul>
-
             </div>
-
-    @endif
+        @endif
 
     <!---------专题结束-------->
 

@@ -18,6 +18,7 @@ use App\Models\ArticleCategory;
 use App\Models\Article;
 use App\Models\Designer;
 use App\Models\UserPoint;
+use App\Models\Topic;
 use App\User;
 use DB;
 use App\Models\UserDownRecord;
@@ -287,7 +288,7 @@ class ArticleController extends Controller
         //     $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $articleslist['id'])->avg('stars');
         //     $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
         // }
-        
+        // dd($topics);
         $data = [
             'user' => $this->getUserInfo(),
             'lang' => $lang,
@@ -409,11 +410,18 @@ class ArticleController extends Controller
             }else{
                 $user_collect_folders[$key]['iscollects']='2';
             }
-            // dump($user_collect_folders);
                        
         }
+        
+        $articleqwe=Article::where('id',$id)->get();
+        foreach($articleqwe as $k=>$articleqqq){
+            $topics = Topic::query();
 
-        // dd($user_finder_folders);
+            foreach ($articleqqq->category_ids as $cid) {
+                $topics =ArticleCategory::getTopics($cid);
+            }
+        }
+        // dd($topics);
         $data = [
             'user' => $this->getUserInfo(),
             'lang' => $lang,
@@ -442,6 +450,7 @@ class ArticleController extends Controller
             'starsav' => $starsav,
             'userstars' => $userstars,
             'comments_all' => $comments_all,
+            'topics' => $topics,
         ];
         return view('article.detail', $data);
     }
@@ -662,19 +671,19 @@ class ArticleController extends Controller
         $today_ends   = date('Y-m-d H:i:s');
         $today_start = date('Y-m-d 00:00:00');
         $today_end   = date('Y-m-d 23:59:59');
+       
+
         //当天兑换下载次数
         $has_freedown=UserDownRecord::where('user_id', $user->id)->where('is_free','1')->where('created_at', '>=', $today_start)->where('created_at', '<', $today_end)->count();
         // dd($freedown,$has_freedown,$freedown-$has_freedown);
         $article = Article::find($request->article_id);
+        //三天内重复下载
         $sandays=UserDownRecord::where('user_id', $user->id)->where('is_free','1')->where('down_id',$request->article_id)->where('created_at', '>=', $today_starts)->where('created_at', '<', $today_ends)->get();
         // dd($sandays);
-        if(empty($sandays)){
+        if(!empty($sandays)){
             return Output::makeResult($request, null, 999, '您已经兑换过,请您移步到个人中心查看!');
-        }else
-
-        if($leftdown>0){
+        }else if($freedown>0){
             
-
             if($article->vip_download){
                 $data = [
                     'user_id' => $user->id,
