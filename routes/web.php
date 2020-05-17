@@ -158,6 +158,7 @@ Route::post('vip/autodelpay', 'VipController@autodelpay');//半小时后未付�
 Route::post('finder_ajax', 'VipController@finderajax');//发现页-->发现的分页 
 Route::post('vip/finderslistsearch', 'VipController@finderslistsearch');//发现页-->搜索框
 Route::post('vip/finlistsearch', 'VipController@finlistsearch');//发现页-->搜索框
+Route::post('vip/checkstatus', 'VipController@checkstatus');//微信支付页面查询支付状态
 
 
 

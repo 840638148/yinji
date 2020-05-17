@@ -24,6 +24,7 @@ use App\Models\Payment;
 use App\Models\VipBuyOrder;
 use Omnipay\Omnipay;
 use \Monolog\Logger;
+use Carbon\Carbon;
 use \Monolog\Handler\StreamHandler;
 
 
@@ -721,7 +722,35 @@ class VipController extends Controller
     }*/
 
 
+    /**
+     * 微信支付检查支付状态并跳转
+     */
+    public function checkstatus(Request $request){
+        if (!Auth::check()) {
+            return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
+        }
+        $user = $this->getUserInfo();
+        $today_start = date('Y-m-d 00:00:00');
+        $today_end   = date('Y-m-d 23:59:59');
+    
+        $results=VipBuyOrder::where('user_id',$user->id)
+        ->where('pay_status',2)
+        ->where('created_at', '>=', date('Y-m-d H:i:s',time()-5*60*1000))
+        ->where('created_at', '<=',date('Y-m-d H:i:s',time()+60*60*1000))
+        ->where('payment_name','微信支付')
+        ->where('pay_status_name','已支付')
+        ->whereNotNull('pay_time')
+        ->orderby('created_at','desc')
+        ->get()->toArray();
+        // dd($results);
 
+        if($results!=[]){
+            return Output::makeResult($request, null,100, '开通会员成功');
+        }else{
+            return Output::makeResult($request, null,200 ,'请尽快付款哦');
+        }
+       
+    }
 
     public function buy(Request $request)
     {

@@ -29,7 +29,7 @@
             </ul>
         </div>
     </section>
-    <script>
+<script>
 
         function getUrlParam(name){
             let reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
@@ -60,6 +60,8 @@
             }
             $(".c_reds").html(ybs);
             let url =  '/vip/pre_pay?vip_type='+vip_type+'&dkyb='+dkyb;
+
+
             $.ajax({
                 url: url,
                 type: 'GET',
@@ -86,8 +88,48 @@
                 }
             });
 
+            setInterval("ajaxstatus()", 3000);   
             // $('.hot-search').find('dd').
         })
-    </script>
+
+        function ajaxstatus() {
+            let vip_type = getUrlParam('vip_type');
+            let dkyb =getUrlParam('yb');
+            let ybs=0;
+            if(dkyb){
+                let money=0;
+                if(vip_type==1){
+                    money=94;
+                    ybs=5;
+                }else if(vip_type==2){
+                    money=260;
+                    ybs=28;
+                }else if(vip_type==3){
+                    money=911;
+                    ybs=88;
+                }
+            }
+            $.ajax({
+                url: "/vip/checkstatus",
+                type: "POST",
+                dataType:"json",
+                data: {},
+                success: function (data) {
+                    console.log(data.message);
+                    if(data.status_code==100){ //订单状态为1表示支付成功
+                        // alert(11);
+                        window.location.href = "/member"; //页面跳转
+                    }else{
+                        layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
+                    }
+                },
+                // error: function () {
+                //     alert("请求订单状态出错"); 
+                // }
+            });
+                
+
+            }
+</script>
 @endsection
 
