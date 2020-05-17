@@ -743,7 +743,7 @@ class VipController extends Controller
         ->orderby('created_at','desc')
         ->get()->toArray();
         // dd($results);
-
+  
         if($results!=[]){
             return Output::makeResult($request, null,100, '开通会员成功');
         }else{
