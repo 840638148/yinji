@@ -417,11 +417,13 @@ $("#myform #txt_name").keydown(function (e) {
         // console.log()
         var discoveryItemsDom = discoveryItems.map(function( item){ return getDiscoveryItemDom(item, folders) }).join('');
         $('#discoveryItems').html(discoveryItemsDom);
+
         // $('#discoveryItems').append(discoveryItemsDom);
         // 收藏
         var collections = {!!$user->collections!!};
         var collectionItemsDom = collections.map(function( item ){ return getCollectionItemDom(item) }).join('');
         $('#collectionItems').html(collectionItemsDom);
+
         //推荐用户
         var recommendUsers = {!!$user->recommend_users!!};
         var users = recommendUsers.map(function( item ){ return getUsersDom(item) }).join('');
@@ -516,8 +518,10 @@ $("#myform #txt_name").keydown(function (e) {
             layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
             that.html('已收藏')
             that.addClass('have-collect');
+          }else if(data.status_code == 500){
+            layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'})
           }else{
-          	layer.msg('已经收藏过了',{skin: 'intro-login-class layui-layer-hui'})
+          	layer.msg('已经收藏过了',{time: 1500,skin: 'intro-login-class layui-layer-hui'})
             that.text('已收藏')
             that.css('width','50px')
             that.removeClass('Button2')

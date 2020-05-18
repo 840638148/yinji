@@ -52,6 +52,8 @@ class Controller extends BaseController
             $user->getKouDownloadNum=User::getKouDownloadNum($user->id);
             $user->getFreeDownloadNum=User::getFreeDownloadNum($user->id);
             $user->getLeftDownloadNum=User::getLeftDownloadNum($user->id);
+            $user->getFreeSum=User::getFreeSum($user->id);
+            $user->getKouSum=User::getKouSum($user->id);
         }
         return $user;
     }

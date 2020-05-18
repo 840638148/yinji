@@ -388,20 +388,9 @@
 
 
             //下载
-
             $('#vip-download').click(function(e){
-
                 if(!IS_LOGIN){
                     $('.login_box').show();
-                // }else if(IS_LOGIN && !IS_VIP){
-                //     layer.open({
-                //         type: 1,
-                //         title: false,
-                //         closeBtn: 0,
-                //         anim:-1,
-                //         isOutAnim:false,
-                //         content: $('#vip-img')
-                //     });
                 }else{
                     var article_id = '{{$article->id}}';
                     $.ajax({
@@ -493,7 +482,6 @@
             });
 
 
-
             //点击小图标时，添加功能
             $(".face ul li").click(function(){
                 var simg=$(this).find("img").clone();
@@ -510,7 +498,6 @@
                 }
 
                 var comment=$(".message").html();
-
 
                 var comment_id = '{{$article->id}}';
                 var comment_type = $(this).attr('data-comment-type');
@@ -613,132 +600,71 @@
     @foreach($topics as $topic)
         <div class="zhuanti">
             <ul class="zhuanti-inner">
-                <li style="width:288px;margin:5px 0;">
-                    <a href="/topic/{{$topic->id}}"><img class="img-responsive" src="/uploads/{{$topic->special_photo}}" />
-                    <span class="title-topic">专题</span>
+                <li style="width:288px;background-color:unset;">
+                    <a href="/topic/{{$topic->id}}"><img class="img-responsive" src="/uploads/{{$topic->custom_thum_2}}" />
                 </li>
             </ul>
         </div>
     <!-- </div> -->
     @endforeach
     @endif
-            <script type="text/javascript">
-
-          $(document).ready(function(){
-
-              $(".icon-eye").click(function(){
-
-                $(".works_design").toggle();
-
-              });
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".icon-eye").click(function(){
+            $(".works_design").toggle();
+        });
 
 
+        $('.subscription_next_designer').click(function(e){
+            var that =  $(this)
+            if(!IS_LOGIN){
+                $('.login_box').show();
+            }else{
+                var designer_id = $(this).attr('designer_id');
+                $.ajax({
+                    url: '/designer/subscription',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {_token:'{{csrf_token()}}',designer_id:designer_id},
+                    success: function (data) {
+                        if (data.status_code == 0) {
+                            that.remove()
+                        }else{
+                            layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+                        }
+                    }
+                });
+            }
+        });
 
+        //订阅
+        $(".subscription_designer").click(function(e){
+            var that =  $(this)
+            if(!IS_LOGIN){
+                $('.login_box').show();
+            }else if(that.text().trim()=='订阅'){
+                var designer_id = $(this).attr('designer_id');
+                $.ajax({
+                    url: '/designer/subscription',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {_token:'{{csrf_token()}}',designer_id:designer_id},
+                    success: function (data) {
+                        if (data.status_code == 0) {
+                            that.text('已订阅')
+                            that.removeClass('Button3')
+                            that.addClass('Button')
+                            that.addClass('have-disalbed')
+                        } else {
+                            layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+                        }
+                    }
+                });
+            }
+        });
 
-
-              $('.subscription_next_designer').click(function(e){
-
-                  var that =  $(this)
-
-                  if(!IS_LOGIN){
-
-                      $('.login_box').show();
-
-                  }else{
-
-                          var designer_id = $(this).attr('designer_id');
-
-                          $.ajax({
-
-                              url: '/designer/subscription',
-
-                              type: 'POST',
-
-                              dataType: 'json',
-
-                              data: {_token:'{{csrf_token()}}',designer_id:designer_id},
-
-                              success: function (data) {
-
-                                  if (data.status_code == 0) {
-
-                                      that.remove()
-
-                                  } else {
-
-                                      layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
-
-                                  }
-
-                              }
-
-                          });
-
-                  }
-
-              });
-
-
-
-
-
-              //订阅
-
-              $(".subscription_designer").click(function(e){
-
-                  var that =  $(this)
-
-                  if(!IS_LOGIN){
-
-                      $('.login_box').show();
-
-                  }else{
-
-                      if(that.text().trim()=='订阅'){
-
-                          var designer_id = $(this).attr('designer_id');
-
-                          $.ajax({
-
-                              url: '/designer/subscription',
-
-                              type: 'POST',
-
-                              dataType: 'json',
-
-                              data: {_token:'{{csrf_token()}}',designer_id:designer_id},
-
-                              success: function (data) {
-
-                                  if (data.status_code == 0) {
-
-                                      that.text('已订阅')
-
-                                      that.removeClass('Button3')
-
-                                      that.addClass('Button')
-
-                                      that.addClass('have-disalbed')
-
-                                  } else {
-
-                                      layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
-
-                                  }
-
-                              }
-
-                          });
-
-                      }
-
-                  }
-
-              });
-
-          });
-
-          </script> 
+    });
+</script> 
             
             <!--------设计师结束----------->
             
@@ -1005,44 +931,28 @@
 
         <!-- <script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5c091d90711a3c0011d0822a&product=sop'></script> --> 
 
-        <script src="/js/sharethis.js"></script> 
-        <script src="/js/5c091d90711a3c0011d0822a.js"></script> 
-        <script>
-
-
-
-
+<script src="/js/sharethis.js"></script> 
+<script src="/js/5c091d90711a3c0011d0822a.js"></script> 
+<script>
 
     function goToTarget(t) {
-
         var value = $(t).text()
-
         if (value && value != '') {
-
             window.location.href = '/search?keyword=' + encodeURIComponent(value);
-
         }
-
     }
 
 
 
     // 判断是否有设计师
-
     if($('.users').html().trim()){
-
         $('.users').css('visibility','visible')
-
     }else{
-
         $('.users').css('height','216px')
-
     }
 
     var timer = setInterval(function(){
-
         if($('.st-btn').length >= 3){
-
             var h = '<div class="fenxiang share-img-btn" style="display:none;position: absolute;width: 60px;height:60px;left: 163px;top: '+top+'px;padding: 8px;box-sizing: border-box;z-index: 100000;text-align:right">';
 
             h += '<a href="javascript:;" class="share-img-btn" sharetype="yinji-find"><svg xml:space="preserve"> <image id="image0" width="24" height="24" x="8" y="8" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACUAAAAlCAQAAABvl+iIAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfiDA0XHTkZwnQUAAAAVUlEQVRIx2P8z0AtwEQ1k0aNGjWKJkaxYIhgS/6MWMUZh6YHsToeTRxrGTA4PTg4jcIV7KgBy0jYoAFNDPRx1bA3ivTEgLMOHpweZBxtM4waNbiNAgDn9QhSF9pevwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0xMi0xM1QyMzoyOTo1NyswODowMMypGaQAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMTItMTNUMjM6Mjk6NTcrMDg6MDC99KEYAAAAAElFTkSuQmCC" /></svg></a>';
@@ -1053,74 +963,42 @@
 
             h += '<svg xml:space="preserve"> <image id="image0" width="100%" height="100%" x="0" y="0" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACUAAAAlCAQAAABvl+iIAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfiDA0XHTkZwnQUAAAAVUlEQVRIx2P8z0AtwEQ1k0aNGjWKJkaxYIhgS/6MWMUZh6YHsToeTRxrGTA4PTg4jcIV7KgBy0jYoAFNDPRx1bA3ivTEgLMOHpweZBxtM4waNbiNAgDn9QhSF9pevwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0xMi0xM1QyMzoyOTo1NyswODowMMypGaQAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMTItMTNUMjM6Mjk6NTcrMDg6MDC99KEYAAAAAElFTkSuQmCC" /></svg></div>';
 
-            
 
             $("#st-el-1").append(h);
-
             clearInterval(timer);
-
             timer = null;
 
         }
 
-        
 
     }, 300);
 
-        // 添加分享
-
-        
-
+    // 添加分享
     var _img = "";
-
     $('.cat-wrap.left').on('mouseenter','.content-post img',function(){
-
-			_img = $(this).attr("src");
-
-            $("#imageUrlJs").val(_img);
-
+        _img = $(this).attr("src");
+        $("#imageUrlJs").val(_img);
     })
 
 
-
-
-
      //新建文件夹
-
      $(document).on('click','.create-new-folder-btn',function(){
-
      	sourceid=$(this).attr('sourceid');
-
         if ($('#new-find-model-folder').data("open")==1) { return false; }
-
         $('#new-find-model-folder').data("open", 1);
-
         layer.open({
-
             type: 1,
-
             title: false,
-
             closeBtn: 0,
-
             anim: -1,
-
             isOutAnim: false,
-
             content: $('#new-find-model-folder')
-
         });
-
-
-
-
-
     })
 
 
 
 //点击收藏的
-
 function resetSCBtn() {
 	$(".add_finder_btn[data-id]").removeClass("Button").addClass("Button2")
 	.removeClass("issca").removeClass("have-disalbed").text("收藏");
@@ -1324,8 +1202,6 @@ function disableSCBtn(img_url, folder_id) {
                 $(".to_find_floder_act").removeData("open");
             },1000);
             _obj = eval("("+_res+")");
-
-
 
             if (_obj.msg) {
                 //$(this).parents(".discoveryFolders").find(".error_msg").html(_obj.msg);
@@ -1591,187 +1467,62 @@ function disableSCBtn(img_url, folder_id) {
 
 
 
-    </script> 
-        {{--登录模块--}} 
-        <script type="text/javascript">
+</script> 
+
+{{--登录模块--}} 
+<script type="text/javascript">
 
         function WeChatLogin() {
-
-
-
             if ($(".ma_box").hasClass("hide")) {
-
-
-
                 $(".ma_box").removeClass("hide");
-
-
-
             } else {
-
-
-
                 $(".ma_box").addClass("hide");
-
-
-
             }
-
-
-
         }
-
-
-
-
-
-
 
         function toLogin() {
-
-
-
             //以下为按钮点击事件的逻辑。注意这里要重新打开窗口
-
-
-
             //否则后面跳转到QQ登录，授权页面时会直接缩小当前浏览器的窗口，而不是打开新窗口
-
-
-
             var A = window.open("/auth/qq", "_self");
-
-
-
-
-
-
-
         }
 
-
-
-
-
-
-
         function wp_attempt_focus() {
-
-
-
             setTimeout(function () {
-
-
-
                 try {
-
-
-
                     d = document.getElementById('user_login');
-
-
-
                     d.focus();
-
-
-
                     d.select();
-
-
-
                 } catch (e) {
 
-
-
                 }
-
-
-
             }, 200);
-
-
-
         }
 
         //监听回车事件
-
         $(document).keyup(function(event){
-
             if(event.keyCode ==13){
-
                 $('#wp-submit-login').trigger("click");
-
             }
-
         });
 
-
-
         $("#wp-submit-login").click(function () {
-
-
-
             // var loginform = new FormData();
-
-
-
             var url = $.trim($('#loginform').attr("action"));
-
-
-
             $.ajax({
-
-
-
                 url: url,
-
-
-
                 type: 'POST',
-
-
-
                 dataType: 'json',
-
-
-
                 data: $('#loginform').serialize(),
-
-
-
                 success: function (data) {
-
-
-
                     if (data.status_code == 0) {
-
-
-
                         setTimeout(function () {
-
                             location.href =  location.href
-
-
-
                         }, 300);
-
-
-
                     } else {
-
                         layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
-
                     }
-
-
-
                 }
-
-
-
             });
-
-
 
         });
 
@@ -1779,8 +1530,8 @@ function disableSCBtn(img_url, folder_id) {
 
         if (typeof wpOnload == 'function') wpOnload();
 
-    </script> 
-        {{--    登录结束--}}
+</script> 
+{{--    登录结束--}}
 
 
 

@@ -1155,7 +1155,7 @@
 
         $.ajax({
 
-            url: '/vip/add_finder',
+            url: '/vip/finder_collect',
 
             type: 'POST',
 
@@ -1178,17 +1178,11 @@
             success: function (data) {
 
                 if (data.status_code == 0) {
-
-                    layer.msg('收藏成功',{skin: 'intro-login-class layui-layer-hui'})
-
+                    layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
                     that.text('已收藏')
-
                     that.removeClass('Button2')
-
                     that.addClass('Button')
-
                     that.addClass('have-disalbed')
-
                 } else {
 
                     layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})

@@ -162,15 +162,19 @@ class VipController extends Controller
      */
     public function finder_collect(Request $request){
         // dd($request->all());
+        $is_vip = User::isVip(Auth::id());
         if (!Auth::check()) {
             return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
         }
-        
+        if($is_vip==false){
+            return Output::makeResult($request, null, 500,'没有权限，请先开通会员获取权限');
+        }
+
         $result = UserFinder::findercollect($request);
 		
-        if ($result<=10) {
-            return Output::makeResult($request, null, 0, '收藏成功,印币+2');
-        }else{
+        if($result<=50){
+            return Output::makeResult($request, null, 0, '收藏成功,印币+1');
+        }else if($result>50){
             return Output::makeResult($request, null,0,'收藏成功!');
         }
         return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
@@ -304,32 +308,10 @@ class VipController extends Controller
     }
 
 
-    
-    public function addFinder(Request $request)
-    {
-        if (empty($request->user_finder_folder_id)) {
-            return Output::makeResult($request, null, 500, '请选择收藏夹');
-        }
-        if (empty($request->photo_url)) {
-            return Output::makeResult($request, null, 500, '请选择图片');
-        }
-        if (empty($request->photo_source)) {
-            return Output::makeResult($request, null, 500, '缺少文章来源');
-        }
-
-        $result = UserFinder::finderByUrl($request);
-        if (true === $result) {
-            return Output::makeResult($request, null);
-        } else {
-            return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
-        }
-    }
-
-
-
     public function addFinderFolder(Request $request)
     {	
-    	$user_id = Auth::id();
+        $user_id = Auth::id();
+        $is_vip = User::isVip(Auth::id());
     	//一个用户不能有重复的文件名，不同用户可以创建相同的文件名
     	$findername=UserFinderFolder::where('user_id',$user_id)->get()->toArray();
 		
@@ -345,8 +327,9 @@ class VipController extends Controller
 	        		return Output::makeResult($request, null, 500, '文件夹名不能重复');
 	    		}   
 	    	}
-	    
-		}
+		}else if($is_vip==false){
+            return Output::makeResult($request, null, 500, '没有权限，请先开通会员获取权限');
+        }
 	
 		 	
 	        $folder_data = [   

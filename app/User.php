@@ -142,7 +142,7 @@ class User extends Authenticatable
     }
     
     /**
-     * 用户可以免费下载次数
+     * 用户免费下载次数
      * @param null $user_id
      */
     public static function getFreeDownloadNum($user_id = null)
@@ -205,6 +205,54 @@ class User extends Authenticatable
         // dd($kounum);
         return $kounum;
     }
+
+    /**
+     * 获取用户剩余免费下载次数
+     */
+    public static function getFreeSum($user_id = null)
+    {  
+        $num=0;
+        if (empty($user_id)) {
+            return $num;
+        }
+        $user = User::find($user_id);
+        $is_vip = self::isVip($user_id);
+        $today_start = date('Y-m-d 00:00:00');
+        $today_end   = date('Y-m-d 23:59:59');
+        $freedown=self::getFreeDownloadNum($user_id);
+        $hasdown=UserDownRecord::where('user_id',$user_id)->where('is_free',1)->where('created_at', '>=', $today_start)->where('created_at', '<', $today_end)->count();
+        
+        if($freedown-$hasdown>0){
+            $num=$freedown-$hasdown;
+        }else{
+            $num=0;
+        }
+        return $num;
+    }
+
+    /**
+     * 获取用户剩余抵扣下载次数
+     */
+    public static function getKouSum($user_id = null)
+    {  
+        $num=0;
+        if (empty($user_id)) {
+            return $num;
+        }
+        $user = User::find($user_id);
+        $is_vip = self::isVip($user_id);
+        $today_start = date('Y-m-d 00:00:00');
+        $today_end   = date('Y-m-d 23:59:59');
+        $koudown=self::getKouDownloadNum($user_id);
+        $hasdown=UserDownRecord::where('user_id',$user_id)->where('is_free',2)->where('created_at', '>=', $today_start)->where('created_at', '<', $today_end)->count();
+        if($koudown-$hasdown>0){
+            $num=$koudown-$hasdown;
+        }else{
+            $num=0;
+        }
+        return $num;
+    }
+
 
 
 
@@ -443,7 +491,7 @@ class User extends Authenticatable
      */
     public static function getFollowNum($user_id)
     {
-        return UserFollow::where('user_id', $user_id)->count();
+        return UserFollow::where('user_id', $user_id)->count()-1;
     }
 
     /**

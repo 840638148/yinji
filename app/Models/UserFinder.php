@@ -547,7 +547,7 @@ class UserFinder extends Model
         if (empty($request->user_finder_folder_id)) {
             return '请选择文件夹';
         }
-		
+
 		$start = strpos($request->photo_url, '/photo/images/');
 		if (false === $start) {
 			$photo_url = $request->photo_url;
@@ -580,12 +580,12 @@ class UserFinder extends Model
             $today_end   = date('Y-m-d 23:59:59');
             $fx_sum = UserPoint::where('user_id', $user_id)->where('remark','发现')->where('created_at', '>=', $today_start)->where('created_at', '<=', $today_end)->count();
             
-            //每天只能发现10次图片加印币，超过10次后不加印币
-            if($fx_sum<=10){
+            //每天只能发现50次图片加印币，超过50次后不加印币
+            if($fx_sum<=50){
                 $point_log = [
                     'user_id' => $user_id,
                     'type' => '0',
-                    'point' => 2,
+                    'point' => 1,
                     'remark' => '发现',
                 ];
                 UserPoint::create($point_log);  

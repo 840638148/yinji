@@ -144,11 +144,10 @@ Route::post('vip/add_finder_folder', 'VipController@addFinderFolder');
 Route::post('vip/add_collect_folder', 'VipController@addCollectFolder');
 Route::post('vip/delete_folder', 'VipController@deleteFolder');
 Route::post('vip/edit_folder', 'VipController@editFolder');
-Route::post('vip/add_finder', 'VipController@addFinder');
 Route::post('vip/get_folder_detail', 'VipController@getFolderDetail');
 Route::post('vip/get_folder_info', 'VipController@getFolderInfo');
 Route::post('vip/edit_folder_info', 'VipController@editFolderInfo');
-Route::post('vip/finder_collect', 'VipController@finder_collect');//发现页-》点击收藏
+Route::post('vip/finder_collect', 'VipController@finder_collect');//发现页-》点击收藏  文章详情页点击图片进行收藏
 
 
 Route::get('folderlist/{id}', 'VipController@folderlist');//推荐收藏夹列表

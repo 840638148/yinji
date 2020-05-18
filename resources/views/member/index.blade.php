@@ -226,7 +226,7 @@
   </div>
   <span class="closebtn" onclick="layer.closeAll();" style="position: absolute;right:0;top:0;padding: 10px 10px 5px 10px;cursor: pointer;">╳</span>
   @if($is_qiandao)
-      <a href="javascript:void(0);" class="fr Button6 mt10" disabled="disabled" id="attendances" style="position:absolute;right:30px;top:50px;width:80px;height:36px;background: #ccc;color: #fff;display: block;text-align: center;line-height: 36px;border-radius: 3px;cursor:no-drop;">已签到</a> 
+      <a href="javascript:void(0);" class="fr Button6 mt10" disabled="disabled" id="attendances">已签到</a> 
   @else
       <a href="javascript:void(0);" class="fr Button3 mt10" id="attendance" style="position: absolute;right:30px;top:50px;">签到</a> 
   @endif
@@ -289,7 +289,7 @@
 <!--------签到规则--------->
 <div class="change_box tab_box">
   <div class="change">
-    <table style="text-align:center">
+    <table style="text-align:center;margin-top:30px;">
       <tr>
         <td>连续签到天数</td>
         <td>1~4</td>
@@ -360,7 +360,7 @@
     
   <script type="text/javascript">
     function alert1(){
-      layer.msg('尽请期待！',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+      layer.msg('敬请期待！',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
     }
     
     function selectItem(index){
@@ -488,45 +488,6 @@
     </div>
 </div>
 
-
-<!--收藏夹图片浏览-->
-<!--<div class="img_browse modal" id="img-browse" >
-  <div class="close">关闭</div>
-  <div class="left">
-    <div style="height:48px;">
-      <h2 class="fl">文件夹名称333</h2>
-      <span class="fr">分享到：</div>
-    <div class="image"><img src="/images/ad_05.gif" alt="发现的图片" class="selected-image"/> </div>
-  </div>
-  <div class="right" style="margin-top:48px;">
-    <div class="more_img"> 
-      <a href="#" class="more-img-item selected"><img src="images/imges.jpg" alt="图片一" /> <div class="cover"></div></a>
-      
-      <a href="#" class="more-img-item"><img src="images/ad_05.gif" alt="图片一" /><div class="cover"></div></a> 
-      <a href="#" class="more-img-item"><img src="images/design_16-03.gif" alt="图片二" /><div class="cover"></div></a> 
-      <a href="#" class="more-img-item"><img src="images/about_img.jpg" alt="图片一" /><div class="cover"></div></a> 
-      <a href="#" class="more-img-item"><img src="images/ad_22.gif" alt="图片二" /><div class="cover"></div></a> 
-      <a href="#" class="more-img-item"><img src="images/ad_05.gif" alt="图片一" /><div class="cover"></div></a> 
-      <a href="#" class="more-img-item"><img src="images/design_16-03.gif" alt="图片二" /><div class="cover"></div></a> 
-      <a href="#" class="more-img-item"><img src="images/about_img.jpg" alt="图片一" /><div class="cover"></div></a> 
-      <a href="#" class="more-img-item"><img src="images/ad_22.gif" alt="图片二" /><div class="cover"></div></a> 
-      <a href="#" class="more-img-item"><img src="images/ad_05.gif" alt="图片一" /><div class="cover"></div></a> 
-      <a href="#" class="more-img-item"><img src="images/design_16-03.gif" alt="图片二" /><div class="cover"></div></a> </div>
-    <hr />
-    <div class="discoverer">
-        <div class="head"><img src="images/design_16-03.gif" alt="头像" /></div>
-        <h2><a href="#">大仁哥1027</a> <span class="vip1">VIP</span></h2>
-          <a class="Button">关注</a>
-      </div>
-    <hr />
-    <div class="faxian_info">
-      <p>由 <a href="#">严PPPPPPPP1</a> 收藏于 <a href="#">大厅</a></p>
-      <p>2017-06-02 14:59:57</p>
-      <p class="laiyuan"><a href="#">来源：Lera Brumina作品 | 80㎡ Apartmen...</a></p>
-    </div>
-  </div>
-</div>-->
-<!--发现图片浏览结束--> 
 
 <script src="/js/layer.js"></script>
 <script src="/js/member.js"></script>

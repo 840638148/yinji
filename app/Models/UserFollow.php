@@ -22,24 +22,27 @@ class UserFollow extends Model
     public static function followByUserId($follow_id)
     {
         $user_id = Auth::id();
-        
+        $is_vip = User::isVip($user_id);
         if (empty($follow_id) || empty($user_id)) {
             return false;
-        }
-        $obj = self::where('user_id', $user_id)
+        }else if($is_vip){
+            $obj = self::where('user_id', $user_id)
             ->where('follow_id', $follow_id)
             ->first();
 
-        if ($obj){
+            if($obj){
+                return true;
+            } else {
+                $data = [
+                    'user_id' => Auth::id(),
+                    'follow_id' => $follow_id,
+                ];
+                self::create($data);
+            }
             return true;
-        } else {
-            $data = [
-                'user_id' => Auth::id(),
-                'follow_id' => $follow_id,
-            ];
-            self::create($data);
+        }else{
+            return false;
         }
-        return true;
     }
 
     /**

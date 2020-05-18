@@ -133,8 +133,8 @@ class ArticleCommentController extends BaseController
             $das=[
                 'user_id' => $user->user_id,
                 'type' => '0',
-                'point' => 10,
-                'remark' => '评语',
+                'point' => 12,
+                'remark' => '评论',
             ];
             $re=UserPoint::where('id',$user->user_id)->create($das);
         }

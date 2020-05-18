@@ -38,17 +38,14 @@ class UserAttendance extends Model
 
         $last_days = self::getLastDays($user_id);
         $point = self::getPoint($last_days);
+        $points=0;
+        $po=0;
+        // dd($point);
         $user = User::find($user_id);
+        $is_vip=User::isVip($user_id);
         if ($user) {
             
-            $user->points = $user->points + $point;
-            $user->left_points = $user->left_points + $point;
-            $user->continuity_day = $last_days + 1;
-            $user->save();
-            $points=0;
-            $po=0;
-            
-            if($user->expire_time >= date('Y-m-d')){
+            if($is_vip){
                 $viplevel=User::getVipLevel($user->id);
                 if($viplevel=='/images/v_1.png'){
                     $points=2;
@@ -66,16 +63,8 @@ class UserAttendance extends Model
                     $points=16;
                 }else if($viplevel=='/images/v_8.png'){
                     $points=20;
-                }
-
-                if($points!=0){
-                    $das=[
-                        'user_id' => $user_id,
-                        'type' => '0',
-                        'point' => $points,
-                        'remark' => 'VIP等级签到额外分',
-                    ];
-                    UserPoint::create($das);                
+                }else{
+                    $points=0;
                 }
 
                 if($user->level==1){
@@ -84,34 +73,53 @@ class UserAttendance extends Model
                     $po=10;
                 }else if($user->level==3){
                     $po=15;
+                }else{
+                    $po=0;
                 }
+        
+                $user->points = $user->points + $point+$po+$points;
+                $user->left_points = $user->left_points + $point+$po+$points;
+                $user->continuity_day = $last_days + 1;
+                $user->save();
 
-                if($po!=0){
-                    $da=[
-                        'user_id' => $user_id,
-                        'type' => '0',
-                        'point' => $po,
-                        'remark' => '会员签到额外分',
-                    ];
-                    UserPoint::create($da);                
-                }
+                $point_data = [
+                    'user_id' => $user_id,
+                    'type' => '0',
+                    'point' => $point+$po+$points,
+                    'remark' => '签到',
+                ]; 
+
+                UserPoint::create($point_data);
+                $data = [
+                    'user_id' => $user_id,
+                    'point' => $point+$po+$points,
+                ];
+                self::create($data);
+            }else{
+                $user->points = $user->points + $point+$po+$points;
+                $user->left_points = $user->left_points + $point+$po+$points;
+                $user->continuity_day = $last_days + 1;
+                $user->save();
+                $point_data = [
+                    'user_id' => $user_id,
+                    'type' => '0',
+                    'point' => $point+$po+$points,
+                    'remark' => '签到',
+                ];
+                UserPoint::create($point_data);
+                $data = [
+                    'user_id' => $user_id,
+                    'point' => $point+$po+$points,
+                ];
+                self::create($data);
             }
-
-            $point_data = [
-                'user_id' => $user_id,
-                'type' => '0',
-                'point' => $point,
-                'remark' => '签到',
-            ];
-            UserPoint::create($point_data);
-            
-            $data = [
-                'user_id' => $user_id,
-                'point' => $point,
-            ];
-            self::create($data);
+            $re=['res'=>true,'qdyb'=>$point+$po+$points,];
+           return $re;
+        }else{
+            $re=['res'=>false,'qdyb'=>$point+$po+$points,];
+            return $re;
         }
-        return true;
+        
     }
 
 
@@ -124,40 +132,28 @@ class UserAttendance extends Model
     public static function getPoint($last_days)
     {
         $last_days ++; //这是已经签到的天数，不包括当前这次签到，所以加1
-        if ($last_days <= 5) {
+        if ($last_days < 5) {
             $id = 1;
-        } else if ($last_days <= 30) {
-            $id = 2;
-        } else {
+        }else if($last_days = 5){
+            $id = 2 ;
+        }else if ($last_days < 15) {
             $id = 3;
+        }else if ($last_days = 15) {
+            $id = 4;
+        }else if ($last_days < 30) {
+            $id = 5;
+        }else if ($last_days = 30) {
+            $id = 6;
+        }else if ($last_days < 45) {
+            $id = 7;
+        }else if ($last_days = 45) {
+            $id = 8;
+        }else if ($last_days > 45) {
+            $id = 9;
         }
+  
         $point_set = PointSet::find($id);
         $point = $point_set->point;
-
-        $last_id = null;
-        if (5 == $last_days) {
-            $last_id = 4;
-        }
-        if (10 == $last_days) {
-            $last_id = 5;
-        }
-        if (20 == $last_days) {
-            $last_id = 6;
-        }
-        if (30 == $last_days) {
-            $last_id = 7;
-        }
-        if ($last_days > 30 && (0 == ($last_days % 15))) {
-            $last_id = 8;
-        }
-
-        if ($last_id) {
-            $point_last = PointSet::find($last_id);
-            if ($point_last) {
-                $point += $point_last->point;
-            }
-        }
-
 
         return $point;
     }
@@ -178,15 +174,15 @@ class UserAttendance extends Model
         $attendance = UserAttendance::where('user_id', $user_id)
             ->where('created_at', '>=', $today_start)
             ->where('created_at', '<=', $today_end)
-            ->first();
-        if ($attendance) {
-            $user = User::find($user_id);
-            if ($user) {
-                $last_days = $user->continuity_day;
-            }
+            ->first(); 
+        $user = User::find($user_id);
+        if ($attendance && $user) {
+            $last_days = $user->continuity_day;
+        }else{
+            $last_days = $user->continuity_day;
         }
 
-        //var_dump($last_days);
+        // dd($last_days);
         return $last_days;
     }
 

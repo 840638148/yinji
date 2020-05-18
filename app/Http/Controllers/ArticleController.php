@@ -606,10 +606,6 @@ class ArticleController extends Controller
      */
     public function like(Request $request)
     {
-        //if (!Auth::check()) {
-        //    return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
-        //}
-
         $result = UserLike::likeById('0', $request->like_id);
 		if (true === $result['status']) {
             return Output::makeResult($request, $result);
@@ -632,11 +628,7 @@ class ArticleController extends Controller
         if (!Auth::check()) {
             return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
         }
-		
-		//查询已经收藏的记录
-		// $findername = UserCollect::where('user_collect_folder_id', $request->folder_id)->where('collect_id', $request->collect_id)->first();
-		// dd($request);  
-		
+	
         $result = UserCollect::collectById('0', $request);
 		
         if (true === $result) {

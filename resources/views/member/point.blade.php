@@ -5,36 +5,6 @@
 @endsection
 
 @section('content')
-<div class="home_top">
-  <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
-  <div class="home_tongji">
-  <ul>
-      <li>发现</br>
-        {{$user->finder_num}} </li>
-      <li> 收藏</br>
-        {{$user->collect_num}} </li>
-      <li> 订阅</br>
-        {{$user->subscription_num}} </li>
-      <li> 关注</br>
-        {{$user->follow_num}} </li>
-    </ul>
-  </div>
-  <div class="home_personal"> <img src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}" />
-  </div>
-  <h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> {{$user->nickname}} <img src="{{$user->vip_level}}" alt=""></h2>
-  <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">个人说明： {{$user->personal_note}}</p>
-  <div class="home_nav">
-    <ul>
-      <li><a  href="/member">个人中心</a></li>
-      <li><a href="/member/finder">我的发现</a></li>
-      <li><a href="/member/collect">我的收藏</a></li>
-      <li><a href="/member/subscription">我的订阅</a></li>
-      <li><a href="/member/follow">我的关注</a></li>
-      <li><a href="/member/mydown">我的下载</a></li>
-      <li><a href="/member/profile">个人资料</a></li>
-    </ul>
-  </div>
-</div>
 <style>
     .item .edit_favorites{
         position: absolute;
@@ -170,8 +140,49 @@
     background: #636af3 !important;
     color: #fff !important;
   }
-
+  .lzcfg{
+    background: rgba(0,0,0,0.5);
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 99999999;
+  }
 </style>
+<div class="lzcfg"></div>
+<div class="home_top">
+  <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
+  <div class="home_tongji">
+  <ul>
+      <li>发现</br>
+        {{$user->finder_num}} </li>
+      <li> 收藏</br>
+        {{$user->collect_num}} </li>
+      <li> 订阅</br>
+        {{$user->subscription_num}} </li>
+      <li> 关注</br>
+        {{$user->follow_num}} </li>
+    </ul>
+  </div>
+  <div class="home_personal"> <img src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}" />
+  </div>
+  <h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> {{$user->nickname}} <img src="{{$user->vip_level}}" alt=""></h2>
+  <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">个人说明： {{$user->personal_note}}</p>
+  <div class="home_nav">
+    <ul>
+      <li><a  href="/member">个人中心</a></li>
+      <li><a href="/member/finder">我的发现</a></li>
+      <li><a href="/member/collect">我的收藏</a></li>
+      <li><a href="/member/subscription">我的订阅</a></li>
+      <li><a href="/member/follow">我的关注</a></li>
+      <li><a href="/member/mydown">我的下载</a></li>
+      <li><a href="/member/profile">个人资料</a></li>
+    </ul>
+  </div>
+</div>
+
 <section class="wrapper">
   <div class="mt30 home_box">
     <div class="jifen_tj">
@@ -199,7 +210,7 @@
           <div class="tj_shuzi">
             <span class="point-title">总下载次数: <b style="color:red">{{$user->download_num}}</b></span>
             </div>
-            <p class="down-show">{{$user->getLeftDownloadNum}}<span style="font-size:13px;">剩余下载次数</span></p><p class="down-show">{{$user->getKouDownloadNum}}<span style="font-size:13px;">印币抵扣次数</span></p>
+            <p class="down-show" style="padding:0 !important;padding-right:16px !important;">{{$user->getFreeSum}}<span style="font-size:13px;">免费可下载次数</span></p><p class="down-show" style="padding:0 !important;padding-left: 16px !important;">{{$user->getKouSum}}<span style="font-size:13px;">印币可抵扣次数</span></p>
         </li>
       </ul>
        <ul>
@@ -209,19 +220,19 @@
                     <div class="today-point">{{ $today_point['today'] }}</div>
                     <div class="qiandao">
                         <p>
-                            <span style="margin-left: 15px">签到：</span>
+                            <span style="margin-left: 15px;padding-left: 2.5px;">签到：
                             @if ($today_point['attendance'] > 0)
                                 {{ $today_point['attendance'] }}/{{ $today_point['attendance'] }}
                             @else
                                 <a href="javascript:void(0);" class="bookInSign"  style="color: #a6c4df">去签到</a>
                             @endif
-                            
+                            </span>
                         </p>
-                        <p><span>发现：</span>{{ $today_point['faxian'] }}/100</p>
-                        <p><span>留言：</span>{{ $today_point['comment'] }}/500</p>
+                        <p><span>发现：</span>{{ $today_point['faxian'] }}/50</p>
+                        <p><span style="padding-left: 7px;">评论：</span>{{ $today_point['comment'] }}/600</p>
                     </div>
                 </div>
-                <div class="bar"><span class="bar-length" style="width: {{($today_point['today']/600)*100}}%"></span><p><span>{{ $today_point['today'] }}</span>/600</p></div>
+                <div class="bar"><span class="bar-length" style="width: {{($today_point['today']/(650+$today_point['attendance']))*100}}%"></span><p><span>{{ $today_point['today'] }}</span>/{{650+$today_point['attendance']}}</p></div>
             </li>
             <li class="ico_jftj-inner">
                 <div class="tj_shuzi">
@@ -244,8 +255,8 @@
             </li>
         </ul>
     </div>
-    <div class="title">
-      <h2 class="fl">积分记录</h2>
+    <div class="title" style="position:relative">
+      <h2 class="fl">印币记录<span class="ybrole" style="position: absolute;right: 10px;cursor: pointer;font-size: 15px;">印币规则</span></h2>
       {{--<a class="fr" href="/static/integral.html" style="line-height:48px; color:#06C">如何印币?</a>--}}
     </div>
 
@@ -284,6 +295,7 @@
 
 
           </ul>
+          
       </div>
     {{--<table class="shop_table my_account_points_rewards my_account_orders">--}}
       {{--<thead>--}}
@@ -320,7 +332,7 @@
             </div>
             <span class="closebtn" onclick="layer.closeAll();" style="position: absolute;right:0;top:0;padding: 10px 10px 5px 10px;cursor: pointer;">╳</span>
             @if($is_qiandao)
-                <a href="javascript:void(0);" class="fr Button6 mt10" disabled="disabled" id="attendances" style="position:absolute;right:30px;top:50px;width:80px;height:36px;background: #ccc;color: #fff;display: block;text-align: center;line-height: 36px;border-radius: 3px;cursor:no-drop;">已签到</a> 
+                <a href="javascript:void(0);" class="fr Button6 mt10" disabled="disabled" id="attendances" >已签到</a> 
             @else
                 <a href="javascript:void(0);" class="fr Button3 mt10" id="attendance" style="position: absolute;right:30px;top:50px;">签到</a> 
             @endif
@@ -381,7 +393,7 @@
         <!--------签到规则--------->
         <div class="change_box tab_box">
             <div class="change">
-                <table style="text-align:center">
+                <table style="text-align:center;margin-top:30px;">
                     <tr>
                         <td>连续签到天数</td>
                         <td>1~4</td>
@@ -449,6 +461,118 @@
         </div>
     </div>
         <!--------签到规则结束--------->
+
+
+    <!-- 印币规则开始 -->
+    <div class="ybtab" style="position: absolute;top: 80%;left: 22%;z-index: 99;width: 900px;height: 660px;background:#fff;border-radius: 7px;text-align: center;display:none;">
+        <span class="closeybtab" style="position: absolute;right:0;top:0;padding: 10px 10px 5px 10px;cursor: pointer;font-size: 18px;">╳</span>
+        <table style="text-align:center;margin:50px auto;width:850px;">
+            <tr style="text-align:center;font-size:18px;"><td colspan="9">印币规则</td></tr>
+            <tr>
+                <td colspan="3">类型</td>
+                <td colspan="2">印币单位：印币</td>
+                <td colspan="2">印币比例：1：10</td>
+                <td colspan="2">印币抵扣（次/印币）1：10</td>
+            </tr>
+            <tr>
+                <td rowspan="10">印币的获取</td>
+                <td rowspan="8">获取（通用）</td>
+                <td rowspan="2">签到</td>
+                <td colspan="6" rowspan="2">详见签到印币规则</td>
+            </tr>
+            <tr>
+               
+            </tr>
+            <tr>
+                <td rowspan="2">评分</td>
+                <td colspan="3">设置</td>
+                <td colspan="3">获取印币（次）</td>
+
+            </tr>
+            <tr>
+                <td colspan="3">印币</td>
+                <td colspan="3">2</td>
+            </tr>
+
+            <tr>
+                <td rowspan="2">发现</td>
+                <td colspan="2">设置</td>
+                <td colspan="2">获取印币（次）</td>
+                <td colspan="2">每天次数</td>
+
+            </tr>
+            <tr>
+                <td colspan="2">印币</td>
+                <td colspan="2">1</td>
+                <td colspan="2">50</td>
+            </tr>
+
+            <tr>
+                <td rowspan="2">评论</td>
+                <td colspan="3">设置</td>
+                <td colspan="3">获取印币（次）</td>
+
+            </tr>
+            <tr>
+                <td colspan="3">印币</td>
+                <td colspan="3">12</td>
+            </tr>
+            
+            <tr>
+                <td colspan="2">会员类型</td>
+                <td>普通会员</td>
+                <td>月会员</td>
+                <td>季会员</td>
+                <td>年会员</td>
+                <td>特邀作者</td>
+                <td>公司</td>
+            </tr>
+            <tr>
+                <td>获取（会员）</td>
+                <td>开通会员（印币）</td>
+                <td>8</td>
+                <td>58</td>
+                <td>168</td>
+                <td>288</td>
+                <td colspan="2" rowspan="4">Space2.0  敬请期待！</td>
+                
+
+            </tr>
+            <tr>
+                <td rowspan="3">印币消费</td>
+                <td rowspan="2">消费（普通）</td>
+                <td>抵扣下载次数（次/天）</td>
+                <td>1</td>
+                <td>3</td>
+                <td>5</td>
+                <td>10</td>
+             
+            </tr>
+            <tr>
+                <td>抵扣印币（印币/天）</td>
+                <td>-10</td>
+                <td>-30</td>
+                <td>-50</td>
+                <td>-100</td>
+        
+            </tr>
+            <tr>
+                <td>消费（会员）</td>
+                <td>开通会员抵扣印币（印币）</td>
+                <td>0</td>
+                <td>-50</td>
+                <td>-280</td>
+                <td>-880</td>
+         
+            </tr>
+
+
+
+
+        </table>
+    </div>
+    <!-- 印币规则结束 -->
+
 </section>
 
 <script>
@@ -518,7 +642,16 @@
             }
         });*/
     })
-
+    $(document).on("click", ".ybrole",function () {
+        $('.lzcfg').css('display','block');
+        $('.ybtab').css('display','block');
+        $('.ybtab').css('z-index','999999999999');
+    })
+    
+    $(document).on("click", ".closeybtab",function () {
+        $('.lzcfg').css('display','none');
+        $('.ybtab').css('display','none');
+    })
 </script>
 
 

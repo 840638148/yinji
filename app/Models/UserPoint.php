@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -29,41 +29,23 @@ class UserPoint extends Model
             'faxian' => 0,
             'pingfen' => 0,
         ];
-        $today = UserPoint::where('user_id', $user_id)
+        $user = User::find($user_id);
+        $res=UserPoint::where('user_id', $user_id)
             ->where('type', '0')
             ->where('created_at', '>', date('Y-m-d 00:00:00'))
-            ->where('created_at', '<=', date('Y-m-d 23:59:59'))
-            ->sum('point');
-        $attendance = UserPoint::where('user_id', $user_id)
-            ->where('type', '0')
-            ->where('remark', '签到')
-            ->where('created_at', '>', date('Y-m-d 00:00:00'))
-            ->where('created_at', '<=', date('Y-m-d 23:59:59'))
-            ->sum('point');
-        $pingfen = UserPoint::where('user_id', $user_id)
-            ->where('type', '0')
-            ->where('remark', '评分')
-            ->where('created_at', '>', date('Y-m-d 00:00:00'))
-            ->where('created_at', '<=', date('Y-m-d 23:59:59'))
-            ->sum('point');
-        $comment = UserPoint::where('user_id', $user_id)
-            ->where('type', '0')
-            ->where('remark', '评语')
-            ->where('created_at', '>', date('Y-m-d 00:00:00'))
-            ->where('created_at', '<=', date('Y-m-d 23:59:59'))
-            ->sum('point');
-        $faxian = UserPoint::where('user_id', $user_id)
-            ->where('type', '0')
-            ->where('remark', '发现')
-            ->where('created_at', '>', date('Y-m-d 00:00:00'))
-            ->where('created_at', '<=', date('Y-m-d 23:59:59'))
-            ->sum('point');
-        $like = UserPoint::where('user_id', $user_id)
-            ->where('type', '0')
-            ->where('remark', '点赞')
-            ->where('created_at', '>', date('Y-m-d 00:00:00'))
-            ->where('created_at', '<=', date('Y-m-d 23:59:59'))
-            ->sum('point');
+            ->where('created_at', '<=', date('Y-m-d 23:59:59'));
+
+        $today = $res->sum('point');
+
+        $attendance = $res->where('remark', '签到')->sum('point');
+
+        $pingfen = $res->where('remark', '评分')->sum('point');
+
+        $comment = $res->where('remark', '评论')->sum('point');
+
+        $faxian = $res->where('remark', '发现')->sum('point');
+
+        $like = $res->where('remark', '点赞')->sum('point');
             
         $today_point['today'] = $today;
         $today_point['attendance'] = $attendance;

@@ -7,129 +7,74 @@
 @section('content')
 
 <style>
-
-    .item .edit_favorites{
-
-            position: absolute;
-
+  .item .edit_favorites{
+    position: absolute;
     display: inline-block;
-
     vertical-align: top;
-
     text-indent: 0;
-
     text-align: center;
-
     line-height: 32px;
-
     z-index: 120;
-
     right: 120px;
-
     top: 34%;
+  }
 
-    }
+  .edit_favorites:hover .item-setting-btns{
+      color:#555;
+  }
 
-    .edit_favorites:hover .item-setting-btns{
+  .find_title{
+      overflow:inherit;
+      position:relative;
+  }
 
-        color:#555;
+  .find_title h2{
+      float: none;
+      width:200px;
+      vertical-align: top
+  }
 
-    }
+  .item .item-setting-btns{
+      display: none;
+      position: absolute;
+      right:-35px;
+      background: #fff;
+      border-radius: 4px;
+      width: 90px;
+      padding: 3px 0px;
+      text-align: center;
+      font-size: 12px;
+      box-shadow: 0 0 11px rgba(0,0,0,.1);
+      top:40px;
+      margin-bottom: 4px;
+  }
 
-    .find_title{
+  .item.selected .item-setting-btns{
+      display: block;
+  }
 
-        overflow:inherit;
+  .modal{
+    display:none;
+  }
 
-        position:relative;
-
-    }
-
-    .find_title h2{
-
-        float: none;
-
-        width:200px;
-
-        vertical-align: top
-
-    }
-
-    .item .item-setting-btns{
-
-        display: none;
-
-        position: absolute;
-
-        right:-35px;
-
-        background: #fff;
-
-        border-radius: 4px;
-
-        width: 90px;
-
-        padding: 3px 0px;
-
-        text-align: center;
-
-        font-size: 12px;
-
-        box-shadow: 0 0 11px rgba(0,0,0,.1);
-
-        top:40px;
-
-        margin-bottom: 4px;
-
-    }
-
-
-
-    .item.selected .item-setting-btns{
-
-        display: block;
-
-    }
-
-    .modal{
-
-      display:none;
-
-    }
-
-    .img_browse{
-
+  .img_browse{
     position: fixed;
-
     left: 50%;
-
     top: 50%;
-
     width: 800px;
-
     margin-left: -350px;
-
-	 margin-top: -350px;
-
+    margin-top: -350px;
     height: 720px;
-
     min-height:0;
-
     background: #fff;
-
     z-index: 999;
-
     padding: 10px;
-
     border-radius: 5px;
-
   }
 
   .img_browse .right{
-
     width:260px;
-
     height: calc( 100% - 50px);
-
   }
 
 </style>

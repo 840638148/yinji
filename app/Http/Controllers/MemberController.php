@@ -196,7 +196,7 @@ class MemberController extends Controller
 
         $today_starts = date('Y-m-d H:i:s', strtotime('-3 days'));
         $today_ends   = date('Y-m-d H:i:s');
-        $down=UserDownRecord::leftjoin('articles','user_down_records.down_id','=','articles.id')->select('articles.static_url','articles.custom_thum','user_down_records.id','articles.title_name_cn','articles.title_designer_cn','articles.vip_download','user_down_records.created_at')->where('user_down_records.user_id',$user->id)->where('user_down_records.created_at', '>=', $today_starts)->where('user_down_records.created_at', '<=', $today_ends)->get();
+        $down=UserDownRecord::leftjoin('articles','user_down_records.down_id','=','articles.id')->select('articles.static_url','articles.custom_thum','user_down_records.id','articles.title_name_cn','articles.title_designer_cn','articles.vip_download','user_down_records.created_at')->where('user_down_records.user_id',$user->id)->where('user_down_records.created_at', '>=', $today_starts)->where('user_down_records.created_at', '<=', $today_ends)->orderby('created_at','desc')->get();
 
         foreach($down as $k=>$v){
             $down[$k]['guoqitime']=Carbon::parse($v->created_at)->addDays(3)->toDateTimeString();
@@ -215,8 +215,11 @@ class MemberController extends Controller
         $this->checkLogin();
 
         $result = UserFollow::followByUserId($request->follow_id);
+        
         if (true === $result) {
             return Output::makeResult($request, null);
+        }else{
+            return Output::makeResult($request, null, 500,'您没有权限，请先开通会员获取权限');
         }
         return Output::makeResult($request, null, Error::SYSTEM_ERROR);
     }
@@ -247,9 +250,11 @@ class MemberController extends Controller
         $today_start = date('Y-m-d 00:00:00');
         $today_end   = date('Y-m-d 23:59:59');
         $is_qiandao = UserAttendance::where('user_id', $user->id)->where('created_at', '>=', $today_start)->where('created_at', '<=', $today_end)->first();
-        // dd($attendances);
+        // dd($today_point);
         $last_days = UserAttendance::getLastDays($user->id);
         $tips = UserAttendance::getAttendanceTips();
+
+        // $qd_sum_points=;
         // dd($user->point_logs);
         $data = [
             'lang' => $lang,
@@ -412,7 +417,7 @@ class MemberController extends Controller
             $finder->delete();
             return Output::makeResult($request, null);
         } else {
-            return Output::makeResult($request, null, Error::SYSTEM_ERROR, '你无权删除该图片');
+            return Output::makeResult($request, null, Error::SYSTEM_ERROR, '您无权删除该图片');
         }
     }
     
@@ -429,7 +434,7 @@ class MemberController extends Controller
             $finder->delete();
             return Output::makeResult($request, null);
         } else {
-            return Output::makeResult($request, null, Error::SYSTEM_ERROR, '你无权删除该图片');
+            return Output::makeResult($request, null, Error::SYSTEM_ERROR, '您无权删除该图片');
         }
     }
 
@@ -439,13 +444,15 @@ class MemberController extends Controller
         $this->checkLogin();
 
         $result = UserAttendance::attendance();
-        if (true === $result) {
+        // dd($result);
+        if (true === $result['res']) {
             $user = $this->getUserInfo();
             $user = User::find($user->id);
             $last_days = UserAttendance::getLastDays($user->id);
             $data = [
                 'last_days' => $last_days,
                 'points' => $user->points,
+                'qdyb' => $result['qdyb'],
             ];
             return Output::makeResult($request, $data);
         }
