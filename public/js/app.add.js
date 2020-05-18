@@ -6,10 +6,10 @@ $(function(){
         $(this).find('figure>a').append('<div class="new-article-author" style="height:'+ $(this).height() +'">'+text+'</div> ')
     })
 
-    $('#slongposts-4 .postlist figure').each(function(){
-        var text = $(this).find('a').attr('title').split('|')[0];
-        $(this).find('a').append('<div class="new-article-author" style="height:'+ $(this).height() +';width:'+ $(this).parent('.postlist').width() +';font-size:14px;">'+text+'</div> ')
-    })
+    // $('#slongposts-4 .postlist figure').each(function(){
+    //     var text = $(this).find('a').attr('title').split('|')[0];
+    //     $(this).find('a').append('<div class="new-article-author" style="height:'+ $(this).height() +';width:'+ $(this).parent('.postlist').width() +';font-size:14px;">'+text+'</div> ')
+    // })
     $('.design_box .design_right li').each(function(){
         var text = $(this).find('img').attr('title');
         $(this).css('position', 'relative')
@@ -34,7 +34,7 @@ $(function(){
     // 模拟you多个
     // $('.oUlplay').append('<li><a href="http://trolan.tyyke.com:39007" target="_blank" rel="noopener"><img src="http://120.79.234.88/uploads/public/photo/images/popularize/c77f4f2ad640c78afc0d01ea885ed469.gif"></a></li>')
     // $('.oUlplay').append('<li><a href="http://trolan.tyyke.com:39007" target="_blank" rel="noopener"><img src="http://120.79.234.88/uploads/public/photo/images/popularize/c77f4f2ad640c78afc0d01ea885ed469.gif"></a></li>')
-    $('.oUlplay').append('<li><a href="http://trolan.tyyke.com:39007" target="_blank" rel="noopener"><img src="http://120.79.234.88/uploads/public/photo/images/popularize/c77f4f2ad640c78afc0d01ea885ed469.gif"></a></li>')
+    // $('.oUlplay').append('<li><a href="http://trolan.tyyke.com:39007" target="_blank" rel="noopener"><img src="http://120.79.234.88/uploads/public/photo/images/popularize/c77f4f2ad640c78afc0d01ea885ed469.gif"></a></li>')
     
     $('.oUlplay li').each(function(){
         $(this).addClass('swiper-slide')

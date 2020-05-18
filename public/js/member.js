@@ -325,12 +325,23 @@ $(document).on('click','#attendance',function(){
         },
         success: function (data) {
             qddays=data.data.last_days;
+            qdb=data.data.qdyb;
+            console.log(data)
             if (data.status_code == 0) {
                 $('#user-point').html(data.data.points);
                 $('#last-day').html(data.data.last_days);
                 // $('.record').find('ul li').attr('id','qd_'+data.data.last_days);
                 // alert('签到成功！');
-                layer.msg('签到成功！印币+2',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+                $('#attendance').html('已签到');
+                $('#attendance').removeClass('Button3');
+                $('#attendance').addClass('Button6');
+                
+                $('#attendance').attr('disabled','disabled');
+                
+                layer.msg('签到成功！印币+'+qdb,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+                setTimeout(function(){
+                    window.location.reload();//刷新百当前页面度.
+                },2000)
             } else {
                 // alert(data.message);
                 layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});

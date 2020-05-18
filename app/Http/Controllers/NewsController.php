@@ -32,7 +32,7 @@ class NewsController extends Controller
         $newses = News::getNewses($request);
 
         $hot_newses = News::getHotNewses();
-        $ads_right = Popularize::getPopularize(7);
+        $ads_right = Popularize::getPopularize(6);
         $data = [
             'user' => $this->getUserInfo(),
             'lang' => $lang,
@@ -78,7 +78,7 @@ class NewsController extends Controller
         //最新
         $new_news = News::getNewNewses(1);
 
-        $ads_right = Popularize::getPopularize(7);
+        $ads_right = Popularize::getPopularize(6);
         $hot_tags = NewsTag::getHotTags();
 		
         $is_like = UserLike::isLike('2', $id);

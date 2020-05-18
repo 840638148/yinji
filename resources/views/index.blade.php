@@ -1,19 +1,11 @@
 @extends('layouts.app')
 
 
-
-
-
-
-
 @section('title')
 
 {{trans('comm.yinji')}} - {{trans('comm.second_title')}}
 
 @endsection
-
-
-
 
 
 @section('seo_verification')
@@ -39,9 +31,6 @@
 @endsection
 
 
-
-
-
 @section('content') 
 
 <!------滚动海报-------->
@@ -49,14 +38,8 @@
 <section class="slides-sticky  wow bounceInUp animated" style="visibility: visible; animation-name: bounceInUp;">
   <section class="slide-main slide-home">
     <div class="swiper-container swiper-home swiper-container-horizontal">
-      <div class="swiper-wrapper"
-
-                     style="transform: translate3d(-7876px, 0px, 0px); transition-duration: 0ms;"> @foreach ($bannar as $ban_item)
-        <article class="swiper-slide slide-single" data-swiper-slide-index="{{$loop->iteration}}"
-
-                                 style="width: 1145.6px;"> <a href="{{$ban_item->ad_url}}" class="swiper-image"
-
-                               style="background-image: url({{url('uploads/' . $ban_item->ad_img)}});"></a> </article>
+      <div class="swiper-wrapper" style="transform: translate3d(-7876px, 0px, 0px); transition-duration: 0ms;"> @foreach ($bannar as $ban_item)
+        <article class="swiper-slide slide-single" data-swiper-slide-index="{{$loop->iteration}}" style="width: 1145.6px;"> <a href="{{$ban_item->ad_url}}" class="swiper-image" style="background-image: url({{url('uploads/' . $ban_item->ad_img)}});"></a> </article>
         @endforeach </div>
       
       <!-- 导航 -->
@@ -68,215 +51,59 @@
       <div class="swiper-button swiper-home-button-next swiper-button-next icon-angle-right"></div>
       <div class="swiper-button swiper-home-button-prev swiper-button-prev icon-angle-left"></div>
     </div>
-    <script type="text/javascript">
-
-
-
-
-
-                $("#lang-switch").click(function () {
-
-
-
-                    var lang = $
-
-
-
-                    $.ajax({
-
-
-
-                        url: '/lang/switch',
-
-
-
-                        type: 'POST',
-
-
-
-                        dataType: 'json',
-
-
-
-                        data: {lang: ''},
-
-
-
-                        success: function () {
-
-
-
-                            location.reload();
-
-
-
-                        }
-
-
-
-                    });
-
-
-
-                });
-
-
-
-
-
-                //首页幻灯片
-
-
-
-                var $page_main_body = $('.slide-home');
-
-
-
-                var $button_next = $page_main_body.find('.swiper-home-button-next');
-
-
-
-                var $button_prev = $page_main_body.find('.swiper-home-button-prev');
-
-
-
-                var len = $('.slide-home').find('.swiper-slide').length;
-
-
-
-                var bannerSwiper = new Swiper('.swiper-home', {
-
-
-
-
-
-                    pagination: '.swiper-home-pagination',
-
-
-
-
-
-                    nextButton: '.swiper-home-button-next',
-
-
-
-
-
-                    prevButton: '.swiper-home-button-prev',
-
-
-
-
-
-                    autoplay: 2000,
-
-
-
-                    autoplayDisableOnInteraction: false,
-
-
-
-                    loop: true,
-
-
-
-                    loopedSlides: len,
-
-
-
-                    centeredSlides: true,
-
-
-
-                    slidesPerView: 1.25,
-
-
-
-                    on: {
-
-
-
-                        init: function () {
-
-
-
-                            var width = parseInt($page_main_body.width());
-
-
-
-                            if ($index_pc_bt.size() > 0) {
-
-
-
-                                $index_pc_bt.css('width', (width - this.slidesSizesGrid['0']) / 2 + 'px');
-
-
-
-                            }
-
-
-
-                        }
-
-
-
-                    },
-
-
-
-                    onInit: function (swiper) {
-
-
-
-                        swiper.slides[2].className = "swiper-slide swiper-slide-active";//第一次打开不要动画
-
-
-
-                    },
-
-
-
-                    breakpoints: {
-
-
-
-                        668: {
-
-
-
-                            slidesPerView: 1
-
-
-
-                        }
-
-
-
-                    },
-
-
-
-                    lazy: {
-
-
-
-                        loadPrevNext: true,
-
-
-
-                    }
-
-
-
-
-
-                });
-
-
-
-
-
-            </script> 
+<script type="text/javascript">
+    $("#lang-switch").click(function () {
+        var lang = $
+        $.ajax({
+            url: '/lang/switch',
+            type: 'POST',
+            dataType: 'json',
+            data: {lang: ''},
+            success: function () {
+                location.reload();
+            }
+        });
+    });
+
+
+  //首页幻灯片
+  var $page_main_body = $('.slide-home');
+  var $button_next = $page_main_body.find('.swiper-home-button-next');
+  var $button_prev = $page_main_body.find('.swiper-home-button-prev');
+  var len = $('.slide-home').find('.swiper-slide').length;
+  var bannerSwiper = new Swiper('.swiper-home', {
+      pagination: '.swiper-home-pagination',
+      nextButton: '.swiper-home-button-next',
+      prevButton: '.swiper-home-button-prev',
+      autoplay: 2000,
+      autoplayDisableOnInteraction: false,
+      loop: true,
+      loopedSlides: len,
+      centeredSlides: true,
+      slidesPerView: 1.25,
+      on: {
+          init: function () {
+              var width = parseInt($page_main_body.width());
+              if ($index_pc_bt.size() > 0) {
+                  $index_pc_bt.css('width', (width - this.slidesSizesGrid['0']) / 2 + 'px');
+              }
+          }
+      },
+      onInit: function (swiper) {
+          swiper.slides[2].className = "swiper-slide swiper-slide-active";//第一次打开不要动画
+      },
+
+      breakpoints: {
+          668: {
+              slidesPerView: 1
+          }
+      },
+
+      lazy: {
+          loadPrevNext: true,
+      }
+  });
+</script> 
   </section>
 </section>
 @if (isset($ads_2)) 
@@ -435,9 +262,7 @@
             </div>
             <ul class="oUlplay">
               @foreach ($ads_right as $right)
-              <li><a href="{{$right->ad_url}}" target="_blank" rel="noopener"><img
-
-                                                        src="{{url('uploads/' . $right->ad_img)}}"></a></li>
+              <li><a href="{{$right->ad_url}}" target="_blank" rel="noopener"><img src="{{url('uploads/' . $right->ad_img)}}"></a></li>
               @endforeach
             </ul>
           </div>
@@ -472,16 +297,12 @@
       </section>
       <ul>
         @foreach ($noted_designers as $noted)
-        
-        
-        
+      
         @if ($loop->iteration % 2)
         <li class="left"> <a class="ad-link" href="{{$noted->ad_url}}"> <img src="{{url('uploads/' . $noted->ad_img)}}" title="{{$noted->ad_title}}"/> </a> </li>
         @else
         <li class="right"> <a href="{{$noted->ad_url}}"> <img src="{{url('uploads/' . $noted->ad_img)}}" title="{{$noted->ad_title}}"/> </a> </li>
         @endif
-        
-        
         
         @endforeach
       </ul>
@@ -508,16 +329,8 @@
         <div class="left like_title">
           <ul>
             <article>
-              <figure> <a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif"
-
-                                               title="{{get_article_title($article)}}" target="_blank"> <img class="thumb"
-
-                                                     src="{{get_article_thum($article)}}"
-
-                                                     style="display: block;"> </a> </figure>
-              <h2><a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif"
-
-                                               title="{{get_article_title($article)}}" target="_blank"> {{get_article_title($article)}}</a></h2>
+              <figure> <a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif" title="{{get_article_title($article)}}" target="_blank"> <img class="thumb" src="{{get_article_thum($article)}}" style="display: block;"> </a> </figure>
+              <h2><a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif" title="{{get_article_title($article)}}" target="_blank"> {{get_article_title($article)}}</a></h2>
               <div class="postinfo"> 
                 
                 <!-- 摘要 -->
@@ -667,6 +480,7 @@
         <h2>{{trans('index.latest_job')}}</h2>
       </section>
       <ul>
+
       @foreach($joblist as $list)
         <li><a target="_blank" href="/job/detail/{{$list['id']}}">({{mb_substr($list['addr'],0,2)}}) {{mb_substr($list['company_name'],0,8)}} / {{mb_substr($list['job_name'],0,10)}}...</a></li>
       @endforeach  

@@ -1591,6 +1591,7 @@ p { display: block;/*-webkit-margin-before: 1em; -webkit-margin-after: 1em; -web
 .Button:hover { background: #636af3; color: #fff; }
 .Button2 { width: 20%; }
 .Button3 { width: 80px; margin: auto; }
+.Button6{position: absolute;right: 30px;top: 50px;width: 80px;height: 36px;background: #ccc;color: #fff;display: block;text-align: center;line-height: 36px;border-radius: 3px;cursor: no-drop;}
 .Button2, .Button3 { height: 36px; background: #636af3; color: #fff; display: block; text-align: center; line-height: 36px; border-radius: 3px; cursor: pointer; }
 .Button2:hover, .Button3:hover { color: #fff; background: #4e53c3; }
 .create_button { text-align: center }
