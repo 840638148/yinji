@@ -378,10 +378,6 @@ $(document).on('click','.bookInSign',function(){
 
 //删除发现图片
 $(document).on('click','.remove_find_img',function(ev){
-    if (!confirm("确定删除？")) {
-        return false;
-    }
-
     var finder_id = $(this).attr('data-id');
     var url = '/member/delete_finder_item';
     var folder_data = {
@@ -389,22 +385,36 @@ $(document).on('click','.remove_find_img',function(ev){
         finder_id:finder_id,
     };
 
-    $.ajax({
-        async:false,
-        url: url,
-        type: 'POST',
-        dataType: 'json',
-        data: folder_data,
-        success: function (data) {
-            if (data.status_code == 0) {
-                alert('删除成功！');
-                window.location.reload();
-            } else {
-                alert(data.message);
-            }
-        }
-    });
+    layer.open({
+        title: ['温馨提示'],
+        content: '确定删除？',
+        btn: ['确定','取消'],
+        shadeClose: true,
+        //回调函数
+        yes: function(index){
+            // self.location='/vip/intro';//确定按钮跳转地址
 
+            $.ajax({
+                async:false,
+                url: url,
+                type: 'POST',
+                dataType: 'json',
+                data: folder_data,
+                success: function (data) {
+                    if (data.status_code == 0) {
+                        layer.msg('删除成功！',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+                        // alert('删除成功！');
+                        window.location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            });
+        }
+    })
+    // if (!confirm("确定删除？")) {
+    //     return false;
+    // }
     return false;
 });
 
