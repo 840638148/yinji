@@ -134,15 +134,15 @@ class UserAttendance extends Model
         $last_days ++; //这是已经签到的天数，不包括当前这次签到，所以加1
         if ($last_days < 5) {
             $id = 1;
-        }else if($last_days = 5){
+        }else if($last_days == 5){
             $id = 2 ;
         }else if ($last_days < 15) {
             $id = 3;
-        }else if ($last_days = 15) {
+        }else if ($last_days == 15) {
             $id = 4;
         }else if ($last_days < 30) {
             $id = 5;
-        }else if ($last_days = 30) {
+        }else if ($last_days == 30) {
             $id = 6;
         }else if ($last_days < 45) {
             $id = 7;
@@ -211,15 +211,52 @@ class UserAttendance extends Model
         if (!$user_id) {
             return '请先登录！';
         }
-        
+        $is_vip= User::isVip($user_id);
+        $user=User::find($user_id);
+        $vip_level=User::getVipLevel($user_id);
+        $point=0;
+        $points=0;
+
+        if($is_vip){
+            if($user->level==1){
+                $point=5;
+            }else if($user->level==2){
+                $point=10;
+            }else if($user->level==3){
+                $point=15;
+            }
+
+            if($vip_level=='/images/v_1.png'){
+                $points=2;
+            }else if($vip_level=='/images/v_2.png'){
+                $points=4;
+            }else if($vip_level=='/images/v_3.png'){
+                $points=6;
+            }else if($vip_level=='/images/v_4.png'){
+                $points=8;
+            }else if($vip_level=='/images/v_5.png'){
+                $points=10;
+            }else if($vip_level=='/images/v_6.png'){
+                $points=13;
+            }else if($vip_level=='/images/v_7.png'){
+                $points=16;
+            }else if($vip_level=='/images/v_8.png'){
+                $points=20;
+            }
+        }else{
+            $point=0;
+            $points=0;
+        }
+
         $last_days = self::getLastDays($user_id);
         $tips = [];
         for ($i = 0; $i < 7; $i++) {
             $tips[] = [
                 'title' => '第' . ($last_days + $i) . '天',
-                'point' => self::getPoint($last_days + $i - 1),
+                'point' => self::getPoint($last_days + $i - 1)+$points+$point,
             ];
         }
+        // dd($tips,$points,$point);
         return $tips;
     }
     

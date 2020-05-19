@@ -672,6 +672,8 @@ class ArticleController extends Controller
         //三天内重复下载
         $sandays=UserDownRecord::where('user_id', $user->id)->where('is_free','1')->where('down_id',$request->article_id)->where('created_at', '>=', $today_starts)->where('created_at', '<', $today_ends)->get()->toArray();
         // dd($sandays);
+
+        $leftkou=User::getKouSum($user->id);
         if(!empty($sandays)){
             return Output::makeResult($request, null, 999, '您已经兑换过,请您移步到个人中心查看!');
         }else if($freedown>0){
@@ -687,7 +689,7 @@ class ArticleController extends Controller
 
                 $return_data = [
                     'vip_download' => $article->vip_download,
-                    'left_down_num' => $freedown,
+                    'leftkou' => $leftkou,
                     'msg'=>'免费兑换成功',
                 ];
                 return Output::makeResult($request,null, 10000, $return_data);
@@ -760,9 +762,9 @@ class ArticleController extends Controller
                     'left_down_num' => $koudown-$has_koudown,
                     'msg'=>'抵扣成功,扣除10印币',
                 ];
-                return Output::makeResult($request, $return_data);
+                return Output::makeResult($request,null,100, $return_data);
             }else{
-                return Output::makeResult($request, null, 500, '兑换失败，请确认是否超过兑换次数或联系管理员！');
+                return Output::makeResult($request, null, 500, '兑换失败，您的兑换次数不足！');
             }
 
 

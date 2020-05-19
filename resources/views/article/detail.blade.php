@@ -404,36 +404,37 @@
                                 $('.down-load-tip').show()
                                 $('.down-load-tip').find('a').attr('href',data.data.vip_download)
                                 $('.down-load-tip').find('a').html(data.data.vip_download)
-                                $('.down-load-tip').find('#left_down_num').html(data.data.left_down_num)
+                                $('.down-load-tip').find('#left_down_num').html(data.data.leftkou)
                                 // window.open(data.data.vip_download);
                             }else if(data.status_code == 10000){
                                 layer.msg(data.message.msg,{skin: 'intro-login-class layui-layer-hui'})
                                 $('.down-load-tip').show()
                                 $('.down-load-tip').find('a').attr('href',data.message.vip_download)
                                 $('.down-load-tip').find('a').html(data.message.vip_download)
-                                $('.down-load-tip').find('#left_down_num').html(data.message.left_down_num)
+                                $('.down-load-tip').find('#left_down_num').html(data.message.leftkou)
                             }else if(data.status_code == 501) {
                                 //todo 弹出确认兑换框，如果用户选择确认调用兑换接口/article/vip_exchange
-                                if(confirm('是否兑换下载次数？')) {
+                                // if(confirm('是否兑换下载次数？')) {
+                                    console.log(data);
                                     $.ajax({
                                         url: '/article/exchange',
                                         type: 'POST',
                                         dataType: 'json',
                                         data: {_token:'{{csrf_token()}}',article_id:article_id},
                                         success: function (data) {
-                                            if (data.status_code == 0) {
-                                                layer.msg(data.msg,{skin: 'intro-login-class layui-layer-hui'})
+                                            if (data.status_code == 100) {
+                                                layer.msg(data.message.msg,{skin: 'intro-login-class layui-layer-hui'})
                                                 $('.down-load-tip').show()
-                                                $('.down-load-tip').find('a').attr('href',data.data.vip_download)
-                                                $('.down-load-tip').find('a').html(data.data.vip_download)
-                                                $('.down-load-tip').find('#left_down_num').html(data.data.left_down_num)
+                                                $('.down-load-tip').find('a').attr('href',data.message.vip_download)
+                                                $('.down-load-tip').find('a').html(data.message.vip_download)
+                                                $('.down-load-tip').find('#left_down_num').html(data.message.leftkou)
                                                 // window.open(data.data.vip_download);
                                             } else {
                                                 layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
                                             }
                                         }
                                     });
-                                }
+                                // }
 
                                 return ;
                             }else{
