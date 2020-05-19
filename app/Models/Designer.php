@@ -2,6 +2,8 @@
 
 namespace App\Models;
 use DB;
+use App\Models\Company;
+use App\Models\CompanyWork;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 
@@ -210,6 +212,9 @@ class Designer extends Model
                 ];
             }
         }
+        $designer->company_name=Company::where('id',$designer->company_id)->value('company_name');
+        $designer->companyids=CompanyWork::where('company_id',$designer->company_id)->value('id');
+        // dd($designer->companyids);
         $is_subscription = UserSubscription::isSubscription($id);
         $designer->is_subscription = $is_subscription;
         $designer->categorys = $tmp;

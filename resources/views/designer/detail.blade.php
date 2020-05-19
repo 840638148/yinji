@@ -86,45 +86,53 @@
                         <li class="like_article"><i class="icon-thumbs-up"></i>点赞({{$designer->like_num}})</li>
 
                     @endif---->
-
-                    <li><i class="icon-share"></i>分享
-
+                    @if($designer->company_id)
+                    <li style="margin-left:0;width:32.85%;"><i class="icon-share"></i>分享
                         <div class="fenbox">
-
                             <div class="jiantou"></div>
-
                             <div class="fenxiang">
-
                                 <ul>
-
                                     <li><img src="/images/foot_31.gif" alt="分享到微博" /></li>
-
                                     <li><img src="/images/foot_33.gif" alt="分享到微信" /></li>
-
                                     <li><img src="/images/foot_35.gif" alt="分享到微博" /></li>
-
                                     <li><img src="/images/foot_37.gif" alt="分享到微博" /></li>
-
                                 </ul>
-
                             </div>
+                        </div>
+                    </li>
+                    
+                        <li style="width:32.85%;" class="have-disalbed"><a href="/job/detail/{{$designer->companyids}}"><i class="icon-bookmark "></i>招聘</a> </li>
+                        
 
-                        </div></li>
-
-
-
-                    @if($is_subscription)
-
-                            <li style=" border-right:none" class="have-disalbed"><i class="icon-bookmark "></i>已订阅</li>
+                        @if($is_subscription)
+                            <li style="width:32.85%;" class="have-disalbed"><i class="icon-bookmark "></i>已订阅</li>
+                        @else
+                            <li style="width:32.85%;" class="subscription_designer"><i class="icon-bookmark"></i>订阅</li>
+                        @endif
 
                     @else
 
-                            <li style=" border-right:none" class="subscription_designer"><i class="icon-bookmark"></i>订阅</li>
+                        <li><i class="icon-share"></i>分享
+                            <div class="fenbox">
+                                <div class="jiantou"></div>
+                                <div class="fenxiang">
+                                    <ul>
+                                        <li><img src="/images/foot_31.gif" alt="分享到微博" /></li>
+                                        <li><img src="/images/foot_33.gif" alt="分享到微信" /></li>
+                                        <li><img src="/images/foot_35.gif" alt="分享到微博" /></li>
+                                        <li><img src="/images/foot_37.gif" alt="分享到微博" /></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+
+                        @if($is_subscription)
+                            <li style=" border-right:none;" class="have-disalbed"><i class="icon-bookmark "></i>已订阅</li>
+                        @else
+                            <li style=" border-right:none;" class="subscription_designer"><i class="icon-bookmark"></i>订阅</li>
+                        @endif
 
                     @endif
-
-
-
                 </ul>
 
             </div>

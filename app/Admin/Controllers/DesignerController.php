@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Controllers\BaseController;
 use App\Models\Topic;
+use App\Models\Company;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -103,6 +104,7 @@ class DesignerController extends BaseController
             $form->datetime('release_time', '发布时间')->format('YYYY-MM-DD HH:mm:ss');
             $form->multipleSelect('category_ids', '分类')->options(DesignerCategory::getSelectOptions());
             $form->multipleSelect('topic_ids', '专题')->options(Topic::getSelectOptions());
+            $form->select('company_id', '招聘公司')->options(Company::getSelectOptions());
             $form->text('tag_ids', '标签');
             $form->text('subscription_num', '订阅数')->default('0');
             $form->text('like_num', '点赞数')->default('0');
