@@ -194,7 +194,10 @@
               <style>
                 .photo-clip-rotateLayer img{width:  auto !important;height:  auto !important;padding: unset !important;border: unset !important;float: unset !important;background-color:unset !important;margin-right: unset !important;}
                 .photo-clip-rotateLayer{margin-top:-5px;}
-                .photo-clip-view{width:120px !important;height:120px !important;}
+                .photo-clip-view{width:321px !important;height:321px !important;}
+                .photo-clip-area{width:321px !important;height:321px !important;left:56% !important;}
+                .photo-clip-mask-left{margin-right: 162px !important;}
+                .photo-clip-mask-right{margin-left: 160px !important;}
               </style>
             <div class="cover-wrap" style="display:none;position:fixed;left:0;top:0;width:100%;height:100%;background: rgba(0, 0, 0, 0.4);z-index: 10000000;text-align:center;">	
               <div class="caijian" style="width:900px;height:600px;margin:100px auto;background-color:#FFFFFF;overflow: hidden;border-radius:4px;">
@@ -220,7 +223,7 @@
 
 
 
-<script src="/js/cropbox.js"></script>
+<!-- <script src="/js/cropbox.js"></script>
 <script src="/js/cropbox-min.js"></script>
 <script type="text/javascript">
   images = '';
@@ -262,7 +265,7 @@
   $('#btnZoomOut').on('click', function(){
       cropper.zoomOut();
   })
-</script>
+</script> -->
 
 <script src="/js/plugins/cover_js/iscroll-zoom.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/plugins/cover_js/hammer.js" type="text/javascript" charset="utf-8"></script>
@@ -312,7 +315,7 @@
   //clipArea.destroy();
 </script>
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
   var options = {
     thumbBox: '.thumbBox',
     spinner: '.spinner',
@@ -345,7 +348,7 @@
       cropper.zoomOut();
   }
 
-</script>
+</script> -->
 
 
 
