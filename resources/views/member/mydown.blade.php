@@ -41,20 +41,18 @@
   <div class="mt30 home_box">
     <!-- 我的下载 -->
     <div class="title  mt30">
-     <b style="font-size:12px; float:right;color:#ccc; line-height:48px;">(温馨提示：所有的下载链接只显示三天时间,三天过后自动过期,需要再次去相应文章下载兑换哦!)</b>
-      <h2 class="fl">我的下载</h2>
+      <h2 class="fl">我的下载 </h2><b style=" font-size:12px; float:right;color:#f60; line-height:48px;">（温馨提示：有效果期三天，过期需重新兑换！）</b>
     </div>
-
     @foreach($down as $v)
-    <div class="down" style="margin-bottom:20px; border-bottom:1px solid #eee; float:left; width:100%">
+    <div class="down" style="float:left; width:30%; margin:0 1.6% 20px 1.6%; background-color:#f8f8f8; line-height:30px;">
 
-      <div class="downleft" style="width: 180px;">
+      <div class="downleft" >
         <a href="/article/{{$v->static_url}}" target="_blank"><img src="/uploads/{{$v->custom_thum}}" alt="{{$v->title_designer_cn}} - {{$v->title_name_cn}}"></a>
       </div>
-      <div class="downright" style="float: left;margin-left: 100px;">
-        <p>下载地址：<a href="{{mb_substr($v->vip_download,0,-10)}}" target="_blank">{{mb_substr($v->vip_download,0,-10)}}</a> </p>
+      <div class="downright" style="float: left; margin-left: 20px;">
+        <p style="height:30px;overflow: hidden;text-overflow: ellipsis;    white-space: nowrap; width:320px;">下载地址：<a href="{{mb_substr($v->vip_download,0,-10)}}" target="_blank">{{mb_substr($v->vip_download,0,-10)}}</a> </p>
         <p>提取密码：{{mb_substr($v->vip_download,-4)}}</p>
-        <p>兑换时间：{{$v->created_at}}</p>
+        <!--p>兑换时间：{{$v->created_at}}</p-->
         <p>过期时间：<span style="color:#f60;">{{$v->guoqitime}}</span></p>
       </div>
 
