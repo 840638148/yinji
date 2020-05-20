@@ -51,7 +51,7 @@
       </div>
       <div class="downright" style="float: left; margin-left: 20px;">
         <p style="height:30px;overflow: hidden;text-overflow: ellipsis;    white-space: nowrap; width:320px;">下载地址：<a href="{{mb_substr($v->vip_download,0,-10)}}" target="_blank">{{mb_substr($v->vip_download,0,-10)}}</a> </p>
-        <p>提取密码：<span id="tqmm">{{mb_substr($v->vip_download,-4)}}</span> <span class='copybtn' style='float: right;padding: 0 5px 0;background: #ccc;border-radius: 5px;cursor: pointer;' onclick="copybtn()">复制</span><textarea style="display:none;" id="input">这是幕后黑手</textarea></p>
+        <p>提取密码：<span id="tqmm">{{mb_substr($v->vip_download,-4)}}</span> <span class='copybtn' style='float: right;padding: 0 5px 0;background: #ccc;border-radius: 5px;cursor: pointer;' onclick="copybtn()">复制</span></p>
         <!--p>兑换时间：{{$v->created_at}}</p-->
         <p>过期时间：<span style="color:#f60;">{{$v->guoqitime}}</span></p>
       </div>
@@ -64,39 +64,25 @@
 <script type="text/javascript" src="/js/dist/clipboard.min.js"></script>	
 <script>
 function copybtn(){
-  let content=$('.copybtn').siblings("#tqmm").text();
-  let input = document.getElementById("input");
-  input.value = content; // 修改文本框的内容
-  input.select(); // 选中文本
-  document.execCommand("copy"); // 执行浏览器复制命令
-  console.log(input);
+  // let con=$('.copybtn').siblings("#tqmm").text();
+  // alert(con)
+  let texthtml = document.getElementById("tqmm");
+  let shtml = texthtml.innerHTML;
+  let clipboard = new ClipboardJS('.copybtn',{
+    text:function(){
+    return shtml;
+    }
+  })
+  clipboard.on('success', function(e) {
+    
+    console.log(e);
+  });
+
+  clipboard.on('error', function(e) {
+    console.log(e);
+  });
+
 }
-
-// $(".copybtn").on('click',function(){
-// //   var copyBtn = new ClipboardJS('.copyBtn');
-// //   // texthtml.select();
-//   selectText(texthtml);
-//   document.execCommand("Copy")
-// //   // copy($(this).siblings("#tqmm").text());
-// //   layer.msg('复制成功');
-
-// })
-// // var texthtml = document.getElementById("tqmm");
-// // var shtml = texthtml.innerHTML;
-// let content=$('.copybtn').siblings("#tqmm").text();
-
-// let clipboard = new ClipboardJS('.copybtn',{
-//   text:function(){
-//   return this.siblings("#tqmm").text();
-//   }
-// })
-// clipboard.on('success', function(e) {
-//   console.log(e);
-// });
-
-// clipboard.on('error', function(e) {
-//   console.log(e);
-// });
 
 
 </script>

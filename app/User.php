@@ -433,8 +433,10 @@ class User extends Authenticatable
         if (!empty($edit_info['username']) && self::isExistsByName($user['username'], [['id', '!=', $user_id]])) {
             return '用户名已经存在';
         }
-
-        if (!empty($edit_info['mobile']) && self::isExistsByMobile($user['mobile'], [['id', '!=', $user_id]])) {
+        
+        $has_mobile=self::where('mobile',$edit_info['mobile'])->value('mobile');
+        
+        if (!empty($edit_info['mobile']) && $has_mobile==$edit_info['mobile']) {
             return '手机号已经存在';
         }
         
@@ -490,8 +492,12 @@ class User extends Authenticatable
      * @return mixed
      */
     public static function getFollowNum($user_id)
-    {
-        return UserFollow::where('user_id', $user_id)->count()-1;
+    {   
+        $num=UserFollow::where('user_id', $user_id)->get();
+        $num = $num->reject(function ($value) use ($user_id) {
+            return $value->follow_id == $user_id;
+        });
+        return $num->count();
     }
 
     /**

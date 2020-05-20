@@ -361,21 +361,42 @@
           </p>
         </form>
       </div>
+
       <div id="myTab1_Content1"  class="none">
-        <form id="pass-form" class="contribute_form" role="form" method="post" action="/member/edit">
+        <form id="pass-form" class="contribute_form" role="form" method="post" action="/member/edit" onsubmit="return checkform()">
           <input type="hidden" name="_token" value="{{csrf_token()}}">
           
           <p>
             <label for="nickname">昵称</label>
             <input type="text" id="nickname" name="nickname" value="{{$user->nickname}}" >
           </p>
-          <p>
+          <p style='position:relative'>
             <label for="mobile">手机号</label>
-            <input type="text" id="mobile" name="mobile" value="{{$user->mobile}}" >
+            @if($user->mobile)
+            <input type="tel" id="mobile" maxlength='11' disabled='disabled' name="mobile" value="{{$user->mobile}}" >
+            <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;width:98px !important;border:none;border-radius:3px;right:0;" type="button" value="解绑" class="jbmobile">
+            @else
+            <input type="tel" id="mobile" maxlength='11' name="mobile" placeholder='请填写手机号' value="" >
+            @endif
           </p>
-          <p>
+          <p style='position:relative;display:none;' class='tel_yzm'>
+            <label for="verification_code" style="position:relative">输入手机验证码</label>
+            <input type="text" name="verification_code" id="verification_code_tel" class="input" style='height:47px;' value="" size="20" placeholder="请输入手机验证码">
+            <input style="padding: 0 19px;position:absolute;top:40px;height:46px;background: #63c5f3;color: #fff;border-radius:3px;" name="发送验证码" type="button" value="获取验证码" class="verification">
+          </p>
+          <p style='position:relative;'>
             <label for="email">电子邮件</label>
-            <input type="text" id="email" name="email" value="{{$user->url}}" >
+            @if($user->email)
+            <input type="email" id="email" disabled='disabled' name="email" value="{{$user->email}}" >
+            <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;width:98px !important;border:none;border-radius:3px;right:0;" type="button" value="解绑" class="jbemail">
+            @else
+            <input type="email" id="email" name="email" value="" placeholder='请填写邮箱' >
+            @endif
+          </p>
+          <p style='position:relative;display:none;' class='email_yzm'>
+            <label for="verification_code" style="position:relative">输入邮箱验证码</label>
+            <input type="text" name="verification_code" id="verification_code_email" class="input" style='height:47px;' value="" size="20" placeholder="请输入邮箱验证码">
+            <input style="padding: 0 19px;position:absolute;top:40px;height:46px;background: #63c5f3;color: #fff;border-radius:3px;right:0;border:none;" name="发送验证码" type="button" value="获取验证码" class="verification_email" onclick='bdemail()'>
           </p>
           <p>
             <label for="pass1">新密码</label>
@@ -386,20 +407,16 @@
             <input type="password" id="pass2" name="pass2">
             <span class="help-block">再输入一遍新密码，提示：密码最好至少包含7个字符，为了保证密码强度，使用大小写字母、数字和符号结合。</span></p>
           <p>
-            <input type="submit" value="保存更改" class="submit">
+            <!-- <input type="submit" value="保存更改" class="submit"> -->
+            <input type="button" value="保存更改" class="submit" onclick='subntm()'>
           </p>
         </form>
       </div>
     </div>
   </div>
 </section>
+<script src="/js/laravel-sms.js"></script>
 <script type="text/javascript">
-// function filebtn() 
-// { 
-//   changeAvatar(); 
-// }
-
-
 
 function changeAvatar() {
   // var reads = new FileReader();
@@ -463,36 +480,146 @@ function changeSingleImg() {
 }
 
 function nTabs(thisObj,Num){
-
-if(thisObj.className == "active")return;
-
-var tabObj = thisObj.parentNode.id;
-
-var tabList = document.getElementById(tabObj).getElementsByTagName("li");
-
-for(i=0; i <tabList.length; i++)
-
-{
-
-if (i == Num)
-
-{
-
-   thisObj.className = "active";
-
+  if(thisObj.className == "active")return;
+  var tabObj = thisObj.parentNode.id;
+  var tabList = document.getElementById(tabObj).getElementsByTagName("li");
+  for(i=0; i <tabList.length; i++){
+    if (i == Num){
+      thisObj.className = "active";
       document.getElementById(tabObj+"_Content"+i).style.display = "block";
-
-}else{
-
-   tabList[i].className = "normal";
-
-   document.getElementById(tabObj+"_Content"+i).style.display = "none";
-
+    }else{
+        tabList[i].className = "normal";
+        document.getElementById(tabObj+"_Content"+i).style.display = "none";
+    }
+  }
 }
 
+//点击解绑显示验证码kaung
+$('.jbmobile').click(function () {
+  $('.tel_yzm').show(1000);
+  $('#mobile').removeAttr('disabled');
+  $('#mobile').val('');
+})
+$('.jbemail').click(function () {
+  $('.email_yzm').show(1000);
+  $('#email').removeAttr('disabled');
+  $('#email').val('');
+})
+
+// 阻止提交表单
+function checkform(){
+  return false;//false:阻止提交表单
 }
 
+//发送邮箱
+function bdemail(){
+  let email=$('#email').val();
+  let emailzz = /^([A-Za-z0-9_+-.])+@([A-Za-z0-9\-.])+\.([A-Za-z]{2,22})$/;
+  if(email!='' && email != null && email != undefined){
+    if(!emailzz.test(email)){
+      layer.msg('邮箱格式错误',{skin: 'intro-login-class layui-layer-hui'});
+      return false;
+    }
+  }
+  $.ajax({
+      async: false,
+      url: '/member/bdemail',
+      type: 'POST',
+      data:{email:email},
+      success: function (data) {
+        console.log(data)
+        if (data.status_code == 0) {
+          layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+        } else {
+          layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+        }
+      }
+    });
 }
+
+//模拟表单提交
+function subntm(){
+  let nickname=$('#nickname').val();
+  let mobile=$('#mobile').val();
+  let email=$('#email').val();
+  let pass1=$('#pass1').val();
+  let pass2=$('#pass2').val();
+  let code_tel = $.trim($('#verification_code_tel').val());
+  let code_email = $.trim($('#verification_code_email').val());
+  // console.log(mobile);
+
+  let emailzz = /^([A-Za-z0-9_+-.])+@([A-Za-z0-9\-.])+\.([A-Za-z]{2,22})$/;
+
+  if(mobile!='' && mobile != null && mobile != undefined){
+    if(!(/^1[34578]\d{9}$/.test(mobile))){ 
+      layer.msg('手机号格式错误',{skin: 'intro-login-class layui-layer-hui'});
+      return false;
+    }
+  }else
+  if(email!='' && email != null && email != undefined){
+    if(!emailzz.test(email)){
+      layer.msg('邮箱格式错误',{skin: 'intro-login-class layui-layer-hui'});
+      return false;
+    }
+  }
+
+  function wp_attempt_focus() {
+    setTimeout(function () {
+        try {
+            d = document.getElementById('mobile');
+            d.focus();
+            d.select();
+        } catch (e) {
+
+        }
+    }, 200);
+  }
+
+  wp_attempt_focus();
+    if (typeof wpOnload == 'function') wpOnload();
+    //获取验证码
+    var is_sending = false;
+    var time_limit = 60;
+    var next_time = time_limit;
+    var cap_btn = $('.verification');
+
+    cap_btn.sms({
+        //laravel csrf token
+        token       : "{{csrf_token()}}",
+        //请求间隔时间
+        interval    : 60,
+        //请求参数
+        requestData : {
+            //手机号
+            mobile : function () {
+                return $.trim($('#mobile').val());
+            },
+            //手机号的检测规则
+            mobile_rule : 'mobile_required'
+        }
+    });
+
+
+
+
+  
+    $.ajax({
+      async: false,
+      url: '/member/edit',
+      type: 'POST',
+      data:{nickname:nickname,mobile:mobile,email:email,pass1:pass1,pass2:pass2,code_tel:code_tel,code_email:code_email},
+      success: function (data) {
+        if (data.status_code == 0) {
+          console.log(data.data)
+          layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+        } else {
+          layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+        }
+      }
+    });
+  
+}
+
 
 </script> 
 @endsection

@@ -25,7 +25,7 @@ use App\User;
 use App\Models\VipPrice;
 use App\Models\Article;
 use Carbon\Carbon;
-
+use Mail;
 use Intervention\Image\Facades\Image;
 
 class MemberController extends Controller
@@ -92,34 +92,81 @@ class MemberController extends Controller
     public function edit(Request $request)
     {
         $this->checkLogin();
-
+        // dd($request->all());
         $edit_info = [];
-        $fields = ['nickname', 'email', 'mobile', 'avatar', 'sex', 'city', 'url', 'personal_note'];
+        $fields = ['nickname', 'email', 'mobile', 'password'];
         foreach ($fields as $field) {
-            if ($request->get($field)) {
+            // if ($request->get($field)) {
                 $edit_info[$field] = $request->get($field);
-            }
+            // }
         }
 
         if (!empty($request->pass1)) {
             if (strlen($request->pass1) < 6) {
-                return '密码长度至少6位';
+                return Output::makeResult($request, null, 500,'密码长度至少6位');
             }
 
             if ($request->pass1 != $request->pass2) {
-                return '两次密码不一致';
+                return Output::makeResult($request, null, 500,'两次密码不一致');
             }
 
             $edit_info['password'] = bcrypt($request->pass1);
         }
-            
+        // dd($edit_info);
+        $user = User::find(Auth::id());
+        if($user->mobile && $edit_info['mobile']=='' || $edit_info['mobile']==null){
+            return Output::makeResult($request, null, 500,'请填写手机号码');
+        }else if($user->mobile=='' || $user->mobile==null){
+            $edit_info['one_tel']=2;
+        }else{
+            $edit_info['one_tel']=3;
+        }
+        if($user->email && $edit_info['email']=='' || $edit_info['email']==null){
+            return Output::makeResult($request, null, 500,'请填写邮箱');
+        }if($user->email=='' || $user->email==null){
+            $edit_info['one_email']=2;
+        }else{
+            $edit_info['one_email']=3;
+        }
+
+
+        // dd($edit_info);
         $result = User::editUser(Auth::id(), $edit_info);
         // dd($result);
         if (true === $result) {
-            return redirect('/member/profile');
+            return Output::makeResult($request, null, 0,'修改成功');
+            // return redirect('/member/profile');
         }
-        return '请重试';
+        return Output::makeResult($request, null, 500,$result);
+        // return $result;
     }
+
+
+    /**
+     * 发送验证码到邮箱绑定邮箱
+     */
+    public function bdemail(Request $request){
+
+        $view='member.email';
+        $message = '验证码为'.rand(10000,99999);
+        $data=compact('message');
+        $from='840638148@qq.com';
+        $name='测试';
+        $to = $request->email;
+        $subject = '绑定邮箱测试';
+        // dd($data);
+        Mail::send($view, $data, function ($message) use ($from, $name, $to, $subject) {
+            $message->from($from, $name)->to($to)->subject($subject);
+        });
+        return Output::makeResult($request, null, 500,'发送成功');
+        // Mail::send(
+        //     'emails.eamil', 
+        //     ['content' => $message], 
+        //     function ($message) use($to, $subject) { 
+        //         $message->to($to)->subject($subject); 
+        //     }
+        // );
+    } 
 
 
     /**

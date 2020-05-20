@@ -117,6 +117,7 @@ Route::post('member/baseedit', 'MemberController@baseedit');//修改用户的基
 Route::post('vip/duihuanvip', 'VipController@duihuanvip');//兑换会员
 Route::post('member/is_enough_points', 'MemberController@is_enough_points');//积分是否够
 Route::get('member/mydown', 'MemberController@mydown');//我的下载
+Route::post('member/bdemail', 'MemberController@bdemail');//邮箱绑定
 
 
 
