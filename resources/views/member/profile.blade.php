@@ -382,7 +382,7 @@
           <p style='position:relative;display:none;' class='tel_yzm'>
             <label for="verification_code" style="position:relative">输入手机验证码</label>
             <input type="text" name="verification_code" id="verification_code_tel" class="input" style='height:47px;' value="" size="20" placeholder="请输入手机验证码">
-            <input style="padding: 0 19px;position:absolute;top:40px;height:46px;background: #63c5f3;color: #fff;border-radius:3px;" name="发送验证码" type="button" value="获取验证码" class="verification">
+            <input style="padding: 0 19px;position:absolute;top:40px;height:46px;background: #63c5f3;color: #fff;border-radius:3px;" name="发送验证码" onclick="bdtel()" type="button" value="获取验证码" class="verification">
           </p>
           <p style='position:relative;'>
             <label for="email">电子邮件</label>
@@ -537,32 +537,9 @@ function bdemail(){
     });
 }
 
-//模拟表单提交
-function subntm(){
-  let nickname=$('#nickname').val();
+//发送手机
+function bdtel(){
   let mobile=$('#mobile').val();
-  let email=$('#email').val();
-  let pass1=$('#pass1').val();
-  let pass2=$('#pass2').val();
-  let code_tel = $.trim($('#verification_code_tel').val());
-  let code_email = $.trim($('#verification_code_email').val());
-  // console.log(mobile);
-
-  let emailzz = /^([A-Za-z0-9_+-.])+@([A-Za-z0-9\-.])+\.([A-Za-z]{2,22})$/;
-
-  if(mobile!='' && mobile != null && mobile != undefined){
-    if(!(/^1[34578]\d{9}$/.test(mobile))){ 
-      layer.msg('手机号格式错误',{skin: 'intro-login-class layui-layer-hui'});
-      return false;
-    }
-  }else
-  if(email!='' && email != null && email != undefined){
-    if(!emailzz.test(email)){
-      layer.msg('邮箱格式错误',{skin: 'intro-login-class layui-layer-hui'});
-      return false;
-    }
-  }
-
   function wp_attempt_focus() {
     setTimeout(function () {
         try {
@@ -599,24 +576,71 @@ function subntm(){
         }
     });
 
-
-
-
-  
     $.ajax({
-      async: false,
-      url: '/member/edit',
-      type: 'POST',
-      data:{nickname:nickname,mobile:mobile,email:email,pass1:pass1,pass2:pass2,code_tel:code_tel,code_email:code_email},
-      success: function (data) {
-        if (data.status_code == 0) {
-          console.log(data.data)
-          layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
-        } else {
-          layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
-        }
+            url: '/user/verify_code',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                user_phone: mobile,
+                verification_code: verification_code,
+                _token: "{{csrf_token()}}",
+            },
+
+            success: function (data) {
+                console.log(data.status_code);
+                if (data.status_code == 0) {
+                    layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
+                    $("#step1").addClass("hide");
+                    $("#step2").removeClass("hide");
+                    $("#userphone").val(mobile);
+                } else {
+                    layer.msg(data.message);
+                }
+            }
+        });
+
+}
+
+//模拟表单提交
+function subntm(){
+  let nickname=$('#nickname').val();
+  let mobile=$('#mobile').val();
+  let email=$('#email').val();
+  let pass1=$('#pass1').val();
+  let pass2=$('#pass2').val();
+  let code_tel = $.trim($('#verification_code_tel').val());
+  let code_email = $.trim($('#verification_code_email').val());
+  // console.log(mobile);
+
+  let emailzz = /^([A-Za-z0-9_+-.])+@([A-Za-z0-9\-.])+\.([A-Za-z]{2,22})$/;
+
+  if(mobile!='' && mobile != null && mobile != undefined){
+    if(!(/^1[34578]\d{9}$/.test(mobile))){ 
+      layer.msg('手机号格式错误',{skin: 'intro-login-class layui-layer-hui'});
+      return false;
+    }
+  }else
+  if(email!='' && email != null && email != undefined){
+    if(!emailzz.test(email)){
+      layer.msg('邮箱格式错误',{skin: 'intro-login-class layui-layer-hui'});
+      return false;
+    }
+  }
+
+  $.ajax({
+    async: false,
+    url: '/member/edit',
+    type: 'POST',
+    data:{nickname:nickname,mobile:mobile,email:email,pass1:pass1,pass2:pass2,code_tel:code_tel,code_email:code_email},
+    success: function (data) {
+      if (data.status_code == 0) {
+        console.log(data.data)
+        layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+      } else {
+        layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
       }
-    });
+    }
+  });
   
 }
 

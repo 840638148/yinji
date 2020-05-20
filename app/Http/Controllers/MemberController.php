@@ -25,7 +25,9 @@ use App\User;
 use App\Models\VipPrice;
 use App\Models\Article;
 use Carbon\Carbon;
-use Mail;
+// use Mail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 use Intervention\Image\Facades\Image;
 
 class MemberController extends Controller
@@ -144,21 +146,37 @@ class MemberController extends Controller
 
     /**
      * 发送验证码到邮箱绑定邮箱
+     * 1261660791@qq.com
      */
     public function bdemail(Request $request){
 
         $view='member.email';
-        $message = '验证码为'.rand(10000,99999);
+        $message = rand(10000,99999);
         $data=compact('message');
-        $from='840638148@qq.com';
-        $name='测试';
-        $to = $request->email;
-        $subject = '绑定邮箱测试';
+        // $data=['content'=>$message];
         // dd($data);
-        Mail::send($view, $data, function ($message) use ($from, $name, $to, $subject) {
-            $message->from($from, $name)->to($to)->subject($subject);
+        $from='840638148@qq.com';
+        $name='印际';
+        $to = $request->email;
+        $subject = '绑定邮箱';
+        // $res=Mail::send($view, ['content' => $message], function ($message) use ($from, $name, $to, $subject) {
+        //     $message->to($to)->subject($subject);
+        // });
+        $res=Mail::raw('尊敬的用户，您换绑的验证码为'.$message, function ($message) use ($from, $name, $to, $subject) {
+            $message->to($to)->subject($subject);
         });
-        return Output::makeResult($request, null, 500,'发送成功');
+
+        dd($res);
+        if($res){
+            return Output::makeResult($request, null, 100,'发送成功');
+        }else{
+            return Output::makeResult($request, null, 500,'发送失败');
+        }
+        // $res= Mail::send('member.email',['content' => $message],function($message){
+        //     $to ='840638148@qq.com';
+        //     $message ->to($to)->subject('绑定邮箱测试');
+        // });
+
         // Mail::send(
         //     'emails.eamil', 
         //     ['content' => $message], 
@@ -166,6 +184,7 @@ class MemberController extends Controller
         //         $message->to($to)->subject($subject); 
         //     }
         // );
+       
     } 
 
 
