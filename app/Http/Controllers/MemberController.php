@@ -130,7 +130,7 @@ class MemberController extends Controller
         }
 
         // dd($sql);
-        return $sql;//返回json数据
+        return $sql;
     }
 
 
@@ -237,8 +237,8 @@ class MemberController extends Controller
         $view='member.email';
         
         $message = rand(10000,99999);
-        $data=json_decode(json_encode($message),true);
-        $data=compact('data');
+        // $data=json_decode(json_encode($message),true);
+        // $data=compact('data');
         
         session(['email'=>$request->email,'code_email' => $message]);
         // Cache::put($request->email, $message, 1800);

@@ -66,6 +66,22 @@ body.login div#login h1 a { -webkit-background-size: 85px 85px; background-size:
       </label>
     </p>
     <p>
+        <select style="width:292px;border: 1px solid #ddd;height: 48px;line-height: 48px;color:#666;border-radius: 5px;" id="zhiwei" name="zhiwei" value="职位">
+            <option name="jzs" value="建筑师" >建筑师</option>
+            <option name="snsjs" value="室内设计师">室内设计师</option>
+            <option name="rzsjs" value="软装设计师">软装设计师</option>
+            <option name="cpsjs" value="产品设计师">产品设计师</option>
+            <option name="sys" value="摄影师">摄影师</option>
+            <option name="mtr" value="媒体人">媒体人</option>
+            <option name="fckf" value="地产开发">地产开发</option>
+            <option name="qt" value="其他" selected>其他</option>    
+        </select>
+    </p>
+    <p style="padding-left:4px;"> 
+        省：<select name='provinces' id="provinces" style="height: 48px;border-radius: 5px;width: 110px;">  <option value="" id="selectpro"  >请选择省份</option></select>  
+        市：<select id="citys" name='citys' style="height: 48px;border-radius: 5px;width: 110px;"><option value="">请选择市</option></select> 
+    </p>
+    <p>
       <label for="pass1" style="position:relative">
         <input type="password" class="input" value="" id="pass1" size="20" name="pass1" placeholder="设置密码">
       </label>
@@ -82,6 +98,44 @@ body.login div#login h1 a { -webkit-background-size: 85px 85px; background-size:
     </p>
   </form>
 </div>
+<script>
+$(function() {  
+  //页面初始，加载所有的省份  
+
+    $.ajax({  
+        type: "post",  
+        url: "/member/citysjld",  
+        data: {"type":1,_token: "{{csrf_token()}}"},  
+        dataType: "json",  
+        success: function(data) {  
+            //遍历json数据，组装下拉选框添加到html中
+            $("#provinces").append("<option value=''>请选择省</option>");  
+            $.each(data, function(i, item) {  
+                $("#provinces").append("<option value='" + item.province_num + "'>" + item.province_name + "</option>");  
+            });
+        }  
+    });      
+  // })
+
+  //监听省select框
+  $("#provinces").change(function() {  
+      $.ajax({  
+          type: "post",  
+          url: "/member/citysjld",
+          data: {"pnum": $(this).val(),"type":2,_token: "{{csrf_token()}}"},  
+          dataType: "json",  
+          success: function(data) {  
+              //遍历json数据，组装下拉选框添加到html中
+              $("#citys").html("<option value=''>请选择市</option>");  
+              $.each(data, function(i, item) {  
+                  $("#citys").append("<option value='" + item.city_num + "'>" + item.city_name + "</option>");  
+              });  
+          }  
+      });  
+  });  
+
+});  
+</script>
 <script type="text/javascript">
 //手机邮箱切换
 $('.click_email').click(function () {
@@ -106,7 +160,7 @@ $('.click_phone').click(function () {
 })
 
 $('.verification_email').click(function () {
-    let email = $.trim($('#user_email').val());
+    let email = $('#user_email').val();
     let emailzz = /^([A-Za-z0-9_+-.])+@([A-Za-z0-9\-.])+\.([A-Za-z]{2,22})$/;
     if(email!='' && email != null && email != undefined){
         if(!emailzz.test(email)){
@@ -230,9 +284,12 @@ $('.verification_email').click(function () {
         let mobile = $.trim($('#user_phone').val());
         let email = $.trim($('#user_email').val());
         let verification_code = $.trim($('#verification_code').val());
-        if (!/1[3-8][0-9]{9}/.test(mobile)) {
-            layer.msg('请输入正确手机号',{time:1500,skin: 'intro-login-class layui-layer-hui'});
-            return false;
+        let verification_code_email = $.trim($('#verification_code_email').val());
+        if(mobile!='' && mobile != null && mobile != undefined){
+            if (!/1[3-8][0-9]{9}/.test(mobile)) {
+                layer.msg('请输入正确手机号',{time:1500,skin: 'intro-login-class layui-layer-hui'});
+                return false;
+            }
         }
         let emailzz = /^([A-Za-z0-9_+-.])+@([A-Za-z0-9\-.])+\.([A-Za-z]{2,22})$/;
         if(email!='' && email != null && email != undefined){
@@ -250,6 +307,7 @@ $('.verification_email').click(function () {
                     user_phone: mobile,
                     user_email: email,
                     verification_code: verification_code,
+                    verification_code_email: verification_code_email,
                     _token: "{{csrf_token()}}",
                 },
 
@@ -261,7 +319,7 @@ $('.verification_email').click(function () {
                         $("#step2").removeClass("hide");
                         $("#userphone").val(mobile);
                     } else {
-                        layer.msg(data.message);
+                        layer.msg(data.message,{time:1500,skin: 'intro-login-class layui-layer-hui'});
                     }
                 }
             });
@@ -272,10 +330,14 @@ $('.verification_email').click(function () {
     //step2
 
     $("#wp-submit-2").click(function () {
-        var user_phone = $.trim($('#userphone').val());
-        var user_login = $.trim($('#user_login').val());
-        var pass1 = $.trim($('#pass1').val());
-        var pass2 = $.trim($('#pass2').val());
+        let user_phone = $.trim($('#userphone').val());
+        let user_login = $.trim($('#user_login').val());
+        let zhiwei=$('#zhiwei').val();
+        let provinces=$("#provinces").val();
+        let city=$('#citys').val();
+        // let diqu=provinces+'-'+city;
+        let pass1 = $.trim($('#pass1').val());
+        let pass2 = $.trim($('#pass2').val());
         if (pass1 != pass2) {
             layer.msg('输入的两次密码不同！');
             return false;
@@ -286,10 +348,13 @@ $('.verification_email').click(function () {
             type: 'POST',
             dataType: 'json',
             data: {
-                user_phone: user_phone,
-                user_login: user_login,
-                pass1: pass1,
-                pass2: pass2,
+                user_phone:user_phone,
+                user_login:user_login,
+                pass1:pass1,
+                pass2:pass2,
+                provinces:provinces,
+                city:city,
+                zhiwei:zhiwei,
                 _token: "{{csrf_token()}}",
             },
 

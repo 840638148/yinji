@@ -10,6 +10,7 @@ use SmsManager;
 use App\Http\Error;
 use App\Http\Output;
 use App\User;
+use DB;
 use Illuminate\Support\Facades\Mail;
 class UserController extends Controller
 {
@@ -80,15 +81,25 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'user_phone' => 'required|confirm_mobile_not_change',
             'verification_code' => 'required|verify_code',
+            'verification_code_email' => 'required|verify_code',
+            'user_email' => 'required|email',
         ]);
-
-        if ($validator->fails()) {
-            //验证失败后建议清空存储的发送状态，防止用户重复试错
-            //SmsManager::forgetState();
-            return Output::makeResult($request, null, Error::MISS_PARAM, '验证码错误');
+        if($request->user_phone){
+            if ($validator->fails()) {
+                //验证失败后建议清空存储的发送状态，防止用户重复试错
+                //SmsManager::forgetState();
+                return Output::makeResult($request, null, Error::MISS_PARAM, '验证码错误');
+            }
+        }
+        if($request->user_email){
+            if($request->user_email!=session('email')){
+                return Output::makeResult($request, null, 500,'邮箱错误');
+            }else if($request->verification_code_email!=session('code_email')){
+                return Output::makeResult($request, null, 500,'邮箱验证码错误');
+            }
         }
 
-        return Output::makeResult($request);
+        return Output::makeResult($request,null,0,'请进行下一步操作');
     }
 
 
@@ -96,26 +107,24 @@ class UserController extends Controller
      * 发送邮箱验证码
      */
     public function send_email_code(Request $request){
-        $email=User::select('id','username','email')->where("email","like","%$request->email%")->get()->toArray();
+        $email=User::select('id','username','email')->where("email","like","%$request->user_email%")->get()->toArray();
         // dd($request->all());
         if($email){
             foreach($email as $v){
-                if($v['email']==$request->email){
+                if($v['email']==$request->user_email){
                     return Output::makeResult($request, null, 500,'邮箱已存在');
                 }
             }            
         }
         $view='member.email';
         $message = rand(10000,99999);
-        $data=json_decode(json_encode($message),true);
-        $data=compact('data');
         
-        session(['email'=>$request->email,'code_email' => $message]);
+        session(['email'=>$request->user_email,'code_email' => $message]);
         // Cache::put($request->email, $message, 1800);
         
-        $from=trim('840638148@qq.com');
+        $from='840638148@qq.com';
         $name='印际';
-        $to = trim($request->email);
+        $to = $request->user_email;
         // dd($from,$to);
         $subject = '邮箱注册通知';
 
@@ -134,29 +143,44 @@ class UserController extends Controller
 
 
     public function doRegister(Request $request)
-    {
+    {   
+        // dd($request->all());
         //验证数据
         $validator = Validator::make($request->all(), [
             'user_phone' => 'required|confirm_mobile_not_change',
             'user_login' => 'required',
             'pass1' => 'required',
             'pass2' => 'required|same:pass1',
+            'user_email'=>'required',
+            'zhiwei'=>'required',
+            'diqu'=>'required',
         ]);
+ 
+        // if ($validator->fails()) {
+        //     return Output::makeResult($request, $validator->errors(), Error::MISS_PARAM);
+        // }
 
-        if ($validator->fails()) {
-            return Output::makeResult($request, $validator->errors(), Error::MISS_PARAM);
-        }
-
+        $province=Db::table("province")->where('province_num',$request->provinces)->value('province_name');
+        $city=Db::table("city")->where('city_num',$request->city)->value('city_name');
+        $citys=$province.'-'.$city;
+        // dd($province,$city,$citys);
+        
+     
         $user = [
             'username'     => $request->user_login,
             'nickname'     => $request->user_login,
             'password'     => bcrypt($request->pass1),
             'mobile'       => $request->user_phone,
             'register_key' => '',
+            'zhiwei' => $request->zhiwei,
+            'city' => $citys,
         ];
         $result = User::createUser($user);
         if (true === $result) {
-            return Output::makeResult($request);
+            $user=User::where("username",$request->user_login)->first();
+            // Auth::login($user);//传用户实例
+            Auth::loginUsingId($user->id);//传用户id
+            return Output::makeResult($request,null,0,'注册成功');
         } else {
             return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
         }
