@@ -224,7 +224,26 @@
 </div>
 
 <!--------选购会员结束------->
-
+<script>
+$(function() { 
+  $.ajax({  
+        type: "post",  
+        url: "/member/one_visited",  
+        data: {_token: "{{csrf_token()}}"},  
+        dataType: "json",  
+        success: function(data) {  
+          console.log(data)
+          if(data.status_code == 0){
+            layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+            window.location.href='/member/profile';
+          }else{
+            layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+          }
+          
+        }  
+    });      
+})
+</script>
 <script>
 
 

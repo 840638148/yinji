@@ -10,7 +10,7 @@ use SmsManager;
 use App\Http\Error;
 use App\Http\Output;
 use App\User;
-
+use Illuminate\Support\Facades\Mail;
 class UserController extends Controller
 {
     public function login(Request $request)
@@ -90,6 +90,47 @@ class UserController extends Controller
 
         return Output::makeResult($request);
     }
+
+
+    /**
+     * 发送邮箱验证码
+     */
+    public function send_email_code(Request $request){
+        $email=User::select('id','username','email')->where("email","like","%$request->email%")->get()->toArray();
+        // dd($request->all());
+        if($email){
+            foreach($email as $v){
+                if($v['email']==$request->email){
+                    return Output::makeResult($request, null, 500,'邮箱已存在');
+                }
+            }            
+        }
+        $view='member.email';
+        $message = rand(10000,99999);
+        $data=json_decode(json_encode($message),true);
+        $data=compact('data');
+        
+        session(['email'=>$request->email,'code_email' => $message]);
+        // Cache::put($request->email, $message, 1800);
+        
+        $from=trim('840638148@qq.com');
+        $name='印际';
+        $to = trim($request->email);
+        // dd($from,$to);
+        $subject = '邮箱注册通知';
+
+        $res=Mail::send($view,['content'=>$message], function ($message) use ($from, $name, $to, $subject) {
+            $message->to($to)->subject($subject);
+        });
+        // dd(Mail::failures());
+        if(!$res){
+            return Output::makeResult($request, null, 100,'发送成功');
+        }else{
+            return Output::makeResult($request, null, 500,'发送失败');
+        }
+
+    }
+
 
 
     public function doRegister(Request $request)

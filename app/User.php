@@ -424,7 +424,8 @@ class User extends Authenticatable
      * @return bool|string
      */
     public static function editUser($user_id, $edit_info = [])
-    {
+    {   
+        // dd($edit_info);
         $user = self::find($user_id);
         if (!$user) {
             return '用户不存在';
@@ -435,17 +436,92 @@ class User extends Authenticatable
         }
         
         $has_mobile=self::where('mobile',$edit_info['mobile'])->value('mobile');
-        
-        if (!empty($edit_info['mobile']) && $has_mobile==$edit_info['mobile']) {
-            return '手机号已经存在';
+        if($edit_info['code_tel']){
+            if (!empty($edit_info['mobile']) && $has_mobile==$edit_info['mobile']) {
+                return '手机号已经存在';
+            }
         }
-        
-        foreach ($edit_info as $k => $v) {
-            $user->$k = $v;
+
+        $info=[];
+        $fields = ['nickname', 'email', 'mobile', 'password','one_tel','one_email','nicksum','one_wx'];
+        foreach ($fields as $field) {
+            if (isset($edit_info[$field]) && !empty($edit_info[$field])){
+                $info[$field] = $edit_info[$field];
+            }
+
         }
+        if($info){
+            User::where('id',Auth::id())->update($info);
+        }
+        // dd($info);
+        // $remark= '';
+        if(@$info['one_tel']){
+            if($info['one_tel']==2){
+                $point_log = [
+                    'user_id' => $user->id,
+                    'type' => '0',
+                    'point' => 10,
+                    'remark' => '首绑手机',
+                ];
+                UserPoint::create($point_log);
+            }
+        }
+        if(@$info['one_email']){
+            if($info['one_email']==2){
+                $point_log = [
+                    'user_id' => $user->id,
+                    'type' => '0',
+                    'point' => 10,
+                    'remark' => '首绑邮箱',
+                ];
+                UserPoint::create($point_log);
+            }
+        }
+        if(@$info['one_wx']){
+            if($info['one_wx']==2){
+                $point_log = [
+                    'user_id' => $user->id,
+                    'type' => '0',
+                    'point' => 10,
+                    'remark' => '首绑微信',
+                ];
+                UserPoint::create($point_log);
+            }
+        }
+        $user->points = $user->points + 10;
+        $user->left_points = $user->left_points + 10;
         $user->save();
+
+
+        // dd($edit_infos);
+        // $user->save();
         return true;
     }
+
+    /**
+     * 获取用户修改昵称的次数
+     */
+    public static function getEditNicknameNum($user_id){
+        $is_vip = self::isVip($user_id);
+        $user = User::find($user_id);
+        $num=0;
+        if($is_vip && $user){
+            if($user->level==1){
+                $num=1;
+            }else if($user->level==2){
+                $num=3;
+            }else if($user->level==3){
+                $num=5;
+            }
+        }else if(preg_match_all("/^ohPM_.＋/",$user->username,$matches)){
+            $num=1;
+        }else{
+            $num=0;
+        }
+        
+        return $num;
+    }
+
 
 
     /**

@@ -33,6 +33,7 @@ Route::get('user/forgot_password', 'UserController@forgotPassword');
 Route::post('user/verify_code', 'UserController@checkCode');
 Route::post('user/register', 'UserController@doRegister');
 Route::post('user/reset_password', 'UserController@resetPassword');
+Route::post('user/send_email_code', 'UserController@send_email_code');//邮箱发送
 
 
 //微信的登录授权
@@ -118,6 +119,8 @@ Route::post('vip/duihuanvip', 'VipController@duihuanvip');//兑换会员
 Route::post('member/is_enough_points', 'MemberController@is_enough_points');//积分是否够
 Route::get('member/mydown', 'MemberController@mydown');//我的下载
 Route::post('member/bdemail', 'MemberController@bdemail');//邮箱绑定
+Route::post('member/citysjld', 'MemberController@citysjld');//城市三级联动
+Route::post('member/one_visited', 'MemberController@one_visited');//是否第一次访问个人中心页面
 
 
 

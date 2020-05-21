@@ -29,7 +29,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Intervention\Image\Facades\Image;
-
+use DB;
 class MemberController extends Controller
 {
    
@@ -76,6 +76,7 @@ class MemberController extends Controller
         $lang = $request->session()->get('language') ?? 'zh-CN';
 
         $user = $this->getUserInfo();
+        $user->city=explode('-',$user->city);
         // dd($user);
         $data = [
             'lang' => $lang,
@@ -83,6 +84,55 @@ class MemberController extends Controller
         ];
         return view('member.profile', $data);
     }
+
+
+    /**
+     * 判断是否为第一次访问个人中心页面
+     */
+    public function one_visited(Request $request){
+        if(!Auth::check()){
+            return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
+        }
+        $user=User::find(Auth::id());
+        if($user->one_visited==1){
+            User::where('id',$user->id)->update(['one_visited'=>2]);
+            return Output::makeResult($request, null, 100,'欢迎来到印际,请移步填写信息');
+        }
+        
+    }
+
+
+    /**
+     * 城市三级联动
+     */
+    public function citysjld(Request $request){
+        // dd($request->all());
+        $type = isset($request->type)?$request->type:0;//获取请求信息类型 1省 2市 3区
+        $province_num = isset($request->pnum)?$request->pnum:'440000';//根据省编号查市信息
+        $city_num = isset($request->cnum)?$request->cnum:'440100';//根据市编号查区信息
+
+        switch ($type) {//根据请求信息类型，组装对应的sql
+            case 1://省
+                // $sql = "SELECT * FROM province";
+                $sql = Db::table("province")->get();
+                break;
+            case 2://市
+                // $sql = "SELECT * FROM city WHERE province_num='{$province_num}'";
+                $sql =Db::table("city")->where('province_num',$province_num)->get();
+                break;
+            case 3://区
+                $sql =Db::table("area")->where('city_num',$city_num)->get();
+                // $sql = "SELECT * FROM area WHERE city_num='{$city_num}'";
+                break;
+            default:
+                die('no data');
+                break;
+        }
+
+        // dd($sql);
+        return $sql;//返回json数据
+    }
+
 
 
     /**
@@ -95,42 +145,67 @@ class MemberController extends Controller
     {
         $this->checkLogin();
         // dd($request->all());
+        $user = User::find(Auth::id());
         $edit_info = [];
-        $fields = ['nickname', 'email', 'mobile', 'password'];
+        $fields = ['nickname', 'email', 'mobile', 'password','code_tel','code_email'];
         foreach ($fields as $field) {
             // if ($request->get($field)) {
                 $edit_info[$field] = $request->get($field);
             // }
         }
-
-        if (!empty($request->pass1)) {
-            if (strlen($request->pass1) < 6) {
-                return Output::makeResult($request, null, 500,'密码长度至少6位');
+        $usernamenum=User::getEditNicknameNum($user->id);
+        if($request->nickname){
+            if($usernamenum<=0){
+                return Output::makeResult($request, null, 500,'修改昵称次数不够');
+            }else if(($usernamenum-1)<0){
+                $usernamenum=0;
+            }else{
+                $edit_info['nicksum']=$usernamenum-1;
             }
+        }
 
-            if ($request->pass1 != $request->pass2) {
-                return Output::makeResult($request, null, 500,'两次密码不一致');
+            
+        if($request->pass1 && $request->pass2){
+            if (!empty($request->pass1)) {
+                if (strlen($request->pass1) < 6) {
+                    return Output::makeResult($request, null, 500,'密码长度至少6位');
+                }
+
+                if ($request->pass1 != $request->pass2) {
+                    return Output::makeResult($request, null, 500,'两次密码不一致');
+                }
+
+                $edit_info['password'] = bcrypt($request->pass1);
             }
-
-            $edit_info['password'] = bcrypt($request->pass1);
         }
         // dd($edit_info);
-        $user = User::find(Auth::id());
-        if($user->mobile && $edit_info['mobile']=='' || $edit_info['mobile']==null){
-            return Output::makeResult($request, null, 500,'请填写手机号码');
-        }else if($user->mobile=='' || $user->mobile==null){
-            $edit_info['one_tel']=2;
-        }else{
-            $edit_info['one_tel']=3;
+        
+        if($request->mobile){
+            if($user->mobile && $edit_info['mobile']=='' || $edit_info['mobile']==null){
+                return Output::makeResult($request, null, 500,'请填写手机号码');
+            }else if($user->mobile=='' || $user->mobile==null){
+                $edit_info['one_tel']=2;
+            }else{
+                $edit_info['one_tel']=3;
+            }
         }
-        if($user->email && $edit_info['email']=='' || $edit_info['email']==null){
-            return Output::makeResult($request, null, 500,'请填写邮箱');
-        }if($user->email=='' || $user->email==null){
-            $edit_info['one_email']=2;
-        }else{
-            $edit_info['one_email']=3;
+        if($request->email){
+            if($user->email && $edit_info['email']=='' || $edit_info['email']==null){
+                return Output::makeResult($request, null, 500,'请填写邮箱');
+            }if($user->email=='' || $user->email==null){
+                $edit_info['one_email']=2;
+            }else{
+                $edit_info['one_email']=3;
+            }
         }
-
+        // dd(session('code_email'));
+        if($request->code_email){
+            if($request->email!=session('email')){
+                return Output::makeResult($request, null, 500,'邮箱错误');
+            }else if($request->code_email!=session('code_email')){
+                return Output::makeResult($request, null, 500,'邮箱验证码错误');
+            }
+        }
 
         // dd($edit_info);
         $result = User::editUser(Auth::id(), $edit_info);
@@ -149,29 +224,52 @@ class MemberController extends Controller
      * 1261660791@qq.com
      */
     public function bdemail(Request $request){
-
+        $this->checkLogin();
+        $email=User::select('id','username','email')->where("email","like","%$request->email%")->get()->toArray();
+        // dd($request->all());
+        if($email){
+            foreach($email as $v){
+                if($v['email']==$request->email){
+                    return Output::makeResult($request, null, 500,'邮箱已存在');
+                }
+            }            
+        }
         $view='member.email';
+        
         $message = rand(10000,99999);
-        $data=compact('message');
-        // $data=['content'=>$message];
-        // dd($data);
-        $from='840638148@qq.com';
+        $data=json_decode(json_encode($message),true);
+        $data=compact('data');
+        
+        session(['email'=>$request->email,'code_email' => $message]);
+        // Cache::put($request->email, $message, 1800);
+        
+        $from=trim('840638148@qq.com');
         $name='印际';
-        $to = $request->email;
-        $subject = '绑定邮箱';
-        // $res=Mail::send($view, ['content' => $message], function ($message) use ($from, $name, $to, $subject) {
-        //     $message->to($to)->subject($subject);
-        // });
-        $res=Mail::raw('尊敬的用户，您换绑的验证码为'.$message, function ($message) use ($from, $name, $to, $subject) {
+        $to = trim($request->email);
+        // dd($from,$to);
+        $subject = '邮箱绑定通知';
+        $res=Mail::send($view,['content'=>$message], function ($message) use ($from, $name, $to, $subject) {
             $message->to($to)->subject($subject);
         });
-
-        dd($res);
-        if($res){
+        // dd(Mail::failures());
+        if(!$res){
             return Output::makeResult($request, null, 100,'发送成功');
         }else{
             return Output::makeResult($request, null, 500,'发送失败');
         }
+
+
+        // 
+        // $data=['content'=>$message];
+        // dd($data);
+
+
+        // $res=Mail::raw('尊敬的用户，您换绑的验证码为'.$message, function ($message) use ($from, $name, $to, $subject) {
+        //     $message->to($to)->subject($subject);
+        // });
+
+        // dd($res);
+
         // $res= Mail::send('member.email',['content' => $message],function($message){
         //     $to ='840638148@qq.com';
         //     $message ->to($to)->subject('绑定邮箱测试');
@@ -198,6 +296,7 @@ class MemberController extends Controller
     {
         $this->checkLogin();
         // dd($request->all());
+
         $edit_info = [];
         // $fields = ['avatar', 'sex', 'city', 'zhiwei', 'personal_note'];
         $fields = ['sex', 'city', 'zhiwei', 'personal_note'];
@@ -208,9 +307,11 @@ class MemberController extends Controller
                 $edit_info[$field] = $request->get($field);
             }
         }
-           
+        $province=Db::table("province")->where('province_num',$request->provinces)->value('province_name');
+        $city=Db::table("city")->where('city_num',$request->citys)->value('city_name');
+        $edit_info['city']=$province.'-'.$city;
         $result = User::where('id',Auth::id())->update($edit_info);
-        //  dd($result);
+        //  dd($edit_info);
         if ($result) {
             return redirect('/member/profile');
         }

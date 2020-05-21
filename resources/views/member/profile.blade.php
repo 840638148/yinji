@@ -120,7 +120,20 @@
             sex) checked="checked" @endif/>女 </p>
           <p>
             <label for="city">所在城市</label>
-            <input type="text" id="city" name="city" value="{{$user->city}}" >
+                @if($user->city)
+                  <p style="padding-left:4px;"> 
+                    省：<select name='provinces' id="provinces"><option value="{{$user->city[0]}}" id="selectpro" >{{$user->city[0]}}</option></select> 
+                    市：<select id="citys" name='citys'><option value="{{$user->city[1]}}">{{$user->city[1]}}</option></select> 
+                  </p>
+                @else
+                <p style="padding-left:4px;"> 
+                  省：<select name='provinces' id="provinces">  <option value="" id="selectpro"  >请选择省份</option></select>  
+                  市：<select id="citys" name='citys'><option value="">请选择市</option></select> 
+                </p>
+                @endif
+                <!-- 区：<select id="countys"><option value="">请选择县</option></select>   -->
+          
+            {{--<!-- <input type="text" id="city" name="city" value="{{$user->city}}" > -->--}}
           </p>
           <p>
             <label for="zhiwei">职位</label>
@@ -221,7 +234,63 @@
             <span style="position: absolute;top: 87px;left: 151px;">当前为<strong>自定义头像</strong>，建议大小：120*120。获取头像的顺序为：自定义头像、社交头像、全球通用头像、默认头像</span> 
           </div>
 
+<script>
+$(function() {  
+  //页面初始，加载所有的省份  
+  // function selectpro(){
+  // $(document).on('click','#provinces',function(){
+    // $('#provinces').click(function(){
+    // alert(123)
+    $.ajax({  
+        type: "post",  
+        url: "/member/citysjld",  
+        data: {"type":1,_token: "{{csrf_token()}}"},  
+        dataType: "json",  
+        success: function(data) {  
+            //遍历json数据，组装下拉选框添加到html中
+            $("#provinces").append("<option value=''>请选择省</option>");  
+            $.each(data, function(i, item) {  
+                $("#provinces").append("<option value='" + item.province_num + "'>" + item.province_name + "</option>");  
+            });
+        }  
+    });      
+  // })
 
+  //监听省select框
+  $("#provinces").change(function() {  
+      $.ajax({  
+          type: "post",  
+          url: "/member/citysjld",
+          data: {"pnum": $(this).val(),"type":2,_token: "{{csrf_token()}}"},  
+          dataType: "json",  
+          success: function(data) {  
+              //遍历json数据，组装下拉选框添加到html中
+              $("#citys").html("<option value=''>请选择市</option>");  
+              $.each(data, function(i, item) {  
+                  $("#citys").append("<option value='" + item.city_num + "'>" + item.city_name + "</option>");  
+              });  
+          }  
+      });  
+  });  
+
+  // // 监听市select框
+  // $("#citys").change(function() {  
+  //     $.ajax({  
+  //         type: "post",  
+  //         url: "/member/citysjld",
+  //         data: {"cnum": $(this).val(),"type":3,_token: "{{csrf_token()}}"},  
+  //         dataType: "json",  
+  //         success: function(data) {  
+  //             //遍历json数据，组装下拉选框添加到html中
+  //             $("#countys").html("<option value=''>请选择区</option>");  
+  //             $.each(data, function(i, item) {  
+  //                 $("#countys").append("<option value='" + item.id + "'>" + item.area_name + "</option>");  
+  //             });  
+  //         }  
+  //     });  
+  // });  
+});  
+</script>
 
 <!-- <script src="/js/cropbox.js"></script>
 <script src="/js/cropbox-min.js"></script>
@@ -366,14 +435,15 @@
         <form id="pass-form" class="contribute_form" role="form" method="post" action="/member/edit" onsubmit="return checkform()">
           <input type="hidden" name="_token" value="{{csrf_token()}}">
           
-          <p>
+          <p style='position:relative'>
             <label for="nickname">昵称</label>
-            <input type="text" id="nickname" name="nickname" value="{{$user->nickname}}" >
+            <input type="text" value="{{$user->nickname}}" disabled='disabled' style="height:46px;">
+            <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;width:98px !important;border:none;border-radius:3px;right:0;" type="button" value="更改昵称" class="editnick">
           </p>
           <p style='position:relative'>
             <label for="mobile">手机号</label>
             @if($user->mobile)
-            <input type="tel" id="mobile" maxlength='11' disabled='disabled' name="mobile" value="{{$user->mobile}}" >
+            <input type="tel" maxlength='11' disabled='disabled' value="{{$user->mobile}}" >
             <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;width:98px !important;border:none;border-radius:3px;right:0;" type="button" value="解绑" class="jbmobile">
             @else
             <input type="tel" id="mobile" maxlength='11' name="mobile" placeholder='请填写手机号' value="" >
@@ -382,12 +452,12 @@
           <p style='position:relative;display:none;' class='tel_yzm'>
             <label for="verification_code" style="position:relative">输入手机验证码</label>
             <input type="text" name="verification_code" id="verification_code_tel" class="input" style='height:47px;' value="" size="20" placeholder="请输入手机验证码">
-            <input style="padding: 0 19px;position:absolute;top:40px;height:46px;background: #63c5f3;color: #fff;border-radius:3px;" name="发送验证码" onclick="bdtel()" type="button" value="获取验证码" class="verification">
+            <input style="padding: 0 19px;position:absolute;top:40px;height:48px;background: #63c5f3;color: #fff;border-radius:3px;" name="发送验证码" onclick="bdtel()" type="button" value="获取验证码" class="verification">
           </p>
           <p style='position:relative;'>
             <label for="email">电子邮件</label>
             @if($user->email)
-            <input type="email" id="email" disabled='disabled' name="email" value="{{$user->email}}" >
+            <input type="email" disabled='disabled' value="{{$user->email}}" >
             <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;width:98px !important;border:none;border-radius:3px;right:0;" type="button" value="解绑" class="jbemail">
             @else
             <input type="email" id="email" name="email" value="" placeholder='请填写邮箱' >
@@ -395,8 +465,8 @@
           </p>
           <p style='position:relative;display:none;' class='email_yzm'>
             <label for="verification_code" style="position:relative">输入邮箱验证码</label>
-            <input type="text" name="verification_code" id="verification_code_email" class="input" style='height:47px;' value="" size="20" placeholder="请输入邮箱验证码">
-            <input style="padding: 0 19px;position:absolute;top:40px;height:46px;background: #63c5f3;color: #fff;border-radius:3px;right:0;border:none;" name="发送验证码" type="button" value="获取验证码" class="verification_email" onclick='bdemail()'>
+            <input type="text" name="verification_code" id="verification_code_email" class="input" style='height:48px;' value="" size="20" placeholder="请输入邮箱验证码">
+            <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;border-radius:3px;right:0;border:none;" name="发送验证码" type="button" value="获取验证码" class="verification_email" onclick='bdemail()'>
           </p>
           <p>
             <label for="pass1">新密码</label>
@@ -415,6 +485,26 @@
     </div>
   </div>
 </section>
+<script>
+$(function() { 
+  $.ajax({  
+        type: "post",  
+        url: "/member/one_visited",  
+        data: {_token: "{{csrf_token()}}"},  
+        dataType: "json",  
+        success: function(data) {  
+          console.log(data)
+          if(data.status_code == 0){
+            layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+            window.location.href='/member/profile';
+          }else{
+            layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+          }
+          
+        }  
+    });      
+})
+</script>
 <script src="/js/laravel-sms.js"></script>
 <script type="text/javascript">
 
@@ -497,13 +587,27 @@ function nTabs(thisObj,Num){
 //点击解绑显示验证码kaung
 $('.jbmobile').click(function () {
   $('.tel_yzm').show(1000);
-  $('#mobile').removeAttr('disabled');
-  $('#mobile').val('');
+  $(this).siblings('input[type="tel"]').removeAttr('disabled');
+  $(this).siblings('input[type="tel"]').attr('id','mobile');
+  $(this).siblings('input[type="tel"]').attr('name','mobile');
+  $(this).siblings('input[type="tel"]').val('');
+  $(this).hide(100)
 })
 $('.jbemail').click(function () {
   $('.email_yzm').show(1000);
-  $('#email').removeAttr('disabled');
-  $('#email').val('');
+  $(this).siblings('input[type="email"]').removeAttr('disabled');
+  $(this).siblings('input[type="email"]').attr('id','email');
+  $(this).siblings('input[type="email"]').attr('name','email');
+  $(this).siblings('input[type="email"]').val('');
+  $(this).hide(100)
+})
+
+$(".editnick").click(function(){
+  $(this).siblings('input[type="text"]').removeAttr('disabled');
+  $(this).siblings('input[type="text"]').attr('id','nickname');
+  $(this).siblings('input[type="text"]').attr('name','nickname');
+  $(this).siblings('input[type="text"]').val('');
+  $(this).hide(100)
 })
 
 // 阻止提交表单
@@ -511,14 +615,17 @@ function checkform(){
   return false;//false:阻止提交表单
 }
 
+
 //发送邮箱
 function bdemail(){
+  $('#verification_code_email').val('');
   let email=$('#email').val();
+  // alert(email)
   let emailzz = /^([A-Za-z0-9_+-.])+@([A-Za-z0-9\-.])+\.([A-Za-z]{2,22})$/;
   if(email!='' && email != null && email != undefined){
     if(!emailzz.test(email)){
-      layer.msg('邮箱格式错误',{skin: 'intro-login-class layui-layer-hui'});
-      return false;
+      layer.msg('邮箱格式错误',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+      // return false;
     }
   }
   $.ajax({
@@ -529,9 +636,9 @@ function bdemail(){
       success: function (data) {
         console.log(data)
         if (data.status_code == 0) {
-          layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+          layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'})
         } else {
-          layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+          layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'})
         }
       }
     });
@@ -589,7 +696,7 @@ function bdtel(){
             success: function (data) {
                 console.log(data.status_code);
                 if (data.status_code == 0) {
-                    layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
+                    layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
                     $("#step1").addClass("hide");
                     $("#step2").removeClass("hide");
                     $("#userphone").val(mobile);
@@ -616,13 +723,13 @@ function subntm(){
 
   if(mobile!='' && mobile != null && mobile != undefined){
     if(!(/^1[34578]\d{9}$/.test(mobile))){ 
-      layer.msg('手机号格式错误',{skin: 'intro-login-class layui-layer-hui'});
+      layer.msg('手机号格式错误',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
       return false;
     }
   }else
   if(email!='' && email != null && email != undefined){
     if(!emailzz.test(email)){
-      layer.msg('邮箱格式错误',{skin: 'intro-login-class layui-layer-hui'});
+      layer.msg('邮箱格式错误',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
       return false;
     }
   }
@@ -635,9 +742,9 @@ function subntm(){
     success: function (data) {
       if (data.status_code == 0) {
         console.log(data.data)
-        layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+        layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'})
       } else {
-        layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+        layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'})
       }
     }
   });

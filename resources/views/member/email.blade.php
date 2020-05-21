@@ -1,1 +1,1 @@
-<br>这是一封测试邮件，内容：{{$content}}<br>
+尊敬的用户，您的验证码为<span style="color:red;">{{$content}}</span><br>如果不是您本人操作，请勿告知他人！
