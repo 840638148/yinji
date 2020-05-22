@@ -76,8 +76,21 @@ class MemberController extends Controller
         $lang = $request->session()->get('language') ?? 'zh-CN';
 
         $user = $this->getUserInfo();
-        $user->city=explode('-',$user->city);
-        // dd($user);
+
+        if($user->city){
+            $user->city=explode('-',$user->city);
+            $province=Db::table("province")->where('province_name',$user->city[0])->value('province_num');
+            $city=Db::table("city")->where('city_name',$user->city[1])->value('city_num');      
+            $data = [
+                'lang' => $lang,
+                'user' => $user,
+                'province' => $province,
+                'city' => $city,
+            ];
+            return view('member.profile', $data);      
+        }
+
+        // dd($user->city);
         $data = [
             'lang' => $lang,
             'user' => $user,

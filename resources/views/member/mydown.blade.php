@@ -50,8 +50,11 @@
         <a href="/article/{{$v->static_url}}" target="_blank"><img src="/uploads/{{$v->custom_thum}}" alt="{{$v->title_designer_cn}} - {{$v->title_name_cn}}"></a>
       </div>
       <div class="downright" style="float: left; margin-left: 20px;">
-        <p style="height:30px;overflow: hidden;text-overflow: ellipsis;    white-space: nowrap; width:320px;">下载地址：<a href="{{mb_substr($v->vip_download,0,-10)}}" target="_blank">{{mb_substr($v->vip_download,0,-10)}}</a> </p>
-        <p>提取密码：<span id="tqmm">{{mb_substr($v->vip_download,-4)}}</span> <span class='copybtn' style='float: right;padding: 0 5px 0;background: #ccc;border-radius: 5px;cursor: pointer;' onclick="copybtn()">复制</span></p>
+        <p style="height:30px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width:320px;">下载地址：<a href="{{mb_substr($v->vip_download,0,-10)}}" target="_blank">{{mb_substr($v->vip_download,0,-10)}}</a> </p>
+        {{--<!-- <p>提取密码：<span id="tqmm">{{mb_substr($v->vip_download,-4)}}</span> <span index='{{mb_substr($v->vip_download,-4)}}' class='copybtn' style='float: right;padding: 0 5px 0;background: #ccc;border-radius: 5px;cursor: pointer;' onclick="copybtn(this)">复制</span></p><textarea title='点我复制' id="tqmm" readonly cols="1" rows="1" style='resize:none;border:none;width:100px;position:absolute;top:-9px;;'>{{mb_substr($v->vip_download,-4)}}</textarea> -->--}}
+        <p style='position: relative;'>提取密码：
+        
+        <input title='点我复制' class='copybtn' style='padding: 0 5px 0;background: #ccc;border-radius: 5px;cursor: pointer;border:none;width:45px;' onclick="copybtn(this)" readonly value='{{mb_substr($v->vip_download,-4)}}'></p>
         <!--p>兑换时间：{{$v->created_at}}</p-->
         <p>过期时间：<span style="color:#f60;">{{$v->guoqitime}}</span></p>
       </div>
@@ -61,47 +64,15 @@
     <!-- 我的下载结束 -->
   </div>
 </section>
-<script>
-$(function() { 
-  $.ajax({  
-        type: "post",  
-        url: "/member/one_visited",  
-        data: {_token: "{{csrf_token()}}"},  
-        dataType: "json",  
-        success: function(data) {  
-          console.log(data)
-          if(data.status_code == 0){
-            layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-            window.location.href='/member/profile';
-          }else{
-            layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-          }
-          
-        }  
-    });      
-})
-</script>
+
 <script type="text/javascript" src="/js/dist/clipboard.min.js"></script>	
 <script>
-function copybtn(){
-  // let con=$('.copybtn').siblings("#tqmm").text();
-  // alert(con)
-  let texthtml = document.getElementById("tqmm");
-  let shtml = texthtml.innerHTML;
-  let clipboard = new ClipboardJS('.copybtn',{
-    text:function(){
-    return shtml;
-    }
-  })
-  clipboard.on('success', function(e) {
-    
-    console.log(e);
-  });
-
-  clipboard.on('error', function(e) {
-    console.log(e);
-  });
-
+function copybtn(obj){
+  let con=document.getElementById("tqmm");
+  obj.select(); // 选择对象
+  document.execCommand("Copy"); // 执行浏览器复制命令
+  // console.log(con);
+  layer.msg('复制成功',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
 }
 
 

@@ -148,7 +148,7 @@ $('.click_email').click(function () {
 })
 
 $('.click_phone').click(function () {
-    $('.verification_email_email').css('right','8px')
+    $('.verification_email').css('right','8px')
     $(this).css('display','none');
     $('#user_phone').css('display','block');
     $('#user_email').css('display','none');
@@ -335,6 +335,7 @@ $('.verification_email').click(function () {
         let zhiwei=$('#zhiwei').val();
         let provinces=$("#provinces").val();
         let city=$('#citys').val();
+        let email = $.trim($('#user_email').val());
         // let diqu=provinces+'-'+city;
         let pass1 = $.trim($('#pass1').val());
         let pass2 = $.trim($('#pass2').val());
@@ -355,18 +356,19 @@ $('.verification_email').click(function () {
                 provinces:provinces,
                 city:city,
                 zhiwei:zhiwei,
+                email:email,
                 _token: "{{csrf_token()}}",
             },
 
             success: function (data) {
                 //console.log(data.status_code);
                 if (data.status_code == 0) {
-                    layer.msg(data.message);
+                    layer.msg(data.message,{time:1500,skin: 'intro-login-class layui-layer-hui'});
                     setTimeout(function () {
                         location.href = "/";
                     }, 300);
                 } else {
-                    layer.msg(data.message);
+                    layer.msg(data.message,{time:1500,skin: 'intro-login-class layui-layer-hui'});
                 }
             }
         });

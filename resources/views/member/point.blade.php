@@ -218,9 +218,9 @@
                 <div class="tj_shuzi">
                     <span class="point-title-small">今日印币</span>
                     <div class="today-point">{{ $today_point['today'] }}</div>
-                    <div class="qiandao">
+                    <div class="qiandao" style="right: 15px;width:110px;">
                         <p>
-                            <span style="margin-left: 15px;padding-left: 2.5px;">签到：
+                            <span style="margin-left: 16px;">签到：
                             @if ($today_point['attendance'] > 0)
                                 {{ $today_point['attendance'] }}/{{ $today_point['attendance'] }}
                             @else
@@ -574,26 +574,7 @@
     <!-- 印币规则结束 -->
 
 </section>
-<script>
-$(function() { 
-  $.ajax({  
-        type: "post",  
-        url: "/member/one_visited",  
-        data: {_token: "{{csrf_token()}}"},  
-        dataType: "json",  
-        success: function(data) {  
-          console.log(data)
-          if(data.status_code == 0){
-            layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-            window.location.href='/member/profile';
-          }else{
-            layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-          }
-          
-        }  
-    });      
-})
-</script>
+
 <script>
     //点击兑换VIP出现确定弹窗
     $('.point-duihuan').click(function(){

@@ -1,7 +1,7 @@
 <?php
 return [
     'login_title' => '用户登录',
-    'input_username' => '请输入手机号码/用户名/邮箱',
+    'input_username' => '请输入手机号码/昵称/邮箱',
     'input_password' => '请输入密码',
     'login' => '登录',
     'remember_me' => '记住我的登录信息',

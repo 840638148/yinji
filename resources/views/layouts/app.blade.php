@@ -1132,51 +1132,31 @@
     $(".add_finder_btn").click(function () {
 
         var that = $(this)
-
         var user_finder_folder_id = $(this).attr('data-id');
-
         var title = $(this).attr('data-title');
-
         var photo_url = $(this).attr('data-img');
-
-        var photo_source = $(this).attr('data-source');
-
+        var source = $(this).attr('data-source');
+        console.log(photo_source);
         if (photo_url == '') {
-
             photo_url = $("#imageUrlJs").val();
-
         }
 
         if (title == '') {
-
             title = $("#imgtitle").val();
-
         }
 
         $.ajax({
-
             url: '/vip/finder_collect',
-
             type: 'POST',
-
             dataType: 'json',
-
             data: {
-
                 _token:_token,
-
                 user_finder_folder_id:user_finder_folder_id,
-
                 title:title,
-
                 photo_url:photo_url,
-
-                photo_source:photo_source
-
+                source:source
             },
-
             success: function (data) {
-
                 if (data.status_code == 0) {
                     layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
                     that.text('已收藏')
@@ -1184,9 +1164,7 @@
                     that.addClass('Button')
                     that.addClass('have-disalbed')
                 } else {
-
                     layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
-
                 }
 
             }

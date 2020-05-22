@@ -500,9 +500,12 @@ $(function() {
         dataType: "json",  
         success: function(data) {  
           console.log(data)
-          if(data.status_code == 0){
+          if(data.status_code == 100){
+            // window.location.href='/member/profile';
             layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-            window.location.href='/member/profile';
+            setTimeout(function () {
+                location.href = "/member/profile";
+            },1600);
           }else{
             layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
           }

@@ -11,6 +11,7 @@ use App\Http\Error;
 use App\Http\Output;
 use App\User;
 use DB;
+use App\Models\UserPoint;
 use Illuminate\Support\Facades\Mail;
 class UserController extends Controller
 {
@@ -35,11 +36,13 @@ class UserController extends Controller
             return Output::makeResult($request, null, Error::MISS_PARAM);
         }
 
-        $username_login = Auth::attempt(['username' => $request->user_login, 'password' => $request->password]);
+        // $username_login = Auth::attempt(['username' => $request->user_login, 'password' => $request->password]);
+        $username_login = Auth::attempt(['nickname' => $request->user_login, 'password' => $request->password]);
         if (!$username_login) {
             $tmp_user = User::where('mobile', $request->user_login)->first();
             if ($tmp_user) {
-                $username_login = Auth::attempt(['username' => $tmp_user->username, 'password' => $request->password]);
+                // $username_login = Auth::attempt(['username' => $tmp_user->username, 'password' => $request->password]);
+                $username_login = Auth::attempt(['nickname' => $tmp_user->nickname, 'password' => $request->password]);
             }
         }
         if ($username_login) {
@@ -81,8 +84,6 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'user_phone' => 'required|confirm_mobile_not_change',
             'verification_code' => 'required|verify_code',
-            'verification_code_email' => 'required|verify_code',
-            'user_email' => 'required|email',
         ]);
         if($request->user_phone){
             if ($validator->fails()) {
@@ -91,6 +92,7 @@ class UserController extends Controller
                 return Output::makeResult($request, null, Error::MISS_PARAM, '验证码错误');
             }
         }
+        // dd(session('code_email'));
         if($request->user_email){
             if($request->user_email!=session('email')){
                 return Output::makeResult($request, null, 500,'邮箱错误');
@@ -104,11 +106,10 @@ class UserController extends Controller
 
 
     /**
-     * 发送邮箱验证码
+     * 注册发送邮箱验证码
      */
     public function send_email_code(Request $request){
         $email=User::select('id','username','email')->where("email","like","%$request->user_email%")->get()->toArray();
-        // dd($request->all());
         if($email){
             foreach($email as $v){
                 if($v['email']==$request->user_email){
@@ -120,18 +121,46 @@ class UserController extends Controller
         $message = rand(10000,99999);
         
         session(['email'=>$request->user_email,'code_email' => $message]);
-        // Cache::put($request->email, $message, 1800);
         
         $from='840638148@qq.com';
         $name='印际';
         $to = $request->user_email;
-        // dd($from,$to);
         $subject = '邮箱注册通知';
 
         $res=Mail::send($view,['content'=>$message], function ($message) use ($from, $name, $to, $subject) {
             $message->to($to)->subject($subject);
         });
-        // dd(Mail::failures());
+        if(!$res){
+            return Output::makeResult($request, null, 100,'发送成功');
+        }else{
+            return Output::makeResult($request, null, 500,'发送失败');
+        }
+
+    }
+
+
+    /**
+     * 忘记密码发送邮箱验证码
+     */
+    public function forget_email_code(Request $request){
+
+        $email=User::select('id','username','email')->where("email",$request->email)->first();
+        if(!$email){
+            return Output::makeResult($request, null, 500,'邮箱不存在'); 
+        }
+        $view='member.email';
+        $message = rand(10000,99999);
+        
+        session(['email'=>$request->email,'code_email' => $message]);
+        
+        $from='840638148@qq.com';
+        $name='印际';
+        $to = $request->email;
+        $subject = '忘记密码邮箱通知';
+
+        $res=Mail::send($view,['content'=>$message], function ($message) use ($from, $name, $to, $subject) {
+            $message->to($to)->subject($subject);
+        });
         if(!$res){
             return Output::makeResult($request, null, 100,'发送成功');
         }else{
@@ -159,11 +188,26 @@ class UserController extends Controller
         // if ($validator->fails()) {
         //     return Output::makeResult($request, $validator->errors(), Error::MISS_PARAM);
         // }
+        if(empty($request->pass1) || empty($request->pass2)){
+            return Output::makeResult($request, null, 500,'请输入密码');
+        }else if(strlen($request->pass1)<6 || strlen($request->pass2)<6){
+            return Output::makeResult($request, null, 500,'密码最少6位');
+        }else if($request->pass1!=$request->pass2){
+            return Output::makeResult($request, null, 500,'密码不一致');
+        }
+
+        if(empty($request->provinces) || empty($request->city)){
+            return Output::makeResult($request, null, 500,'请选择城市');
+        }
+
+        if(empty($request->zhiwei)){
+            return Output::makeResult($request, null, 500,'请选择职位');
+        }
+
 
         $province=Db::table("province")->where('province_num',$request->provinces)->value('province_name');
         $city=Db::table("city")->where('city_num',$request->city)->value('city_name');
         $citys=$province.'-'.$city;
-        // dd($province,$city,$citys);
         
      
         $user = [
@@ -174,12 +218,68 @@ class UserController extends Controller
             'register_key' => '',
             'zhiwei' => $request->zhiwei,
             'city' => $citys,
+            'email' => $request->email,
         ];
         $result = User::createUser($user);
         if (true === $result) {
             $user=User::where("username",$request->user_login)->first();
             // Auth::login($user);//传用户实例
             Auth::loginUsingId($user->id);//传用户id
+            if($request->email){
+                $data1 = [
+                    'user_id' => $user->id,
+                    'type' => '0',
+                    'point' => 10,
+                    'remark' => '首绑邮箱',
+                ];
+                $data2 = [
+                        'user_id' => $user->id,
+                        'type' => '0',
+                        'point' => 5,
+                        'remark' => '首绑职位',
+                ];
+                $data3 = [
+                        'user_id' => $user->id,
+                        'type' => '0',
+                        'point' => 5,
+                        'remark' => '首绑城市',
+                ];
+                $user->one_email = 2;
+                $user->points = $user->points + 20;
+                $user->left_points = $user->left_points + 20;
+                $user->save();
+                UserPoint::create($data1);
+                UserPoint::create($data2);
+                UserPoint::create($data3);
+            }
+            if($request->user_phone){
+                $data1 = [
+                    'user_id' => $user->id,
+                    'type' => '0',
+                    'point' => 10,
+                    'remark' => '首绑手机',
+                ];
+                $data2 = [
+                        'user_id' => $user->id,
+                        'type' => '0',
+                        'point' => 5,
+                        'remark' => '首绑职位',
+                ];
+                $data3 = [
+                        'user_id' => $user->id,
+                        'type' => '0',
+                        'point' => 5,
+                        'remark' => '首绑城市',
+                ];
+                $user->one_tel = 2;
+                $user->points = $user->points + 20;
+                $user->left_points = $user->left_points + 20;
+                $user->save();
+                UserPoint::create($data1);
+                UserPoint::create($data2);
+                UserPoint::create($data3);
+            }
+
             return Output::makeResult($request,null,0,'注册成功');
         } else {
             return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
@@ -200,17 +300,51 @@ class UserController extends Controller
             'pass1' => 'required',
             'pass2' => 'required|same:pass1',
         ]);
-
-        if ($validator->fails()) {
-            return Output::makeResult($request, $validator->errors(), Error::MISS_PARAM, '验证码错误');
+        
+        if($request->user_phone){
+            if ($validator->fails()) {
+                return Output::makeResult($request, $validator->errors(), Error::MISS_PARAM, '验证码错误');
+            }
+        }
+        // dd(session('code_email'));
+        if($request->email){
+            if($request->email!=session('email')){
+                return Output::makeResult($request, null, 500,'邮箱错误');
+            }else if($request->verification_code_email!=session('code_email')){
+                return Output::makeResult($request, null, 500,'邮箱验证码错误');
+            }
         }
 
-        $user = User::where('mobile', $request->user_phone)->first();
-        if (!$user) {
-            return Output::makeResult($request, null, Error::SYSTEM_ERROR, '用户不存在');
+        if(empty($request->pass1) || empty($request->pass2)){
+            return Output::makeResult($request, null, 500,'请输入密码');
+        }else if(strlen($request->pass1)<6 || strlen($request->pass2)<6){
+            return Output::makeResult($request, null, 500,'密码最少6位');
+        }else if($request->pass1!=$request->pass2){
+            return Output::makeResult($request, null, 500,'密码不一致');
         }
-        $user->password = bcrypt($request->pass1);
-        $user->save();
-        return Output::makeResult($request);
+        
+        if($request->user_phone){
+            $user = User::where('mobile', $request->user_phone)->first();
+            if (!$user) {
+                return Output::makeResult($request, null, Error::SYSTEM_ERROR, '用户不存在');
+            }            
+            $user->password = bcrypt($request->pass1);
+            $user->save();
+            Auth::loginUsingId($user->id);//传用户id
+            return Output::makeResult($request,null,0,'修改成功');
+        }
+        
+        if($request->email){
+            $user = User::where('email', $request->email)->first();
+            if (!$user) {
+                return Output::makeResult($request, null, Error::SYSTEM_ERROR, '用户不存在');
+            }            
+            $user->password = bcrypt($request->pass1);
+            $user->save();
+            Auth::loginUsingId($user->id);//传用户id
+            return Output::makeResult($request,null,0,'修改成功');
+        }
+
+        return Output::makeResult($request,null,Error::SYSTEM_ERROR,'系统繁忙！');
     }
 }

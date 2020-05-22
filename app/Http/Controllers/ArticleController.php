@@ -742,7 +742,7 @@ class ArticleController extends Controller
                     'user_id' => $user->id,
                     'type' => '1',
                     'point' => 10,
-                    'remark' => '印币抵扣下载',
+                    'remark' => '印币抵扣',
                 ];
                 $re=UserPoint::create($das);
 

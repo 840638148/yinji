@@ -537,7 +537,7 @@ class UserFinder extends Model
      */
     public static function findercollect($request)
     {   
-        // dd($request->is_sc);
+        // dd($request->all());
         $is_sc=$request->is_sc;
         $user_id = Auth::id();
         if (empty($request->photo_url) || empty($user_id)) {
@@ -572,7 +572,7 @@ class UserFinder extends Model
                 'title' => $request->title ?? '',
                 'photo_url' => $photo_url,
                 'photo_source' => $request->source,
-                'is_sc'=>$is_sc,
+                'is_sc'=>1,
             ];
             self::create($data);
 

@@ -33,7 +33,8 @@ Route::get('user/forgot_password', 'UserController@forgotPassword');
 Route::post('user/verify_code', 'UserController@checkCode');
 Route::post('user/register', 'UserController@doRegister');
 Route::post('user/reset_password', 'UserController@resetPassword');
-Route::post('user/send_email_code', 'UserController@send_email_code');//邮箱发送
+Route::post('user/send_email_code', 'UserController@send_email_code');//注册邮箱发送
+Route::post('user/forget_email_code', 'UserController@forget_email_code');//忘记密码邮箱发送
 
 
 //微信的登录授权

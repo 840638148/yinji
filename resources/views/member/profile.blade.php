@@ -122,8 +122,8 @@
             <label for="city">所在城市</label>
                 @if($user->city)
                   <p style="padding-left:4px;"> 
-                    省：<select name='provinces' id="provinces"><option value="{{$user->city[0]}}" id="selectpro" >{{$user->city[0]}}</option></select> 
-                    市：<select id="citys" name='citys'><option value="{{$user->city[1]}}">{{$user->city[1]}}</option></select> 
+                    省：<select name='provinces' id="provinces"><option value="{{$province}}" id="selectpro" >{{$user->city[0]}}</option></select> 
+                    市：<select id="citys" name='citys'><option value="{{$city}}">{{$user->city[1]}}</option></select> 
                   </p>
                 @else
                 <p style="padding-left:4px;"> 
@@ -440,6 +440,10 @@ $(function() {
             <input type="text" value="{{$user->nickname}}" disabled='disabled' style="height:46px;">
             <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;width:98px !important;border:none;border-radius:3px;right:0;" type="button" value="更改昵称" class="editnick">
           </p>
+          <p>
+            <label for="bdwx">绑定微信</label>
+            敬请期待...
+          </p>
           <p style='position:relative'>
             <label for="mobile">手机号</label>
             @if($user->mobile)
@@ -485,26 +489,7 @@ $(function() {
     </div>
   </div>
 </section>
-<script>
-$(function() { 
-  $.ajax({  
-        type: "post",  
-        url: "/member/one_visited",  
-        data: {_token: "{{csrf_token()}}"},  
-        dataType: "json",  
-        success: function(data) {  
-          console.log(data)
-          if(data.status_code == 0){
-            layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-            window.location.href='/member/profile';
-          }else{
-            layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-          }
-          
-        }  
-    });      
-})
-</script>
+
 <script src="/js/laravel-sms.js"></script>
 <script type="text/javascript">
 
