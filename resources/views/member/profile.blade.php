@@ -271,24 +271,7 @@ $(function() {
               });  
           }  
       });  
-  });  
-
-  // // 监听市select框
-  // $("#citys").change(function() {  
-  //     $.ajax({  
-  //         type: "post",  
-  //         url: "/member/citysjld",
-  //         data: {"cnum": $(this).val(),"type":3,_token: "{{csrf_token()}}"},  
-  //         dataType: "json",  
-  //         success: function(data) {  
-  //             //遍历json数据，组装下拉选框添加到html中
-  //             $("#countys").html("<option value=''>请选择区</option>");  
-  //             $.each(data, function(i, item) {  
-  //                 $("#countys").append("<option value='" + item.id + "'>" + item.area_name + "</option>");  
-  //             });  
-  //         }  
-  //     });  
-  // });  
+  });    
 });  
 </script>
 
@@ -442,7 +425,15 @@ $(function() {
           </p>
           <p>
             <label for="bdwx">绑定微信</label>
-            敬请期待...
+            <div class=""> <a href="javascript:void(0);" onclick="WeChatLogin();" title="使用微信登录"><img src="/img/tl_weixin.png"></a> </div>
+            <div class="ma_box hide" style="position: absolute;top: 55%;left: 34%;background: #ccc;">
+              <h1><a href="/index" title="{{trans('comm.yinji')}}" tabindex="-1">{{trans('comm.yinji')}}</a><span class='closebtn' style='float: right;margin-top: -46px;cursor: pointer;'>X</span></h1>
+              <!-- <h2>微信扫码登陆</h2> -->
+              <p>
+                <iframe frameborder="0" scrolling="no" width="365" height="395" src="/auth/weixin"></iframe>
+              </p>  
+              
+            </div>
           </p>
           <p style='position:relative'>
             <label for="mobile">手机号</label>
@@ -492,6 +483,19 @@ $(function() {
 
 <script src="/js/laravel-sms.js"></script>
 <script type="text/javascript">
+function WeChatLogin() {
+  if ($(".ma_box").hasClass("hide")) {
+    $(".ma_box").removeClass("hide");
+  } else {
+    $(".ma_box").addClass("hide");
+  }
+} 
+
+$('.closebtn').click(function(){
+  $(".ma_box").addClass("hide");
+  $(this).css('display','none')
+});
+
 
 function changeAvatar() {
   // var reads = new FileReader();

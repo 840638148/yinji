@@ -19,6 +19,7 @@
         "laravel/tinker": "~1.0",
         "lokielse/omnipay-alipay": "^3.0",
         "lokielse/omnipay-wechatpay": "^3.0",
+        "oakhope/oauth2-wechat": "^1.0",
         "socialiteproviders/qq": "^3.0",
         "socialiteproviders/weibo": "^3.0",
         "socialiteproviders/weixin-web": "^3.0",
