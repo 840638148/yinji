@@ -629,6 +629,13 @@ class MemberController extends Controller
         if ($folder_obj) {
             $folder_name = $folder_obj->name;
         }
+        //获取用户所有发现夹，并去掉当前所在发现夹
+        $folderall=USerFinderFolder::where('user_id',Auth::id())->get();
+        $folderall = $folderall->reject(function ($value) use ($id) {
+            return $value->id == $id;
+          });
+        // dd($folderall);
+
 
 		//获取个人中心->发现中心->图片的标题
         foreach ($user->finder_details as $userfinderid){
@@ -644,16 +651,41 @@ class MemberController extends Controller
         }
 
         $folist=UserFinderFolder::where('user_finder_folders.id',$request->id)->leftjoin('user_finders','user_finder_folders.id','user_finders.user_finder_folder_id')->get()->toArray();
-
+        // dd($folder_obj);
         $data = [
             'lang' => $lang,
             'user' => $user,
             'folist' => $folist,
             'folder_name' => $folder_name,
+            'folderall' => $folderall,
         ];
         return view('member.finder_detail', $data);
     }
 
+    //移动个人中心->发现中心的->一个发现夹里的一张图片到另外一个发现夹里
+    public function remove_finder_item(Request $request)
+    {
+        if(!Auth::check()){
+            return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
+        }
+
+        $finder_id = $request->finder_id;
+        $source = $request->source;
+        $user_id = Auth::id();
+
+        $finder = UserFinder::where('user_id', $user_id)->where('id', $finder_id)->first(); 
+
+        dd($finder);
+        // if ($finder) {
+        //     $finder->delete();
+        //     return Output::makeResult($request, null);
+        // } else {
+        //     return Output::makeResult($request, null, Error::SYSTEM_ERROR, '您无权删除该图片');
+        // }
+    }
+    
+
+    //删除个人中心->发现中心的->一个发现夹里的一张图片
     public function deleteFinderItem(Request $request)
     {
         $this->checkLogin();

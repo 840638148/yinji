@@ -51,7 +51,7 @@
     right: 10px;
   }
 
-  .item_content:hover .find_title h2,.item_content:hover .find_title a{
+  .item_content:hover .find_title h2,.item_content:hover .find_title a,.item_content:hover .find_title .dot{
     display: block;
   }
 
@@ -77,32 +77,32 @@
   }
 
   .modal{
-  display:none;
+    display:none;
   }
 
   .img_browse{
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  width: 800px;
-  margin-left: -350px;
-  margin-top: -350px;
-  height: 720px;
-  min-height:0;
-  background: #fff;
-  z-index: 999;
-  padding: 10px;
-  border-radius: 5px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 800px;
+    margin-left: -350px;
+    margin-top: -350px;
+    height: 720px;
+    min-height:0;
+    background: #fff;
+    z-index: 999;
+    padding: 10px;
+    border-radius: 5px;
   }
 
   .img_browse .right{
-  width:260px;
-  height: 100%;
+    width:260px;
+    height: 100%;
   }
 
   .img_browse .right .head img{
-  width:100%;
-  height: 100%;
+    width:100%;
+    height: 100%;
   }
 
   .img_browse .right .faxian_info{
@@ -125,6 +125,67 @@
     position:absolute;
     z-index:9999999999;
     top:31%;
+  }
+
+  .dot {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 22px; 
+    letter-spacing: 4px;
+    color:#fff;
+    display:none;
+  }
+  .move_del{
+    width: 100px;
+    height: 65px;
+    background: rgba(0,0,0,0.5);
+    text-align: center;
+    color:#fff;
+    position: relative;
+    left: 279px;
+    top: 11px;
+    z-index: 999;
+    display:none;
+  }
+  .move_del p{
+    padding-top:6px;
+  }
+  .move_del p:hover{
+    background:#ccc3c342;
+  }
+  .move_del .left_sjx{
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid rgba(0,0,0,0.5);
+    position: absolute;
+    left: -10px;
+    top: 23px;
+  }
+  .fxj{
+    width: 500px;
+    /* height: 300px; */
+    background: #ccc;
+    position: absolute;
+    z-index: 999;
+    border:1px solid red;
+  }
+  .fxj p{
+    height:50px;
+    padding:5px 0;
+    /* line-height:45px; */
+  }
+  .fxj .fxj_left{
+
+  }
+  .fxj .fxj_right{
+    position:absolute;
+    right:2px;
+    padding:5px 10px 5px;
+    border:1px solid red;
+    top:-1px;
   }
 
 </style>
@@ -229,8 +290,21 @@
           <div class="find_title">
 
             <h2><a href="/article/{{$detail['static_url']}}" target="_blank">{{mb_substr($detail['titlename'],0,20)}}</a></h2>
-
-            <a style="padding-top: 1.5px;" href="javascript:;" class="find-icon-trash remove_find_img" data-id="{{$detail['id']}}" tag="删除发现的图片"></a> </div>
+            <span class='dot'>•••</span>
+            
+            <div class='move_del'>
+              <div class='left_sjx'></div>
+              <p><a style="padding-top: 1.5px;color:#fff;" source='{{$detail["photo_source"]}}' href="javascript:;" class="yd_find_img" data-id="{{$detail['id']}}" tag="移动发现的图片到其他文件夹">移动</a></p>
+              <p><a style="padding-top: 1.5px;color:#fff;" href="javascript:;" class="remove_find_img" data-id="{{$detail['id']}}" tag="删除发现的图片">删除</a></p>
+            </div>
+            <div class='fxj'>
+              @foreach($folderall as $v)
+              <p><span class='fxj_left'>{{$v->name}}</span><span id='{{$v->id}}' class='fxj_right'>移动</span></p>
+              @endforeach
+            </div>
+            {{--<a style="padding-top: 1.5px;" href="javascript:;" class="find-icon-trash remove_find_img" data-id="{{$detail['id']}}" tag="删除发现的图片"></a>--}}
+            
+          </div>
 
         </div>
 
@@ -245,6 +319,42 @@
 </section>
 
 <script type="text/javascript">
+$(document).on('click','.yd_find_img',function(ev){
+  let source = $(this).attr('source');
+  let finder_id = $(this).attr('data-id');
+  let url = '/member/fxj';
+  let folder_data = {
+      _token:_token,
+      finder_id:finder_id,
+      source:source,
+  };
+  console.log(folder_data)
+  $.ajax({
+      async:false,
+      url: url,
+      type: 'POST',
+      dataType: 'json',
+      data: folder_data,
+      success: function (data) {
+          if (data.status_code == 0) {
+              layer.msg('移动成功！',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+              window.location.reload();
+          } else {
+              alert(data.message);
+          }
+      }
+  });
+
+});
+
+
+$('.find_title>.dot').click(function(){
+  if($('.move_del').css("display")=="none"){//如果当前隐藏
+		  $(this).siblings(".move_del").css('display','block');
+		}else{//否则
+      $(this).siblings(".move_del").css('display','none');
+		}
+});
 
 	//--点击上面的图片显示轮播图片--
 	$(document).on('click','.masonry .item_content>li',function(){
