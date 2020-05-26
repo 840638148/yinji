@@ -40,7 +40,8 @@ Route::post('user/forget_email_code', 'UserController@forget_email_code');//忘�
 //微信的登录授权
 Route::get('auth/weixin', 'ThirdLogin\WeixinController@redirectToProvider');
 Route::get('auth/weixin/callback','ThirdLogin\WeixinController@handleProviderCallback');
-Route::get('member/bdwx','MemberController@bdwx');
+Route::get('member/wxbd','MemberController@wxbd');
+Route::get('member/wxbd_callbakc','MemberController@wxbd_callbakc');
 
 
 //支付回调

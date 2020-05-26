@@ -308,7 +308,6 @@ class MemberController extends Controller
     public function baseedit(Request $request)
     {
         $this->checkLogin();
-        // dd($request->all());
 
         $edit_info = [];
         // $fields = ['avatar', 'sex', 'city', 'zhiwei', 'personal_note'];
@@ -335,68 +334,85 @@ class MemberController extends Controller
 
 
 
-    public function bdwx(Request $request){
-        $provider = new \Oakhope\OAuth2\Client\Provider\WebProvider([
-            'appid' => 'wxcdb9881bbd6e45bb',
-            'secret' => 'fe636918b8e48706cc54a5e40edf9df3',
-            'redirect_uri' => 'http://sp7vxd.natappfree.cc/callbackbd'
-        ]);
-    
-    // If we don't have an authorization code then get one
-    if (!isset($_GET['code'])) {
-    
-        // Fetch the authorization URL from the provider; this returns the
-        // urlAuthorize option and generates and applies any necessary parameters
-        // (e.g. state).
-        $authorizationUrl = $provider->getAuthorizationUrl();
-    
-        // Get the state generated for you and store it to the session.
-        $_SESSION['oauth2state'] = $provider->getState();
-    
-        // Redirect the user to the authorization URL.
-        header('Location: '.$authorizationUrl);
-        exit;
-    
-    // Check given state against previously stored one to mitigate CSRF attack
-    } elseif (empty($_GET['state']) || ($_GET['state'] !== rtrim($_SESSION['oauth2state'], '#wechat_redirect'))) {
-    
-        unset($_SESSION['oauth2state']);
-        exit('Invalid state');
-    
-    } else {
-    
-        try {
-    
-            // Try to get an access token using the authorization code grant.
-            $accessToken = $provider->getAccessToken(
-                'authorization_code',
-                [
-                    'code' => $_GET['code'],
-                ]);
-    
-            // We have an access token, which we may use in authenticated
-            // requests against the service provider's API.
-            echo "token: ".$accessToken->getToken()."<br/>";
-            echo "refreshToken: ".$accessToken->getRefreshToken()."<br/>";
-            echo "Expires: ".$accessToken->getExpires()."<br/>";
-            echo ($accessToken->hasExpired() ? 'expired' : 'not expired')."<br/><br/>";
-    
-            // Using the access token, we may look up details about the
-            // resource owner.
-            $resourceOwner = $provider->getResourceOwner($accessToken);
-    
-            var_export($resourceOwner->toArray());
-            
-        } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
-    
-            // Failed to get the access token or user details.
-            echo "error:";
-            exit($e->getMessage());
+    /**
+     * 微信绑定
+     * 1、获取微信用户信息，判断有没有code，有使用code换取access_token，没有去获取code。
+     * @return array 微信用户信息数组
+    */
+    public function wxbd(Request $request){
+        $appid = "wxcdb9881bbd6e45bb";  
+        $secret = "fe636918b8e48706cc54a5e40edf9df3";  
+        $callbackUrl='http://www.yinjispace.com/member/wxbd_callbakc';
+        $wxOAuth = new \Yurun\OAuthLogin\Weixin\OAuth2($appid, $secret, $callbackUrl);
+        // 获取登录授权跳转页地址
+        $url = $wxOAuth->getAuthUrl();
+        // 存储sdk自动生成的state，回调处理时候要验证
+        session(['YURUN_Weixin_STATE'=>$wxOAuth->state]);
+        // 跳转到登录页
+        header('location:' . $url);
+    }
+ 
+    /**
+     * 微信回调
+     */
+    public function wxbd_callbakc(Request $request){
+        $code=$request->code;
+        $appid = "wxcdb9881bbd6e45bb";  
+        $secret = "fe636918b8e48706cc54a5e40edf9df3";  
+        $wxOAuth = new \Yurun\OAuthLogin\Weixin\OAuth2($appid, $secret);        
+
+        $wxOAuth->getAccessToken(session('YURUN_Weixin_STATE')); 
+        // file_put_contents(dirname(dirname(__DIR__)) . '/a.log', json_encode($userinfo) , FILE_APPEND);
+        // var_dump(
+        //     'access_token:', $wxOAuth->getAccessToken(session('YURUN_Weixin_STATE')),
+        //     '我也是access_token:', $wxOAuth->accessToken,
+        //     '请求返回:', $wxOAuth->result,
+        //     '用户资料:', $wxOAuth->getUserInfo(),
+        //     'openid:', $wxOAuth->openid
+        // );
+
+        $user_third = UserThird::where('third_type', 'weixin')->where('unique_id', $wxOAuth->openid)->first();
+        $is_bdwx=User::where('id',Auth::id())->where('username',$wxOAuth->openid)->first();
+  
+        if($is_bdwx){
+            return '该微信号已被绑定了';
+        }else{   
+            $user = User::leftjoin('user_thirds','user_thirds.user_id','=','users.id')->where('users.id',$user_third['user_id'])->get()->toArray();
+            // dd($wxOAuth->openid);
+            if(empty($user)){
+            	$u=User::find(Auth::id());
+                $u->username = $wxOAuth->openid;
+                $u->save();  
+                if($user_third){
+                	
+                }else{
+	                $data = [
+	                    'user_id'    => $u->id,
+	                    'third_type' => 'weixin',
+	                    'unique_id'  => $wxOAuth->openid,
+	                    'third_data' => serialize($wxOAuth->getUserInfo()),
+	                ];
+	                $user_third = UserThird::create($data);                 	
+                }
+ 
+                return redirect('/member/profile');
+            }else{  
+            	$u=User::find(Auth::id());
+                $u->username = $wxOAuth->openid;
+                $u->save();  
+                $data = [
+                    'user_id'    => $u->id,
+                    'third_type' => 'weixin',
+                    'unique_id'  => $wxOAuth->openid,
+                    'third_data' => serialize($wxOAuth->getUserInfo()),
+                ];
+                $user_third = UserThird::create($data);  
+                return redirect('/member');
+                // return '该微信号已被绑定!!!';
+            }
         }
     }
-    }
-
-
+	
 
 
 
@@ -427,6 +443,7 @@ class MemberController extends Controller
 
         $user = $this->getUserInfo();
         $user->follows = UserFollow::getFollows($user->id);
+        $user->fans = UserFollow::getFans($user->id);
 
         $data = [
             'lang' => $lang,

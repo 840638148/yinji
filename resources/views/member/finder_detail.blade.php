@@ -228,7 +228,7 @@
 
       <li><a href="/member/subscription">我的订阅</a></li>
 
-      <li><a href="/member/follow">我的关注</a></li>
+      <li><a href="/member/follow">我的互动</a></li>
 
       <li><a href="/member/mydown">我的下载</a></li>
 

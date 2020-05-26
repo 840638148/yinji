@@ -89,7 +89,7 @@
       <li><a href="/member/finder">我的发现</a></li>
       <li><a href="/member/collect">我的收藏</a></li>
       <li><a href="/member/subscription">我的订阅</a></li>
-      <li><a href="/member/follow">我的关注</a></li>
+      <li><a href="/member/follow">我的互动</a></li>
       <li><a href="/member/mydown">我的下载</a></li>
       <li class="current"><a href="/member/profile">个人资料</a></li>
     </ul>
@@ -426,8 +426,8 @@ $(function() {
           <p>
             <label for="bdwx">绑定微信</label>
             <div class=""> <a href="javascript:void(0);" onclick="WeChatLogin();" title="使用微信登录"><img src="/img/tl_weixin.png"></a> </div>
-            <div class="ma_box hide" style="position: absolute;top: 55%;left: 34%;background: #ccc;">
-              <h1><a href="/index" title="{{trans('comm.yinji')}}" tabindex="-1">{{trans('comm.yinji')}}</a><span class='closebtn' style='float: right;margin-top: -46px;cursor: pointer;'>X</span></h1>
+            <div class="ma_box hide" style="position: absolute;top: 55%;left: 34%;background: #ccc;z-index:999;">
+              <h1><a href="/index" title="{{trans('comm.yinji')}}" tabindex="-1">{{trans('comm.yinji')}}</a><span class='closebtn hide' style='float: right;margin-top: -46px;cursor: pointer;'>X</span></h1>
               <!-- <h2>微信扫码登陆</h2> -->
               <p>
                 <iframe frameborder="0" scrolling="no" width="365" height="395" src="/auth/weixin"></iframe>
@@ -484,10 +484,12 @@ $(function() {
 <script src="/js/laravel-sms.js"></script>
 <script type="text/javascript">
 function WeChatLogin() {
-  if ($(".ma_box").hasClass("hide")) {
+  if($(".ma_box").hasClass("hide")) {
     $(".ma_box").removeClass("hide");
+    $('.closebtn').removeClass("hide");
   } else {
     $(".ma_box").addClass("hide");
+    $('.closebtn').addClass("hide");
   }
 } 
 

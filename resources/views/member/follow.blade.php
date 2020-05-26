@@ -121,13 +121,13 @@
                 <div class="users">
                   <div class="border-bottom1">
                     {{--<div class="head"><a href="/vip/index/{{$follow->id}}"><img src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>--}}
-                    <div class="head"><a href="javascript:void(0)" onclick="showNoEnter()"><img alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>
+                    <div class="head"><a href="javascript:void(0)" onclick="showNoEnter()"><img style="margin-top:unset;" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>
                     <h2><a href="/vip/index/{{$follow->id}}">{{$follow->nickname}}</a> </h2>
                     <p style="position:relative;"> 
                       
                       @if($follow->zhiwei){{$follow->zhiwei}} @else 其他 @endif
                       -
-                      @if($follow->city){{$follow->city}} @else 保密 @endif
+                      {{$follow->city}}
 
                     <span style="background:none;background: none;position: absolute;top: -3px;" class="VIP1"><img style="width:32px;" src="{{$follow->vip_level}}" alt=""></span> </p>
                     </div>
@@ -155,18 +155,18 @@
             <!--VIP专栏提示-->	
           <div class="vip_prompt modal vip_prompt-member" id="vip-img"><a href="javascript:void(0);" id="vip_buy" class="vip_buy">开通VIP会员</a><a href="/vip/intro" class="vip_detail">了解VIP详情>></a></div>
           <!--@endif-->
-          <div class="masonry" > @foreach ($user->follows as $follow)
+          <div class="masonry" > @foreach ($user->fans as $follow)
             <div class="item">
               <div class="users">
                 <div class="border-bottom1">
                   {{--<div class="head"><a href="/vip/index/{{$follow->id}}"><img src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>--}}
-                  <div class="head"><a href="javascript:void(0)" onclick="showNoEnter()"><img alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>
+                  <div class="head"><a href="javascript:void(0)" onclick="showNoEnter()"><img style="margin-top:unset;" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>
                   <h2><a href="/vip/index/{{$follow->id}}">{{$follow->nickname}}</a> </h2>
                   <p style="position:relative;"> 
                     
                     @if($follow->zhiwei){{$follow->zhiwei}} @else 其他 @endif
                     -
-                    @if($follow->city){{$follow->city}} @else 保密 @endif
+                    {{$follow->city}}
 
                   <span style="background:none;background: none;position: absolute;top: -3px;" class="VIP1"><img style="width:32px;" src="{{$follow->vip_level}}" alt=""></span> </p>
                   </div>
@@ -176,7 +176,7 @@
                     <li><span>{{$follow->fans_num}}</span>粉丝</li>
                   </ul>
                 </div>
-                <a href="javascript:void(0)" data-id="{{$follow->id}}" class="Button cancelFollow" style="width:60px;">取消关注</a> </div>
+                 </div>
             </div>
 
             @endforeach </div>

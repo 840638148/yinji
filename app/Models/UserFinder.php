@@ -348,12 +348,26 @@ class UserFinder extends Model
                     break;
             }
             $rank = User::isVip($user->id) ? 'VIP' : '普通用户';
+            $user->city=explode('-',$user->city);
+            if(isset($user->city[0]) && isset($user->city[1])){
+                if($user->city[1]=='市辖区' || $user->city[1]=='县'){
+                    $user->city=$user->city[0];
+                }else{
+                    $user->city=$user->city[1];
+                }
+            }else
+            if(isset($user->city[0]) && isset($user->city[1])){
+                $user->city=$user->city[1];
+            }else{
+                $user->city='保密';
+            }
+
             $recommend_users[] = [
                 'id' => $user->id,
                 'icon' => $user->avatar,
                 'name' => $user->nickname,
                 'gender' => $sex,
-                'addr' => $user->city ? $user->city :'保密' ,
+                'addr' => $user->city,
                 'collections' => User::getCollectNum($user->id),
                 'fans' => User::getFansNum($user->id),
                 'rank' => $rank,

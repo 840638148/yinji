@@ -106,7 +106,7 @@
       <li class="current"><a href="/member/finder">我的发现</a></li>
       <li><a href="/member/collect">我的收藏</a></li>
       <li><a href="/member/subscription">我的订阅</a></li>
-      <li><a href="/member/follow">我的关注</a></li>
+      <li><a href="/member/follow">我的互动</a></li>
       <li><a href="/member/mydown">我的下载</a></li>
       <li><a href="/member/profile">个人资料</a></li>
     </ul>
