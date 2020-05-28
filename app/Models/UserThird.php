@@ -53,7 +53,11 @@ class UserThird extends Model
             $user_third->third_data = serialize($third_data);
             $user_third->user_id = $user->id;
             $user_third->save();
-
+            $user->points = $user->points + 10; 
+            $user->left_points = $user->left_points + 10;
+            $user->save();
+            $datas = ['user_id' => $user->id,'type' => '0','point' => 10,'remark' => '首绑微信'];
+            UserPoint::create($datas);   
         } else {
             $user_data = [
                 'username'     => $unique_id,
@@ -70,7 +74,11 @@ class UserThird extends Model
                 'unique_id'  => $unique_id,
                 'third_data' => serialize($third_data),
             ];
-
+            $user->points = $user->points + 10; 
+            $user->left_points = $user->left_points + 10;
+            $user->save();
+            $datas = ['user_id' => $user->id,'type' => '0','point' => 10,'remark' => '首绑微信'];
+            UserPoint::create($datas);   
             $user_third = self::create($data);
         }
         return true;

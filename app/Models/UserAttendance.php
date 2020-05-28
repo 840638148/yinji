@@ -179,7 +179,7 @@ class UserAttendance extends Model
         if ($attendance && $user) {
             $last_days = $user->continuity_day;
         }else{
-            $last_days = $user->continuity_day;
+            $last_days = 0;
         }
 
         // dd($last_days);

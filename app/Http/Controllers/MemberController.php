@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Intervention\Image\Facades\Image;
 use DB;
+use App\Models\UserThird;
 class MemberController extends Controller
 {
    
@@ -76,7 +77,7 @@ class MemberController extends Controller
         $lang = $request->session()->get('language') ?? 'zh-CN';
 
         $user = $this->getUserInfo();
-
+        $user->is_wxbd=UserThird::leftjoin('users','users.id','=','user_thirds.user_id')->select('users.id','user_thirds.unique_id','users.username')->where('user_thirds.user_id',$user->id)->where('user_thirds.unique_id',$user->username)->orwhere('users.username','like','%ohPM_%')->first();
         if($user->city){
             $user->city=explode('-',$user->city);
             $province=Db::table("province")->where('province_name',$user->city[0])->value('province_num');
@@ -106,10 +107,56 @@ class MemberController extends Controller
         if(!Auth::check()){
             return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
         }
-        $user=User::find(Auth::id());
+        $user=User::where('id',Auth::id())->where('username','like','%ohPM_%')->first();
+        // dd($user);
         if($user->one_visited==1){
-            User::where('id',$user->id)->update(['one_visited'=>2]);
+            // User::where('id',$user->id)->update(['one_visited'=>2]);
             return Output::makeResult($request, null, 100,'欢迎来到印际,请移步填写信息');
+        }else{
+            return Output::makeResult($request, null, 200,'欢迎回来');
+        }
+        
+    }
+
+
+    /**
+     * 微信注册进个人中心提交信息
+     */
+    public function one_check(Request $request){
+        if(!Auth::check()){
+            return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
+        }
+        $edit_info = [];
+        $fields = ['nickname', 'mobile','verification_code','provinces','citys','zhiwei'];
+        foreach ($fields as $field) {
+            $edit_info[$field] = $request->get($field);
+        }
+
+        $has_nick=User::where('nickname',$edit_info['nickname'])->first();
+        $has_tel=User::where('mobile',$edit_info['mobile'])->first();
+        if($has_nick){
+            return Output::makeResult($request, null, 500,'昵称太受欢迎了');
+        }else if($has_tel){
+            return Output::makeResult($request, null, 500,'手机已存在');
+        }
+        $validator = Validator::make($request->all(), [
+            'mobile' => 'required|confirm_mobile_not_change',
+            'verification_code' => 'required|verify_code',
+        ]);
+        if ($validator->fails()) {
+            //验证失败后建议清空存储的发送状态，防止用户重复试错
+            // SmsManager::forgetState();
+            return Output::makeResult($request, null, Error::MISS_PARAM, '验证码错误');
+        }
+        $province=Db::table("province")->where('province_num',$request->provinces)->value('province_name');
+        $city=Db::table("city")->where('city_num',$request->citys)->value('city_name');
+        $edit_info['city']=$province.'-'.$city;
+        $result = User::where('id',Auth::id())->update(['nickname' =>$edit_info['nickname'],'mobile' =>$edit_info['mobile'],'zhiwei' =>$edit_info['zhiwei'],'city' =>$edit_info['city'],'one_visited'=>2]); 
+
+        if($result){
+            return Output::makeResult($request, null, 100,'填写完毕');
+        }else{
+            return Output::makeResult($request, null, 200,'请重新填写');
         }
         
     }
@@ -149,7 +196,7 @@ class MemberController extends Controller
 
 
     /**
-     * 修改用户
+     * 修改用户信息
      *
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|string
@@ -160,11 +207,9 @@ class MemberController extends Controller
         // dd($request->all());
         $user = User::find(Auth::id());
         $edit_info = [];
-        $fields = ['nickname', 'email', 'mobile', 'password','code_tel','code_email'];
+        $fields = ['nickname', 'email', 'mobile', 'password','code_tel','code_email','one_tel','one_email','nicksum','sex','city','zhiwei','personal_note'];
         foreach ($fields as $field) {
-            // if ($request->get($field)) {
-                $edit_info[$field] = $request->get($field);
-            // }
+            $edit_info[$field] = $request->get($field);
         }
         $usernamenum=User::getEditNicknameNum($user->id);
         if($request->nickname){
@@ -177,7 +222,6 @@ class MemberController extends Controller
             }
         }
 
-            
         if($request->pass1 && $request->pass2){
             if (!empty($request->pass1)) {
                 if (strlen($request->pass1) < 6) {
@@ -191,8 +235,7 @@ class MemberController extends Controller
                 $edit_info['password'] = bcrypt($request->pass1);
             }
         }
-        // dd($edit_info);
-        
+
         if($request->mobile){
             if($user->mobile && $edit_info['mobile']=='' || $edit_info['mobile']==null){
                 return Output::makeResult($request, null, 500,'请填写手机号码');
@@ -211,7 +254,6 @@ class MemberController extends Controller
                 $edit_info['one_email']=3;
             }
         }
-        // dd(session('code_email'));
         if($request->code_email){
             if($request->email!=session('email')){
                 return Output::makeResult($request, null, 500,'邮箱错误');
@@ -219,8 +261,16 @@ class MemberController extends Controller
                 return Output::makeResult($request, null, 500,'邮箱验证码错误');
             }
         }
-
-        // dd($edit_info);
+        $edit_info['personal_note']=$request->grsm;
+        $province=Db::table("province")->where('province_num',$request->provinces)->value('province_name');
+        $city=Db::table("city")->where('city_num',$request->citys)->value('city_name');
+        // dd($province,$city);
+        if(empty($province) && empty($city)){
+            $edit_info['city']=null;
+        }else{
+            $edit_info['city']=$province.'-'.$city;
+        }
+        
         $result = User::editUser(Auth::id(), $edit_info);
         // dd($result);
         if (true === $result) {
@@ -228,13 +278,13 @@ class MemberController extends Controller
             // return redirect('/member/profile');
         }
         return Output::makeResult($request, null, 500,$result);
-        // return $result;
+        
     }
 
 
     /**
      * 发送验证码到邮箱绑定邮箱
-     * 1261660791@qq.com
+     * 
      */
     public function bdemail(Request $request){
         $this->checkLogin();
@@ -300,41 +350,6 @@ class MemberController extends Controller
 
 
     /**
-     * 修改用户基本信息
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|string
-     */
-    public function baseedit(Request $request)
-    {
-        $this->checkLogin();
-
-        $edit_info = [];
-        // $fields = ['avatar', 'sex', 'city', 'zhiwei', 'personal_note'];
-        $fields = ['sex', 'city', 'zhiwei', 'personal_note'];
-        
-        foreach ($fields as $field) {
-           
-            if ($request->get($field)) {
-                $edit_info[$field] = $request->get($field);
-            }
-        }
-        $province=Db::table("province")->where('province_num',$request->provinces)->value('province_name');
-        $city=Db::table("city")->where('city_num',$request->citys)->value('city_name');
-        $edit_info['city']=$province.'-'.$city;
-        $result = User::where('id',Auth::id())->update($edit_info);
-        //  dd($edit_info);
-        if ($result) {
-            return redirect('/member/profile');
-        }
-        return '请重试';
-    }
-
-
-
-
-
-    /**
      * 微信绑定
      * 1、获取微信用户信息，判断有没有code，有使用code换取access_token，没有去获取code。
      * @return array 微信用户信息数组
@@ -370,46 +385,22 @@ class MemberController extends Controller
         //     '用户资料:', $wxOAuth->getUserInfo(),
         //     'openid:', $wxOAuth->openid
         // );
-
-        $user_third = UserThird::where('third_type', 'weixin')->where('unique_id', $wxOAuth->openid)->first();
-        $is_bdwx=User::where('id',Auth::id())->where('username',$wxOAuth->openid)->first();
-  
-        if($is_bdwx){
+        $user = User::leftjoin('user_thirds','user_thirds.user_id','=','users.id')->select('users.id','users.username','user_thirds.unique_id')->where('users.username','user_thirds.unique_id')->get()->toArray();
+        $u=User::find(Auth::id());
+        //如果user表的username等于oppenid得话，就说明该微信已被绑定，或者是用微信扫码注册登录得
+        if($user){
             return '该微信号已被绑定了';
         }else{   
-            $user = User::leftjoin('user_thirds','user_thirds.user_id','=','users.id')->where('users.id',$user_third['user_id'])->get()->toArray();
-            // dd($wxOAuth->openid);
-            if(empty($user)){
-            	$u=User::find(Auth::id());
-                $u->username = $wxOAuth->openid;
-                $u->save();  
-                if($user_third){
-                	
-                }else{
-	                $data = [
-	                    'user_id'    => $u->id,
-	                    'third_type' => 'weixin',
-	                    'unique_id'  => $wxOAuth->openid,
-	                    'third_data' => serialize($wxOAuth->getUserInfo()),
-	                ];
-	                $user_third = UserThird::create($data);                 	
-                }
- 
-                return redirect('/member/profile');
-            }else{  
-            	$u=User::find(Auth::id());
-                $u->username = $wxOAuth->openid;
-                $u->save();  
-                $data = [
-                    'user_id'    => $u->id,
-                    'third_type' => 'weixin',
-                    'unique_id'  => $wxOAuth->openid,
-                    'third_data' => serialize($wxOAuth->getUserInfo()),
-                ];
-                $user_third = UserThird::create($data);  
-                return redirect('/member');
-                // return '该微信号已被绑定!!!';
-            }
+            $u->username = $wxOAuth->openid;
+            $u->points = $u->points + 10; 
+            $u->left_points = $u->left_points + 10;
+            $u->save();  
+            $data = ['user_id' => $u->id,'type' => '0','point' => 10,'remark' => '首绑微信'];
+            UserPoint::create($data);   
+            $datas = ['user_id'=> $u->id,'third_type' => 'weixin','unique_id'  => $wxOAuth->openid,'third_data' => serialize($wxOAuth->getUserInfo())];
+            UserThird::create($datas); 
+            return redirect('/member/profile');
+            
         }
     }
 	
@@ -551,6 +542,32 @@ class MemberController extends Controller
     }
 
 
+    /**
+     * 我的订阅搜索框
+     */
+    public function desearch(Request $request){
+        if(!Auth::check()){
+            return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
+        }
+
+		$user_id = Auth::id();
+        $user = $this->getUserInfo();
+
+        // if ($request->isMethod('post') && $request->page && $request->page > 1) {
+        //     $mores = UserFinder::getMoreTuijians($request);
+        //     return Output::makeResult($request, $mores);
+        // }
+
+        $result = UserSubscription::desearch($request);
+        if($result==''){
+            return Output::makeResult($request, null, 500,'没有数据');
+        }
+        $data=['result'=>$result,'msg'=>'查询成功'];
+        return Output::makeResult($request, $data);
+
+    }
+
+
     public function cancelSubscription(Request $request)
     {
         $this->checkLogin();
@@ -680,7 +697,7 @@ class MemberController extends Controller
     }
 
     //移动个人中心->发现中心的->一个发现夹里的一张图片到另外一个发现夹里
-    public function remove_finder_item(Request $request)
+    public function movefxj(Request $request)
     {
         if(!Auth::check()){
             return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
@@ -688,17 +705,19 @@ class MemberController extends Controller
 
         $finder_id = $request->finder_id;
         $source = $request->source;
+        $photo_src = $request->photo_src;
+        $now_folder_id = $request->now_url;
         $user_id = Auth::id();
 
-        $finder = UserFinder::where('user_id', $user_id)->where('id', $finder_id)->first(); 
 
-        dd($finder);
-        // if ($finder) {
-        //     $finder->delete();
-        //     return Output::makeResult($request, null);
-        // } else {
-        //     return Output::makeResult($request, null, Error::SYSTEM_ERROR, '您无权删除该图片');
-        // }
+        $finder = UserFinder::where('user_id', $user_id)->where('photo_url', $photo_src)->where('user_finder_folder_id',$now_folder_id)->update(['user_finder_folder_id' => $finder_id]); 
+
+        // dd($finder);
+        if ($finder) {
+            return Output::makeResult($request, null,0,'移动成功');
+        } else {
+            return Output::makeResult($request, null, Error::SYSTEM_ERROR, '您无权删除该图片');
+        }
     }
     
 

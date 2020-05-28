@@ -5,6 +5,80 @@
 @endsection
 
 @section('content')
+<style>
+  body{background:#f8f8f8 !important;}
+  .home_box{border-radius:10px !important;}
+  .home_top{background:#fff !important;}
+  .item .edit_favorites{
+        position: absolute;
+    display: inline-block;
+    vertical-align: top;
+    text-indent: 0;
+    text-align: center;
+    line-height: 32px;
+    z-index: 120;
+    right: 120px;
+    top: 34%;
+  }
+  .edit_favorites:hover .item-setting-btns{
+      color:#555;
+  }
+  .find_title{
+      overflow:inherit;
+      position:relative;
+  }
+  .find_title h2{
+      float: none;
+      width:200px;
+      vertical-align: top
+  }
+  .item .item-setting-btns{
+      display: none;
+      position: absolute;
+      right:-35px;
+      background: #fff;
+      border-radius: 4px;
+      width: 90px;
+      padding: 3px 0px;
+      text-align: center;
+      font-size: 12px;
+      box-shadow: 0 0 11px rgba(0,0,0,.1);
+      top:40px;
+      margin-bottom: 4px;
+  }
+
+  .item.selected .item-setting-btns{
+      display: block;
+  }
+  .modal{
+    display:none;
+  }
+  .img_browse{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 800px;
+    margin-left: -350px;
+    margin-top: -350px;
+    height: 720px;
+    min-height:0;
+    background: #fff;
+    z-index: 999;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  .img_browse .right{
+    width:260px;
+    height: 100%;
+  }
+  .img_browse .right .head img{
+    width:100%;
+    height: 100%;
+  }
+  .img_browse .right .faxian_info{
+    margin-top: 10px;
+  }
+</style>
 <div class="home_top">
   <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
   <div class="home_tongji">
@@ -35,77 +109,7 @@
     </ul>
   </div>
 </div>
-<style>
-    .item .edit_favorites{
-         position: absolute;
-	    display: inline-block;
-	    vertical-align: top;
-	    text-indent: 0;
-	    text-align: center;
-	    line-height: 32px;
-	    z-index: 120;
-	    right: 120px;
-	    top: 34%;
-    }
-    .edit_favorites:hover .item-setting-btns{
-        color:#555;
-    }
-    .find_title{
-        overflow:inherit;
-        position:relative;
-    }
-    .find_title h2{
-        float: none;
-        width:200px;
-        vertical-align: top
-    }
-    .item .item-setting-btns{
-        display: none;
-        position: absolute;
-        right:-35px;
-        background: #fff;
-        border-radius: 4px;
-        width: 90px;
-        padding: 3px 0px;
-        text-align: center;
-        font-size: 12px;
-        box-shadow: 0 0 11px rgba(0,0,0,.1);
-        top:40px;
-        margin-bottom: 4px;
-    }
 
-    .item.selected .item-setting-btns{
-        display: block;
-    }
-    .modal{
-      display:none;
-    }
-    .img_browse{
-      position: fixed;
-      left: 50%;
-      top: 50%;
-      width: 800px;
-      margin-left: -350px;
-      margin-top: -350px;
-      height: 720px;
-      min-height:0;
-      background: #fff;
-      z-index: 999;
-      padding: 10px;
-      border-radius: 5px;
-    }
-    .img_browse .right{
-      width:260px;
-      height: 100%;
-    }
-    .img_browse .right .head img{
-      width:100%;
-      height: 100%;
-    }
-    .img_browse .right .faxian_info{
-      margin-top: 10px;
-    }
-</style>
 <section class="wrapper">
   <div class="mt30 home_box">
     <div class="title">

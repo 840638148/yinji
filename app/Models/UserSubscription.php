@@ -42,6 +42,20 @@ class UserSubscription extends Model
         return true;
     }
 
+    /**
+    * 我的订阅搜索框 
+    * 
+    */
+
+    public static function desearch($request){
+
+        $favorites=self::leftjoin('designers','designers.id','=','user_subscriptions.designer_id')
+                // ->select('user_subscriptions.designer_id','user_subscriptions.user_id','designers.title_cn','designers.')
+                ->where("designers.title_cn","like","%$request->content%")
+                ->paginate(15);
+        
+    }
+
 
     /**
      * 是否已经订阅

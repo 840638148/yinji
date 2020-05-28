@@ -1,18 +1,17 @@
 @extends('layouts.app')
 
-
-
 @section('title')
 
   {{trans('comm.yinji')}} - 个人中心 -订阅中心
 
 @endsection
 
-
-
-
-
 @section('content')
+<style>
+  body{background:#f8f8f8 !important;}
+  .home_box{border-radius:10px !important;}
+  .home_top{background:#fff !important;}
+</style>
 <div class="home_top">
   <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
   <div class="home_tongji">
@@ -45,8 +44,14 @@
 </div>
 <section class="wrapper">
   <div class="mt30 home_box">
-    <div class="title">
+    <div class="title" style='position: relative;'>
       <h2>我的订阅</h2>
+      <div class="desearch" style='position: absolute;top: 1px;right: 0;'>
+        <form id="myform" action="/member/desearch"  style="position:relative;padding:0;" method="post" class="search_form" onkeydown="if (event.keyCode == 13) return false"  >
+            <i class="findersearch_btn" style="position: absolute;left: 10px;top: 10px;padding: 5px;cursor: pointer;border:none;background:url(/images/findersearch.png) center no-repeat;width: 30px;display: block;height: 30px;"></i>
+            <input name="content" id="txt_name" class="text_input" type="text" placeholder="输入设计师名" style=" width:100%;height:46px;text-indent: 3.5em;border-radius: 50px;" >
+        </form>
+      </div>
     </div>
     
     <!----------设计师订阅------->
@@ -90,24 +95,66 @@
 </section>
 
 <script type="text/javascript">
-    $(document).ready(function(){
-      //取消订阅
-      $(".cancelSubscription").click(function(e){
-        var designer_id = $(this).attr('data-id');
-        $.ajax({
-          url: '/member/cancel_subscription',
-          type: 'POST',
-          dataType: 'json',
-          data: {_token:'{{csrf_token()}}',designer_id:designer_id},
-          success: function (data) {
-            if (data.status_code == 0) {
-              window.location.reload();
-            } else {
-              alert(data.message);
-            }
+  $(document).ready(function(){
+    //取消订阅
+    $(".cancelSubscription").click(function(e){
+      var designer_id = $(this).attr('data-id');
+      $.ajax({
+        url: '/member/cancel_subscription',
+        type: 'POST',
+        dataType: 'json',
+        data: {_token:'{{csrf_token()}}',designer_id:designer_id},
+        success: function (data) {
+          if (data.status_code == 0) {
+            window.location.reload();
+          } else {
+            alert(data.message);
           }
-        });
+        }
       });
     });
+  });
+
+  //绑定回车事件
+  $("#myform #txt_name").keydown(function (e) { 
+      var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode; //兼容IE 火狐 谷歌
+      if (keyCode == 13) {
+        $(this).siblings('.findersearch_btn').trigger("click");
+          // $(".findersearch_btn").trigger("click");
+          return false;
+      }
+  });
+
+  // 搜索框
+  window.content='';
+  $(document).on('click','.findersearch_btn',function(){
+    window.content=$(this).siblings('.text_input').val();
+    if(content=='' || content==null){
+      layer.msg('请填写搜索关键词!!!',{skin: 'intro-login-class layui-layer-hui'});
+      return false;
+    }else{
+      let h='';
+      // console.log(content)
+      $.ajax({
+        async:false,
+        url: '/member/desearch',
+        type: 'POST',
+        //dataType: 'json',
+        data: {content:content},
+        success:function(data) {
+          console.log(data.data)
+          if(data.status_code==0){
+            layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
+            $('.public_item').html(data.data.result); 
+          }else{
+            layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
+            $('.text_input').val('');
+          }
+        }
+      });
+    }  
+
+  })
+
   </script> 
 @endsection

@@ -7,6 +7,9 @@
 
 @section('content')
 <style>
+  body{background:#f8f8f8 !important;}
+  .home_box{border-radius:10px !important;}
+  .home_top{background:#fff !important;}
   .container
   {
       position: absolute;

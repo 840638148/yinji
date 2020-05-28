@@ -7,6 +7,9 @@
 
 @section('content')
 <style>
+  body{background:#f8f8f8 !important;}
+  .home_box{border-radius:10px !important;}
+  .home_top{background:#fff !important;}
   .container
   {
       position: absolute;
@@ -97,19 +100,25 @@
 </div>
 <section class="wrapper">
   <div class="mt30 home_box">
-    <div class="TabTitle">
+    <!-- <div class="TabTitle">
       <ul id="myTab1" style="float:left; width:600px;">
         <li class="active" onclick="nTabs(this,0);">基本信息</li>
         <li class="normal" onclick="nTabs(this,1);">账号修改</li>
       </ul>
-    </div>
+    </div> -->
+    <p style='border-bottom: 1px solid #ccc;height: 50px;font-size: 20px;line-height: 65px;'><span style='border-bottom: 2px solid #3d87f1;padding-bottom: 5px;'>基本信息</span></p>
     <div class="TabContent content-post"> 
       
       <!---发现--->
       
       <div id="myTab1_Content0" >
-        <form id="info-form" class="contribute_form" role="form" method="POST" action="/member/baseedit" enctype="multipart/form-data">
+        <form id="info-form" class="contribute_form" role="form" method="POST" action="/member/edit" enctype="multipart/form-data" onsubmit="return checkform()">
           <input type="hidden" name="_token" value="{{csrf_token()}}">
+          <p style='position:relative'>
+            <label for="nickname">昵称</label>
+            <input type="text" value="{{$user->nickname}}" disabled='disabled' style="height:46px;">
+            <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;width:98px !important;border:none;border-radius:3px;right:0;" type="button" value="更改昵称" class="editnick">
+          </p>
           <p>
             <label for="sex">性别</label>
             <input name="sex" type="radio" value="0" checked="checked" />
@@ -132,8 +141,6 @@
                 </p>
                 @endif
                 <!-- 区：<select id="countys"><option value="">请选择县</option></select>   -->
-          
-            {{--<!-- <input type="text" id="city" name="city" value="{{$user->city}}" > -->--}}
           </p>
           <p>
             <label for="zhiwei">职位</label>
@@ -150,7 +157,7 @@
               <option name="qt" value="其他">其他</option>    
             </select>
             @else
-            <select style="width: 100%;" name="zhiwei" value="职位">
+            <select class='zhiwei' style="width: 100%;" name="zhiwei" value="职位">
               <option name="jzs" value="建筑师" >建筑师</option>
               <option name="snsjs" value="室内设计师">室内设计师</option>
               <option name="rzsjs" value="软装设计师">软装设计师</option>
@@ -163,44 +170,47 @@
             @endif
             <!-- <input type="text" id="url" name="url" value="{{$user->url}}"> -->
           </p>
+          <p style='position:relative'>
+            <label for="zhuye">个人主页</label>
+            <a href="{{$user->url}}" style="height:46px;">http://www.baidu.com</a>
+          </p>
           <p>
             <label for="personal_note">个人说明</label>
-            <!-- <div contenteditable>123</div> -->
-<!-- <br> -->
-            <textarea rows="5" style="resize:vertical;" name="personal_note" id="personal_note">{{$user->personal_note}}</textarea>
+
+            <textarea class='grsm' rows="5" style="resize:vertical;" name="personal_note" id="personal_note">{{$user->personal_note}}</textarea>
           </p>
-      {{--<div id="profile_avatar">
-            <label for="avatar">头像</label>
-            <div class="avatar_img" style="width:128px;height:128px;border-radius:128px;">
-              <img class="avatar img-responsive" src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}" style="display: block;">
-            </div> 
-            <a class="avatar_uploader" href="javascript:void(0)"> 点击更换头像 <input type="file" id="fileAvatar" class="filepath" onchange="changeAvatar(this)" accept="image/jpg,image/jpeg,image/png,image/PNG" /></a> 
-            <span>当前为<strong>自定义头像</strong>，建议大小：120*120。获取头像的顺序为：自定义头像、社交头像、全球通用头像、默认头像</span> 
-          </div>
+          {{--<div id="profile_avatar">
+              <label for="avatar">头像</label>
+              <div class="avatar_img" style="width:128px;height:128px;border-radius:128px;">
+                <img class="avatar img-responsive" src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}" style="display: block;">
+              </div> 
+              <a class="avatar_uploader" href="javascript:void(0)"> 点击更换头像 <input type="file" id="fileAvatar" class="filepath" onchange="changeAvatar(this)" accept="image/jpg,image/jpeg,image/png,image/PNG" /></a> 
+              <span>当前为<strong>自定义头像</strong>，建议大小：120*120。获取头像的顺序为：自定义头像、社交头像、全球通用头像、默认头像</span> 
+            </div>
           --}}
 
-
           {{--<div id="profile_avatar">
-            <label for="avatar">头像</label>
-            <div class="cropped" style="width: 120px;height: 120px;overflow: hidden;border: 1px solid red;">
-                <img style="width: 120px;height:120px;padding:0;margin:0;background:none;" src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}">
-            </div>            
+                <label for="avatar">头像</label>
+                <div class="cropped" style="width: 120px;height: 120px;overflow: hidden;border: 1px solid red;">
+                    <img style="width: 120px;height:120px;padding:0;margin:0;background:none;" src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}">
+                </div>            
 
-            <div class="imageBox">
-              <div class="thumbBox"></div>
-              <div class="spinner" style="display: none">Loading...</div>
-            </div>
-            <div class="action">
-                <input type="file" style="float:left; width: 250px" id="fileAvatar"  accept="image/jpg,image/jpeg,image/png,image/PNG" >
-            </div>
-            <div class="actionbtn" style="float:left;">
-                <input type="button" id="btnCrop" value="确定" style="float: right;width:50px;">
-                <input type="button" id="btnZoomIn" value="+" style="float: right;width:30px;">
-                <input type="button" id="btnZoomOut" value="-" style="float: right;width:30px;">
-            </div>
-            <br>
-            <span>当前为<strong>自定义头像</strong>，建议大小：120*120。获取头像的顺序为：自定义头像、社交头像、全球通用头像、默认头像</span> 
-          </div>--}}
+                <div class="imageBox">
+                  <div class="thumbBox"></div>
+                  <div class="spinner" style="display: none">Loading...</div>
+                </div>
+                <div class="action">
+                    <input type="file" style="float:left; width: 250px" id="fileAvatar"  accept="image/jpg,image/jpeg,image/png,image/PNG" >
+                </div>
+                <div class="actionbtn" style="float:left;">
+                    <input type="button" id="btnCrop" value="确定" style="float: right;width:50px;">
+                    <input type="button" id="btnZoomIn" value="+" style="float: right;width:30px;">
+                    <input type="button" id="btnZoomOut" value="-" style="float: right;width:30px;">
+                </div>
+                <br>
+                <span>当前为<strong>自定义头像</strong>，建议大小：120*120。获取头像的顺序为：自定义头像、社交头像、全球通用头像、默认头像</span> 
+              </div>
+          --}}
 
           <div id="profile_avatar" style="position:relative;">
             <label for="avatar">头像</label>
@@ -234,45 +244,123 @@
             <span style="position: absolute;top: 87px;left: 151px;">当前为<strong>自定义头像</strong>，建议大小：120*120。获取头像的顺序为：自定义头像、社交头像、全球通用头像、默认头像</span> 
           </div>
 
-<script>
-$(function() {  
-  //页面初始，加载所有的省份  
-  // function selectpro(){
-  // $(document).on('click','#provinces',function(){
-    // $('#provinces').click(function(){
-    // alert(123)
-    $.ajax({  
-        type: "post",  
-        url: "/member/citysjld",  
-        data: {"type":1,_token: "{{csrf_token()}}"},  
-        dataType: "json",  
-        success: function(data) {  
-            //遍历json数据，组装下拉选框添加到html中
-            $("#provinces").append("<option value=''>请选择省</option>");  
-            $.each(data, function(i, item) {  
-                $("#provinces").append("<option value='" + item.province_num + "'>" + item.province_name + "</option>");  
-            });
-        }  
-    });      
-  // })
+          <div id="homepage_top_img" style="overflow:hidden">
+            <label for="avatar">个人主图</label>
+            <img id="avimg" src="{{$user->zhuti}}" alt="个人主图" width="600" hidden="200" style="display:block; width:200px; float:left; height:100px;" > <a class="avatar_uploader" href="javascript:void(0)" > 点击更换个人主图 <input type="file" id="fileSingleImg" class="filepath" onchange="changeSingleImg(this)" accept="image/jpg,image/jpeg,image/png,image/PNG" /></a> <span>当前为<strong>个人主页主图</strong>，建议大小：1920*300。</span> </div>
+          <p>
+            <input name="avatar" type="hidden" value="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" />
+            <!-- <input type="submit" value="保存更改" class="submit"> -->
+          </p>
+        <!-- </form>
+      </div> -->
 
-  //监听省select框
-  $("#provinces").change(function() {  
+      <p style='border-bottom:1px solid #ccc;height:50px;font-size: 20px;line-height:40px;'><span style='border-bottom:2px solid #3d87f1;padding-bottom: 5px;width: 90px;    display: block;'>账号修改</span></p>
+      <!-- <div id="myTab1_Content0"  > -->
+        <!-- <form id="pass-form" class="contribute_form" role="form" method="post" action="/member/edit" onsubmit="return checkform()"> -->
+          <!-- <input type="hidden" name="_token" value="{{csrf_token()}}"> -->
+          
+          <p>
+            <label for="bdwx">绑定微信</label>
+            @if($user->is_wxbd)
+            <div class="" style='position:relative'> <a href="javascript:void(0);" title="微信绑定"><img src="/img/tl_weixin.png"></a> <span style='position:absolute;top: 0;left: 45px;color: #6d9aec;cursor: pointer;' title="已绑定">已绑定</span> </div>
+            @else
+            <div class="" style='position:relative'> <a href="javascript:void(0);" title="微信绑定"><img src="/img/tl_weixin.png"></a> <span style='position:absolute;top: 0;left: 45px;color: #6d9aec;cursor: pointer;' onclick="WeChatLogins();" title="点击进行微信绑定">未绑定，点击绑定微信(只有一次机会)</span> </div>
+            @endif
+            <div class="ma_box" style="position: absolute;top: 160%;left: 34%;background: #eee;z-index:999;display:none;">
+              <h1><a href="/index" title="{{trans('comm.yinji')}}" tabindex="-1">{{trans('comm.yinji')}}</a><span class='closebtn' style='float: right;margin-top: -46px;cursor: pointer;color:#ddd;'>X</span></h1>
+              <!-- <h2>微信扫码登陆</h2> -->
+              <p>
+                <iframe frameborder="0" scrolling="no" width="365" height="395" src="/auth/weixin"></iframe>
+              </p>  
+              
+            </div>
+          </p>
+          <p style='position:relative'>
+            <label for="mobile">手机号</label>
+            @if($user->mobile)
+            <input type="tel" maxlength='11' disabled='disabled' value="{{$user->mobile}}" >
+            <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;width:98px !important;border:none;border-radius:3px;right:0;" type="button" value="更换手机" class="jbmobile">
+            @else
+            <input type="tel" id="mobile" maxlength='11' name="mobile" placeholder='请填写手机号' value="" >
+            @endif
+          </p>
+          <p style='position:relative;display:none;' class='tel_yzm'>
+            <label for="verification_code" style="position:relative">输入手机验证码</label>
+            <input type="text" name="verification_code" id="verification_code_tel" class="input" style='height:47px;' value="" size="20" placeholder="请输入手机验证码">
+            <input style="padding: 0 19px;position:absolute;top:40px;height:48px;background: #63c5f3;color: #fff;border-radius:3px;" name="发送验证码" onclick="bdtel()" type="button" value="获取验证码" class="verification">
+          </p>
+          <p style='position:relative;'>
+            <label for="email">电子邮件</label>
+            @if($user->email)
+            <input type="email" disabled='disabled' value="{{$user->email}}" >
+            <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;width:98px !important;border:none;border-radius:3px;right:0;" type="button" value="更换邮箱" class="jbemail">
+            @else
+            <input type="email" id="email" name="email" value="" placeholder='请填写邮箱' >
+            @endif
+          </p>
+          <p style='position:relative;display:none;' class='email_yzm'>
+            <label for="verification_code" style="position:relative">输入邮箱验证码</label>
+            <input type="text" name="verification_code" id="verification_code_email" class="input" style='height:48px;' value="" size="20" placeholder="请输入邮箱验证码">
+            <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;border-radius:3px;right:0;border:none;" name="发送验证码" type="button" value="获取验证码" class="verification_email" onclick='bdemail()'>
+          </p>
+          <p>
+            <label for="pass1">新密码</label>
+            <input type="password" id="pass1" name="pass1">
+            <span class="help-block">如果需要修改密码，请输入新的密码，不改则留空。</span></p>
+          <p>
+            <label for="pass2">重复新密码</label>
+            <input type="password" id="pass2" name="pass2">
+            <span class="help-block">再输入一遍新密码，提示：密码最好至少包含7个字符，为了保证密码强度，使用大小写字母、数字和符号结合。</span></p>
+          <p>
+            <!-- <input type="submit" value="保存更改" class="submit"> -->
+            <input type="button" value="保存更改" class="submit" onclick='subntm()'>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+  $(function() {  
+    //页面初始，加载所有的省份  
+    // function selectpro(){
+    // $(document).on('click','#provinces',function(){
+      // $('#provinces').click(function(){
+      // alert(123)
       $.ajax({  
           type: "post",  
-          url: "/member/citysjld",
-          data: {"pnum": $(this).val(),"type":2,_token: "{{csrf_token()}}"},  
+          url: "/member/citysjld",  
+          data: {"type":1,_token: "{{csrf_token()}}"},  
           dataType: "json",  
           success: function(data) {  
               //遍历json数据，组装下拉选框添加到html中
-              $("#citys").html("<option value=''>请选择市</option>");  
+              $("#provinces").append("<option value=''>请选择省</option>");  
               $.each(data, function(i, item) {  
-                  $("#citys").append("<option value='" + item.city_num + "'>" + item.city_name + "</option>");  
-              });  
+                  $("#provinces").append("<option value='" + item.province_num + "'>" + item.province_name + "</option>");  
+              });
           }  
-      });  
-  });    
-});  
+      });      
+    // })
+
+    //监听省select框
+    $("#provinces").change(function() {  
+        $.ajax({  
+            type: "post",  
+            url: "/member/citysjld",
+            data: {"pnum": $(this).val(),"type":2,_token: "{{csrf_token()}}"},  
+            dataType: "json",  
+            success: function(data) {  
+                //遍历json数据，组装下拉选框添加到html中
+                $("#citys").html("<option value=''>请选择市</option>");  
+                $.each(data, function(i, item) {  
+                    $("#citys").append("<option value='" + item.city_num + "'>" + item.city_name + "</option>");  
+                });  
+            }  
+        });  
+    });    
+  });  
 </script>
 
 <!-- <script src="/js/cropbox.js"></script>
@@ -402,345 +490,263 @@ $(function() {
 
 </script> -->
 
-
-
-          <div id="homepage_top_img" style="overflow:hidden">
-            <label for="avatar">个人主图</label>
-            <img id="avimg" src="{{$user->zhuti}}" alt="个人主图" width="600" hidden="200" style="display:block; width:200px; float:left; height:100px;" > <a class="avatar_uploader" href="javascript:void(0)" > 点击更换个人主图 <input type="file" id="fileSingleImg" class="filepath" onchange="changeSingleImg(this)" accept="image/jpg,image/jpeg,image/png,image/PNG" /></a> <span>当前为<strong>个人主页主图</strong>，建议大小：1920*300。</span> </div>
-          <p>
-            <input name="avatar" type="hidden" value="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" />
-            <input type="submit" value="保存更改" class="submit">
-          </p>
-        </form>
-      </div>
-
-      <div id="myTab1_Content1"  class="none">
-        <form id="pass-form" class="contribute_form" role="form" method="post" action="/member/edit" onsubmit="return checkform()">
-          <input type="hidden" name="_token" value="{{csrf_token()}}">
-          
-          <p style='position:relative'>
-            <label for="nickname">昵称</label>
-            <input type="text" value="{{$user->nickname}}" disabled='disabled' style="height:46px;">
-            <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;width:98px !important;border:none;border-radius:3px;right:0;" type="button" value="更改昵称" class="editnick">
-          </p>
-          <p>
-            <label for="bdwx">绑定微信</label>
-            <div class=""> <a href="javascript:void(0);" onclick="WeChatLogin();" title="使用微信登录"><img src="/img/tl_weixin.png"></a> </div>
-            <div class="ma_box hide" style="position: absolute;top: 55%;left: 34%;background: #ccc;z-index:999;">
-              <h1><a href="/index" title="{{trans('comm.yinji')}}" tabindex="-1">{{trans('comm.yinji')}}</a><span class='closebtn hide' style='float: right;margin-top: -46px;cursor: pointer;'>X</span></h1>
-              <!-- <h2>微信扫码登陆</h2> -->
-              <p>
-                <iframe frameborder="0" scrolling="no" width="365" height="395" src="/auth/weixin"></iframe>
-              </p>  
-              
-            </div>
-          </p>
-          <p style='position:relative'>
-            <label for="mobile">手机号</label>
-            @if($user->mobile)
-            <input type="tel" maxlength='11' disabled='disabled' value="{{$user->mobile}}" >
-            <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;width:98px !important;border:none;border-radius:3px;right:0;" type="button" value="解绑" class="jbmobile">
-            @else
-            <input type="tel" id="mobile" maxlength='11' name="mobile" placeholder='请填写手机号' value="" >
-            @endif
-          </p>
-          <p style='position:relative;display:none;' class='tel_yzm'>
-            <label for="verification_code" style="position:relative">输入手机验证码</label>
-            <input type="text" name="verification_code" id="verification_code_tel" class="input" style='height:47px;' value="" size="20" placeholder="请输入手机验证码">
-            <input style="padding: 0 19px;position:absolute;top:40px;height:48px;background: #63c5f3;color: #fff;border-radius:3px;" name="发送验证码" onclick="bdtel()" type="button" value="获取验证码" class="verification">
-          </p>
-          <p style='position:relative;'>
-            <label for="email">电子邮件</label>
-            @if($user->email)
-            <input type="email" disabled='disabled' value="{{$user->email}}" >
-            <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;width:98px !important;border:none;border-radius:3px;right:0;" type="button" value="解绑" class="jbemail">
-            @else
-            <input type="email" id="email" name="email" value="" placeholder='请填写邮箱' >
-            @endif
-          </p>
-          <p style='position:relative;display:none;' class='email_yzm'>
-            <label for="verification_code" style="position:relative">输入邮箱验证码</label>
-            <input type="text" name="verification_code" id="verification_code_email" class="input" style='height:48px;' value="" size="20" placeholder="请输入邮箱验证码">
-            <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;border-radius:3px;right:0;border:none;" name="发送验证码" type="button" value="获取验证码" class="verification_email" onclick='bdemail()'>
-          </p>
-          <p>
-            <label for="pass1">新密码</label>
-            <input type="password" id="pass1" name="pass1">
-            <span class="help-block">如果需要修改密码，请输入新的密码，不改则留空。</span></p>
-          <p>
-            <label for="pass2">重复新密码</label>
-            <input type="password" id="pass2" name="pass2">
-            <span class="help-block">再输入一遍新密码，提示：密码最好至少包含7个字符，为了保证密码强度，使用大小写字母、数字和符号结合。</span></p>
-          <p>
-            <!-- <input type="submit" value="保存更改" class="submit"> -->
-            <input type="button" value="保存更改" class="submit" onclick='subntm()'>
-          </p>
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
-
 <script src="/js/laravel-sms.js"></script>
 <script type="text/javascript">
-function WeChatLogin() {
-  if($(".ma_box").hasClass("hide")) {
-    $(".ma_box").removeClass("hide");
-    $('.closebtn').removeClass("hide");
-  } else {
-    $(".ma_box").addClass("hide");
-    $('.closebtn').addClass("hide");
-  }
-} 
+  function WeChatLogins() {
+    $(".ma_box").show(500);
+  } 
 
-$('.closebtn').click(function(){
-  $(".ma_box").addClass("hide");
-  $(this).css('display','none')
-});
-
-
-function changeAvatar() {
-  // var reads = new FileReader();
-  // f = document.getElementById('fileAvatar').files[0];
-  // reads.readAsDataURL(f);
-  // reads.onload = function(e) {
-  //   $('#profile_avatar .avatar').attr('src',this.result)
-  // };
-  var formdata=new FormData();
-  let a=$('#fileAvatar')[0].files[0];
-  formdata.append('file',$('#fileAvatar')[0].files[0])
-  formdata.append('_token',_token)
-  console.log(a);
-  $.ajax({
-    async: false,
-    url: '/member/upload_img',
-    type: 'POST',
-    contentType:false,
-    data:formdata,
-    processData:false,
-    success: function (data) {
-      console.log(data)
-      if (data.status_code == 0) {
-        $('#profile_avatar .avatar').attr('src',data.data.path)
-        $("[name='avatar']").val(data.data.path)
-      } else {
-        layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
-      }
-    }
-  });
-}
-
-function changeSingleImg() {
-  // var reads = new FileReader();
-  // f = document.getElementById('fileSingleImg').files[0];
-  // reads.readAsDataURL(f);
-  // reads.onload = function(e) {
-  //   $('#homepage_top_img img').attr('src',this.result)
-  // };
-
-  var formdata=new FormData();
-  formdata.append('file',$('#fileSingleImg')[0].files[0])
-  formdata.append('_token',_token)
-  $.ajax({
-    async: false,
-    url: '/member/upload_imgs',
-    type: 'POST',
-    contentType:false,
-    data:formdata,
-    processData:false,
-    success: function (data) {
-      if (data.status_code == 0) {
-        console.log(data.data)
-        $('#homepage_top_img img').attr('src',data.data.path)
-      } else {
-        layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
-      }
-    }
+  $('.closebtn').click(function(){
+    $('.ma_box').hide(500);
   });
 
-}
 
-function nTabs(thisObj,Num){
-  if(thisObj.className == "active")return;
-  var tabObj = thisObj.parentNode.id;
-  var tabList = document.getElementById(tabObj).getElementsByTagName("li");
-  for(i=0; i <tabList.length; i++){
-    if (i == Num){
-      thisObj.className = "active";
-      document.getElementById(tabObj+"_Content"+i).style.display = "block";
-    }else{
-        tabList[i].className = "normal";
-        document.getElementById(tabObj+"_Content"+i).style.display = "none";
-    }
-  }
-}
-
-//点击解绑显示验证码kaung
-$('.jbmobile').click(function () {
-  $('.tel_yzm').show(1000);
-  $(this).siblings('input[type="tel"]').removeAttr('disabled');
-  $(this).siblings('input[type="tel"]').attr('id','mobile');
-  $(this).siblings('input[type="tel"]').attr('name','mobile');
-  $(this).siblings('input[type="tel"]').val('');
-  $(this).hide(100)
-})
-$('.jbemail').click(function () {
-  $('.email_yzm').show(1000);
-  $(this).siblings('input[type="email"]').removeAttr('disabled');
-  $(this).siblings('input[type="email"]').attr('id','email');
-  $(this).siblings('input[type="email"]').attr('name','email');
-  $(this).siblings('input[type="email"]').val('');
-  $(this).hide(100)
-})
-
-$(".editnick").click(function(){
-  $(this).siblings('input[type="text"]').removeAttr('disabled');
-  $(this).siblings('input[type="text"]').attr('id','nickname');
-  $(this).siblings('input[type="text"]').attr('name','nickname');
-  $(this).siblings('input[type="text"]').val('');
-  $(this).hide(100)
-})
-
-// 阻止提交表单
-function checkform(){
-  return false;//false:阻止提交表单
-}
-
-
-//发送邮箱
-function bdemail(){
-  $('#verification_code_email').val('');
-  let email=$('#email').val();
-  // alert(email)
-  let emailzz = /^([A-Za-z0-9_+-.])+@([A-Za-z0-9\-.])+\.([A-Za-z]{2,22})$/;
-  if(email!='' && email != null && email != undefined){
-    if(!emailzz.test(email)){
-      layer.msg('邮箱格式错误',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-      // return false;
-    }
-  }
-  $.ajax({
+  function changeAvatar() {
+    // var reads = new FileReader();
+    // f = document.getElementById('fileAvatar').files[0];
+    // reads.readAsDataURL(f);
+    // reads.onload = function(e) {
+    //   $('#profile_avatar .avatar').attr('src',this.result)
+    // };
+    var formdata=new FormData();
+    let a=$('#fileAvatar')[0].files[0];
+    formdata.append('file',$('#fileAvatar')[0].files[0])
+    formdata.append('_token',_token)
+    console.log(a);
+    $.ajax({
       async: false,
-      url: '/member/bdemail',
+      url: '/member/upload_img',
       type: 'POST',
-      data:{email:email},
+      contentType:false,
+      data:formdata,
+      processData:false,
       success: function (data) {
         console.log(data)
         if (data.status_code == 0) {
+          $('#profile_avatar .avatar').attr('src',data.data.path)
+          $("[name='avatar']").val(data.data.path)
+        } else {
+          layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+        }
+      }
+    });
+  }
+
+  function changeSingleImg() {
+    // var reads = new FileReader();
+    // f = document.getElementById('fileSingleImg').files[0];
+    // reads.readAsDataURL(f);
+    // reads.onload = function(e) {
+    //   $('#homepage_top_img img').attr('src',this.result)
+    // };
+
+    var formdata=new FormData();
+    formdata.append('file',$('#fileSingleImg')[0].files[0])
+    formdata.append('_token',_token)
+    $.ajax({
+      async: false,
+      url: '/member/upload_imgs',
+      type: 'POST',
+      contentType:false,
+      data:formdata,
+      processData:false,
+      success: function (data) {
+        if (data.status_code == 0) {
+          console.log(data.data)
+          $('#homepage_top_img img').attr('src',data.data.path)
+        } else {
+          layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+        }
+      }
+    });
+
+  }
+
+  function nTabs(thisObj,Num){
+    if(thisObj.className == "active")return;
+    var tabObj = thisObj.parentNode.id;
+    var tabList = document.getElementById(tabObj).getElementsByTagName("li");
+    for(i=0; i <tabList.length; i++){
+      if (i == Num){
+        thisObj.className = "active";
+        document.getElementById(tabObj+"_Content"+i).style.display = "block";
+      }else{
+          tabList[i].className = "normal";
+          document.getElementById(tabObj+"_Content"+i).style.display = "none";
+      }
+    }
+  }
+
+  //点击解绑显示验证码kaung
+  $('.jbmobile').click(function () {
+    $('.tel_yzm').show(1000);
+    $(this).siblings('input[type="tel"]').removeAttr('disabled');
+    $(this).siblings('input[type="tel"]').attr('id','mobile');
+    $(this).siblings('input[type="tel"]').attr('name','mobile');
+    $(this).siblings('input[type="tel"]').val('');
+    $(this).hide(100)
+  })
+  $('.jbemail').click(function () {
+    $('.email_yzm').show(1000);
+    $(this).siblings('input[type="email"]').removeAttr('disabled');
+    $(this).siblings('input[type="email"]').attr('id','email');
+    $(this).siblings('input[type="email"]').attr('name','email');
+    $(this).siblings('input[type="email"]').val('');
+    $(this).hide(100)
+  })
+
+  $(".editnick").click(function(){
+    $(this).siblings('input[type="text"]').removeAttr('disabled');
+    $(this).siblings('input[type="text"]').attr('id','nickname');
+    $(this).siblings('input[type="text"]').attr('name','nickname');
+    $(this).siblings('input[type="text"]').val('');
+    $(this).hide(100)
+  })
+
+  // 阻止提交表单
+  function checkform(){
+    return false;//false:阻止提交表单
+  }
+
+
+  //发送邮箱
+  function bdemail(){
+    $('#verification_code_email').val('');
+    let email=$('#email').val();
+    // alert(email)
+    let emailzz = /^([A-Za-z0-9_+-.])+@([A-Za-z0-9\-.])+\.([A-Za-z]{2,22})$/;
+    if(email!='' && email != null && email != undefined){
+      if(!emailzz.test(email)){
+        layer.msg('邮箱格式错误',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+        // return false;
+      }
+    }
+    $.ajax({
+        async: false,
+        url: '/member/bdemail',
+        type: 'POST',
+        data:{email:email},
+        success: function (data) {
+          console.log(data)
+          if (data.status_code == 0) {
+            layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'})
+          } else {
+            layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'})
+          }
+        }
+      });
+  }
+
+  //发送手机
+  function bdtel(){
+    let mobile=$('#mobile').val();
+    function wp_attempt_focus() {
+      setTimeout(function () {
+          try {
+              d = document.getElementById('mobile');
+              d.focus();
+              d.select();
+          } catch (e) {
+
+          }
+      }, 200);
+    }
+
+    wp_attempt_focus();
+      if (typeof wpOnload == 'function') wpOnload();
+      //获取验证码
+      var is_sending = false;
+      var time_limit = 60;
+      var next_time = time_limit;
+      var cap_btn = $('.verification');
+
+      cap_btn.sms({
+          //laravel csrf token
+          token       : "{{csrf_token()}}",
+          //请求间隔时间
+          interval    : 60,
+          //请求参数
+          requestData : {
+              //手机号
+              mobile : function () {
+                  return $.trim($('#mobile').val());
+              },
+              //手机号的检测规则
+              mobile_rule : 'mobile_required'
+          }
+      });
+
+      $.ajax({
+              url: '/user/verify_code',
+              type: 'POST',
+              dataType: 'json',
+              data: {
+                  user_phone: mobile,
+                  verification_code: verification_code,
+                  _token: "{{csrf_token()}}",
+              },
+
+              success: function (data) {
+                  console.log(data.status_code);
+                  if (data.status_code == 0) {
+                      layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+                      $("#step1").addClass("hide");
+                      $("#step2").removeClass("hide");
+                      $("#userphone").val(mobile);
+                  } else {
+                      layer.msg(data.message);
+                  }
+              }
+          });
+
+  }
+
+  //模拟表单提交
+  function subntm(){
+    let nickname=$('#nickname').val();
+    let mobile=$('#mobile').val();
+    let email=$('#email').val();
+    let pass1=$('#pass1').val();
+    let pass2=$('#pass2').val();
+    let code_tel = $.trim($('#verification_code_tel').val());
+    let code_email = $.trim($('#verification_code_email').val());
+    let zhiwei=$("select[name='zhiwei']").val();
+    let grsm=$('.grsm').val();
+    let provinces=$("select[name='provinces']").val();
+    let citys=$("select[name='citys']").val();
+    // console.log(zhiwei,grsm);
+
+    let emailzz = /^([A-Za-z0-9_+-.])+@([A-Za-z0-9\-.])+\.([A-Za-z]{2,22})$/;
+
+    if(mobile!='' && mobile != null && mobile != undefined){
+      if(!(/^1[34578]\d{9}$/.test(mobile))){ 
+        layer.msg('手机号格式错误',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+        return false;
+      }
+    }else
+    if(email!='' && email != null && email != undefined){
+      if(!emailzz.test(email)){
+        layer.msg('邮箱格式错误',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+        return false;
+      }
+    }
+
+    $.ajax({
+      async: false,
+      url: '/member/edit',
+      type: 'POST',
+      data:{nickname:nickname,mobile:mobile,email:email,pass1:pass1,pass2:pass2,code_tel:code_tel,code_email:code_email,zhiwei:zhiwei,grsm:grsm,provinces:provinces,citys:citys},
+      success: function (data) {
+        if (data.status_code == 0) {
+          console.log(data.data)
           layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'})
         } else {
           layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'})
         }
       }
     });
-}
-
-//发送手机
-function bdtel(){
-  let mobile=$('#mobile').val();
-  function wp_attempt_focus() {
-    setTimeout(function () {
-        try {
-            d = document.getElementById('mobile');
-            d.focus();
-            d.select();
-        } catch (e) {
-
-        }
-    }, 200);
+    
   }
-
-  wp_attempt_focus();
-    if (typeof wpOnload == 'function') wpOnload();
-    //获取验证码
-    var is_sending = false;
-    var time_limit = 60;
-    var next_time = time_limit;
-    var cap_btn = $('.verification');
-
-    cap_btn.sms({
-        //laravel csrf token
-        token       : "{{csrf_token()}}",
-        //请求间隔时间
-        interval    : 60,
-        //请求参数
-        requestData : {
-            //手机号
-            mobile : function () {
-                return $.trim($('#mobile').val());
-            },
-            //手机号的检测规则
-            mobile_rule : 'mobile_required'
-        }
-    });
-
-    $.ajax({
-            url: '/user/verify_code',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                user_phone: mobile,
-                verification_code: verification_code,
-                _token: "{{csrf_token()}}",
-            },
-
-            success: function (data) {
-                console.log(data.status_code);
-                if (data.status_code == 0) {
-                    layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-                    $("#step1").addClass("hide");
-                    $("#step2").removeClass("hide");
-                    $("#userphone").val(mobile);
-                } else {
-                    layer.msg(data.message);
-                }
-            }
-        });
-
-}
-
-//模拟表单提交
-function subntm(){
-  let nickname=$('#nickname').val();
-  let mobile=$('#mobile').val();
-  let email=$('#email').val();
-  let pass1=$('#pass1').val();
-  let pass2=$('#pass2').val();
-  let code_tel = $.trim($('#verification_code_tel').val());
-  let code_email = $.trim($('#verification_code_email').val());
-  // console.log(mobile);
-
-  let emailzz = /^([A-Za-z0-9_+-.])+@([A-Za-z0-9\-.])+\.([A-Za-z]{2,22})$/;
-
-  if(mobile!='' && mobile != null && mobile != undefined){
-    if(!(/^1[34578]\d{9}$/.test(mobile))){ 
-      layer.msg('手机号格式错误',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-      return false;
-    }
-  }else
-  if(email!='' && email != null && email != undefined){
-    if(!emailzz.test(email)){
-      layer.msg('邮箱格式错误',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-      return false;
-    }
-  }
-
-  $.ajax({
-    async: false,
-    url: '/member/edit',
-    type: 'POST',
-    data:{nickname:nickname,mobile:mobile,email:email,pass1:pass1,pass2:pass2,code_tel:code_tel,code_email:code_email},
-    success: function (data) {
-      if (data.status_code == 0) {
-        console.log(data.data)
-        layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'})
-      } else {
-        layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'})
-      }
-    }
-  });
-  
-}
 
 
 </script> 

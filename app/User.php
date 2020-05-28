@@ -425,7 +425,6 @@ class User extends Authenticatable
      */
     public static function editUser($user_id, $edit_info = [])
     {   
-        // dd($edit_info);
         $user = self::find($user_id);
         if (!$user) {
             return '用户不存在';
@@ -443,7 +442,8 @@ class User extends Authenticatable
         }
 
         $info=[];
-        $fields = ['nickname', 'email', 'mobile', 'password','one_tel','one_email','nicksum','one_wx'];
+        $fields = ['nickname','email','mobile','password','one_tel','one_email','nicksum','sex','city','zhiwei','personal_note'];
+        
         foreach ($fields as $field) {
             if (isset($edit_info[$field]) && !empty($edit_info[$field])){
                 $info[$field] = $edit_info[$field];
@@ -453,8 +453,7 @@ class User extends Authenticatable
         if($info){
             User::where('id',Auth::id())->update($info);
         }
-        // dd($info);
-        // $remark= '';
+
         if(@$info['one_tel']){
             if($info['one_tel']==2){
                 $point_log = [
@@ -477,24 +476,10 @@ class User extends Authenticatable
                 UserPoint::create($point_log);
             }
         }
-        if(@$info['one_wx']){
-            if($info['one_wx']==2){
-                $point_log = [
-                    'user_id' => $user->id,
-                    'type' => '0',
-                    'point' => 10,
-                    'remark' => '首绑微信',
-                ];
-                UserPoint::create($point_log);
-            }
-        }
         $user->points = $user->points + 10;
         $user->left_points = $user->left_points + 10;
         $user->save();
 
-
-        // dd($edit_infos);
-        // $user->save();
         return true;
     }
 
@@ -513,8 +498,6 @@ class User extends Authenticatable
             }else if($user->level==3){
                 $num=5;
             }
-        }else if(preg_match_all("/^ohPM_.＋/",$user->username,$matches)){
-            $num=1;
         }else{
             $num=0;
         }

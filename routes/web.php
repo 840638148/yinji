@@ -125,7 +125,9 @@ Route::get('member/mydown', 'MemberController@mydown');//我的下载
 Route::post('member/bdemail', 'MemberController@bdemail');//邮箱绑定
 Route::post('member/citysjld', 'MemberController@citysjld');//城市三级联动
 Route::post('member/one_visited', 'MemberController@one_visited');//是否第一次访问个人中心页面
-Route::post('member/remove_finder_item', 'MemberController@remove_finder_item');//移动图片到其他文件夹里
+Route::post('member/one_check', 'MemberController@one_check');//微信注册进个人中心提交信息
+Route::post('member/movefxj', 'MemberController@movefxj');//移动图片到其他文件夹里
+Route::post('member/desearch', 'MemberController@desearch');//搜索设计师
 
 
 

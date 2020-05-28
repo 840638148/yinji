@@ -4,69 +4,69 @@
 @endsection
 @section('content')
 <style>
-    .item .edit_favorites{
-            position: absolute;
-    display: inline-block;
-    vertical-align: top;
-    text-indent: 0;
-    text-align: center;
-    line-height: 32px;
-    z-index: 120;
-    right: 123px;
-    top: 34%;
-    }
-    .edit_favorites:hover .item-setting-btns{
-        color:#555;
-    }
-    .find_title{
-        overflow:inherit;
-        position:relative;
-    }
-    .find_title h2{
-        float: none;
-        width:200px;
-        vertical-align: top
-    }
-    .item .item-setting-btns{
-        display: none;
-        position: absolute;
-        right: 0;
-        background: #fff;
-        border-radius: 4px;
-        width: 90px;
-        padding: 3px 0px;
-        text-align: center;
-        font-size: 12px;
-        box-shadow: 0 0 11px rgba(0,0,0,.1);
-        top:40px;
-        margin-bottom: 4px;
-    }
-
-    .item.selected .item-setting-btns{
-        display: block;
-    }
-    .modal{
-      display:none;
-    }
-    .sign_box{
-      width: 610px;
-      padding: 20px;
-      min-height: 400px;
-      height: 680px;
-      position: fixed;
-      z-index: 9999;
+  .item .edit_favorites{
+          position: absolute;
+  display: inline-block;
+  vertical-align: top;
+  text-indent: 0;
+  text-align: center;
+  line-height: 32px;
+  z-index: 120;
+  right: 123px;
+  top: 34%;
+  }
+  .edit_favorites:hover .item-setting-btns{
+      color:#555;
+  }
+  .find_title{
+      overflow:inherit;
+      position:relative;
+  }
+  .find_title h2{
+      float: none;
+      width:200px;
+      vertical-align: top
+  }
+  .item .item-setting-btns{
+      display: none;
+      position: absolute;
+      right: 0;
       background: #fff;
-      top: 16%;
-      left: 50%;
-      margin-left: -305px;
-      box-shadow: 0px 0px 5px rgba(0,0,0,3);
-      border-radius: 3px;
-      overflow: auto;
-    }
-    .change_box{
-      display:none;
-    }
-    .img_browse{
+      border-radius: 4px;
+      width: 90px;
+      padding: 3px 0px;
+      text-align: center;
+      font-size: 12px;
+      box-shadow: 0 0 11px rgba(0,0,0,.1);
+      top:40px;
+      margin-bottom: 4px;
+  }
+
+  .item.selected .item-setting-btns{
+      display: block;
+  }
+  .modal{
+    display:none;
+  }
+  .sign_box{
+    width: 610px;
+    padding: 20px;
+    min-height: 400px;
+    height: 680px;
+    position: fixed;
+    z-index: 9999;
+    background: #fff;
+    top: 16%;
+    left: 50%;
+    margin-left: -305px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,3);
+    border-radius: 3px;
+    overflow: auto;
+  }
+  .change_box{
+    display:none;
+  }
+  .img_browse{
     position: fixed;
     left: 50%;
     top:50%;
@@ -84,7 +84,19 @@
     width:260px;
     height: calc( 100% - 50px);
   }
+  .lzcfg{
+    background: rgba(0,0,0,0.5);
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 999;
+  }
 </style>
+<!--笼罩层-->
+<div class="lzcfg"></div>
 <div class="home_top">
   <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
   <div class="home_tongji">
@@ -157,7 +169,8 @@
       <ul>
         @foreach ($user->follows as $key => $follow)
               @if ($key < 13)
-                <li class="guanzhu-item"> <a href="/user/index/{{$follow->id}}" target="_blank" title="{{$follow->nickname}}" onclick="selectItemGuanZhu({{$key}})"><span class="select-item"></span>  <img onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /> </a> </li>
+                {{--<li class="guanzhu-item"> <a href="/user/index/{{$follow->id}}" target="_blank" title="{{$follow->nickname}}" onclick="selectItemGuanZhu({{$key}})"><span class="select-item"></span>  <img onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /> </a> </li>--}}
+                <li class="guanzhu-item"> <a href="javascript:alert1();" title="{{$follow->nickname}}" onclick="selectItemGuanZhu({{$key}})"><span class="select-item"></span>  <img onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /> </a> </li>
               @elseif($key == 13)
                       <li><a href="/member/follow" class="more-content"></a></li>
                 @endif
@@ -488,30 +501,222 @@
     </div>
 </div>
 
-
+<!-- 微信注册的第一次进入个人主页出现弹窗 -->
+<div class='txxx' style='width: 340px;height: 445px;background: #fff;position:absolute;top:40%;left: 40%;z-index:9999;padding:20px;border-radius: 10px;display:none;'>
+  <form id="info-form" class="contribute_form" role="form" method="POST" action="/member/one_check"  onsubmit="return checkforms()">
+    <p style="width:292px;">  
+      <label for="nickname">
+        <input type="text" id='nickname' value="" placeholder='请填写昵称' style="height:46px;border-radius: 5px;">
+      </label>  
+      <span style='font-size:10px;margin-top:-5px;color:#ccc;'>(非会员用户只能更改一次)</span>
+    </p>
+    <p style="position:relative;width:292px;margin: 10px 0;">
+      <label for="user_phone">
+        <input type="tel" style='border-radius: 5px;' name="user_phone" maxlength='11' id="user_phone" class="input" value="" size="20" placeholder="输入手机号">
+      </label>
+    </p>
+    <p style="width:292px;">
+      <label class='code_tel' for="verification_code" style="position:relative">
+        <input type="text" name="verification_code" style="height:46px;border-radius: 5px;" id="verification_code" class="input" value="" size="20" placeholder="输入手机验证码">
+        <input style="padding: 0 19px;height:46px;" name="发送验证码" type="button" value="获取验证码" class="verification">
+      </label>
+    </p>
+    <p>职位：
+      <select style="width:245px;border: 1px solid #ddd;height:42px;line-height:27px;color:#666;margin-top:10px;border-radius: 5px;" id="zhiwei" name="zhiwei" value="职位">
+          <option name="jzs" value="建筑师" >建筑师</option>
+          <option name="snsjs" value="室内设计师">室内设计师</option>
+          <option name="rzsjs" value="软装设计师">软装设计师</option>
+          <option name="cpsjs" value="产品设计师">产品设计师</option>
+          <option name="sys" value="摄影师">摄影师</option>
+          <option name="mtr" value="媒体人">媒体人</option>
+          <option name="fckf" value="地产开发">地产开发</option>
+          <option name="qt" value="其他" selected>其他</option>    
+      </select>
+    </p>
+    <p style="margin-top:20px ;"> 
+        地区：<select name='provinces' id="provinces" style="height: 42px;border-radius: 5px;width: 120px;margin-left: 4px;">  <option value="" id="selectpro"  >请选择省份</option></select>  
+        <select id="citys" name='citys' style="height: 42px;border-radius: 5px;width: 120px;"><option value="">请选择市</option></select> 
+    </p>
+    <p class="submit0" style='margin-top:23px;'>
+      <input type="hidden" name="_token" value="{{csrf_token()}}">
+      <button type="button" id="wp-submit-1" class="button button-primary button-large" value=""> 确定 </button>
+    </p>
+  </form>
+</div>
+<script src="/js/laravel-sms.js"></script>
 <script src="/js/layer.js"></script>
 <script src="/js/member.js"></script>
+<script type="text/javascript">
+  $(function() {  
+    //页面初始，加载所有的省份  
+      $.ajax({  
+          type: "post",  
+          url: "/member/citysjld",  
+          data: {"type":1,_token: "{{csrf_token()}}"},  
+          dataType: "json",  
+          success: function(data) {  
+              //遍历json数据，组装下拉选框添加到html中
+              $("#provinces").append("<option value=''>请选择省</option>");  
+              $.each(data, function(i, item) {  
+                  $("#provinces").append("<option value='" + item.province_num + "'>" + item.province_name + "</option>");  
+              });
+          }  
+      });      
+    // })
+
+    //监听省select框
+    $("#provinces").change(function() {  
+        $.ajax({  
+            type: "post",  
+            url: "/member/citysjld",
+            data: {"pnum": $(this).val(),"type":2,_token: "{{csrf_token()}}"},  
+            dataType: "json",  
+            success: function(data) {  
+                //遍历json数据，组装下拉选框添加到html中
+                $("#citys").html("<option value=''>请选择市</option>");  
+                $.each(data, function(i, item) {  
+                    $("#citys").append("<option value='" + item.city_num + "'>" + item.city_name + "</option>");  
+                });  
+            }  
+        });  
+    });  
+
+  });  
+</script>
 <script>
-$(function() { 
-  $.ajax({  
+  $(function() { 
+    $.ajax({  
         type: "post",  
         url: "/member/one_visited",  
         data: {_token: "{{csrf_token()}}"},  
         dataType: "json",  
         success: function(data) {  
-          console.log(data)
+          // console.log(data)
           if(data.status_code == 100){
-            // window.location.href='/member/profile';
             layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-            setTimeout(function () {
-                location.href = "/member/profile";
-            },1600);
+            $('.lzcfg').show(500)
+            $('.txxx').show(500)
           }else{
             layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
           }
           
         }  
     });      
-})
+  })
+</script>
+
+<script type="text/javascript">
+// 阻止提交表单
+function checkforms(){
+    return false;//false:阻止提交表单
+  }
+
+  function wp_attempt_focus() {
+    setTimeout(function () {
+      try {
+          d = document.getElementById('user_phone');
+          d.focus();
+          d.select();
+      } catch (e) {
+
+      }
+    }, 200);
+  }
+
+  wp_attempt_focus();
+  if (typeof wpOnload == 'function') wpOnload();
+  //获取验证码
+  var is_sending = false;
+  var time_limit = 60;
+  var next_time = time_limit;
+  var cap_btn = $('.verification');
+
+  cap_btn.sms({
+    //laravel csrf token
+    token       : "{{csrf_token()}}",
+    //请求间隔时间
+    interval    : 60,
+    //请求参数
+    requestData : {
+        //手机号
+        mobile : function () {
+            return $.trim($('#user_phone').val());
+        },
+        //手机号的检测规则
+        mobile_rule : 'mobile_required'
+    }
+  });
+  
+  $("#wp-submit-1").click(function () {
+    let nickname = $.trim($('#nickname').val());
+    let mobile = $.trim($('#user_phone').val());
+    let provinces = $.trim($('#provinces').val());
+    let citys = $.trim($('#citys').val());
+    let zhiwei = $.trim($('#zhiwei').val());
+    let verification_code = $.trim($('#verification_code').val());
+
+    if(nickname=='' || nickname == null || nickname == undefined){
+      layer.msg('请填写昵称',{time:1500,skin: 'intro-login-class layui-layer-hui'});
+      return false;
+    }else
+    if(mobile=='' || mobile == null || mobile == undefined){
+      layer.msg('请填写手机号',{time:1500,skin: 'intro-login-class layui-layer-hui'});
+      return false;
+    }else
+    if(zhiwei=='' || zhiwei == null || zhiwei == undefined){
+      layer.msg('请填写职位',{time:1500,skin: 'intro-login-class layui-layer-hui'});
+      return false;
+    }else
+    if(provinces=='' || provinces == null || provinces == undefined){
+      layer.msg('请填写省份',{time:1500,skin: 'intro-login-class layui-layer-hui'});
+      return false;
+    }else
+
+    if(verification_code=='' || verification_code == null || verification_code == undefined){
+      layer.msg('请输入验证码',{time:1500,skin: 'intro-login-class layui-layer-hui'});
+        return false;
+    }
+    if(nickname!='' && nickname != null && nickname != undefined){
+      if (!/^[\u4E00-\u9FA5A-Za-z0-9]+$/.test(nickname)) {
+        layer.msg('昵称规范:中文、英文、数字但不包括下划线等符号',{time:1500,skin: 'intro-login-class layui-layer-hui'});
+        return false;
+      }
+    }
+    if(mobile!='' && mobile != null && mobile != undefined){
+      if (!/1[3-8][0-9]{9}/.test(mobile)) {
+          layer.msg('请输入正确手机号',{time:1500,skin: 'intro-login-class layui-layer-hui'});
+          return false;
+      }
+    }
+
+      $.ajax({
+          url: '/member/one_check',
+          type: 'POST',
+          dataType: 'json',
+          data: {
+              mobile: mobile,
+              nickname: nickname,
+              zhiwei: zhiwei,
+              provinces: provinces,
+              citys: citys,
+              verification_code: verification_code,
+              _token: "{{csrf_token()}}",
+          },
+          success: function (data) {
+              //console.log(data.status_code);
+              if (data.status_code == 0) {
+                  layer.msg(data.message,{time:1500,skin: 'intro-login-class layui-layer-hui'});
+                  setTimeout(function () {
+                      location.href = "/member";
+                  },1600);
+              }else{
+                  layer.msg(data.message,{time:1500,skin: 'intro-login-class layui-layer-hui'});
+              }
+          }
+      });
+    
+  });
+
+
 </script>
 @endsection

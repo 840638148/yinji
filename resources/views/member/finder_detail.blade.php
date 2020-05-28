@@ -167,27 +167,37 @@
   .fxj{
     width: 500px;
     /* height: 300px; */
-    background: #ccc;
+    background: #f2f2f2;
     position: absolute;
     z-index: 999;
-    border:1px solid red;
+    border:1px solid #f2f2f2;
+    display:none;
+    top: 60%;
+    left: 37%;
+    border-radius: 5px;
   }
   .fxj p{
     height:50px;
     padding:5px 0;
-    /* line-height:45px; */
   }
-  .fxj .fxj_left{
+  .fxj p:nth-of-type(1){
+    margin-top:30px;
+  }
 
+  .fxj .fxj_left{
+    line-height:40px;
   }
   .fxj .fxj_right{
-    position:absolute;
-    right:2px;
     padding:5px 10px 5px;
-    border:1px solid red;
-    top:-1px;
+    background: #4a8bdc;
+    color: #FFF;
+    border-radius: 5px;
+    float:right;
+    cursor: pointer;
   }
-
+  body{background:#f8f8f8 !important;}
+  .home_box{border-radius:10px !important;}
+  .home_top{background:#fff !important;}
 </style>
 <div class="lzcfg"></div>
 <div class="home_top">
@@ -217,32 +227,17 @@
   <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">个人说明： {{$user->personal_note}}</p>
 
   <div class="home_nav">
-
     <ul>
-
       <li><a  href="/member">个人中心</a></li>
-
       <li class="current"><a href="/member/finder">我的发现</a></li>
-
       <li><a href="/member/collect">我的收藏</a></li>
-
       <li><a href="/member/subscription">我的订阅</a></li>
-
       <li><a href="/member/follow">我的互动</a></li>
-
       <li><a href="/member/mydown">我的下载</a></li>
-
       <li><a href="/member/profile">个人资料</a></li>
-
     </ul>
-
   </div>
-
 </div>
-
-
-
-
 
 
 <!--点击上面的图片显示轮播图片-->
@@ -265,25 +260,15 @@
 
 
 
-
-
-
 <section class="wrapper ">
-
   <div class="mt30 home_box ">
-
     <div class="title">
-
       <h2 class="fl">{{$folder_name or ''}}</h2>
-
       <span class="fr"><a href="javascript:window.history.go(-1);" data-type="collect" >&lt; 返回</a></span> </div>
-
     <div class="masonry">
 
-        @foreach ($user->finder_details as $detail)
-
+      @foreach ($user->finder_details as $detail)
       <div class="item discovery-item " style="display:flex">
-
         <div class="item_content item_content2">
         		<!--<li> <img onclick="location='{{$detail['photo_url']}}'" src="{{$detail['photo_url']}}" alt="{{--mb_substr($detail['titlename'],0,30)--}}"> </li>-->
         		<li> <img src="{{$detail['photo_url']}}" data-id="{{$detail['user_finder_folder_id']}}" alt="{{mb_substr($detail['titlename'],0,30)}}"> </li>
@@ -297,17 +282,19 @@
               <p><a style="padding-top: 1.5px;color:#fff;" source='{{$detail["photo_source"]}}' href="javascript:;" class="yd_find_img" data-id="{{$detail['id']}}" tag="移动发现的图片到其他文件夹">移动</a></p>
               <p><a style="padding-top: 1.5px;color:#fff;" href="javascript:;" class="remove_find_img" data-id="{{$detail['id']}}" tag="删除发现的图片">删除</a></p>
             </div>
-            <div class='fxj'>
-              @foreach($folderall as $v)
-              <p><span class='fxj_left'>{{$v->name}}</span><span id='{{$v->id}}' class='fxj_right'>移动</span></p>
-              @endforeach
-            </div>
             {{--<a style="padding-top: 1.5px;" href="javascript:;" class="find-icon-trash remove_find_img" data-id="{{$detail['id']}}" tag="删除发现的图片"></a>--}}
             
           </div>
 
         </div>
 
+      </div>
+
+      <div class='fxj'>
+        <span class='closefxj' style='padding:5px;font-size: 22px;float: right;cursor: pointer;'>X</span>
+        @foreach($folderall as $v)
+        <p><span class='fxj_left'>{{$v->name}}</span><span photo_src="{{$detail['photo_url']}}" source='{{$detail["photo_source"]}}' data-id='{{$v->id}}' class='fxj_right'>移动</span></p>
+        @endforeach
       </div>
 
       @endforeach 
@@ -319,42 +306,61 @@
 </section>
 
 <script type="text/javascript">
-$(document).on('click','.yd_find_img',function(ev){
-  let source = $(this).attr('source');
-  let finder_id = $(this).attr('data-id');
-  let url = '/member/fxj';
-  let folder_data = {
-      _token:_token,
-      finder_id:finder_id,
-      source:source,
-  };
-  console.log(folder_data)
-  $.ajax({
-      async:false,
-      url: url,
-      type: 'POST',
-      dataType: 'json',
-      data: folder_data,
-      success: function (data) {
-          if (data.status_code == 0) {
-              layer.msg('移动成功！',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-              window.location.reload();
-          } else {
-              alert(data.message);
-          }
-      }
+  $('.closefxj').click(function(){
+    $('.fxj').hide(500);
+  })
+
+  $(document).on('click','.yd_find_img',function(){
+    $('.fxj').show(500);
+  })
+
+  function getQueryString(name) {   
+    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象  
+    let r = window.location.search.substr(1).match(reg);  //匹配目标参数
+    if( r != null ) return decodeURI( r[2] ); return null;   
+  }
+  
+  //点击移动图片到另外一个收藏夹
+  $(document).on('click','.fxj_right',function(){
+    let source = $(this).attr('source');
+    let finder_id = $(this).attr('data-id');
+    let photo_src=$(this).attr('photo_src');
+    let url = window.location.pathname;
+    let now_url=url.split('/')[3];
+    let now_folder_id=0;
+    let folder_data = {
+        _token:_token,
+        finder_id:finder_id,
+        source:source,
+        photo_src:photo_src,
+        now_url:now_url,
+    };
+    console.log(finder_id,now_url)
+    $.ajax({
+        async:false,
+        url: '/member/movefxj',
+        type: 'POST',
+        dataType: 'json',
+        data: folder_data,
+        success: function (data) {
+            if (data.status_code == 0) {
+                layer.msg('移动成功！',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+                window.location.reload();
+            } else {
+              layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+            }
+        }
+    });
   });
 
-});
 
-
-$('.find_title>.dot').click(function(){
-  if($('.move_del').css("display")=="none"){//如果当前隐藏
-		  $(this).siblings(".move_del").css('display','block');
-		}else{//否则
-      $(this).siblings(".move_del").css('display','none');
-		}
-});
+  $('.find_title>.dot').click(function(){
+    if($('.move_del').css("display")=="none"){//如果当前隐藏
+        $(this).siblings(".move_del").css('display','block');
+      }else{//否则
+        $(this).siblings(".move_del").css('display','none');
+      }
+  });
 
 	//--点击上面的图片显示轮播图片--
 	$(document).on('click','.masonry .item_content>li',function(){
@@ -403,7 +409,8 @@ $('.find_title>.dot').click(function(){
         loadPrevNext: true,
       }
     });
-	})
+  })
+  
 	//点击关闭轮播图
     $(document).on('click','.closeltb',function(){
       $('.swiper-container').css('display','none');
@@ -412,210 +419,66 @@ $('.find_title>.dot').click(function(){
     })
 
 
+  //切换图片
+  $(document).on('click','.more-img-item',function(){
+      var src = '';
+      //去除所有选中状态
+      $('.more-img-item').each(function(){
+          $(this).removeClass('selected');
+      })
+      $(this).parents('.right').prev().find('#discovery-folder-name').html($(this).find('img').attr('alt'))
+      // 添加选中状态
+      $(this).addClass('selected');
+
+      src = $(this).find('img').attr('src');
+      $(this).parents('.img_browse').find('.selected-image').attr('src',src);
+  })
 
 
-// $(document).on('click','.masonry .item_content>li',function(){
-
-//     var folder_id = $('.masonry .item_content>li img').attr('data-id');
-//     // alert(folder_id); 
-//     $.ajax({
-//         async:false,
-//         url: '/vip/get_folder_detail',
-//         type: 'POST',
-//         //dataType: 'json',
-//         data: {
-//             _token:_token,
-//             folder_id:folder_id
-//         },
-//         success: function (data) {
-//             $('#img-browse').html(data);
-            
-//             //初始化相框
-//             // getImgBrowseImgsDom(browseImgs,'#discovery-img-browse');
-//             layer.open({
-//                 type: 1,
-//                 title: false,
-//                 closeBtn: 0,
-//                 anim:-1,
-//                 isOutAnim:false,
-//                 content: $('#img-browse')
-//             });
-//         }
-//     });
-// })
-//切换图片
-$(document).on('click','.more-img-item',function(){
-    var src = '';
-    //去除所有选中状态
-    $('.more-img-item').each(function(){
-        $(this).removeClass('selected');
-    })
-    $(this).parents('.right').prev().find('#discovery-folder-name').html($(this).find('img').attr('alt'))
-    // 添加选中状态
-    $(this).addClass('selected');
-
-    src = $(this).find('img').attr('src');
-    $(this).parents('.img_browse').find('.selected-image').attr('src',src);
-})
+  function selectItem(index){
+      $('.dingyue-item .select-item').hide()
+      $($('.dingyue-item')[index]).find('.select-item').show()
+      localStorage.setItem("selectdD", index);
+  }
 
 
-      function selectItem(index){
+  function selectItemGuanZhu(index){
+      $('.guanzhu-item .select-item').hide()
+      $($('.guanzhu-item')[index]).find('.select-item').show()
+      localStorage.setItem("selectdG", index);
+  }
 
-          $('.dingyue-item .select-item').hide()
-
-          $($('.dingyue-item')[index]).find('.select-item').show()
-
-          localStorage.setItem("selectdD", index);
-
+  $(document).ready(function(){
+      if(IS_VIP){
+          $('.order_center .order2').find('a').html('会员中心')
+          $('.order_center .order2').find('a').attr('href','/member/interest')
       }
 
-
-
-      function selectItemGuanZhu(index){
-
-          $('.guanzhu-item .select-item').hide()
-
-          $($('.guanzhu-item')[index]).find('.select-item').show()
-
-          localStorage.setItem("selectdG", index);
-
-      }
-
-
-
-
-
-
-
-    $(document).ready(function(){
-
-        if(IS_VIP){
-
-            $('.order_center .order2').find('a').html('会员中心')
-
-            $('.order_center .order2').find('a').attr('href','/member/interest')
-
-        }
-
-
-
-        $('.dingyue-item .select-item').hide()
-
-        var dIndex = localStorage.getItem('selectdD')
-
-        $($('.dingyue-item')[dIndex]).find('.select-item').show()
-
-
-
-        $('.guanzhu-item .select-item').hide()
-
-        var gIndex = localStorage.getItem('selectdG')
-
-        $($('.guanzhu-item')[gIndex]).find('.select-item').show()
-
-
-
-        //最多显示8条数据
-
-        for(var i=0;i<$('.my-collection .collection-item').length;i++){
-
-            if(i>7){
-
-                $($('.my-collection .collection-item')[i]).hide()
-
-            }
-
-        }
-
-
-
-        for(var i=0;i<$('.my-finder .collection-item').length;i++){
-
-            if(i>7){
-
-                $($('.my-finder .collection-item')[i]).hide()
-
-            }
-
-        }
-
-
-
-      //取消订阅
-
-
-
-      $(".cancelSubscription").click(function(e){
-
-
-
-        var designer_id = $(this).attr('data-id');
-
-
-
-        $.ajax({
-
-
-
-          url: '/member/cancel_subscription',
-
-
-
-          type: 'POST',
-
-
-
-          dataType: 'json',
-
-
-
-          data: {_token:'{{csrf_token()}}',designer_id:designer_id},
-
-
-
-          success: function (data) {
-
-
-
-            if (data.status_code == 0) {
-
-
-
-              window.location.reload();
-
-
-
-            } else {
-
-
-
-              alert(data.message);
-
-
-
-
-
-
-
-            }
-
-
-
+      $('.dingyue-item .select-item').hide()
+      var dIndex = localStorage.getItem('selectdD')
+      $($('.dingyue-item')[dIndex]).find('.select-item').show()
+
+      $('.guanzhu-item .select-item').hide()
+      var gIndex = localStorage.getItem('selectdG')
+      $($('.guanzhu-item')[gIndex]).find('.select-item').show()
+
+      //最多显示8条数据
+      for(var i=0;i<$('.my-collection .collection-item').length;i++){
+          if(i>7){
+              $($('.my-collection .collection-item')[i]).hide()
           }
+      }
+
+      for(var i=0;i<$('.my-finder .collection-item').length;i++){
+          if(i>7){
+              $($('.my-finder .collection-item')[i]).hide()
+          }
+      }
+
+  });
 
 
-
-        });
-
-
-      });
-
-
-
-    });
-
-
-  </script>
+</script>
 
 <!--个人发现中心的图片浏览-->
 

@@ -5,6 +5,11 @@
 @endsection
    
 @section('content')
+<style>
+body{background:#f8f8f8 !important;}
+.home_box{border-radius:10px !important;}
+.home_top{background:#fff !important;}
+</style>
 <div class="home_top">
   <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
   <div class="home_tongji">
