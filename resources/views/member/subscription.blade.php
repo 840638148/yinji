@@ -144,7 +144,7 @@
         success:function(data) {
           console.log(data.data)
           if(data.status_code==0){
-            layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
+            layer.msg(data.data.msg,{skin: 'intro-login-class layui-layer-hui'});
             $('.public_item').html(data.data.result); 
           }else{
             layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});

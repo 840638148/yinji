@@ -558,8 +558,8 @@ class MemberController extends Controller
         //     return Output::makeResult($request, $mores);
         // }
 
-        $result = UserSubscription::desearch($request);
-        if($result==''){
+        $result = UserSubscription::desearch($request,$user_id);
+        if(empty($result)){
             return Output::makeResult($request, null, 500,'没有数据');
         }
         $data=['result'=>$result,'msg'=>'查询成功'];
