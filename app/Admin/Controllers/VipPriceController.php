@@ -54,6 +54,9 @@ class VipPriceController extends BaseController
         $grid->id('ID')->sortable();
         $grid->title('会员类型');
         $grid->price('价格');
+        $grid->display('状态')->display(function ($display) {
+            return $display == 1 ? '打开' : '关闭';
+        });
         $grid->updated_at('修改时间')->sortable();
 
         return $grid;
@@ -70,7 +73,11 @@ class VipPriceController extends BaseController
         $form = new Form(new $this->currentModel);
         $form->display('title', '会员类型');
         $form->currency('price', '价格')->symbol('￥');
-
+        $states = [
+            'on'  => ['value' => 1, 'text' => '打开', 'color' => 'success'],
+            'off' => ['value' => 0, 'text' => '关闭', 'color' => 'default'],
+        ];
+        $form->switch('display', '状态')->states($states);
         return $form;
     }
     
