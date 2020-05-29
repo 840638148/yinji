@@ -113,7 +113,7 @@
 <section class="wrapper">
   <div class="mt30 home_box">
     <div class="title">
-      <h2 class="fl">我的收藏</h2>
+      <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>我的收藏</span></h2>
       <span class="fr"><a href="javascript:;" data-type="collect" class="create-new-folder">+ 创建新文件</a></span> </div>
     <div class="masonry" > @foreach($user->collects as $collect)
       <div class="item">

@@ -263,7 +263,7 @@
 <section class="wrapper ">
   <div class="mt30 home_box ">
     <div class="title">
-      <h2 class="fl">{{$folder_name or ''}}</h2>
+      <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>{{$folder_name or ''}}</span></h2>
       <span class="fr"><a href="javascript:window.history.go(-1);" data-type="collect" >&lt; 返回</a></span> </div>
     <div class="masonry">
 

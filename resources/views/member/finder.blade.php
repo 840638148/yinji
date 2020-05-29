@@ -118,7 +118,7 @@
 <section class="wrapper">
   <div class="mt30 home_box">
     <div class="title">
-      <h2 class="fl">我的发现</h2>
+      <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>我的发现</span></h2>
       <span class="fr"><a href="javascript:;" data-type="find" class="create-new-folder">+ 创建新文件</a></span> </div>
       <!--VIP专栏提示-->
       <div class="vip_prompt modal vip_prompt-member" id="vip-img"><a href="#" class="vip_buy">开通VIP会员</a><a href="#" class="vip_detail">了解VIP详情>></a></div>

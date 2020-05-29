@@ -45,7 +45,7 @@
 <section class="wrapper">
   <div class="mt30 home_box">
     <div class="title" style='position: relative;'>
-      <h2>我的订阅</h2>
+      <h2><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>我的订阅</span></h2>
       <div class="desearch" style='position: absolute;top: 1px;right: 0;'>
         <form id="myform" action="/member/desearch"  style="position:relative;padding:0;" method="post" class="search_form" onkeydown="if (event.keyCode == 13) return false"  >
             <i class="findersearch_btn" style="position: absolute;left: 10px;top: 10px;padding: 5px;cursor: pointer;border:none;background:url(/images/findersearch.png) center no-repeat;width: 30px;display: block;height: 30px;"></i>
