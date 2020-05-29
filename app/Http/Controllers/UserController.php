@@ -44,6 +44,10 @@ class UserController extends Controller
                 // $username_login = Auth::attempt(['username' => $tmp_user->username, 'password' => $request->password]);
                 $username_login = Auth::attempt(['nickname' => $tmp_user->nickname, 'password' => $request->password]);
             }
+            $email_lg=User::where('email', $request->user_login)->first();
+            if($email_lg){
+                $username_login = Auth::attempt(['nickname' => $email_lg->nickname, 'password' => $request->password]);
+            }
         }
         if ($username_login) {
             $user = User::find(Auth::id());

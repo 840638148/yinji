@@ -282,11 +282,17 @@
             <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;width:98px !important;border:none;border-radius:3px;right:0;" type="button" value="更换手机" class="jbmobile">
             @else
             <input type="tel" id="mobile" maxlength='11' name="mobile" placeholder='请填写手机号' value="" >
+            <p style='position:relative;' class='tel_yzm'>
+              <label for="verification_code" style="position:relative">输入手机验证码</label>
+              <input type="text" name="verification_code" id="verification_code" class="input" style='height:47px;' value="" size="20" placeholder="请输入手机验证码">
+              <input style="padding: 0 19px;position:absolute;top:40px;height:48px;background: #63c5f3;color: #fff;border-radius:3px;" name="发送验证码" onclick="bdtel()" type="button" value="获取验证码" class="verification">
+          </p>
             @endif
           </p>
+
           <p style='position:relative;display:none;' class='tel_yzm'>
             <label for="verification_code" style="position:relative">输入手机验证码</label>
-            <input type="text" name="verification_code" id="verification_code_tel" class="input" style='height:47px;' value="" size="20" placeholder="请输入手机验证码">
+            <input type="text" name="verification_code" id="verification_code" class="input" style='height:47px;' value="" size="20" placeholder="请输入手机验证码">
             <input style="padding: 0 19px;position:absolute;top:40px;height:48px;background: #63c5f3;color: #fff;border-radius:3px;" name="发送验证码" onclick="bdtel()" type="button" value="获取验证码" class="verification">
           </p>
           <p style='position:relative;'>
@@ -296,6 +302,11 @@
             <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;width:98px !important;border:none;border-radius:3px;right:0;" type="button" value="更换邮箱" class="jbemail">
             @else
             <input type="email" id="email" name="email" value="" placeholder='请填写邮箱' >
+            <p style='position:relative;' class='email_yzm'>
+              <label for="verification_code" style="position:relative">输入邮箱验证码</label>
+              <input type="text" name="verification_code" id="verification_code_email" class="input" style='height:48px;' value="" size="20" placeholder="请输入邮箱验证码">
+              <input style="padding: 0 19px;position:absolute;top:40px;height:48px;background: #63c5f3;color: #fff;border-radius:3px;right:0;border:none;" name="发送验证码" type="button" value="获取验证码" class="verification_email" onclick='bdemail()'>
+          </p> 
             @endif
           </p>
           <p style='position:relative;display:none;' class='email_yzm'>
@@ -655,11 +666,11 @@
     wp_attempt_focus();
       if (typeof wpOnload == 'function') wpOnload();
       //获取验证码
-      var is_sending = false;
-      var time_limit = 60;
-      var next_time = time_limit;
-      var cap_btn = $('.verification');
-
+      let is_sending = false;
+      let time_limit = 60;
+      let next_time = time_limit;
+      let cap_btn = $('.verification');
+      let verification_code = $.trim($('#verification_code').val());
       cap_btn.sms({
           //laravel csrf token
           token       : "{{csrf_token()}}",
@@ -675,31 +686,8 @@
               mobile_rule : 'mobile_required'
           }
       });
-
-      $.ajax({
-              url: '/user/verify_code',
-              type: 'POST',
-              dataType: 'json',
-              data: {
-                  user_phone: mobile,
-                  verification_code: verification_code,
-                  _token: "{{csrf_token()}}",
-              },
-
-              success: function (data) {
-                  console.log(data.status_code);
-                  if (data.status_code == 0) {
-                      layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-                      $("#step1").addClass("hide");
-                      $("#step2").removeClass("hide");
-                      $("#userphone").val(mobile);
-                  } else {
-                      layer.msg(data.message);
-                  }
-              }
-          });
-
   }
+
 
   //模拟表单提交
   function subntm(){
@@ -708,7 +696,7 @@
     let email=$('#email').val();
     let pass1=$('#pass1').val();
     let pass2=$('#pass2').val();
-    let code_tel = $.trim($('#verification_code_tel').val());
+    let code_tel = $.trim($('#verification_code').val());
     let code_email = $.trim($('#verification_code_email').val());
     let zhiwei=$("select[name='zhiwei']").val();
     let grsm=$('.grsm').val();
@@ -717,6 +705,13 @@
     // console.log(zhiwei,grsm);
 
     let emailzz = /^([A-Za-z0-9_+-.])+@([A-Za-z0-9\-.])+\.([A-Za-z]{2,22})$/;
+
+    if(nickname!='' && nickname != null && nickname != undefined){
+      if (!/^[\u4E00-\u9FA5A-Za-z0-9]+$/.test(nickname)) {
+        layer.msg('昵称规范:中文、英文、数字但不包括下划线等符号',{time:1500,skin: 'intro-login-class layui-layer-hui'});
+        return false;
+      }
+    }
 
     if(mobile!='' && mobile != null && mobile != undefined){
       if(!(/^1[34578]\d{9}$/.test(mobile))){ 

@@ -607,7 +607,7 @@
 
 <script type="text/javascript">
 // 阻止提交表单
-function checkforms(){
+  function checkforms(){
     return false;//false:阻止提交表单
   }
 
