@@ -46,12 +46,11 @@ class UserSubscription extends Model
     * 我的订阅搜索框 
     * 
     */
-
     public static function desearch($request,$user_id){
 
         $user = User::find($user_id);
         $con=self::leftjoin('designers','designers.id','=','user_subscriptions.designer_id')
-            ->select('user_subscriptions.designer_id','user_subscriptions.user_id','designers.title_cn','designers.category_ids','designers.topic_ids','designers.static_url','designers.special_photo as d_special_photo')
+            ->select('user_subscriptions.designer_id','user_subscriptions.user_id','designers.title_cn','designers.category_ids','designers.topic_ids','designers.static_url','designers.custom_thum as d_custom_thum')
             ->where('user_subscriptions.user_id',$user_id)
             ->where("designers.title_cn","like","%$request->content%")
             ->get();
@@ -63,32 +62,50 @@ class UserSubscription extends Model
             $con[$k]['country']=DesignerCategory::whereIn("id",$v->category_ids)->get();
             $con[$k]['article_num'] = Article::where('designer_id', 'like', "%,{$v->designer_id},%")->count();
             $con[$k]['fans_num'] = self::where('designer_id', $v->designer_id)->count();
-            $con[$k]['articles'] = Article::where('designer_id', 'like', "%,{$v->designer_id},%")->select('title_designer_cn','title_name_cn','static_url as ar_static_url','special_photo','id as article_id')->limit(4)->get();
+            $con[$k]['articles'] = Article::where('designer_id', 'like', "%,{$v->designer_id},%")->limit(4)->get();
             $con[$k]['deintro']=DesignerDetail::where('designer_id',$v->designer_id)->value('content_cn');
             
             $html.='<div class="public_item" data-id="'.$v->designer_id.'">';
-            $html.='<div class="item_left"> <a href="/designer/'.$v->static_url.'">';
-            $html.='<div class="tx"><img src="/uploads/'.$v->d_special_photo.'" alt="'.$v->title_cn.'"> </div></a>';
-            $html.='<div class="item_msg"><div class="title"> <a href="/designer/'.$v->static_url.'">'.$v->title_cn.'</a> </div>';
+            $html.='    <div class="item_left"> ';
+            $html.='        <a href="/designer/'.$v->static_url.'">';
+            $html.='            <div class="tx"><img class="img-responsive" src="/uploads/'.$v->d_custom_thum.'" alt="'.$v->title_cn.'"> </div>';
+            $html.='        </a>';
+            $html.='        <div class="item_msg">';
+            $html.='            <div class="title"> <a href="/designer/'.$v->static_url.'">'.$v->title_cn.'</a> </div>';
+            $html.='            <div class="describe">';
+            $html.='                <span>国家';
             foreach($v->country as $contrys){
-                // dd($v->country);
-                $html.='<div class="describe"> <span>国家'.$contrys->name_cn.'</span><span>';
+                $html.=$contrys->name_cn;
             }
-            $html.='<span>'.mb_substr($v->deintro,0,60).'</span></div>';
-            $html.='<div class="focus"> <a href="javascript:void(0)" data-id="'.$v->designer_id.'" class="focus_btn2 click cancelSubscription"> 取消订阅 </a>';
-            $html.='<div class="focus_msg"> <span>作品：'.$v->article_num.'</span> | <span>粉丝：'.$v->fans_num.'</span> </div></div></div></div><div class="item_right">';
-
+            $html.='                </span>';
+            $html.='                <span>'.mb_substr($v->deintro,0,82).'...</span>';
+            $html.='            </div>';
+            $html.='            <div class="focus">';
+            $html.='                <a href="javascript:void(0)" data-id="'.$v->designer_id.'" class="focus_btn2 click cancelSubscription"> 取消订阅 </a>';
+            $html.='                <div class="focus_msg"> <span>作品：'.$v->article_num.'</span> | <span>粉丝：'.$v->fans_num.'</span> </div>';
+            $html.='            </div>';
+            $html.='        </div>';
+            $html.='    </div>';
+            $html.='    <div class="item_right">';
             foreach($v->articles as $articles){
-                $html.='<div class="works" data-id="'.$articles->article_id.'">';            
-                $html.='<a href="/article/'.$articles->ar_static_url.'" target="_blank">';
-                $html.='<img src="/uploads/'.$articles->special_photo.'" alt=""><span>'.$articles->title_designer_cn.' | '.$articles->title_name_cn.'</span> </a> </div>';
+                $html.='    <div class="works" data-id="'.$articles->article_id.'">';            
+                $html.='        <a href="/article/'.$articles->static_url.'" target="_blank">';
+                $html.='            <img src="'.get_article_thum($articles).'" alt=""> ';
+                $html.='            <span>'.get_article_title($articles).'</span>';
+                $html.='        </a>';
+                $html.='    </div>';
             }
+            $html.='    </div>';     
             $html.='</div>';     
         }
         
-       
         return $html;
-        // dd($html);
+        
+
+
+        // dd($con);
+
+
 
     }
 

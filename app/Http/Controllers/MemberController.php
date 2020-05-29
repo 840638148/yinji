@@ -109,7 +109,7 @@ class MemberController extends Controller
         }
         $user=User::where('id',Auth::id())->where('username','like','%ohPM_%')->first();
         // dd($user);
-        if($user->one_visited==1){
+        if(@$user->one_visited==1){
             // User::where('id',$user->id)->update(['one_visited'=>2]);
             return Output::makeResult($request, null, 100,'欢迎来到印际,请移步填写信息');
         }else{
@@ -151,7 +151,7 @@ class MemberController extends Controller
         $province=Db::table("province")->where('province_num',$request->provinces)->value('province_name');
         $city=Db::table("city")->where('city_num',$request->citys)->value('city_name');
         $edit_info['city']=$province.'-'.$city;
-        $result = User::where('id',Auth::id())->update(['nickname' =>$edit_info['nickname'],'mobile' =>$edit_info['mobile'],'zhiwei' =>$edit_info['zhiwei'],'city' =>$edit_info['city'],'one_visited'=>2]); 
+        $result = User::where('id',Auth::id())->update(['nickname' =>$edit_info['nickname'],'mobile' =>$edit_info['mobile'],'zhiwei' =>$edit_info['zhiwei'],'city' =>$edit_info['city'],'one_visited'=>2,'nicksum'=>0]); 
 
         if($result){
             return Output::makeResult($request, null, 100,'填写完毕');
@@ -553,18 +553,13 @@ class MemberController extends Controller
 		$user_id = Auth::id();
         $user = $this->getUserInfo();
 
-        // if ($request->isMethod('post') && $request->page && $request->page > 1) {
-        //     $mores = UserFinder::getMoreTuijians($request);
-        //     return Output::makeResult($request, $mores);
-        // }
-
         $result = UserSubscription::desearch($request,$user_id);
         if(empty($result)){
             return Output::makeResult($request, null, 500,'没有数据');
-        }
-        $data=['result'=>$result,'msg'=>'查询成功'];
-        return Output::makeResult($request, $data);
-
+        }else{
+            $data=['result'=>$result,'msg'=>'查询成功'];
+            return Output::makeResult($request, $data);
+        }   
     }
 
 

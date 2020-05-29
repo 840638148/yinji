@@ -56,38 +56,48 @@
     
     <!----------设计师订阅------->
     
-    <div class="public_list"> @foreach ($user->subscriptions as $subscription)
+    <div class="public_list"> 
+      @foreach ($user->subscriptions as $subscription)
       <div class="public_item" data-id="{{$subscription->id}}">
-        <div class="item_left"> <a href="@if($subscription->static_url) /designer/{{$subscription->static_url}} @else /designer/detail/{{$subscription->id}} @endif">
-          <div class="tx"> <img src="{{get_designer_thum($subscription)}}" alt="{{get_designer_title($subscription)}}"> </div>
+        <div class="item_left"> 
+          <a href="@if($subscription->static_url) /designer/{{$subscription->static_url}} @else /designer/detail/{{$subscription->id}} @endif">
+            <div class="tx"><img src="{{get_designer_thum($subscription)}}" alt="{{get_designer_title($subscription)}}"></div>
           </a>
           <div class="item_msg">
-            <div class="title"> <a href="@if($subscription->static_url) /designer/{{$subscription->static_url}} @else /designer/detail/{{$subscription->id}} @endif"> {{get_designer_title($subscription)}} </a> </div>
-            <div class="describe"> <span>国家：
-              
-              @foreach ($subscription->categorys as $category)
-              
-              @if($loop->last)
-              
-              {{$category['name']}}
-              
-              @else
-              
-              {{$category['name']}},
-              
-              @endif
-              
-              @endforeach </span> <span>{!! get_designer_description($subscription) !!}</span> </div>
-            <div class="focus"> <a href="javascript:void(0)" data-id="{{$subscription->id}}" class="focus_btn2 click cancelSubscription"> 取消订阅 </a>
-              <div class="focus_msg"> <span>作品：{{$subscription->article_num}}</span> | <span>粉丝：{{$subscription->fans_num}}</span> </div>
+            <div class="title"> 
+              <a href="@if($subscription->static_url) /designer/{{$subscription->static_url}} @else /designer/detail/{{$subscription->id}} @endif"> {{get_designer_title($subscription)}} </a> 
+            </div>
+            <div class="describe"> 
+              <span>国家：
+                @foreach ($subscription->categorys as $category)
+                @if($loop->last)
+                {{$category['name']}}
+                @else
+                {{$category['name']}},
+                @endif
+                @endforeach 
+              </span> 
+              <span>{!! get_designer_description($subscription) !!}</span> 
+            </div>
+            <div class="focus"> 
+              <a href="javascript:void(0)" data-id="{{$subscription->id}}" class="focus_btn2 click cancelSubscription"> 取消订阅 </a>
+              <div class="focus_msg"><span>作品：{{$subscription->article_num}}</span> | <span>粉丝：{{$subscription->fans_num}}</span></div>
             </div>
           </div>
         </div>
-        <div class="item_right"> @foreach($subscription->articles as $article)
-          <div class="works" data-id="1722"> <a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif" target="_blank"> <img src="{{get_article_thum($article)}}" alt=""> <span>{{get_article_title($article)}}</span> </a> </div>
-          @endforeach </div>
+        <div class="item_right"> 
+          @foreach($subscription->articles as $article)
+            <div class="works" data-id="1722"> 
+              <a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif" target="_blank"> 
+                <img src="{{get_article_thum($article)}}" alt=""> 
+                <span>{{get_article_title($article)}}</span> 
+              </a> 
+            </div>
+          @endforeach 
+        </div>
       </div>
-      @endforeach </div>
+      @endforeach 
+    </div>
     
     <!----------设计师订阅结束-------> 
     
@@ -97,7 +107,8 @@
 <script type="text/javascript">
   $(document).ready(function(){
     //取消订阅
-    $(".cancelSubscription").click(function(e){
+    $(document).on('click','.cancelSubscription',function(e){
+    // $(".cancelSubscription").click(function(e){
       var designer_id = $(this).attr('data-id');
       $.ajax({
         url: '/member/cancel_subscription',
@@ -145,7 +156,7 @@
           console.log(data.data)
           if(data.status_code==0){
             layer.msg(data.data.msg,{skin: 'intro-login-class layui-layer-hui'});
-            $('.public_item').html(data.data.result); 
+            $('.public_list').html(data.data.result); 
           }else{
             layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
             $('.text_input').val('');
