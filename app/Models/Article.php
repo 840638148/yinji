@@ -202,9 +202,9 @@ class Article extends Model
                    
             if($request->type=='timesort'){
                 if($request->sjx=='desc' ){
-                    $obj = $obj->orderBy('updated_at','desc');
+                    $obj = $obj->orderBy('release_time','desc');
                 }else{
-                    $obj = $obj->orderBy('updated_at','asc');
+                    $obj = $obj->orderBy('release_time','asc');
                 }
             }
             
@@ -222,6 +222,7 @@ class Article extends Model
         if ($category_ids) {
             $obj->where(function($query) use($category_ids){
                 foreach ($category_ids as $category_id) {
+                    // dd($category_ids);
                     $query->orWhere('category_ids', 'like', "%,{$category_id},%");
                 }
             });
@@ -240,9 +241,9 @@ class Article extends Model
                 $query->orWhere('description_en', 'like', "%{$keyword}%");
             });
         }
-
+        // dd($obj);
         $articles = $obj->paginate(intval($request->per_page));
-// dd($articles);
+        // dd(intval($request->page));
         $lang = Session::get('language') ?? 'zh-CN';
         if ('zh-CN' == $lang) {
             $display_name = "name_cn";
@@ -285,13 +286,14 @@ class Article extends Model
     
     public static function getMoreArticles(& $request, $category_ids = [])
     {
-        $articles = Article::getArticles($request, $category_ids);
+        // $articles = Article::getArticles($request, $category_ids);
         $data = [];
         // dd($request->all());
 
         if($request->category_id){
             $category_ids = [$request->category_id];
-
+            $articles = Article::getArticles($request, $category_ids);
+            // $articles=$articles->paginate(15);
             foreach ($articles as $k=>$article) {
                 $category_html = '';
                 if ($article->category) {
@@ -332,7 +334,7 @@ class Article extends Model
             }
 
 
-        }else if(!$request->category_id && $request->type && $request->sjx){
+        }else if(empty($request->category_id) && $request->type && $request->sjx){
             if($request->type=='starssort'){
                 if($request->sjx=='desc'){
                     $articles = Article::orderBy('article_avg','desc')->paginate(15);
@@ -343,9 +345,9 @@ class Article extends Model
                    
             if($request->type=='timesort'){
                 if($request->sjx=='desc' ){
-                    $articles = Article::orderBy('updated_at','desc')->paginate(15);
+                    $articles = Article::orderBy('release_time','desc')->paginate(15);
                 }else{
-                    $articles = Article::orderBy('updated_at','asc')->paginate(15);
+                    $articles = Article::orderBy('release_time','asc')->paginate(15);
                 }
             }
             
@@ -370,35 +372,36 @@ class Article extends Model
                     $url = url('/article/detail/' . $article->id);
                 }
                 $tmp_html = '<li class="layout_li ajaxpost">
-                        <article class="postgrid">
-                        <div class="interior_dafen">'.($article->article_avg !=""  || $article->article_avg !=null ? sprintf("%.1f",$article->article_avg) : "5.0").'</div>
-                        <figure>
-                        <a href="' . $url . '" title="' .get_article_title($article) . '" target="_blank">
-                            <img class="thumb" src="' .get_article_thum($article) . '" data-original="' .get_article_thum($article) . '" alt="' .get_article_title($article) . '" style="display: block;">
-                        </a>
-                    </figure>
-                    <div class="chengshi">' .get_article_location($article) . '</div>
-                    <h2>
-                        <a href="' . $url . '" title="' .get_article_title($article) . '" target="_blank">
-                            <div style="font-size:12px; line-height:30px; color:#999; font-family:Georgia , Times, serif;">' .get_article_title($article, 1) . '</div>
-                            <div style=" color:#666; line-height:24px;">' .get_article_title($article, 2) . '</div>
-                        </a>
-                    </h2>
-                    <div class="homeinfo">
-                        <!--分类-->
-                        ' . $category_html . '
-                        <!--时间-->
-                        <span class="date">' .str_limit($article->release_time, 10, "") . '</span>
-                        <!--点赞-->
-                        <span title="" class="like"><i class="icon-eye"></i><span class="count">' .$article->view_num . '</span></span> </div>
-                    </article>
-                </li>';
+                                <article class="postgrid">
+                                <div class="interior_dafen">'.($article->article_avg !=""  || $article->article_avg !=null ? sprintf("%.1f",$article->article_avg) : "5.0").'</div>
+                                <figure>
+                                <a href="' . $url . '" title="' .get_article_title($article) . '" target="_blank">
+                                    <img class="thumb" src="' .get_article_thum($article) . '" data-original="' .get_article_thum($article) . '" alt="' .get_article_title($article) . '" style="display: block;">
+                                </a>
+                                </figure>
+                                <div class="chengshi">' .get_article_location($article) . '</div>
+                                <h2>
+                                    <a href="' . $url . '" title="' .get_article_title($article) . '" target="_blank">
+                                        <div style="font-size:12px; line-height:30px; color:#999; font-family:Georgia , Times, serif;">' .get_article_title($article, 1) . '</div>
+                                        <div style=" color:#666; line-height:24px;">' .get_article_title($article, 2) . '</div>
+                                    </a>
+                                </h2>
+                                <div class="homeinfo">
+                                    <!--分类-->
+                                    ' . $category_html . '
+                                    <!--时间-->
+                                    <span class="date">' .str_limit($article->release_time, 10, "") . '</span>
+                                    <!--点赞-->
+                                    <span title="" class="like"><i class="icon-eye"></i><span class="count">' .$article->view_num . '</span></span> </div>
+                                </article>
+                            </li>';
                 $data[] = $tmp_html;
             }
             return $data;
 
          
         }else{
+            $articles = Article::getArticles($request, $category_ids);
             foreach ($articles as $k=>$article) {
                 $category_html = '';
                 // $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['id'])->orderBy('article_comments.stars','desc')->avg('stars');
