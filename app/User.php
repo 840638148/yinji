@@ -11,6 +11,7 @@ use App\Models\UserExchangeRecord;
 use App\Models\PointSet;
 use App\Models\UserCollectFolder;
 use App\Models\UserFinder;
+use App\Models\NicknameSum;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
@@ -158,9 +159,9 @@ class User extends Authenticatable
             if ($user->level == 1) {
                 $freenum = 5;
             } else if ($user->level == 2) {
-                $freenum = 10;
+                $freenum = 8;
             } else if ($user->level == 3) {
-                $freenum = 15;
+                $freenum = 10;
             } else if ($user->level == 4) {
                 $freenum = 50;
             } else if ($user->level == 5) {
@@ -192,7 +193,7 @@ class User extends Authenticatable
             } else if ($user->level == 2) {
                 $kounum = 5;
             } else if ($user->level == 3) {
-                $kounum = 10;
+                $kounum = 8;
             } else if ($user->level == 4) {
                 $kounum = 50;
             } else if ($user->level == 5) {
@@ -442,16 +443,28 @@ class User extends Authenticatable
         }
 
         $info=[];
-        $fields = ['nickname','email','mobile','password','one_tel','one_email','nicksum','sex','city','zhiwei','personal_note'];
+        $infos=[];
+        $fields = ['nickname','email','mobile','password','one_tel','one_email','nicksum','sex','city','zhiwei','personal_note',];
         
+
         foreach ($fields as $field) {
             if (isset($edit_info[$field]) && !empty($edit_info[$field])){
                 $info[$field] = $edit_info[$field];
             }
-
         }
-        if($info){
-            User::where('id',Auth::id())->update($info);
+
+        if($info['nickname']){
+            $data=[
+                'nname_be'=>$user->nickname,
+                'nname_af'=>$info['nickname'],
+                'year'=>date('Y'),
+                'user_id'=>Auth::id()
+            ];
+            NicknameSum::create($data);
+            User::where('id',Auth::id())->update(['nicksum'=>'nicksum'.-1,'nickname_type'=>date('Y')]);
+        }
+        if($infos){
+            User::where('id',Auth::id())->update($infos);
         }
 
         if(@$info['one_tel']){
@@ -484,7 +497,7 @@ class User extends Authenticatable
     }
 
     /**
-     * 获取用户修改昵称的次数
+     * 获取用户每年修改昵称的次数
      */
     public static function getEditNicknameNum($user_id){
         $is_vip = self::isVip($user_id);
@@ -500,11 +513,46 @@ class User extends Authenticatable
             }
         }else{
             $num=0;
-        }
-        
+        } 
         return $num;
     }
 
+    /**
+     * 获取用户每年修改昵称的记录
+     */
+    public static function getNickRecord($user_id){
+        return NicknameSum::WhereRaw("DATE_FORMAT(created_at, '%Y' ) = DATE_FORMAT( CURDATE( ) , '%Y' )")->where('user_id',$user_id)->count();
+    }
+
+    /**
+     * 获取用户每年剩下的修改昵称次数
+     */
+    public static function getNickSum($user_id){
+        $num=0;
+        $is_vip = self::isVip($user_id);
+        $nickrecord=self::getNickRecord($user_id);
+        $nicksum=self::getEditNicknameNum($user_id);
+        $user = User::find($user_id);
+        $sum=$nicksum-$nickrecord;
+        $year=date('Y');
+
+        if($sum>0){
+            if($is_vip && $user){
+                if($user->level==1){
+                    $num=1;
+                }else if($user->level==2){
+                    $num=3;
+                }else if($user->level==3){
+                    $num=5;
+                }
+            }else{
+                $num=0;
+            } 
+        }else{
+            $num=0;
+        }
+        return $num;
+    }
 
 
     /**

@@ -128,6 +128,7 @@ Route::post('member/one_visited', 'MemberController@one_visited');//是否第一
 Route::post('member/one_check', 'MemberController@one_check');//微信注册进个人中心提交信息
 Route::post('member/movefxj', 'MemberController@movefxj');//移动图片到其他文件夹里
 Route::post('member/desearch', 'MemberController@desearch');//搜索设计师
+Route::post('member/editnick', 'MemberController@editnick');//检测是否够次数修改昵称
 
 
 

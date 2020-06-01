@@ -118,6 +118,7 @@
             <label for="nickname">昵称</label>
             <input type="text" value="{{$user->nickname}}" disabled='disabled' style="height:46px;">
             <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;width:98px !important;border:none;border-radius:3px;right:0;" type="button" value="更改昵称" class="editnick">
+            <p style='font-size:14px;margin-top:-18px;color:#ccc;'>(月会员1次/年，季会员3次/年，年会员5次/年)</p>
           </p>
           <p>
             <label for="sex">性别</label>
@@ -607,11 +608,28 @@
   })
 
   $(".editnick").click(function(){
-    $(this).siblings('input[type="text"]').removeAttr('disabled');
-    $(this).siblings('input[type="text"]').attr('id','nickname');
-    $(this).siblings('input[type="text"]').attr('name','nickname');
-    $(this).siblings('input[type="text"]').val('');
-    $(this).hide(100)
+    // let nickname=$('#nickname').val();
+    let that=$(this);
+    $.ajax({
+      async: false,
+      url: '/member/editnick',
+      type: 'POST',
+      data:{},
+      success: function (data) {
+        if (data.status_code == 100) {
+          console.log(data.data)
+          layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'})
+          that.siblings('input[type="text"]').removeAttr('disabled');
+          that.siblings('input[type="text"]').attr('id','nickname');
+          that.siblings('input[type="text"]').attr('name','nickname');
+          that.siblings('input[type="text"]').val('');
+          that.hide(100)          
+        } else {
+          layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'})
+        }
+      }
+    });
+
   })
 
   // 阻止提交表单

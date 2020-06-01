@@ -12,6 +12,6 @@ class UserDownRecord extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'down_type', 'down_id',
+        'user_id', 'down_type', 'down_id','is_free'
     ];
 }

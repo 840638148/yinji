@@ -194,6 +194,24 @@ class MemberController extends Controller
     }
 
 
+    /**
+     * 检测是否够次数修改昵称
+    */
+    public function editnick(Request $request){
+        if(!Auth::check()){
+            return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
+        }
+        $user = User::find(Auth::id());
+        $usernamenum=User::getNickSum($user->id);
+        // dd($usernamenum);
+        if($usernamenum<=0){
+            return Output::makeResult($request, null, 500,'修改昵称次数不够');
+        }else{
+            return Output::makeResult($request, null, 100,'今年修改昵称还剩下'.$usernamenum.'次');
+        }
+    }
+
+
 
     /**
      * 修改用户信息
