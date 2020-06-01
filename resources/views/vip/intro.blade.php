@@ -61,7 +61,7 @@
         <td>费用</td>
         <td class="vip_jiage">免费</td>
         <td class="vip_jiage"><em>99</em>元/月</td>
-        <td class="vip_jiage"><em>288</em>元/年</td>
+        <td class="vip_jiage"><em>288</em>元/季</td>
         <td class="vip_jiage"><em>999</em>元/年</td>
         
         <!--td class="vip_jiage">特邀注册</td>
@@ -83,7 +83,7 @@
       </tr>
       <tr>
         <td>注册送积分</td>
-        <td>8</td>
+        <td>10</td>
         <td>58</td>
         <td>168</td>
         <td>288</td>
@@ -109,8 +109,8 @@
         <td>免积分下载次数（/天）</td>
         <td>0</td>
         <td>5</td>
+        <td>8</td>
         <td>10</td>
-        <td>15</td>
         
         <!--td>50</td>
 
@@ -122,7 +122,7 @@
         <td>1</td>
         <td>3</td>
         <td>5</td>
-        <td>10</td>
+        <td>8</td>
         
         <!--td>50</td>
 
