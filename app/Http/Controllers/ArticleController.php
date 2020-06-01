@@ -470,15 +470,12 @@ class ArticleController extends Controller
         $sjx=$request->sjx;
         // dd($request->all());
         $data=[];
-        if ($request->isMethod('post') && $request->page && $request->page > 1) {
-            $mores = UserFinder::getMoreArticles($request);
-            return Output::makeResult($request, $mores);
-        }
 
-        if($request->category_id){
+        /*if($request->category_id){
             $category_ids = [$request->category_id];
-            $articles =Article::getArticles($request, $category_ids);
             
+            $articles =Article::getMoreArticles($request, $category_ids);
+            // dd($articles);
             foreach ($articles as $k=>$article) {
                 $category_html = '';
                 if ($article->category) {
@@ -517,8 +514,10 @@ class ArticleController extends Controller
                 </li>';
                 $data[] = $tmp_html;
             }
-
-        }else{
+            foreach ($articles as $k=>$article) {
+                $data[] = $article;
+            }
+        }else{*/
             $articles = Article::where('article_status', '2')->where('display', '0');
             if($request->type=='starssort'){
                 if($request->sjx=='desc'){
@@ -582,7 +581,7 @@ class ArticleController extends Controller
                 </li>';
                 $data[] = $tmp_html;
             }
-        }
+        // }
 
 
         return Output::makeResult($request, $data);
@@ -673,10 +672,10 @@ class ArticleController extends Controller
         $sandays=UserDownRecord::where('user_id', $user->id)->where('is_free','1')->where('down_id',$request->article_id)->where('created_at', '>=', $today_starts)->where('created_at', '<', $today_ends)->get()->toArray();
         // dd($sandays);
 
-        $leftkou=User::getKouSum($user->id);
+        $leftkou=User::getFreeSum($user->id);
         if(!empty($sandays)){
             return Output::makeResult($request, null, 999, '您已经兑换过,请您移步到个人中心查看!');
-        }else if($freedown>0){
+        }else if($leftkou>0){
             
             if($article->vip_download){
                 $data = [
@@ -689,17 +688,17 @@ class ArticleController extends Controller
 
                 $return_data = [
                     'vip_download' => $article->vip_download,
-                    'leftkou' => $leftkou,
+                    'leftkou' => ($leftkou-1)<0?0:$leftkou-1,
                     'msg'=>'免费兑换成功',
                 ];
-                return Output::makeResult($request,null, 10000, $return_data);
+                return Output::makeResult($request,null, 0, $return_data);
             }else{
-                return Output::makeResult($request, null, 500, '该作品暂未提供下载，请联系管理员！');
+                return Output::makeResult($request, null, 500, '因版权要求，本作品暂不提供下载！');
             }
 
+        }else{
+            return Output::makeResult($request, null, 501, '您当前没有免费的下载次数！');
         }
-        return Output::makeResult($request, null, 501, '您当前没有免费的下载次数！');
-
     }
 
     /**
@@ -718,26 +717,24 @@ class ArticleController extends Controller
         $user = User::find(Auth::id());
         $article = Article::find($request->article_id);
         if (!$article->vip_download) {
-            return Output::makeResult($request, null, 500, '该作品暂未提供下载，请联系管理员！');
+            return Output::makeResult($request, null, 500, '因版权要求，本作品暂不提供下载！');
         }
         $leftdown=User::getLeftDownloadNum($user->id);
         $today_start = date('Y-m-d 00:00:00');
         $today_end   = date('Y-m-d 23:59:59');
         $koudown=User::getKouDownloadNum($user->id);
         $has_koudown=UserDownRecord::where('user_id', $user->id)->where('is_free','2')->where('created_at', '>=', $today_start)->where('created_at', '<', $today_end)->count();
-
+        $leftkou=USer::getKouSum($user->id);
         // dd($user->left_points);
         //检查是否可以兑换
         if($user->left_points>10){
-
-            if ($leftdown>0) {
+            // dd($leftkou);
+            if ($leftkou>0) {
                 $data_exchange = [
                     'user_id' => $user->id,
                 ];
                 UserExchangeRecord::create($data_exchange);
                 
-                //$user->points = $user->points - 10;
-
                 $das=[
                     'user_id' => $user->id,
                     'type' => '1',
@@ -759,7 +756,7 @@ class ArticleController extends Controller
                 
                 $return_data = [
                     'vip_download' => $article->vip_download,
-                    'left_down_num' => $koudown-$has_koudown,
+                    'left_down_num' => ($leftkou-1)<1?0:$leftkou-1,
                     'msg'=>'抵扣成功,扣除10印币',
                 ];
                 return Output::makeResult($request,null,100, $return_data);

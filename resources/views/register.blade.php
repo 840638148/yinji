@@ -285,13 +285,15 @@ $('.verification_email').click(function () {
         let email = $.trim($('#user_email').val());
         let verification_code = $.trim($('#verification_code').val());
         let verification_code_email = $.trim($('#verification_code_email').val());
+        let emailzz = /^([A-Za-z0-9_+-.])+@([A-Za-z0-9\-.])+\.([A-Za-z]{2,22})$/;
+
         if(mobile!='' && mobile != null && mobile != undefined){
             if (!/1[3-8][0-9]{9}/.test(mobile)) {
                 layer.msg('请输入正确手机号',{time:1500,skin: 'intro-login-class layui-layer-hui'});
                 return false;
             }
         }
-        let emailzz = /^([A-Za-z0-9_+-.])+@([A-Za-z0-9\-.])+\.([A-Za-z]{2,22})$/;
+        
         if(email!='' && email != null && email != undefined){
             if(!emailzz.test(email)){
             layer.msg('邮箱格式错误',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
@@ -342,6 +344,13 @@ $('.verification_email').click(function () {
         if (pass1 != pass2) {
             layer.msg('输入的两次密码不同！');
             return false;
+        }
+
+        if(user_login!='' && user_login != null && user_login != undefined){
+            if (!/^[\u4E00-\u9FA5A-Za-z0-9]+$/.test(user_login)) {
+                layer.msg('昵称规范:中文、英文、数字但不包括下划线等符号',{time:1500,skin: 'intro-login-class layui-layer-hui'});
+                return false;
+            }
         }
 
         $.ajax({

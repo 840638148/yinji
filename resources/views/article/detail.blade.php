@@ -155,11 +155,12 @@
                 <li data-toggle="modal"  id="article-collect"><i class="icon-bookmark"></i>收藏</li>
                 
                 <li style=" border-right:none" id="vip-download"> <a href="javascript:void(0)" ><i class="icon-download"></i>下载</a>
-          <div class="down-load-tip">
+                <div class="down-load-tip" style='min-width:271px;'>
                     <div class="down-jiantou"></div>
-                    <p style="height: 30px">今日剩余下载印币抵扣下载次数：<span id="left_down_num">0</span>次</p>
-                    <p style="text-align: left;padding: 0 15px"> <span style="padding: 0 15px">下载链接</span><a style="color: #428bca" href="" target="_blank" ></a> </p>
-                  </div>
+                    <p class='down_con' style="height: 30px">今日剩余免费下载次数：<span id="left_down_num">0</span>次</p>
+                    <p style="text-align: center;padding: 0 15px"> <span style="padding: 0 15px">下载: </span><a style="color: #428bca" href="" target="_blank" >链接</a> <span style='position: relative;padding: 0 15px;'>提取码：<input title='点我复制' class='copybtn' style='padding: 0 5px 0;background: #ccc;border-radius: 5px;cursor: pointer;border:none;width:50px;height:20px;' onclick="copybtn(this)" readonly value=''></span>
+                    </p>
+                </div>
         </li>
               </ul>
     </div>
@@ -385,6 +386,14 @@
                 });
             });
 
+            //提取码复制
+            function copybtn(obj){
+                let con=document.getElementById("tqmm");
+                obj.select(); // 选择对象
+                document.execCommand("Copy"); // 执行浏览器复制命令
+                // console.log(con);
+                layer.msg('复制成功',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+            }
 
 
             //下载
@@ -399,43 +408,32 @@
                         dataType: 'json',
                         data: {_token:'{{csrf_token()}}',article_id:article_id},
                         success: function (data) {
+                            console.log(data);
                             if(data.status_code == 0) {
-                                // layer.msg(data.return_data.msg,{skin: 'intro-login-class layui-layer-hui'})
-                                $('.down-load-tip').show()
-                                $('.down-load-tip').find('a').attr('href',data.data.vip_download)
-                                $('.down-load-tip').find('a').html(data.data.vip_download)
-                                $('.down-load-tip').find('#left_down_num').html(data.data.leftkou)
-                                // window.open(data.data.vip_download);
-                            }else if(data.status_code == 10000){
-                                layer.msg(data.message.msg,{skin: 'intro-login-class layui-layer-hui'})
                                 $('.down-load-tip').show()
                                 $('.down-load-tip').find('a').attr('href',data.message.vip_download)
-                                $('.down-load-tip').find('a').html(data.message.vip_download)
-                                $('.down-load-tip').find('#left_down_num').html(data.message.leftkou)
+                                $('.down-load-tip').find('input').val(data.message.vip_download.substr(-4))
+                                $('.down_con').html('今日剩余免费下载次数'+data.message.leftkou)
                             }else if(data.status_code == 501) {
                                 //todo 弹出确认兑换框，如果用户选择确认调用兑换接口/article/vip_exchange
-                                // if(confirm('是否兑换下载次数？')) {
-                                    console.log(data);
                                     $.ajax({
                                         url: '/article/exchange',
                                         type: 'POST',
                                         dataType: 'json',
                                         data: {_token:'{{csrf_token()}}',article_id:article_id},
                                         success: function (data) {
+                                            console.log(data);
                                             if (data.status_code == 100) {
                                                 layer.msg(data.message.msg,{skin: 'intro-login-class layui-layer-hui'})
-                                                $('.down-load-tip').show()
-                                                $('.down-load-tip').find('a').attr('href',data.message.vip_download)
-                                                $('.down-load-tip').find('a').html(data.message.vip_download)
-                                                $('.down-load-tip').find('#left_down_num').html(data.message.leftkou)
-                                                // window.open(data.data.vip_download);
+                                                $('.down-load-tip').show();
+                                                $('.down-load-tip').find('a').attr('href',data.message.vip_download);
+                                                $('.down-load-tip').find('input').val(data.message.vip_download.substr(-4));
+                                                $('.down_con').html('今日剩余积分下载次数'+data.message.left_down_num);
                                             } else {
                                                 layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
                                             }
                                         }
                                     });
-                                // }
-
                                 return ;
                             }else{
                                 layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
