@@ -10,7 +10,7 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Illuminate\Http\Request;
 use Validator;
-
+use DB;
 use App\User as CurrentModel;
 
 class UserController extends BaseController
@@ -133,6 +133,41 @@ class UserController extends BaseController
     }
     
     
+
+    /**
+     * Delete action.
+     *
+     * @param $id
+     * @return Content
+     */
+    public function removes($id)
+    {
+        $ids = explode(',', $id);
+        
+        $res1=Db::table('users')->where('id',$ids)->delete();
+        $res2=Db::table('vip_buy_orders')->where('user_id',$ids)->delete();
+        $res3=Db::table('user_thirds')->where('user_id',$ids)->delete();
+        $res4=Db::table('user_subscriptions')->where('user_id',$ids)->delete();
+        $res5=Db::table('user_points')->where('user_id',$ids)->delete();
+        $res6=Db::table('user_likes')->where('user_id',$ids)->delete();
+        $res7=Db::table('user_follows')->where('user_id',$ids)->delete();
+        $res8=Db::table('user_finders')->where('user_id',$ids)->delete();
+        $res9=Db::table('user_finder_folders')->where('user_id',$ids)->delete();
+        $res10=Db::table('user_exchange_records')->where('user_id',$ids)->delete();
+        $res11=Db::table('user_down_records')->where('user_id',$ids)->delete();
+        $res12=Db::table('user_collects')->where('user_id',$ids)->delete();
+        $res13=Db::table('user_collect_folders')->where('user_id',$ids)->delete();
+        $res14=Db::table('user_attendances')->where('user_id',$ids)->delete();
+        $res15=Db::table('nickname_sums')->where('user_id',$ids)->delete();
+
+        return response()->json([
+                'status'  => true,
+                'message' => trans('admin::lang.delete_succeeded'),
+        ]);
+
+    }
+
+
     protected function valid(Request $request)
     {	 
     	return Validator::make($request->all(), [
