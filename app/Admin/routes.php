@@ -160,7 +160,8 @@ Route::group([
     $router->post('/user', 'UserController@postCreate');
     $router->get('/user/{id}/edit', 'UserController@getEdit');
     $router->put('/user/{id}', 'UserController@putEdit');
-    $router->delete('/user/{id}', 'UserController@remove');
+    // $router->delete('/user/{id}', 'UserController@remove');
+    $router->delete('/user/{id}', 'UserController@removes');
 
     
     //会员设置

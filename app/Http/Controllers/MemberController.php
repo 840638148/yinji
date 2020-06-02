@@ -107,10 +107,10 @@ class MemberController extends Controller
         if(!Auth::check()){
             return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
         }
-        $user=User::where('id',Auth::id())->where('username','like','%ohPM_%')->first();
+
+        $user=User::where('id',Auth::id())->where('username','like','%ohPM_%')->where('created_at','<','2020-06-02 00:00:00')->where('mobile','=','')->first();
         // dd($user);
-        if(@$user->one_visited==1){
-            // User::where('id',$user->id)->update(['one_visited'=>2]);
+        if($user->one_visited==1 || $user){
             return Output::makeResult($request, null, 100,'欢迎来到印际,请移步填写信息');
         }else{
             return Output::makeResult($request, null, 200,'欢迎回来');
@@ -202,12 +202,12 @@ class MemberController extends Controller
             return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
         }
         $user = User::find(Auth::id());
-        $usernamenum=User::getNickSum($user->id);
-        // dd($usernamenum);
-        if($usernamenum<=0){
+        $nicknamenum=User::getNickSum($user->id);
+        // dd($nicknamenum);
+        if($nicknamenum<=0){
             return Output::makeResult($request, null, 500,'修改昵称次数不够');
         }else{
-            return Output::makeResult($request, null, 100,'今年修改昵称还剩下'.$usernamenum.'次');
+            return Output::makeResult($request, null, 100,'今年修改昵称还剩下'.$nicknamenum.'次');
         }
     }
 
@@ -229,14 +229,10 @@ class MemberController extends Controller
         foreach ($fields as $field) {
             $edit_info[$field] = $request->get($field);
         }
-        $usernamenum=User::getEditNicknameNum($user->id);
+        $usernamenum=User::where('nickname',$request->nickname)->first();
         if($request->nickname){
-            if($usernamenum<=0){
-                return Output::makeResult($request, null, 500,'修改昵称次数不够');
-            }else if(($usernamenum-1)<0){
-                $usernamenum=0;
-            }else{
-                $edit_info['nicksum']=$usernamenum-1;
+            if($usernamenum){
+                return Output::makeResult($request, null, 500,'昵称太受欢迎');
             }
         }
 

@@ -173,7 +173,7 @@
           </p>
           <p style='position:relative'>
             <label for="zhuye">个人主页</label>
-            <a href="{{$user->url}}" style="height:46px;">http://www.baidu.com</a>
+            <a href="javascript:layer.msg('敬请期待！',{time: 1500,skin: 'intro-login-class layui-layer-hui'});" style="height:46px;">http://www.yinjispace.com</a>
           </p>
           <p>
             <label for="personal_note">个人说明</label>
@@ -247,7 +247,11 @@
 
           <div id="homepage_top_img" style="overflow:hidden">
             <label for="avatar">个人主图</label>
+            @if($user->zhuti)
             <img id="avimg" src="{{$user->zhuti}}" alt="个人主图" width="600" hidden="200" style="display:block; width:200px; float:left; height:100px;" > <a class="avatar_uploader" href="javascript:void(0)" > 点击更换个人主图 <input type="file" id="fileSingleImg" class="filepath" onchange="changeSingleImg(this)" accept="image/jpg,image/jpeg,image/png,image/PNG" /></a> <span>当前为<strong>个人主页主图</strong>，建议大小：1920*300。</span> </div>
+            @else
+            <img id="avimg" src="/images/zhutibj.jpg" alt="个人主图" width="600" hidden="200" style="display:block; width:200px; float:left; height:100px;" > <a class="avatar_uploader" href="javascript:void(0)" > 点击更换个人主图 <input type="file" id="fileSingleImg" class="filepath" onchange="changeSingleImg(this)" accept="image/jpg,image/jpeg,image/png,image/PNG" /></a> <span>当前为<strong>个人主页主图</strong>，建议大小：1920*300。</span> </div>
+            @endif
           <p>
             <input name="avatar" type="hidden" value="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" />
             <!-- <input type="submit" value="保存更改" class="submit"> -->
@@ -283,19 +287,15 @@
             <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;width:98px !important;border:none;border-radius:3px;right:0;" type="button" value="更换手机" class="jbmobile">
             @else
             <input type="tel" id="mobile" maxlength='11' name="mobile" placeholder='请填写手机号' value="" >
-            <p style='position:relative;' class='tel_yzm'>
-              <label for="verification_code" style="position:relative">输入手机验证码</label>
+            <input style="padding: 0 19px;position:absolute;top:40px;height:48px;background: #63c5f3;color: #fff;border-radius:3px;" name="发送验证码" onclick="bdtel()" type="button" value="获取验证码" class="verification">
+            <p style='position:relative;display:none;' class='tel_yzm'>
+              <label for="verification_code" style="position:relative">手机验证码</label>
               <input type="text" name="verification_code" id="verification_code" class="input" style='height:47px;' value="" size="20" placeholder="请输入手机验证码">
-              <input style="padding: 0 19px;position:absolute;top:40px;height:48px;background: #63c5f3;color: #fff;border-radius:3px;" name="发送验证码" onclick="bdtel()" type="button" value="获取验证码" class="verification">
+              
           </p>
             @endif
           </p>
 
-          <p style='position:relative;display:none;' class='tel_yzm'>
-            <label for="verification_code" style="position:relative">输入手机验证码</label>
-            <input type="text" name="verification_code" id="verification_code" class="input" style='height:47px;' value="" size="20" placeholder="请输入手机验证码">
-            <input style="padding: 0 19px;position:absolute;top:40px;height:48px;background: #63c5f3;color: #fff;border-radius:3px;" name="发送验证码" onclick="bdtel()" type="button" value="获取验证码" class="verification">
-          </p>
           <p style='position:relative;'>
             <label for="email">电子邮件</label>
             @if($user->email)
@@ -303,18 +303,15 @@
             <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;width:98px !important;border:none;border-radius:3px;right:0;" type="button" value="更换邮箱" class="jbemail">
             @else
             <input type="email" id="email" name="email" value="" placeholder='请填写邮箱' >
-            <p style='position:relative;' class='email_yzm'>
-              <label for="verification_code" style="position:relative">输入邮箱验证码</label>
+            <input style="padding: 0 19px;position:absolute;top:40px;height:48px;background: #63c5f3;color: #fff;border-radius:3px;right:0;border:none;" name="发送验证码" type="button" value="获取验证码" class="verification_email" onclick='bdemail()'>
+            <p style='position:relative;display:none;' class='email_yzm'>
+              <label for="verification_code" style="position:relative">邮箱验证码</label>
               <input type="text" name="verification_code" id="verification_code_email" class="input" style='height:48px;' value="" size="20" placeholder="请输入邮箱验证码">
-              <input style="padding: 0 19px;position:absolute;top:40px;height:48px;background: #63c5f3;color: #fff;border-radius:3px;right:0;border:none;" name="发送验证码" type="button" value="获取验证码" class="verification_email" onclick='bdemail()'>
+              
           </p> 
             @endif
           </p>
-          <p style='position:relative;display:none;' class='email_yzm'>
-            <label for="verification_code" style="position:relative">输入邮箱验证码</label>
-            <input type="text" name="verification_code" id="verification_code_email" class="input" style='height:48px;' value="" size="20" placeholder="请输入邮箱验证码">
-            <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #63c5f3;color: #fff;border-radius:3px;right:0;border:none;" name="发送验证码" type="button" value="获取验证码" class="verification_email" onclick='bdemail()'>
-          </p>
+
           <p>
             <label for="pass1">新密码</label>
             <input type="password" id="pass1" name="pass1">
@@ -641,15 +638,23 @@
   //发送邮箱
   function bdemail(){
     $('#verification_code_email').val('');
+    
     let email=$('#email').val();
+
+    if(email==''||email==null||email==undefined){
+      layer.msg('请填写邮箱',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+      return false;
+    }
+      
     // alert(email)
     let emailzz = /^([A-Za-z0-9_+-.])+@([A-Za-z0-9\-.])+\.([A-Za-z]{2,22})$/;
     if(email!='' && email != null && email != undefined){
       if(!emailzz.test(email)){
         layer.msg('邮箱格式错误',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-        // return false;
+        return false;
       }
     }
+    $(".email_yzm").show();
     $.ajax({
         async: false,
         url: '/member/bdemail',
@@ -662,8 +667,9 @@
           } else {
             layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'})
           }
-        }
-      });
+      }
+    });
+    
   }
 
   //发送手机
@@ -680,7 +686,17 @@
           }
       }, 200);
     }
-
+    if(mobile==''|| mobile==null||mobile==undefined){
+      layer.msg('请填写手机号',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+      return false;
+    }
+    if(mobile!='' && mobile != null && mobile != undefined){
+      if(!(/^1[34578]\d{9}$/.test(mobile))){ 
+        layer.msg('手机号格式错误',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+        return false;
+      }
+    }
+    $(".tel_yzm").show();
     wp_attempt_focus();
       if (typeof wpOnload == 'function') wpOnload();
       //获取验证码
@@ -736,7 +752,7 @@
         layer.msg('手机号格式错误',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
         return false;
       }
-    }else
+    }
     if(email!='' && email != null && email != undefined){
       if(!emailzz.test(email)){
         layer.msg('邮箱格式错误',{time: 1500,skin: 'intro-login-class layui-layer-hui'});

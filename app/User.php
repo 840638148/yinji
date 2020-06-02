@@ -431,9 +431,9 @@ class User extends Authenticatable
             return '用户不存在';
         }
         
-        if (!empty($edit_info['username']) && self::isExistsByName($user['username'], [['id', '!=', $user_id]])) {
-            return '用户名已经存在';
-        }
+        // if (!empty($edit_info['username']) && self::isExistsByName($user['username'], [['id', '!=', $user_id]])) {
+        //     return '用户名已经存在';
+        // }
         
         $has_mobile=self::where('mobile',$edit_info['mobile'])->value('mobile');
         if($edit_info['code_tel']){
@@ -443,16 +443,15 @@ class User extends Authenticatable
         }
 
         $info=[];
-        $infos=[];
-        $fields = ['nickname','email','mobile','password','one_tel','one_email','nicksum','sex','city','zhiwei','personal_note',];
+        $fields = ['nickname','email','mobile','password','one_tel','one_email','sex','city','zhiwei','personal_note',];
         
-
+        
         foreach ($fields as $field) {
             if (isset($edit_info[$field]) && !empty($edit_info[$field])){
                 $info[$field] = $edit_info[$field];
             }
         }
-
+        // dd($edit_info);
         if($info['nickname']){
             $data=[
                 'nname_be'=>$user->nickname,
@@ -461,10 +460,10 @@ class User extends Authenticatable
                 'user_id'=>Auth::id()
             ];
             NicknameSum::create($data);
-            User::where('id',Auth::id())->update(['nicksum'=>'nicksum'.-1,'nickname_type'=>date('Y')]);
+            
         }
-        if($infos){
-            User::where('id',Auth::id())->update($infos);
+        if($info){
+            User::where('id',Auth::id())->update($info);
         }
 
         if(@$info['one_tel']){
@@ -521,7 +520,7 @@ class User extends Authenticatable
      * 获取用户每年修改昵称的记录
      */
     public static function getNickRecord($user_id){
-        return NicknameSum::WhereRaw("DATE_FORMAT(created_at, '%Y' ) = DATE_FORMAT( CURDATE( ) , '%Y' )")->where('user_id',$user_id)->count();
+        return NicknameSum::Where('year',date('Y'))->where('user_id',$user_id)->count();
     }
 
     /**
@@ -535,19 +534,9 @@ class User extends Authenticatable
         $user = User::find($user_id);
         $sum=$nicksum-$nickrecord;
         $year=date('Y');
-
+        // dd($sum);
         if($sum>0){
-            if($is_vip && $user){
-                if($user->level==1){
-                    $num=1;
-                }else if($user->level==2){
-                    $num=3;
-                }else if($user->level==3){
-                    $num=5;
-                }
-            }else{
-                $num=0;
-            } 
+            $num=$sum;
         }else{
             $num=0;
         }
