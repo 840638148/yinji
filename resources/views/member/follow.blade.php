@@ -7,9 +7,6 @@
 
 @section('content')
 <style>
-  body{background:#f8f8f8 !important;}
-  .home_box{border-radius:10px !important;}
-  .home_top{background:#fff !important;}
   .container
   {
       position: absolute;
@@ -65,6 +62,17 @@
       text-align: center;
       line-height: 400px;
       background: rgba(0,0,0,0.7);
+  }
+  body{background:#f8f8f8 !important;}
+  .home_box{border-radius:10px !important;}
+  .home_top{background:#fff !important;}
+  .masonry{
+	  display: flex;
+	  justify-content: flex-start;
+	  flex-wrap: wrap;
+  }
+  .masonry .item{
+	  width: 25%;
   }
 </style>
 <div class="home_top">
