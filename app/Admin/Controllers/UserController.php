@@ -159,7 +159,8 @@ class UserController extends BaseController
         $res13=Db::table('user_collect_folders')->where('user_id',$ids)->delete();
         $res14=Db::table('user_attendances')->where('user_id',$ids)->delete();
         $res15=Db::table('nickname_sums')->where('user_id',$ids)->delete();
-
+        $res15=Db::table('article_comments')->where('user_id',$ids)->delete();
+        
         return response()->json([
                 'status'  => true,
                 'message' => trans('admin::lang.delete_succeeded'),
