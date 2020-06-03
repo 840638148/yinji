@@ -691,7 +691,7 @@
       return false;
     }
     if(mobile!='' && mobile != null && mobile != undefined){
-      if(!(/^1[34578]\d{9}$/.test(mobile))){ 
+      if(!(/^[1][3,4,5,6,7,8,9][0-9]{9}$/.test(mobile))){ 
         layer.msg('手机号格式错误',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
         return false;
       }

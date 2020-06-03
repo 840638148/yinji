@@ -188,7 +188,7 @@ $('.verification_email').click(function () {
     // 判断是否为手机号
 
     function isPhoneAvailable(phone) {
-        var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+        var myreg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
         if (!myreg.test(phone)) {
             return false;
         } else {
@@ -288,7 +288,7 @@ $('.verification_email').click(function () {
         let emailzz = /^([A-Za-z0-9_+-.])+@([A-Za-z0-9\-.])+\.([A-Za-z]{2,22})$/;
 
         if(mobile!='' && mobile != null && mobile != undefined){
-            if (!/1[3-8][0-9]{9}/.test(mobile)) {
+            if (!/^[1][3,4,5,6,7,8,9][0-9]{9}$/.test(mobile)) {
                 layer.msg('请输入正确手机号',{time:1500,skin: 'intro-login-class layui-layer-hui'});
                 return false;
             }
