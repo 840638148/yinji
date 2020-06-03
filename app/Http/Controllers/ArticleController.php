@@ -332,15 +332,15 @@ class ArticleController extends Controller
         //上一条
         // $previous_id = Article::where('id', $id)->max('id');
         // $previous_article = Article::getArticle($previous_id);
-        $previous_id = Article::where('id',$id)->pluck('created_at');
-        $previous_article = Article::where('created_at','<',$previous_id)->first();
+        $previous_id = Article::where('id',$id)->pluck('release_time');
+        $previous_article = Article::where('release_time','<',$previous_id)->where('display',0)->where('article_status',2)->orderby('release_time','desc')->first();
 
 
         //下一条
         // $next_id = Article::where('id', '>', $id)->min('id');
         // $next_article = Article::getArticle($next_id);
-        $next_id = Article::where('id',$id)->pluck('created_at');
-        $next_article = Article::where('created_at','>',$next_id)->first();
+        $next_id = Article::where('id',$id)->pluck('release_time');
+        $next_article = Article::where('release_time','>',$next_id)->where('display',0)->where('article_status',2)->orderby('release_time','desc')->first();
 
         //最新
         // $new_article = Article::getNewArticles(1);
