@@ -168,11 +168,11 @@
     width: 500px;
     /* height: 300px; */
     background: #f2f2f2;
-    position: absolute;
+    position: fixed;
     z-index: 999;
     border:1px solid #f2f2f2;
     display:none;
-    top: 60%;
+    top: 28%;
     left: 37%;
     border-radius: 5px;
   }
@@ -198,6 +198,146 @@
   body{background:#f8f8f8 !important;}
   .home_box{border-radius:10px !important;}
   .home_top{background:#fff !important;}
+  
+  /* ------------------------------------------------------------------- */
+  
+  .box { 
+      -moz-column-count:4; /* Firefox */
+      -webkit-column-count:4; /* Safari 和 Chrome */
+      column-count:4;
+      -moz-column-gap: 2em;
+      -webkit-column-gap: 2em;
+      column-gap: 2em;
+      width: 100%;
+      margin:2em auto;
+  }
+  .itemww { 
+      margin-bottom: 2em;
+      -moz-page-break-inside: avoid;
+      -webkit-column-break-inside: avoid;
+      break-inside: avoid;
+      position: relative;
+  }
+  .titlename{
+    position: absolute;
+    background:rgba(250,250,250,.8);
+    width: 65%;
+    bottom: 0;
+    color: #000;
+    height: 33px;
+    line-height: 35px;
+    border-radius: 35px;
+    margin:0 0 5px 10px;
+    text-indent: 1em;
+    display: none;
+    cursor:pointer;
+  }
+  
+  .scbtm{
+    background: #e1244e;
+      width: 50px;
+      height: 35px;
+      line-height: 35px;
+      text-align: center;
+      color: #fff;
+      display: inline-block;
+      border-radius: 30px;
+      position: absolute;
+      bottom: 5px;
+      right: 18px;
+      display: none;
+      cursor:pointer;
+  }
+  .scbtmlbt{
+    background: #e1244e;
+      width: 50px;
+      height: 35px;
+      line-height: 35px;
+      text-align: center;
+      color: #fff;
+      display: inline-block;
+      border-radius: 4px;
+      position: absolute;
+    z-index:999999999;
+      top: 5px;
+      left: 5px;
+    display:none;
+      cursor:pointer;
+  }
+  .swiper-slide{
+  	  display: flex;
+  	  justify-content: center;
+  	  align-items: center;
+  	  height: 90%;
+  }
+  .swiper-slide img{
+  	  display: inline-block;
+  	  margin: auto;
+  	  max-height: 64rem;
+  }
+  .swiper-slide:hover .scbtmlbt{
+    display:block;
+  }
+  .showscbtn{
+    position: fixed;
+      left: 50%;
+      top: 20%;
+      width: 620px;
+      margin-left: -330px;
+      height: 450px;
+      background: #fff;
+      z-index: 19999999;
+      padding: 20px;
+      border-radius: 5px;
+      display: none;
+  }
+  .showscbtnlbt{
+    position: fixed;
+      left: 50%;
+      top: 20%;
+      width: 620px;
+      margin-left: -330px;
+      height: 450px;
+      background: #fff;
+      z-index: 19999999;
+      padding: 20px;
+      border-radius: 5px;
+      display: none;
+  }
+  
+  .lzcfg{
+      background: rgba(0,0,0,0.5);
+      position: fixed;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      display: none;
+      z-index: 99999999;
+  }
+  
+  .swiper-container{
+    display:none;
+      top:10%;
+    position:fixed;
+    z-index:9999999999;
+  	width: 100%;
+  	height: 100%;
+  }
+  
+  .itemww:hover .titlename,.itemww:hover .scbtm{
+    display: block;
+  }
+  @media  screen and (max-width: 800px) { 
+      .box { 
+          column-count: 2; // two columns on larger phones 
+      } 
+  } 
+  @media  screen and (max-width: 500px) { 
+      .box { 
+          column-count: 1; // two columns on larger phones 
+      } 
+  }
 </style>
 <div class="lzcfg"></div>
 <div class="home_top">
@@ -244,13 +384,15 @@
 <div class="swiper-container swiper-home">
 	<div style="padding:5px;color:#fff;font-size:65px;position:fixed;z-index:999999999999;top:120px;right:20px;cursor: pointer;" class="closeltb"> × </div>
 	<div class="swiper-wrapper"> 
-		@foreach ($folist as  $i =>$v)
+    @foreach ($folist as  $i =>$v)
+    
+    <article class="swiper-slide slide-single" data-swiper-slide-index="{{$loop->iteration}}"> 
+		<div class="wrap" style="position: relative;">
+			<img id="btntp" width="600px" height="600px" src="{{$v['photo_url']}}" data-id="{{$v['photo_source']}}" alt="{{$v['name']}}">
+			<div class="scbtmlbt" data-id="{{$v['photo_source']}}" data-pid-i="{{ $i }}" onclick="getID(this)">发现</div>
+		</div>
+    </article>
 
-			<article class="swiper-slide slide-single" data-swiper-slide-index="{{$loop->iteration}}" >
-				<img width="600px" height="600px" src="{{$v['photo_url']}}" data-id="{{$v['photo_source']}}" alt="{{$v['name']}}">
-				<div class="scbtmlbt" data-id="{{$v['photo_source']}}" data-pid-i="{{ $i }}" onclick="getID(this)">收藏</div>
-			</article>
-			
 		@endforeach 
     </div>
       <!-- 按钮 -->
@@ -294,6 +436,11 @@
         <span class='closefxj' style='padding:5px;font-size: 22px;float: right;cursor: pointer;'>X</span>
         @foreach($folderall as $v)
         <p><span class='fxj_left'>{{$v->name}}</span><span photo_src="{{$detail['photo_url']}}" source='{{$detail["photo_source"]}}' data-id='{{$v->id}}' class='fxj_right'>移动</span></p>
+        <div class='move_del'>
+            <div class='left_sjx'></div>
+            <p><a style="padding-top: 1.5px;color:#fff;" source='{{$detail["photo_source"]}}' href="javascript:;" class="yd_find_img" data-id="{{$detail['id']}}" tag="移动发现的图片到其他文件夹">移动</a></p>
+            <p><a style="padding-top: 1.5px;color:#fff;" href="javascript:;" class="remove_find_img" data-id="{{$detail['id']}}" tag="删除发现的图片">删除</a></p>
+          </div>
         @endforeach
       </div>
 
@@ -353,62 +500,91 @@
     });
   });
 
-
-  $('.find_title>.dot').click(function(){
-    if($('.move_del').css("display")=="none"){//如果当前隐藏
-        $(this).siblings(".move_del").css('display','block');
-      }else{//否则
-        $(this).siblings(".move_del").css('display','none');
-      }
+ var hoverTimer = ''
+  $('.find_title>.dot').hover(function(){
+      $(this).siblings(".move_del").css('display','block');
+  },function(){
+	  let _this = $(this)
+	  hoverTimer = setTimeout(function(){
+		  _this.siblings(".move_del").css('display','none');
+	  },100)
   });
+  
+  $('.move_del').hover(function(){
+      clearTimeout(hoverTimer)
+  },function(){
+  	$('.find_title>.dot').siblings(".move_del").css('display','none');
+  });
+  
+  function start(){
+  	let len = $(".swiper-slide").length
+  	$(".swiper-slide").eq(i).show().siblings().stop(true, true).hide();
+      // timer = setInterval(function(){
+      //     i++;
+      //     if(i == len){
+      //         i = 1;
+      //     }
+      //     change();
+      // }, 3000);
+  }
+  function change(){
+      $(".swiper-slide").eq(i).show().siblings().stop(true, true).hide();
+  }
 
 	//--点击上面的图片显示轮播图片--
-	$(document).on('click','.masonry .item_content>li',function(){
-      $('.lzcfg').css('display','block');
-      $('.swiper-container').css('display','block');
-
+	$(document).on('click','.discovery-item .item_content>li',function(){
+		var index = $(this).index()
+		console.log(index)
+		i = index
+		$('.lzcfg').css('display','block');
+		$('.swiper-container').css('display','block');
+		start()
+		
+		
+      // $('.lzcfg').css('display','block');
+      // $('.swiper-container').css('display','block');
         //轮播图效果
-    var $page_main_body = $('.slide-home');
-    var $button_next = $page_main_body.find('.swiper-home-button-next');
-    var $button_prev = $page_main_body.find('.swiper-home-button-prev');
-    var len = $('.slide-home').find('.swiper-slide').length;
-      bannerSwiper = new Swiper('.swiper-home', {
-      pagination: '.swiper-home-pagination',
-      nextButton: '.swiper-home-button-next',
-      prevButton: '.swiper-home-button-prev',
-      autoplayDisableOnInteraction: true,
-      loop: true,
-      centeredSlides: true,
-      observer: true, //解决数据传入后轮播问题
-        observerParents: true,
-        autoResize: true, //尺寸自适应
-        initialSlide: 0,
-        direction: "horizontal",
-        /*形成环路（即：可以从最后一张图跳转到第一张图*/
-        slidesPerView: 'auto',
-        loopedSlides: 0,
-        autoplay: 1500,
-        /*每隔3秒自动播放*/
-      on: {
-        init: function () {
-          var width = parseInt($page_main_body.width());
-          if ($index_pc_bt.size() > 0) {
-            $index_pc_bt.css('width', (width - this.slidesSizesGrid['0']) / 2 + 'px');
-          }
-        }
-      },
-      onInit: function (swiper) {
-        swiper.slides[2].className = "swiper-slide swiper-slide-active";//第一次打开不要动画
-      },
-      breakpoints: {
-        668: {
-          slidesPerView: 1
-        }
-      },
-      lazy: {
-        loadPrevNext: true,
-      }
-    });
+    // var $page_main_body = $('.slide-home');
+    // var $button_next = $page_main_body.find('.swiper-home-button-next');
+    // var $button_prev = $page_main_body.find('.swiper-home-button-prev');
+    // var len = $('.slide-home').find('.swiper-slide').length;
+    //   bannerSwiper = new Swiper('.swiper-home', {
+    //   pagination: '.swiper-home-pagination',
+    //   nextButton: '.swiper-home-button-next',
+    //   prevButton: '.swiper-home-button-prev',
+    //   autoplayDisableOnInteraction: true,
+    //   loop: true,
+    //   centeredSlides: true,
+    //   observer: true, //解决数据传入后轮播问题
+    //     observerParents: true,
+    //     autoResize: true, //尺寸自适应
+    //     initialSlide: 0,
+    //     direction: "horizontal",
+    //     /*形成环路（即：可以从最后一张图跳转到第一张图*/
+    //     slidesPerView: 'auto',
+    //     loopedSlides: 0,
+    //     autoplay: 1500,
+    //     /*每隔3秒自动播放*/
+    //   on: {
+    //     init: function () {
+    //       var width = parseInt($page_main_body.width());
+    //       if ($index_pc_bt.size() > 0) {
+    //         $index_pc_bt.css('width', (width - this.slidesSizesGrid['0']) / 2 + 'px');
+    //       }
+    //     }
+    //   },
+    //   onInit: function (swiper) {
+    //     swiper.slides[2].className = "swiper-slide swiper-slide-active";//第一次打开不要动画
+    //   },
+    //   breakpoints: {
+    //     668: {
+    //       slidesPerView: 1
+    //     }
+    //   },
+    //   lazy: {
+    //     loadPrevNext: true,
+    //   }
+    // });
   })
   
 	//点击关闭轮播图
@@ -416,22 +592,52 @@
       $('.swiper-container').css('display','none');
       $('.showscbtnlbt').css('display','none');
       $('.lzcfg').css('display','none');
+      // clearInterval(timer);
     })
 
 
   //切换图片
-  $(document).on('click','.more-img-item',function(){
-      var src = '';
-      //去除所有选中状态
-      $('.more-img-item').each(function(){
-          $(this).removeClass('selected');
-      })
-      $(this).parents('.right').prev().find('#discovery-folder-name').html($(this).find('img').attr('alt'))
-      // 添加选中状态
-      $(this).addClass('selected');
+  // $(document).on('click','.more-img-item',function(){
+  //     var src = '';
+  //     //去除所有选中状态
+  //     $('.more-img-item').each(function(){
+  //         $(this).removeClass('selected');
+  //     })
+  //     $(this).parents('.right').prev().find('#discovery-folder-name').html($(this).find('img').attr('alt'))
+  //     // 添加选中状态
+  //     $(this).addClass('selected');
 
-      src = $(this).find('img').attr('src');
-      $(this).parents('.img_browse').find('.selected-image').attr('src',src);
+  //     src = $(this).find('img').attr('src');
+  //     $(this).parents('.img_browse').find('.selected-image').attr('src',src);
+  // })
+  $(document).on('click','.swiper-button-next',function(){
+  		let len = $(".swiper-slide").length
+  		i++;
+  		if(i >= len){
+  			i = 0;
+  		}
+  		change();
+  })
+  $(document).on('mousemove','.swiper-button-next',function(){
+  		// clearInterval(timer);
+  })
+  $(document).on('mouseout','.swiper-button-next',function(){
+  		start()
+  })
+  
+  $(document).on('click','.swiper-button-prev',function(){
+  		let len = $(".swiper-slide").length
+  		i--;
+  		if(i <= 0){
+  		    i = len-1;
+  		}
+  		change();
+  })
+  $(document).on('mousemove','.swiper-button-prev',function(){
+  		// clearInterval(timer);
+  })
+  $(document).on('mouseout','.swiper-button-prev',function(){
+  		start()
   })
 
 
@@ -479,6 +685,7 @@
 
 
 </script>
+
 
 <!--个人发现中心的图片浏览-->
 

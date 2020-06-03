@@ -69,9 +69,20 @@
       position: absolute;
     z-index:999999999;
       top: 5px;
-      left: 30%;
+      left: 5px;
     display:none;
       cursor:pointer;
+  }
+  .swiper-slide{
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  height: 90%;
+  }
+  .swiper-slide img{
+  	  display: inline-block;
+	  margin: auto;
+	  max-height: 64rem;
   }
   .swiper-slide:hover .scbtmlbt{
     display:block;
@@ -119,17 +130,19 @@
       top:10%;
     position:fixed;
     z-index:9999999999;
+	width: 100%;
+	height: 100%;
   }
 
   .itemww:hover .titlename,.itemww:hover .scbtm{
     display: block;
   }
-  @media screen and (max-width: 800px) { 
+  @media  screen and (max-width: 800px) { 
       .box { 
           column-count: 2; // two columns on larger phones 
       } 
   } 
-  @media screen and (max-width: 500px) { 
+  @media  screen and (max-width: 500px) { 
       .box { 
           column-count: 1; // two columns on larger phones 
       } 
@@ -143,11 +156,16 @@
 <!--点击上面的图片显示轮播图片-->
 <div class="swiper-container swiper-home">
   <div style="padding:5px;color:#fff;font-size:65px;position:fixed;z-index:999999999999;top:120px;right:20px;cursor: pointer;" class="closeltb"> × </div>
-  <div class="swiper-wrapper"> @foreach ($folist as  $i =>$v)
-    <article class="swiper-slide slide-single" data-swiper-slide-index="{{$loop->iteration}}" > <img id="btntp" width="600px" height="600px" src="{{$v['photo_url']}}" data-id="{{$v['photo_source']}}" alt="{{$v['name']}}">
-      <div class="scbtmlbt" data-id="{{$v['photo_source']}}" data-pid-i="{{ $i }}" onclick="getID(this)">发现</div>
+  <div class="swiper-wrapper"> 
+    @foreach ($folist as  $i =>$v)
+    <article class="swiper-slide slide-single" data-swiper-slide-index="{{$loop->iteration}}">
+    	<div class="wrap" style="position: relative">
+    		<img id="btntp" width="600px" height="600px" src="{{$v['photo_url']}}" data-id="{{$v['photo_source']}}" alt="{{$v['name']}}">
+    		<div class="scbtmlbt" data-id="{{$v['photo_source']}}" data-pid-i="{{ $i }}" onclick="getID(this)">发现</div>
+    	</div>
     </article>
-    @endforeach </div>
+    @endforeach 
+  </div>
   <!-- 按钮 -->
   <div class="swiper-home-button-next swiper-button-next"></div>
   <div class="swiper-home-button-prev swiper-button-prev"></div>
@@ -311,71 +329,77 @@ function getID(obj){
 
 
 $(document).ready(function(){
+	let idx = 1
+	let bannerSwiper = ''
+	let i = 0;
+	let timer;
+
 	//判断是否为vip
 	if(IS_VIP){
 	    $('.order_center .order2').find('a').html('会员中心')
 	    $('.order_center .order2').find('a').attr('href','/member/interest')
 	}
+  function start(){
+		let len = $(".swiper-slide").length
+		$(".swiper-slide").eq(i).show().siblings().stop(true, true).hide();
+	}
+	function change(){
+	    $(".swiper-slide").eq(i).show().siblings().stop(true, true).hide();
+	}
 	
 	
 
 	//--点击上面的图片显示轮播图片--
-	$(document).on('click','#boximg',function(){
+	$(document).on('click','.itemww',function(){
+		var index = $(this).index()
+		console.log(index)
+		i = index
 		$('.lzcfg').css('display','block');
 		$('.swiper-container').css('display','block');
-
-			//轮播图效果
-	var $page_main_body = $('.slide-home');
-	var $button_next = $page_main_body.find('.swiper-home-button-next');
-	var $button_prev = $page_main_body.find('.swiper-home-button-prev');
-	var len = $('.slide-home').find('.swiper-slide').length;
-		bannerSwiper = new Swiper('.swiper-home', {
-		pagination: '.swiper-home-pagination',
-		nextButton: '.swiper-home-button-next',
-		prevButton: '.swiper-home-button-prev',
-		autoplayDisableOnInteraction: true,
-		loop: true,
-		centeredSlides: true,
-		observer: true, //解决数据传入后轮播问题
-	    observerParents: true,
-	    autoResize: true, //尺寸自适应
-	    initialSlide: 0,
-	    direction: "horizontal",
-	    /*形成环路（即：可以从最后一张图跳转到第一张图*/
-	    slidesPerView: 'auto',
-	    loopedSlides: 0,
-	    autoplay: 1500,
-	    /*每隔3秒自动播放*/
-		on: {
-			init: function () {
-				var width = parseInt($page_main_body.width());
-				if ($index_pc_bt.size() > 0) {
-					$index_pc_bt.css('width', (width - this.slidesSizesGrid['0']) / 2 + 'px');
-				}
-			}
-		},
-		onInit: function (swiper) {
-			swiper.slides[2].className = "swiper-slide swiper-slide-active";//第一次打开不要动画
-		},
-		breakpoints: {
-			668: {
-				slidesPerView: 1
-			}
-		},
-		lazy: {
-			loadPrevNext: true,
-		}
-	});
+		start()
 	})
 	//点击关闭轮播图
-    $(document).on('click','.closeltb',function(){
+  $(document).on('click','.closeltb',function(){
 		$('.swiper-container').css('display','none');
 		$('.showscbtnlbt').css('display','none');
 		$('.lzcfg').css('display','none');
-    })
+		clearInterval(timer);
+})
+
+	
+  $(document).on('click','.swiper-button-next',function(){
+		let len = $(".swiper-slide").length
+		i++;
+		if(i >= len){
+			i = 0;
+		}
+		change();
+  })
+	 $(document).on('mousemove','.swiper-button-next',function(){
+	 		clearInterval(timer);
+	 })
+	 $(document).on('mouseout','.swiper-button-next',function(){
+	 		start()
+	 })
+	 
+	 $(document).on('click','.swiper-button-prev',function(){
+	 		let len = $(".swiper-slide").length
+	 		i--;
+	 		if(i <= 0){
+	 		    i = len-1;
+	 		}
+	 		change();
+	 })
+	 $(document).on('mousemove','.swiper-button-prev',function(){
+	 		clearInterval(timer);
+	 })
+	 $(document).on('mouseout','.swiper-button-prev',function(){
+	 		start()
+	 })
+	
 
 
-
+	
 	
 	//点击图片上的收藏按钮出现弹窗	
 	$(document).on('click','.scbtm',function(ev){
@@ -387,7 +411,7 @@ $(document).ready(function(){
 			let folder_ids = [];
       let source = $(this).attr('photoid');//图片所在的文章id
       let is_sc=1;
-      let photo_url=$('#boximg').attr('src');//图片src
+      let photo_url=$('.boximg').attr('src');//图片src
       // console.log(user_finder_folder_id)
       // photo_url=photo_url.substr(20)
 			$(".asd").each(function () {
@@ -401,7 +425,7 @@ $(document).ready(function(){
         type: 'POST',
         dataType: 'json',
         data: {
-          _token:'{{csrf_token()}}',
+          _token:'dinkbrs5zOGhIn0S2AAfXE1AzZCTmGiC2slhoZLD',
           user_finder_folder_id:user_finder_folder_id,
           photo_url:photo_url,
           source:source,
@@ -432,12 +456,12 @@ $(document).ready(function(){
 		 	tpid=$('.scbtm').attr('data-id');
 		 	$('.lzcfg').css('display','block');
 		 	$('.showscbtn').css('display','block');
-       $('.showscbtn').css('z-index','999999999999');
+      $('.showscbtn').css('z-index','999999999999');
     }
   })
 	
 	//点击轮播图片上的收藏按钮出现弹窗	
-	 $(document).on('click','.scbtmlbt',function(ev){
+  $(document).on('click','.scbtmlbt',function(ev){
 	 	if(!IS_LOGIN){
             $('.login_box').show();
 	 	}else{
@@ -459,7 +483,7 @@ $(document).ready(function(){
         type: 'POST',
         dataType: 'json',
         data: {
-          _token:'{{csrf_token()}}',
+          _token:'dinkbrs5zOGhIn0S2AAfXE1AzZCTmGiC2slhoZLD',
           user_finder_folder_id:user_finder_folder_id,
           photo_url:photo_url,
           source:source,
@@ -495,7 +519,7 @@ $(document).ready(function(){
 	                url: '/vip/scstatus',
 	                type: 'POST',
 	                dataType: 'json',
-	                data: {_token:'{{csrf_token()}}',collect_id:collect_id,tpsrc:tpsrc,folder_id:folder_id},
+	                data: {_token:'dinkbrs5zOGhIn0S2AAfXE1AzZCTmGiC2slhoZLD',collect_id:collect_id,tpsrc:tpsrc,folder_id:folder_id},
 	                success: function (data){
 	                	console.log(data);
 	                	let btn = $(`.asd[scid=${folder_id}]`);
@@ -528,11 +552,13 @@ $(document).ready(function(){
 		 	
 			// 轮播图鼠标移入停止自动滚动
 			$('.showscbtnlbt').mouseenter(function() {
-				bannerSwiper.stopAutoplay();
+				// bannerSwiper.stopAutoplay();
+				clearInterval(timer);
 			})
 			// l轮播图鼠标移出开始自动滚动
 			$('.showscbtnlbt').mouseleave(function() {
-				bannerSwiper.startAutoplay();
+				// bannerSwiper.startAutoplay();
+				start()
 			})
 
 	 	}
@@ -540,11 +566,14 @@ $(document).ready(function(){
 
  	// 鼠标移入停止自动滚动
 	 $('.swiper-slide').mouseenter(function() {
-	    bannerSwiper.stopAutoplay();
+	    // bannerSwiper.stopAutoplay();
+		clearInterval(timer);
 	})
 	// 鼠标移出开始自动滚动
 	$('.swiper-slide').mouseleave(function() {
-	    bannerSwiper.startAutoplay();
+	    // bannerSwiper.startAutoplay();
+		start()
+		console.log(i)
 	})
 
 
