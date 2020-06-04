@@ -134,7 +134,7 @@
     <div class="order_center">
       <ul>
         <!-- <li class="order1"><a href="/vip/index/{{$user->id}}">我的主页</a><i class="order1_bj"></i> </li> -->
-        <li class="order1"><a href="javascript:alert1();">我的主页</a><i class="order1_bj"></i> </li>
+        <li class="order1"><a href="/member/homepage">我的主页</a><i class="order1_bj"></i> </li>
         <li class="order2"><a href="/vip/intro">成为会员</a><i class="order1_bj"></i> </li>
         <li class="order3"><a href="/member/point">我的积分</a><i class="order1_bj"></i> </li>
         <li class="order4 bookInSign"><a href="javascript:;">签到</a></li>

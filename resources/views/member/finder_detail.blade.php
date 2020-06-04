@@ -389,7 +389,6 @@
     <article class="swiper-slide slide-single" data-swiper-slide-index="{{$loop->iteration}}"> 
 		<div class="wrap" style="position: relative;">
 			<img id="btntp" width="600px" height="600px" src="{{$v['photo_url']}}" data-id="{{$v['photo_source']}}" alt="{{$v['name']}}">
-			<div class="scbtmlbt" data-id="{{$v['photo_source']}}" data-pid-i="{{ $i }}" onclick="getID(this)">发现</div>
 		</div>
     </article>
 
@@ -412,37 +411,28 @@
       @foreach ($user->finder_details as $detail)
       <div class="item discovery-item " style="display:flex">
         <div class="item_content item_content2">
-        		<!--<li> <img onclick="location='{{$detail['photo_url']}}'" src="{{$detail['photo_url']}}" alt="{{--mb_substr($detail['titlename'],0,30)--}}"> </li>-->
-        		<li> <img src="{{$detail['photo_url']}}" data-id="{{$detail['user_finder_folder_id']}}" alt="{{mb_substr($detail['titlename'],0,30)}}"> </li>
+        		<li> <img src="{{$detail['photo_url']}}" data-id="{{$detail['user_finder_folder_id']}}" source='{{$detail["photo_source"]}}' alt="{{mb_substr($detail['titlename'],0,30)}}"> </li>
           <div class="find_title">
-
             <h2><a href="/article/{{$detail['static_url']}}" target="_blank">{{mb_substr($detail['titlename'],0,20)}}</a></h2>
             <span class='dot'>•••</span>
-            
             <div class='move_del'>
               <div class='left_sjx'></div>
-              <p><a style="padding-top: 1.5px;color:#fff;" source='{{$detail["photo_source"]}}' href="javascript:;" class="yd_find_img" data-id="{{$detail['id']}}" tag="移动发现的图片到其他文件夹">移动</a></p>
+              <p><a style="padding-top: 1.5px;color:#fff;" source='{{$detail["photo_source"]}}' photo_src="{{$detail['photo_url']}}" href="javascript:;" class="yd_find_img" data-id="{{$detail['id']}}" tag="移动发现的图片到其他文件夹">移动</a></p>
               <p><a style="padding-top: 1.5px;color:#fff;" href="javascript:;" class="remove_find_img" data-id="{{$detail['id']}}" tag="删除发现的图片">删除</a></p>
             </div>
-            {{--<a style="padding-top: 1.5px;" href="javascript:;" class="find-icon-trash remove_find_img" data-id="{{$detail['id']}}" tag="删除发现的图片"></a>--}}
-            
+            <div class='fxj' source='' photo_src=''>
+              <span class='closefxj' style='padding:5px;font-size: 22px;float: right;cursor: pointer;'>X</span>
+              @foreach($folderall as $v)
+              <p><span class='fxj_left'>{{$v->name}}</span><span data-id='{{$v->id}}' class='fxj_right'>移动</span></p>
+              @endforeach
+            </div>            
           </div>
 
         </div>
 
       </div>
 
-      <div class='fxj'>
-        <span class='closefxj' style='padding:5px;font-size: 22px;float: right;cursor: pointer;'>X</span>
-        @foreach($folderall as $v)
-        <p><span class='fxj_left'>{{$v->name}}</span><span photo_src="{{$detail['photo_url']}}" source='{{$detail["photo_source"]}}' data-id='{{$v->id}}' class='fxj_right'>移动</span></p>
-        <div class='move_del'>
-            <div class='left_sjx'></div>
-            <p><a style="padding-top: 1.5px;color:#fff;" source='{{$detail["photo_source"]}}' href="javascript:;" class="yd_find_img" data-id="{{$detail['id']}}" tag="移动发现的图片到其他文件夹">移动</a></p>
-            <p><a style="padding-top: 1.5px;color:#fff;" href="javascript:;" class="remove_find_img" data-id="{{$detail['id']}}" tag="删除发现的图片">删除</a></p>
-          </div>
-        @endforeach
-      </div>
+
 
       @endforeach 
 
@@ -459,6 +449,10 @@
 
   $(document).on('click','.yd_find_img',function(){
     $('.fxj').show(500);
+    let sou=$(this).attr('source');
+    $('.fxj').attr('source',sou)
+    let src=$(this).attr('photo_src');
+    $('.fxj').attr('photo_src',src)
   })
 
   function getQueryString(name) {   
@@ -469,9 +463,9 @@
   
   //点击移动图片到另外一个收藏夹
   $(document).on('click','.fxj_right',function(){
-    let source = $(this).attr('source');
+    let source = $(this).parents('.fxj').attr('source');
     let finder_id = $(this).attr('data-id');
-    let photo_src=$(this).attr('photo_src');
+    let photo_src=$(this).parents('.fxj').attr('photo_src');
     let url = window.location.pathname;
     let now_url=url.split('/')[3];
     let now_folder_id=0;
@@ -482,7 +476,7 @@
         photo_src:photo_src,
         now_url:now_url,
     };
-    console.log(finder_id,now_url)
+    console.log(finder_id,source,photo_src)
     $.ajax({
         async:false,
         url: '/member/movefxj',
@@ -519,72 +513,20 @@
   function start(){
   	let len = $(".swiper-slide").length
   	$(".swiper-slide").eq(i).show().siblings().stop(true, true).hide();
-      // timer = setInterval(function(){
-      //     i++;
-      //     if(i == len){
-      //         i = 1;
-      //     }
-      //     change();
-      // }, 3000);
+  
   }
   function change(){
       $(".swiper-slide").eq(i).show().siblings().stop(true, true).hide();
   }
 
 	//--点击上面的图片显示轮播图片--
-	$(document).on('click','.discovery-item .item_content>li',function(){
+	$(document).on('click','.item_content2>li',function(){
 		var index = $(this).index()
 		console.log(index)
 		i = index
 		$('.lzcfg').css('display','block');
 		$('.swiper-container').css('display','block');
-		start()
-		
-		
-      // $('.lzcfg').css('display','block');
-      // $('.swiper-container').css('display','block');
-        //轮播图效果
-    // var $page_main_body = $('.slide-home');
-    // var $button_next = $page_main_body.find('.swiper-home-button-next');
-    // var $button_prev = $page_main_body.find('.swiper-home-button-prev');
-    // var len = $('.slide-home').find('.swiper-slide').length;
-    //   bannerSwiper = new Swiper('.swiper-home', {
-    //   pagination: '.swiper-home-pagination',
-    //   nextButton: '.swiper-home-button-next',
-    //   prevButton: '.swiper-home-button-prev',
-    //   autoplayDisableOnInteraction: true,
-    //   loop: true,
-    //   centeredSlides: true,
-    //   observer: true, //解决数据传入后轮播问题
-    //     observerParents: true,
-    //     autoResize: true, //尺寸自适应
-    //     initialSlide: 0,
-    //     direction: "horizontal",
-    //     /*形成环路（即：可以从最后一张图跳转到第一张图*/
-    //     slidesPerView: 'auto',
-    //     loopedSlides: 0,
-    //     autoplay: 1500,
-    //     /*每隔3秒自动播放*/
-    //   on: {
-    //     init: function () {
-    //       var width = parseInt($page_main_body.width());
-    //       if ($index_pc_bt.size() > 0) {
-    //         $index_pc_bt.css('width', (width - this.slidesSizesGrid['0']) / 2 + 'px');
-    //       }
-    //     }
-    //   },
-    //   onInit: function (swiper) {
-    //     swiper.slides[2].className = "swiper-slide swiper-slide-active";//第一次打开不要动画
-    //   },
-    //   breakpoints: {
-    //     668: {
-    //       slidesPerView: 1
-    //     }
-    //   },
-    //   lazy: {
-    //     loadPrevNext: true,
-    //   }
-    // });
+		start() 
   })
   
 	//点击关闭轮播图
@@ -596,20 +538,7 @@
     })
 
 
-  //切换图片
-  // $(document).on('click','.more-img-item',function(){
-  //     var src = '';
-  //     //去除所有选中状态
-  //     $('.more-img-item').each(function(){
-  //         $(this).removeClass('selected');
-  //     })
-  //     $(this).parents('.right').prev().find('#discovery-folder-name').html($(this).find('img').attr('alt'))
-  //     // 添加选中状态
-  //     $(this).addClass('selected');
-
-  //     src = $(this).find('img').attr('src');
-  //     $(this).parents('.img_browse').find('.selected-image').attr('src',src);
-  // })
+ 
   $(document).on('click','.swiper-button-next',function(){
   		let len = $(".swiper-slide").length
   		i++;

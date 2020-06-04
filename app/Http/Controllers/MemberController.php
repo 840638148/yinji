@@ -659,6 +659,39 @@ class MemberController extends Controller
         return view('member.finder', $data);
     }
 
+    /**
+     * 我的主页
+     */
+    public function homepage(Request $request){
+        $this->checkLogin();
+
+        $lang = $request->session()->get('language') ?? 'zh-CN';
+
+        $user = $this->getUserInfo();
+        $user->follows = UserFollow::getFollows($user->id);
+        $user->subscriptions = UserSubscription::getSubscriptions($user->id);
+        $user->collects = UserCollect::getCollects($user->id);
+        $user->finders = UserFinder::getFinders($user->id);
+        $attendances = UserAttendance::getAttendanceLog();
+        $last_days = UserAttendance::getLastDays($user->id);
+        $tips = UserAttendance::getAttendanceTips();
+
+        $today_start = date('Y-m-d 00:00:00');
+        $today_end   = date('Y-m-d 23:59:59');
+        $is_qiandao = UserAttendance::where('user_id', $user->id)->where('created_at', '>=', $today_start)->where('created_at', '<=', $today_end)->first();
+
+        $data = [
+            'lang' => $lang,
+            'user' => $user,
+            'attendances' => $attendances,
+            'last_days' => $last_days,
+            'tips' => $tips,
+            'is_qiandao' => $is_qiandao,
+        ];
+        return view('member.homepage', $data);
+    }
+
+
 
     public function finderDetail(Request $request, $id)
     {
@@ -673,7 +706,7 @@ class MemberController extends Controller
             $folder_name = $folder_obj->name;
         }
         //获取用户所有发现夹，并去掉当前所在发现夹
-        $folderall=USerFinderFolder::where('user_id',Auth::id())->get();
+        $folderall=UserFinderFolder::where('user_finder_folders.is_open',1)->select('id','user_id','name')->where('user_finder_folders.user_id',Auth::id())->get();
         $folderall = $folderall->reject(function ($value) use ($id) {
             return $value->id == $id;
           });

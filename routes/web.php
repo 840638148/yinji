@@ -129,6 +129,7 @@ Route::post('member/one_check', 'MemberController@one_check');//微信注册进�
 Route::post('member/movefxj', 'MemberController@movefxj');//移动图片到其他文件夹里
 Route::post('member/desearch', 'MemberController@desearch');//搜索设计师
 Route::post('member/editnick', 'MemberController@editnick');//检测是否够次数修改昵称
+Route::get('member/homepage', 'MemberController@homepage');//我的主页
 
 
 

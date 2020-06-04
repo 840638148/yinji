@@ -72,6 +72,14 @@
       margin-top: 10px;
     }
     .imgvip{ width:32px !important;}
+  .masonry{
+	  display: flex;
+	  justify-content: flex-start;
+	  flex-wrap: wrap;
+  }
+  .masonry .item{
+	  width: 24%;
+  }
 </style>
 <div class="banner_news" style="background-image:url(/images/find.jpg)"> —— NEWS —— </div>
 <section class="wrapper"> 
