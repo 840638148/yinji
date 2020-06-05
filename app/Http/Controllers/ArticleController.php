@@ -471,12 +471,12 @@ class ArticleController extends Controller
         // dd($request->all());
         $data=[];
 
-        /*if($request->category_id){
+        if($request->category_id){
             $category_ids = [$request->category_id];
             
             $articles =Article::getMoreArticles($request, $category_ids);
             // dd($articles);
-            foreach ($articles as $k=>$article) {
+            /*foreach ($articles as $k=>$article) {
                 $category_html = '';
                 if ($article->category) {
                     foreach ($article->category as $category) {
@@ -513,11 +513,11 @@ class ArticleController extends Controller
                     </article>
                 </li>';
                 $data[] = $tmp_html;
-            }
+            }*/
             foreach ($articles as $k=>$article) {
                 $data[] = $article;
             }
-        }else{*/
+        }else{
             $articles = Article::where('article_status', '2')->where('display', '0');
             if($request->type=='starssort'){
                 if($request->sjx=='desc'){
@@ -581,7 +581,7 @@ class ArticleController extends Controller
                 </li>';
                 $data[] = $tmp_html;
             }
-        // }
+        }
 
 
         return Output::makeResult($request, $data);

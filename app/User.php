@@ -452,7 +452,7 @@ class User extends Authenticatable
             }
         }
         // dd($edit_info);
-        if($info['nickname']){
+        if(@$info['nickname']){
             $data=[
                 'nname_be'=>$user->nickname,
                 'nname_af'=>$info['nickname'],
