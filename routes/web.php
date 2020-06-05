@@ -129,7 +129,16 @@ Route::post('member/one_check', 'MemberController@one_check');//微信注册进�
 Route::post('member/movefxj', 'MemberController@movefxj');//移动图片到其他文件夹里
 Route::post('member/desearch', 'MemberController@desearch');//搜索设计师
 Route::post('member/editnick', 'MemberController@editnick');//检测是否够次数修改昵称
-Route::get('member/homepage', 'MemberController@homepage');//我的主页
+
+Route::get('member/{id}', 'MemberController@homepage');//TA的主页
+Route::get('member/homepage_finder/{id}', 'MemberController@homepage_finder');//TA的发现
+Route::get('member/homepage_collect/{id}', 'MemberController@homepage_collect');//TA的收藏
+Route::get('member/homepage_subscription/{id}', 'MemberController@homepage_subscription');//TA的订阅
+Route::get('member/homepage_interactive/{id}', 'MemberController@homepage_interactive');//TA的互动
+Route::get('member/homepage_record/{id}', 'MemberController@homepage_record');//TA的印记
+Route::get('member/hp_collect_detail/{uid}/{id}', 'MemberController@hp_collect_detail');//TA的收藏详情
+Route::get('member/hp_finder_detail/{uid}/{id}', 'MemberController@hp_finder_detail');//TA的发现详情
+Route::get('member/homepage_record/{id}', 'MemberController@homepage_record');//TA的印记
 
 
 

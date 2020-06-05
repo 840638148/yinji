@@ -100,45 +100,44 @@
 <div class="home_top">
   <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
   <div class="home_tongji">
-  <ul>
-    <li>人气</br>{{$user->finder_num}} </li>
-    <li>收藏</br>{{$user->collect_num}} </li>
-    <li>发现</br>{{$user->finder_num}} </li>
-    <li>关注</br>{{$user->follow_num}} </li>
-    <li>粉丝</br>{{$user->follow_num}} </li>
-        
+    <ul>
+      <li>人气</br>{{$users->view_num}} </li>
+      <li>收藏</br>{{$users->collect_num}} </li>
+      <li>关注</br>{{$users->follow_num}} </li>
+      <li>粉丝</br>{{$users->follow_num}} </li>
     </ul>
   </div>
-  <div class="home_personal"> <img src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}" />
+  <div class="home_personal"> <img src="@if($users->avatar) {{$users->avatar}} @else /img/avatar.png @endif" alt="{{$users->nickname}}" />
    
   </div>
-  <h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> {{$user->nickname}} <img src="{{$user->vip_level}}" alt=""></h2>
-  <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">个人说明： {{$user->personal_note}}</p>
-  <p>关注</p>
-  <div class="home_nav">
+  <h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> {{$users->nickname}} <img src="{{$users->vip_level}}" alt=""></h2>
+  <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">@if($users->zhiwei){{$users->zhiwei}}@else 保密 @endif - {{$users->city}} <img src="{{App\User::getVipLevel($users->id)}}" alt=""></p>
+  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span style='padding: 5px 25px;display: inline-block;background: #3d87f1;margin: 20px auto;color: #fff;'>关注</span></p>
+  <div class="home_nav" style='width:610px;left:52%;'>
     <ul>
-    	
-	      <li class="current"><a  href="/">首页</a></li>
-	      <li><a href="/member/finder">TA的发现</a></li>
-	      <li><a href="/member/collect">TA的收藏</a></li>
-	      <li><a href="/member/subscription">TA的订阅</a></li>
-	      <li><a href="/member/follow">TA的互动</a></li>
-	      <li><a href="/member/profile">印记</a></li>
+	      <li class="current"><a  href="/member/{{$users->id}}">TA的主页</a></li>
+	      <li><a href="/member/homepage_finder/{{$users->id}}">TA的发现</a></li>
+	      <li><a href="/member/homepage_collect/{{$users->id}}">TA的收藏</a></li>
+	      <li><a href="/member/homepage_subscription/{{$users->id}}">TA的订阅</a></li>
+	      <li><a href="/member/homepage_interactive/{{$users->id}}">TA的互动</a></li>
+	      <li><a href="/member/homepage_record/{{$users->id}}">印记</a></li>
     </ul>
   </div>
 </div>
 <section class="wrapper">
   <div class="mt30 home_box">
-
-    <h2 class="fl">TA的收藏</h2>
-    <span class="fr"><a href="/member/collect">更多</a></span> </div>
+    <div class="title">
+      <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>TA的收藏</span></h2>
+      <span class="fr"><a href="/member/homepage_collect/{{$users->id}}">更多</a></span>
+    </div>
+  
     <div class="masonry my-collection" >   
-      @foreach($user->collects as $collect)
-      <div class="item collection-item " data-id="{{$collect['folder']['id']}}" onclick="location='/member/collect_detail/{{$collect['folder']['id']}}'">
+      @foreach($users->collects as $collect)
+      <div class="item collection-item " data-id="{{$collect['folder']['id']}}" onclick="location='/member/hp_collect_detail/{{$users->id}}/{{$collect['folder']['id']}}'">
         <div class="item__content">
           <ul data-id="{{$collect['folder']['id']}}" >
             @foreach($collect['collect'] as $img_obj)
-            <li><a href="/member/collect_detail/{{$collect['folder']['id']}}"><img src="{{$img_obj['img']}}" /></a></li>
+            <li><a href="/member/hp_collect_detail/{{$users->id}}/{{$collect['folder']['id']}}"><img src="{{$img_obj['img']}}" /></a></li>
             @endforeach
           </ul>
           <div class="find_title">
@@ -151,29 +150,24 @@
     </div>
 
     <div class="title mt30">
-      <h2>TA的关注</h2>
+      <div class="title">
+        <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>TA的关注</span></h2>
+      </div>
     </div>
     <div class="designer">
       <ul>
-        @foreach ($user->follows as $key => $follow)
+        @foreach ($users->follows as $key => $follow)
             @if ($key < 13)
-                <li class="guanzhu-item"> <a href="javascript:alert1();" title="{{$follow->nickname}}" onclick="selectItemGuanZhu({{$key}})"><span class="select-item"></span>  <img onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /> </a> </li>
+                <li class="guanzhu-item"> <a href="/member/{{$follow->id}}" title="{{$follow->nickname}}" onclick="selectItemGuanZhu({{$key}})"><span class="select-item"></span>  <img onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /> </a> </li>
             @elseif($key == 13)
-                <li><a href="/member/follow" class="more-content"></a></li>
+                <li><a href="/member/homepage_interactive/{{$users->id}}" class="more-content"></a></li>
             @endif
             @endforeach
       </ul>
     </div>
 
    
-</div>
-    
-  <script type="text/javascript">
-    function alert1(){
-      layer.msg('敬请期待！',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-    }
-    
-  </script>
-
+  </div>
+</section>  
 
 @endsection

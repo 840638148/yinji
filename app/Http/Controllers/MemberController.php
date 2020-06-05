@@ -644,7 +644,6 @@ class MemberController extends Controller
         $user = $this->getUserInfo();
         $user->finders = UserFinder::getFinders($user->id);
 
-        $user = $this->getUserInfo();
         $month_price = VipPrice::getPrice(1);
         $season_price = VipPrice::getPrice(2);
         $year_price = VipPrice::getPrice(3);
@@ -660,29 +659,30 @@ class MemberController extends Controller
     }
 
     /**
-     * 我的主页
+     * TA的主页
      */
-    public function homepage(Request $request){
+    public function homepage(Request $request,$id){
         $this->checkLogin();
 
         $lang = $request->session()->get('language') ?? 'zh-CN';
-
-        $user = $this->getUserInfo();
-        $user->follows = UserFollow::getFollows($user->id);
-        $user->subscriptions = UserSubscription::getSubscriptions($user->id);
-        $user->collects = UserCollect::getCollects($user->id);
-        $user->finders = UserFinder::getFinders($user->id);
+        $user = User::find(Auth::id());
+        $users = User::find($id);
+        $users->follows = UserFollow::getFollows($users->id);
+        $users->subscriptions = UserSubscription::getSubscriptions($users->id);
+        $users->collects = UserCollect::getCollects($users->id);
+        $users->finders = UserFinder::getFinders($users->id);
         $attendances = UserAttendance::getAttendanceLog();
-        $last_days = UserAttendance::getLastDays($user->id);
+        $last_days = UserAttendance::getLastDays($users->id);
         $tips = UserAttendance::getAttendanceTips();
 
         $today_start = date('Y-m-d 00:00:00');
         $today_end   = date('Y-m-d 23:59:59');
-        $is_qiandao = UserAttendance::where('user_id', $user->id)->where('created_at', '>=', $today_start)->where('created_at', '<=', $today_end)->first();
+        $is_qiandao = UserAttendance::where('user_id', $users->id)->where('created_at', '>=', $today_start)->where('created_at', '<=', $today_end)->first();
 
         $data = [
             'lang' => $lang,
             'user' => $user,
+            'users' => $users,
             'attendances' => $attendances,
             'last_days' => $last_days,
             'tips' => $tips,
@@ -691,7 +691,179 @@ class MemberController extends Controller
         return view('member.homepage', $data);
     }
 
+    /**
+    * TA的发现  
+    */
+    public function homepage_finder(Request $request, $id){
+        $this->checkLogin();
 
+        $lang = $request->session()->get('language') ?? 'zh-CN';
+        $user = User::find(Auth::id());
+        $users = User::find($id);
+        $users->finders = UserFinder::getFinders($users->id);
+
+        $month_price = VipPrice::getPrice(1);
+        $season_price = VipPrice::getPrice(2);
+        $year_price = VipPrice::getPrice(3);
+
+        $data = [
+            'lang' => $lang,
+            'user' => $user,
+            'users' => $users,
+            'month_price' => $month_price,
+            'season_price' => $season_price,
+            'year_price' => $year_price,
+        ];
+        return view('member.homepage_finder', $data);
+    }
+
+    /**
+    * TA的收藏
+    */
+    public function homepage_collect(Request $request, $id){
+        $this->checkLogin();
+
+        $lang = $request->session()->get('language') ?? 'zh-CN';
+        $user = User::find(Auth::id());
+        $users = User::find($id);
+        $users->collects = UserCollect::getCollects($users->id);
+		
+        $data = [
+            'lang' => $lang,
+            'users' => $users,
+            'user' => $user,
+        ];
+        return view('member.homepage_collect', $data);
+    }
+
+    /**
+    * TA的订阅
+    */
+    public function homepage_subscription(Request $request, $id){
+        $this->checkLogin();
+        $lang = $request->session()->get('language') ?? 'zh-CN';
+        $user = User::find(Auth::id());
+        $users = User::find($id);
+
+        $users->subscriptions = UserSubscription::getSubscriptions($users->id);
+        $data = [
+            'lang' => $lang,
+            'users' => $users,
+            'user' => $user,
+        ];
+        return view('member.homepage_subscription', $data);
+    }
+
+    /**
+    * TA的互动
+    */
+    public function homepage_interactive(Request $request, $id){
+        $this->checkLogin();
+        $lang = $request->session()->get('language') ?? 'zh-CN';
+        $user = User::find(Auth::id());
+        $users = User::find($id);
+
+        $users->follows = UserFollow::getFollows($users->id);
+        $users->fans = UserFollow::getFans($users->id);
+
+        $data = [
+            'lang' => $lang,
+            'users' => $users,
+            'user' => $user,
+        ];
+        return view('member.homepage_interactive', $data);
+    }
+
+    /**
+    * TA的收藏详情
+    */
+    public function hp_collect_detail(Request $request,$uid,$id){
+        $this->checkLogin();
+        $lang = $request->session()->get('language') ?? 'zh-CN';
+        $user = User::find(Auth::id());
+        $users = User::find($uid);
+
+        $users->collect_details = UserCollect::getCollectDetails($users->id, $id);
+        $folder_name = '';
+        $folder_obj = UserCollectFolder::find($id);
+        if ($folder_obj) {
+            $folder_name = $folder_obj->name;
+        }
+
+        $data = [
+            'lang' => $lang,
+            'users' => $users,
+            'user' => $user,
+            'folder_name' => $folder_name,
+        ];
+        return view('member.hp_collect_detail', $data);
+    }
+    
+    /**
+    * TA的收藏详情
+    */
+    public function hp_finder_detail(Request $request,$uid,$id){
+        $this->checkLogin();
+        $lang = $request->session()->get('language') ?? 'zh-CN';
+        $user = User::find(Auth::id());
+        $users = User::find($uid);
+
+        $users->finder_details = UserFinder::getFinderDetails($users->id, $id);
+        $folder_name = '';
+        $folder_obj = UserFinderFolder::find($id);
+        if ($folder_obj) {
+            $folder_name = $folder_obj->name;
+        }
+        //获取用户所有发现夹，并去掉当前所在发现夹
+        $folderall=UserFinderFolder::where('user_finder_folders.is_open',1)->select('id','user_id','name')->where('user_finder_folders.user_id',$uid)->get();
+        $folderall = $folderall->reject(function ($value) use ($uid) {
+            return $value->id == $uid;
+          });
+
+		//获取个人中心->发现中心->图片的标题
+        foreach ($users->finder_details as $userfinderid){
+        	
+        	$tiname=Article::where('id',$userfinderid['photo_source'])->get()->toArray();
+        	
+        	foreach ($tiname as $tinamearr){
+				$tinames=$tinamearr['title_designer_cn'].' | '.$tinamearr['title_name_cn'];
+				$userfinderid['static_url']=$tinamearr['static_url'];
+				$userfinderid['titlename']=$tinames;
+        	}
+			
+        }
+        //通过用户id获取收藏夹名字
+    	$userscname = UserFinderFolder::where('user_finder_folders.user_id',$user->id)->get()->toArray();
+
+        $folist=UserFinderFolder::where('user_finder_folders.id',$request->id)->leftjoin('user_finders','user_finder_folders.id','user_finders.user_finder_folder_id')->get()->toArray();
+        $data = [
+            'lang' => $lang,
+            'users' => $users,
+            'user' => $user,
+            'folist' => $folist,
+            'folder_name' => $folder_name,
+            'folderall' => $folderall,
+            'userscname' => $userscname,
+        ];
+        return view('member.hp_finder_detail', $data);
+    }
+
+    /**
+    * TA的印记 
+    */
+    public function homepage_record(Request $request, $id){
+        $this->checkLogin();
+        $lang = $request->session()->get('language') ?? 'zh-CN';
+        $user = User::find(Auth::id());
+        $users = User::find($id);
+
+        $data = [
+            'lang' => $lang,
+            'users' => $users,
+            'user' => $user,
+        ];
+        return view('member.homepage_record', $data);
+    }
 
     public function finderDetail(Request $request, $id)
     {
