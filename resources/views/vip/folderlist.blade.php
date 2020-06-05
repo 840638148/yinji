@@ -7,25 +7,25 @@
   h2{
     margin:30px auto;
     text-align: center;
-      font-size: 2em; line-height:60px;
+    font-size: 2em; line-height:60px;
   }
 
   .box { 
-      -moz-column-count:4; /* Firefox */
-      -webkit-column-count:4; /* Safari 和 Chrome */
-      column-count:4;
-      -moz-column-gap: 2em;
-      -webkit-column-gap: 2em;
-      column-gap: 2em;
-      width: 100%;
-      margin:2em auto;
+    -moz-column-count:4; /* Firefox */
+    -webkit-column-count:4; /* Safari 和 Chrome */
+    column-count:4;
+    -moz-column-gap: 2em;
+    -webkit-column-gap: 2em;
+    column-gap: 2em;
+    width: 100%;
+    margin:2em auto;
   }
   .itemww { 
-      margin-bottom: 2em;
-      -moz-page-break-inside: avoid;
-      -webkit-column-break-inside: avoid;
-      break-inside: avoid;
-      position: relative;
+    margin-bottom: 2em;
+    -moz-page-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    break-inside: avoid;
+    position: relative;
   }
   .titlename{
     position: absolute;
@@ -44,34 +44,34 @@
 
   .scbtm{
     background: #e1244e;
-      width: 50px;
-      height: 35px;
-      line-height: 35px;
-      text-align: center;
-      color: #fff;
-      display: inline-block;
-      border-radius: 30px;
-      position: absolute;
-      bottom: 5px;
-      right: 18px;
-      display: none;
-      cursor:pointer;
+    width: 50px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    color: #fff;
+    display: inline-block;
+    border-radius: 30px;
+    position: absolute;
+    bottom: 5px;
+    right: 18px;
+    display: none;
+    cursor:pointer;
   }
   .scbtmlbt{
     background: #e1244e;
-      width: 50px;
-      height: 35px;
-      line-height: 35px;
-      text-align: center;
-      color: #fff;
-      display: inline-block;
-      border-radius: 4px;
-      position: absolute;
+    width: 50px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    color: #fff;
+    display: inline-block;
+    border-radius: 4px;
+    position: absolute;
     z-index:999999999;
-      top: 5px;
-      left: 5px;
+    top: 5px;
+    left: 5px;
     display:none;
-      cursor:pointer;
+    cursor:pointer;
   }
   .swiper-slide{
 	  display: flex;
@@ -80,7 +80,7 @@
 	  height: 90%;
   }
   .swiper-slide img{
-  	  display: inline-block;
+    display: inline-block;
 	  margin: auto;
 	  max-height: 64rem;
   }
@@ -89,49 +89,49 @@
   }
   .showscbtn{
     position: fixed;
-      left: 50%;
-      top: 20%;
-      width: 620px;
-      margin-left: -330px;
-      height: 450px;
-      background: #fff;
-      z-index: 19999999;
-      padding: 20px;
-      border-radius: 5px;
-      display: none;
+    left: 50%;
+    top: 20%;
+    width: 620px;
+    margin-left: -330px;
+    height: 450px;
+    background: #fff;
+    z-index: 19999999;
+    padding: 20px;
+    border-radius: 5px;
+    display: none;
   }
   .showscbtnlbt{
     position: fixed;
-      left: 50%;
-      top: 20%;
-      width: 620px;
-      margin-left: -330px;
-      height: 450px;
-      background: #fff;
-      z-index: 19999999;
-      padding: 20px;
-      border-radius: 5px;
-      display: none;
+    left: 50%;
+    top: 20%;
+    width: 620px;
+    margin-left: -330px;
+    height: 450px;
+    background: #fff;
+    z-index: 19999999;
+    padding: 20px;
+    border-radius: 5px;
+    display: none;
   }
 
   .lzcfg{
-      background: rgba(0,0,0,0.5);
-      position: fixed;
-      left: 0px;
-      top: 0px;
-      width: 100%;
-      height: 100%;
-      display: none;
-      z-index: 99999999;
+    background: rgba(0,0,0,0.5);
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 99999999;
   }
 
   .swiper-container{
     display:none;
-      top:10%;
+    top:10%;
     position:fixed;
     z-index:9999999999;
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
   }
 
   .itemww:hover .titlename,.itemww:hover .scbtm{
@@ -153,7 +153,7 @@
 <div class="lzcfg"></div>
 <div class="banner_news" style="background-image:url(/images/find.jpg)"> —— NEWS —— </div>
 
-<!--点击上面的图片显示轮播图片-->
+<!--轮播图-->
 <div class="swiper-container swiper-home">
   <div style="padding:5px;color:#fff;font-size:65px;position:fixed;z-index:999999999999;top:120px;right:20px;cursor: pointer;" class="closeltb"> × </div>
   <div class="swiper-wrapper"> 
@@ -170,12 +170,16 @@
   <div class="swiper-home-button-next swiper-button-next"></div>
   <div class="swiper-home-button-prev swiper-button-prev"></div>
 </div>
-<section class="wrapper"> @foreach ($folistname as $v)
-  <h2 style="border-bottom:1px solid #ccc; line-height:60px;">{{$v['name']}}</h2>
+<!--轮播图结束-->
+
+<section class="wrapper"> 
+  @foreach ($folistname as $v)
+    <h2 style="border-bottom:1px solid #ccc; line-height:60px;">{{$v['name']}}</h2>
   @endforeach 
   <!-- 内容开始 -->
   <div class="box"> @foreach ($folist as $i => $v)
-    <div class="itemww"> <img id="boximg" class="img_{{$v['photo_source']}}" src="{{$v['photo_url']}}" data-photo-index="{{ $i }}" photoid="{{$v['photo_source']}}" alt="{{$v['name']}}">
+    <div class="itemww"> 
+      <img id="boximg" class="img_{{$v['photo_source']}}" src="{{$v['photo_url']}}" data-photo-index="{{ $i }}" photoid="{{$v['photo_source']}}" alt="{{$v['name']}}">
       <div class="titlename" onclick="location='@if($v['static_url']) /article/{{$v['static_url']}} @else /article/detail/{{$v['id']}} @endif'">
       @if(strlen($v['articlename']) < 20) {{$v['articlename']}} @else {{mb_substr($v['articlename'],0,15)}} @endif</div>
       <div class="scbtm" photoid="{{$v['photo_source']}}" imgsrc="{{$v['photo_url']}}" data-id="{{$v['photo_source']}}" data-pid-i="{{ $i }}" onclick="getID(this)">收藏</div>
@@ -319,416 +323,377 @@
 <!--登陆结束--> 
 
 <script src="/js/layer.js"></script> 
+
+<!-- 轮播图和收藏的 -->
 <script type="text/javascript">
-function getID(obj){
-	collect_id = $(obj).attr('data-id');
-	// that=$(obj);
-	// console.log(collect_id);
-}
+  function getID(obj){
+    collect_id = $(obj).attr('data-id');
+  }
 
+  $(document).ready(function(){
+    let idx = 1
+    let bannerSwiper = ''
+    let i = 0;
+    let timer;
 
-
-$(document).ready(function(){
-	let idx = 1
-	let bannerSwiper = ''
-	let i = 0;
-	let timer;
-
-	//判断是否为vip
-	if(IS_VIP){
-	    $('.order_center .order2').find('a').html('会员中心')
-	    $('.order_center .order2').find('a').attr('href','/member/interest')
-	}
-  function start(){
-		let len = $(".swiper-slide").length
-		$(".swiper-slide").eq(i).show().siblings().stop(true, true).hide();
-	}
-	function change(){
-	    $(".swiper-slide").eq(i).show().siblings().stop(true, true).hide();
-	}
-	
-	
-
-	//--点击上面的图片显示轮播图片--
-	$(document).on('click','.itemww',function(){
-		var index = $(this).index()
-		console.log(index)
-		i = index
-		$('.lzcfg').css('display','block');
-		$('.swiper-container').css('display','block');
-		start()
-	})
-	//点击关闭轮播图
-  $(document).on('click','.closeltb',function(){
-		$('.swiper-container').css('display','none');
-		$('.showscbtnlbt').css('display','none');
-		$('.lzcfg').css('display','none');
-		clearInterval(timer);
-})
-
-	
-  $(document).on('click','.swiper-button-next',function(){
-		let len = $(".swiper-slide").length
-		i++;
-		if(i >= len){
-			i = 0;
-		}
-		change();
-  })
-	 $(document).on('mousemove','.swiper-button-next',function(){
-	 		clearInterval(timer);
-	 })
-	 $(document).on('mouseout','.swiper-button-next',function(){
-	 		start()
-	 })
-	 
-	 $(document).on('click','.swiper-button-prev',function(){
-	 		let len = $(".swiper-slide").length
-	 		i--;
-	 		if(i <= 0){
-	 		    i = len-1;
-	 		}
-	 		change();
-	 })
-	 $(document).on('mousemove','.swiper-button-prev',function(){
-	 		clearInterval(timer);
-	 })
-	 $(document).on('mouseout','.swiper-button-prev',function(){
-	 		start()
-	 })
-	
-
-
-	
-	
-	//点击图片上的收藏按钮出现弹窗	
-	$(document).on('click','.scbtm',function(ev){
-	 	if (!IS_LOGIN) {
-       $('.login_box').show();
-	 	} else {
-		 	let photo_id_i = $(this).data('pid-i');
-      let user_finder_folder_id = $('.to_find_floder_act ').attr('scid');//发现的收藏夹id
-			let folder_ids = [];
-      let source = $(this).attr('photoid');//图片所在的文章id
-      let is_sc=1;
-      let photo_url=$('.boximg').attr('src');//图片src
-      // console.log(user_finder_folder_id)
-      // photo_url=photo_url.substr(20)
-			$(".asd").each(function () {
-				folder_ids.push($(this).attr("scid"));
-			});
-			$(".asd").data("pid-i", photo_id_i);//这个啥意思，自定义属性？相当于attr('data-pid-i', photo_id_i),,好吧
-       
-      /*$.ajax({
-        async:false,
-        url: '/vip/scstatus',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-          _token:'dinkbrs5zOGhIn0S2AAfXE1AzZCTmGiC2slhoZLD',
-          user_finder_folder_id:user_finder_folder_id,
-          photo_url:photo_url,
-          source:source,
-          is_sc:is_sc,
-        },
-        success: function (data) {
-          // 重置按钮
-          $('.asd[scid]').html('收藏')
-          .addClass('to_find_floder_act')
-          .addClass('Button2')
-          .removeClass('Button')
-          .removeClass('have-disalbed')
-          .removeClass('have-collect');
-          for (let i = 0; i < data.data.length; i++) {
-            // 为已收藏的按钮添加效果
-            const user_collect_folder_id = data.data[i];
-            let btn = $(`.asd[scid=${user_collect_folder_id}]`);
-            btn.html('已收藏')
-            .removeClass('to_find_floder_act')
-            .removeClass('Button2')
-            .addClass('Button')
-            .addClass('have-disalbed')
-            .addClass('have-collect');
-          }
-        }
-      });*/
-		 	
-		 	tpid=$('.scbtm').attr('data-id');
-		 	$('.lzcfg').css('display','block');
-		 	$('.showscbtn').css('display','block');
-      $('.showscbtn').css('z-index','999999999999');
+    //判断是否为vip
+    if(IS_VIP){
+        $('.order_center .order2').find('a').html('会员中心')
+        $('.order_center .order2').find('a').attr('href','/member/interest')
     }
-  })
-	
-	//点击轮播图片上的收藏按钮出现弹窗	
-  $(document).on('click','.scbtmlbt',function(ev){
-	 	if(!IS_LOGIN){
-            $('.login_box').show();
-	 	}else{
-		 	let photo_id_i = $(this).data('pid-i');
-      let user_finder_folder_id = $('.to_find_floder_act ').attr('scid');//发现的收藏夹id
-			let folder_ids = [];
-      let source = $(this).attr('photoid');//图片所在的文章id
-      let photo_url=$('#btntp').attr('src');//图片src
-      // photo_url=photo_url.substr(20)
-      let is_sc=1;
-			$(".asd").each(function () {
-				folder_ids.push($(this).attr("scid"));
-			});
-			$(".asd").data("pid-i", photo_id_i);//这个啥意思，自定义属性？相当于attr('data-pid-i', photo_id_i),,好吧
-       
-      /*$.ajax({
-        async:false,
-        url: '/vip/scstatus',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-          _token:'dinkbrs5zOGhIn0S2AAfXE1AzZCTmGiC2slhoZLD',
-          user_finder_folder_id:user_finder_folder_id,
-          photo_url:photo_url,
-          source:source,
-          is_sc:is_sc,
-        },
-        success: function (data) {
-          // 重置按钮
-          $('.asd[scid]').html('收藏')
-          .addClass('to_find_floder_act')
-          .addClass('Button2')
-          .removeClass('Button')
-          .removeClass('have-disalbed')
-          .removeClass('have-collect');
-          for (let i = 0; i < data.data.length; i++) {
-            // 为已收藏的按钮添加效果
-            const user_collect_folder_id = data.data[i];
-            let btn = $(`.asd[scid=${user_collect_folder_id}]`);
-            btn.html('已收藏')
-            .removeClass('to_find_floder_act')
-            .removeClass('Button2')
-            .addClass('Button')
-            .addClass('have-disalbed')
-            .addClass('have-collect');
-          }
-        }
-      });
+    function start(){
+      let len = $(".swiper-slide").length
+      $(".swiper-slide").eq(i).show().siblings().stop(true, true).hide();
+    }
+    function change(){
+        $(".swiper-slide").eq(i).show().siblings().stop(true, true).hide();
+    }
 
-		 	for (let i = 0;i < folder_ids.length;i++) {
-		 		let folder_id = folder_ids[i];
-		 		console.group(folder_id)
-		 		$.ajax({
-	                async:false,
-	                url: '/vip/scstatus',
-	                type: 'POST',
-	                dataType: 'json',
-	                data: {_token:'dinkbrs5zOGhIn0S2AAfXE1AzZCTmGiC2slhoZLD',collect_id:collect_id,tpsrc:tpsrc,folder_id:folder_id},
-	                success: function (data){
-	                	console.log(data);
-	                	let btn = $(`.asd[scid=${folder_id}]`);
-	                    if (data.status_code == 100001) {
-	                    	// let btn = $('.asd[scid=' . folder_id . ']');
-	                    	$('.showscbtn').css('display','none');
-	                    	$('.lzcfg').css('display','none');
-				          	    btn.html('已收藏')
-				              	.removeClass('to_find_floder_act')
-				              	.removeClass('Button2')
-				              	.addClass('Button')
-				              	.addClass('have-disalbed')
-				              	.addClass('have-collect');
-	                    }else{
-	                    	btn.html('收藏')
-				              	.addClass('to_find_floder_act')
-				              	.addClass('Button2')
-				              	.removeClass('Button')
-				              	.removeClass('have-disalbed')
-				              	.removeClass('have-collect');
-	                    }
-	                }
-	            });
-	            console.groupEnd();
-		 	}*/
-		 	tpid=$('.scbtmlbt').attr('data-id');
-		 	$('.lzcfg').css('display','block');
-		 	$('.showscbtnlbt').css('display','block');
-		 	$('.showscbtnlbt').css('z-index','999999999999');
-		 	
-			// 轮播图鼠标移入停止自动滚动
-			$('.showscbtnlbt').mouseenter(function() {
-				// bannerSwiper.stopAutoplay();
-				clearInterval(timer);
-			})
-			// l轮播图鼠标移出开始自动滚动
-			$('.showscbtnlbt').mouseleave(function() {
-				// bannerSwiper.startAutoplay();
-				start()
-			})
-
-	 	}
+    //--点击上面的图片显示轮播图片--
+    $(document).on('click','.itemww',function(){
+      var index = $(this).index()
+      console.log(index)
+      i = index
+      $('.lzcfg').css('display','block');
+      $('.swiper-container').css('display','block');
+      start()
     })
+    //点击关闭轮播图
+    $(document).on('click','.closeltb',function(){
+      $('.swiper-container').css('display','none');
+      $('.showscbtnlbt').css('display','none');
+      $('.lzcfg').css('display','none');
+      clearInterval(timer);
+    })
+    
+    $(document).on('click','.swiper-button-next',function(){
+      let len = $(".swiper-slide").length
+      i++;
+      if(i >= len){
+        i = 0;
+      }
+      change();
+    })
+    $(document).on('mousemove','.swiper-button-next',function(){
+      clearInterval(timer);
+    })
+    $(document).on('mouseout','.swiper-button-next',function(){
+      start()
+    })
+    
+    $(document).on('click','.swiper-button-prev',function(){
+      let len = $(".swiper-slide").length
+      i--;
+      if(i <= 0){
+          i = len-1;
+      }
+      change();
+    })
+    $(document).on('mousemove','.swiper-button-prev',function(){
+      clearInterval(timer);
+    })
+    $(document).on('mouseout','.swiper-button-prev',function(){
+      start()
+    })
+    
+    
+    
+    //点击图片上的收藏按钮出现弹窗	
+    $(document).on('click','.scbtm',function(ev){
+      ev.stopPropagation(); //  阻止事件冒泡
+      if (!IS_LOGIN) {
+        $('.login_box').show();
+      } else {
+        let photo_id_i = $(this).data('pid-i');
+        let user_finder_folder_id = $('.to_find_floder_act ').attr('scid');//发现的收藏夹id
+        let folder_ids = [];
+        let source = $(this).attr('photoid');//图片所在的文章id
+        let is_sc=1;
+        let photo_url=$('.boximg').attr('src');//图片src
+        // console.log(user_finder_folder_id)
+        // photo_url=photo_url.substr(20)
+        $(".asd").each(function () {
+          folder_ids.push($(this).attr("scid"));
+        });
+        $(".asd").data("pid-i", photo_id_i);//这个啥意思，自定义属性？相当于attr('data-pid-i', photo_id_i),,好吧
+        
+        tpid=$('.scbtm').attr('data-id');
+        $('.lzcfg').css('display','block');
+        $('.showscbtn').css('display','block');
+        $('.showscbtn').css('z-index','999999999999');
+      }
+    })
+    
+    //点击轮播图片上的收藏按钮出现弹窗	
+    $(document).on('click','.scbtmlbt',function(ev){
+      if(!IS_LOGIN){
+        $('.login_box').show();
+      }else{
+        let photo_id_i = $(this).data('pid-i');
+        let user_finder_folder_id = $('.to_find_floder_act ').attr('scid');//发现的收藏夹id
+        let folder_ids = [];
+        let source = $(this).attr('photoid');//图片所在的文章id
+        let photo_url=$('#btntp').attr('src');//图片src
+        // photo_url=photo_url.substr(20)
+        let is_sc=1;
+        $(".asd").each(function () {
+          folder_ids.push($(this).attr("scid"));
+        });
+        $(".asd").data("pid-i", photo_id_i);//这个啥意思，自定义属性？相当于attr('data-pid-i', photo_id_i),,好吧
+        
+        /*$.ajax({
+          async:false,
+          url: '/vip/scstatus',
+          type: 'POST',
+          dataType: 'json',
+          data: {
+            _token:'dinkbrs5zOGhIn0S2AAfXE1AzZCTmGiC2slhoZLD',
+            user_finder_folder_id:user_finder_folder_id,
+            photo_url:photo_url,
+            source:source,
+            is_sc:is_sc,
+          },
+          success: function (data) {
+            // 重置按钮
+            $('.asd[scid]').html('收藏')
+            .addClass('to_find_floder_act')
+            .addClass('Button2')
+            .removeClass('Button')
+            .removeClass('have-disalbed')
+            .removeClass('have-collect');
+            for (let i = 0; i < data.data.length; i++) {
+              // 为已收藏的按钮添加效果
+              const user_collect_folder_id = data.data[i];
+              let btn = $(`.asd[scid=${user_collect_folder_id}]`);
+              btn.html('已收藏')
+              .removeClass('to_find_floder_act')
+              .removeClass('Button2')
+              .addClass('Button')
+              .addClass('have-disalbed')
+              .addClass('have-collect');
+            }
+          }
+        });
 
- 	// 鼠标移入停止自动滚动
-	 $('.swiper-slide').mouseenter(function() {
-	    // bannerSwiper.stopAutoplay();
-		clearInterval(timer);
-	})
-	// 鼠标移出开始自动滚动
-	$('.swiper-slide').mouseleave(function() {
-	    // bannerSwiper.startAutoplay();
-		start()
-		console.log(i)
-	})
+        for (let i = 0;i < folder_ids.length;i++) {
+          let folder_id = folder_ids[i];
+          console.group(folder_id)
+          $.ajax({
+                    async:false,
+                    url: '/vip/scstatus',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {_token:'dinkbrs5zOGhIn0S2AAfXE1AzZCTmGiC2slhoZLD',collect_id:collect_id,tpsrc:tpsrc,folder_id:folder_id},
+                    success: function (data){
+                      console.log(data);
+                      let btn = $(`.asd[scid=${folder_id}]`);
+                        if (data.status_code == 100001) {
+                          // let btn = $('.asd[scid=' . folder_id . ']');
+                          $('.showscbtn').css('display','none');
+                          $('.lzcfg').css('display','none');
+                          btn.html('已收藏')
+                          .removeClass('to_find_floder_act')
+                          .removeClass('Button2')
+                          .addClass('Button')
+                          .addClass('have-disalbed')
+                          .addClass('have-collect');
+                        }else{
+                          btn.html('收藏')
+                          .addClass('to_find_floder_act')
+                          .addClass('Button2')
+                          .removeClass('Button')
+                          .removeClass('have-disalbed')
+                          .removeClass('have-collect');
+                        }
+                    }
+                });
+                console.groupEnd();
+        }*/
+        tpid=$('.scbtmlbt').attr('data-id');
+        $('.lzcfg').css('display','block');
+        $('.showscbtnlbt').css('display','block');
+        $('.showscbtnlbt').css('z-index','999999999999');
+        
+        // 轮播图鼠标移入停止自动滚动
+        $('.showscbtnlbt').mouseenter(function() {
+          // bannerSwiper.stopAutoplay();
+          clearInterval(timer);
+        })
+        // l轮播图鼠标移出开始自动滚动
+        $('.showscbtnlbt').mouseleave(function() {
+          // bannerSwiper.startAutoplay();
+          start()
+        })
+
+      }
+      })
+
+    // 鼠标移入停止自动滚动
+    $('.swiper-slide').mouseenter(function() {
+        // bannerSwiper.stopAutoplay();
+      clearInterval(timer);
+    })
+    // 鼠标移出开始自动滚动
+    $('.swiper-slide').mouseleave(function() {
+        // bannerSwiper.startAutoplay();
+      start()
+      console.log(i)
+    })
 
 
     //关闭收藏展示框
     $(document).on('click','.showscbtn .close',function(){
-    	$('.showscbtn').css('display','none');
-    	$('.lzcfg').css('display','none');
-	})
-	
-	//关闭轮播图收藏展示框
-	$(document).on('click','.showscbtnlbt .closelbtbtn',function(){
-		$('.showscbtnlbt').css('display','none');
+      $('.showscbtn').css('display','none');
+      $('.lzcfg').css('display','none');
+    })
+    
+    //关闭轮播图收藏展示框
+    $(document).on('click','.showscbtnlbt .closelbtbtn',function(){
+      $('.showscbtnlbt').css('display','none');
+      })
+
+      //关闭创建收藏夹窗口
+      $(document).on('click','.modal .close',function(){
+        $('#new-find-model-folder').css('display','none');
+        $('.lzcfg').css('display','none');
+      })
+      $(document).on('click','.concle-create-folder',function(){
+        $('#new-find-model-folder').css('display','none');
+        $('.lzcfg').css('display','none');
+      })
+
+
+      //创建收藏收藏夹窗口
+      $(document).on('click','.create-new-folder-btn',function(){
+        $('.showscbtn').css('display','none');
+        $('.showscbtn').css('z-index','-99999999');
+          $('#new-find-model-folder').css('display','block');
+          $('#new-find-model-folder').css('position','position');
+          $('#new-find-model-folder').css('z-index','99999999999');
+          
+      })
+    
+    //创建收藏收藏夹
+      $(document).on('click','.create_finder_folder_enter_btn',function(ev){
+          $data = {};
+          $data.favorite = $("#new-find-model-folder [name='favorite']").val();
+          $data.memo = $("#new-find-model-folder").find("[name='memo']").val();
+
+          $data.isopen =1;
+          if ($("#new-find-model-folder").find("[name='isopen']").prop('checked')) {
+              $data.isopen =2;
+          }
+
+          if (!$data.favorite) {
+              $("#new-find-model-folder .error_msg").text("收藏夹名称必填");
+              return false;
+          }else{
+              $("#new-find-model-folder .error_msg").text("");
+          }
+
+      $('#new-find-model-folder').css('display','none');
+      $('.showscbtn').css('display','block');
+      $('.showscbtn').css('z-index','99999999999');
+      location.reload();
+      })
+
+    
+    //点击收藏按钮进行收藏
+    $(document).on('click','.to_find_floder_act',function(ev){
+      if(!IS_LOGIN){
+              // window.location = "/user/login";
+              $('.login_box').show();
+      }else{
+        var that=$(this);
+        //folder_id获取图片id
+        let photo_id_i = $(this).data('pid-i');
+        let user_finder_folder_id=$(this).attr('scid'); //获取收藏夹的id
+        let photo_url=$(`.itemww img[data-photo-index=${photo_id_i}]`).attr('src');
+        let source = collect_id;//图片所在的文章id
+        let is_sc=1;
+        console.log(photo_url);
+        $.ajax({
+                async:false,
+                url: '/vip/finder_collect',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                  _token:'{{csrf_token()}}',
+                  user_finder_folder_id:user_finder_folder_id,
+                  photo_url:photo_url,
+                  source:source,
+                  is_sc:is_sc,
+                },
+                success: function (data){
+                  console.log(data);
+                    if(data.status_code == 0){
+                      layer.msg('收藏成功',{skin: 'intro-login-class layui-layer-hui'});
+                      that.html('已收藏');
+                      that.addClass('have-collect');
+                      that.removeClass('Button2');
+                      that.removeClass('to_find_floder_act');
+                      that.addClass('Button');
+                      that.addClass('have-disalbed');
+                      // location.reload();
+                    }
+                    else{
+                      layer.msg('已经收藏过了',{skin: 'intro-login-class layui-layer-hui'});
+                      $('.showscbtn').css('display','none');
+                      $('.lzcfg').css('display','none');
+                      that.text('已收藏');
+                      that.removeClass('to_find_floder_act');
+                      that.removeClass('Button2');
+                      that.addClass('Button');
+                      that.addClass('have-disalbed');
+                      that.addClass('have-collect');
+                    }
+                }
+            });
+      }
     })
 
-    //关闭创建收藏夹窗口
-    $(document).on('click','.modal .close',function(){
-    	$('#new-find-model-folder').css('display','none');
-    	$('.lzcfg').css('display','none');
-    })
-    $(document).on('click','.concle-create-folder',function(){
-    	$('#new-find-model-folder').css('display','none');
-    	$('.lzcfg').css('display','none');
-    })
-
-
-	  //创建收藏收藏夹窗口
-     $(document).on('click','.create-new-folder-btn',function(){
-     	$('.showscbtn').css('display','none');
-     	$('.showscbtn').css('z-index','-99999999');
-        $('#new-find-model-folder').css('display','block');
-        $('#new-find-model-folder').css('position','position');
-        $('#new-find-model-folder').css('z-index','99999999999');
-        
-    })
-	
-	//创建收藏收藏夹
-    $(document).on('click','.create_finder_folder_enter_btn',function(ev){
-        $data = {};
-        $data.favorite = $("#new-find-model-folder [name='favorite']").val();
-        $data.memo = $("#new-find-model-folder").find("[name='memo']").val();
-
-        $data.isopen =1;
-        if ($("#new-find-model-folder").find("[name='isopen']").prop('checked')) {
-            $data.isopen =2;
-        }
-
-        if (!$data.favorite) {
-            $("#new-find-model-folder .error_msg").text("收藏夹名称必填");
-            return false;
-        }else{
-            $("#new-find-model-folder .error_msg").text("");
-        }
-
-		$('#new-find-model-folder').css('display','none');
-		$('.showscbtn').css('display','block');
-		$('.showscbtn').css('z-index','99999999999');
-		location.reload();
-    })
-
-	
-	//点击收藏按钮进行收藏
-	$(document).on('click','.to_find_floder_act',function(ev){
-		if(!IS_LOGIN){
-            // window.location = "/user/login";
-            $('.login_box').show();
-	 	}else{
-	 		var that=$(this);
-			//folder_id获取图片id
-			let photo_id_i = $(this).data('pid-i');
-			let user_finder_folder_id=$(this).attr('scid'); //获取收藏夹的id
-      let photo_url=$(`.itemww img[data-photo-index=${photo_id_i}]`).attr('src');
-      let source = collect_id;//图片所在的文章id
-      let is_sc=1;
-			console.log(photo_url);
-			$.ajax({
-	            async:false,
-	            url: '/vip/finder_collect',
-	            type: 'POST',
-	            dataType: 'json',
-	            data: {
-                _token:'{{csrf_token()}}',
-                user_finder_folder_id:user_finder_folder_id,
-                photo_url:photo_url,
-                source:source,
-                is_sc:is_sc,
-              },
-	            success: function (data){
-	            	console.log(data);
-	                if(data.status_code == 0){
-                    layer.msg('收藏成功',{skin: 'intro-login-class layui-layer-hui'});
-	                	that.html('已收藏');
-            			  that.addClass('have-collect');
-                    that.removeClass('Button2');
-                    that.removeClass('to_find_floder_act');
-				            that.addClass('Button');
-				            that.addClass('have-disalbed');
-                    // location.reload();
-	                }
-	                else{
-	                	layer.msg('已经收藏过了',{skin: 'intro-login-class layui-layer-hui'});
-	                	$('.showscbtn').css('display','none');
-	                	$('.lzcfg').css('display','none');
-                    that.text('已收藏');
-                    that.removeClass('to_find_floder_act');
-                    that.removeClass('Button2');
-                    that.addClass('Button');
-                    that.addClass('have-disalbed');
-	                	that.addClass('have-collect');
-	                }
-	            }
-	        });
-	 	}
-	})
-
-});
-
+  });
 
 </script> 
+<!-- 轮播图和收藏结束 -->
+
 
 <!--登录模块 --> 
 <script type="text/javascript">
-function WeChatLogin() {
+  function WeChatLogin() {
     if ($(".ma_box").hasClass("hide")) {
-        $(".ma_box").removeClass("hide");
+      $(".ma_box").removeClass("hide");
     } else {
-        $(".ma_box").addClass("hide");
+      $(".ma_box").addClass("hide");
     }
-}
+  }
 
-function toLogin() {
+  function toLogin() {
     //以下为按钮点击事件的逻辑。注意这里要重新打开窗口
     //否则后面跳转到QQ登录，授权页面时会直接缩小当前浏览器的窗口，而不是打开新窗口
     var A = window.open("/auth/qq", "_self");
-}
+  }
 
-function wp_attempt_focus() {
+  function wp_attempt_focus() {
     setTimeout(function () {
-        try {
-            d = document.getElementById('user_login');
-            d.focus();
-            d.select();
-        } catch (e) {
-        }
+      try {
+          d = document.getElementById('user_login');
+          d.focus();
+          d.select();
+      } catch (e) {
+      }
     }, 200);
-}
+  }
 
-//监听回车事件
+  //监听回车事件
 
-$(document).keyup(function(event){
+  $(document).keyup(function(event){
     if(event.keyCode ==13){
         $('#wp-submit-login').trigger("click");
     }
-});
+  });
 
-$("#wp-submit-login").click(function () {
+  $("#wp-submit-login").click(function () {
     var url = $.trim($('#loginform').attr("action"));
     $.ajax({
         url: url,
@@ -736,23 +701,20 @@ $("#wp-submit-login").click(function () {
         dataType: 'json',
         data: $('#loginform').serialize(),
         success: function (data) {
-            if (data.status_code == 0) {
-                setTimeout(function () {
-                    location.href =  location.href
-                }, 300);
-            } else {
-                layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
-            }
-        }
+          if(data.status_code == 0) {
+            setTimeout(function () {
+              location.href =  location.href
+            }, 300);
+          } else {
+            layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
+          }
+      }
     });
+  });
 
+  wp_attempt_focus();
 
-
-});
-
-wp_attempt_focus();
-
-if (typeof wpOnload == 'function') wpOnload();
+  if (typeof wpOnload == 'function') wpOnload();
 
 </script> 
 <!--登录结束--> 
