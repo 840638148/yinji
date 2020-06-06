@@ -102,9 +102,9 @@
   <div class="home_tongji">
     <ul>
       <li>人气</br>{{$users->view_num}} </li>
-      <li>收藏</br>{{$users->collect_num}} </li>
-      <li>关注</br>{{$users->follow_num}} </li>
-      <li>粉丝</br>{{$users->follow_num}} </li>
+      <li>收藏</br>{{App\User::getCollectNum($users->id)}} </li>
+      <li>关注</br>{{App\User::getFollowNum($users->id)}} </li>
+      <li>粉丝</br>{{App\User::getFansNum($users->id)}} </li>
     </ul>
   </div>
   <div class="home_personal"> <img src="@if($users->avatar) {{$users->avatar}} @else /img/avatar.png @endif" alt="{{$users->nickname}}" />
@@ -112,7 +112,13 @@
   </div>
   <h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> {{$users->nickname}} <img src="{{$users->vip_level}}" alt=""></h2>
   <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">@if($users->zhiwei){{$users->zhiwei}}@else 保密 @endif - {{$users->city}} <img src="{{App\User::getVipLevel($users->id)}}" alt=""></p>
-  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span style='padding: 5px 25px;display: inline-block;background: #3d87f1;margin: 20px auto;color: #fff;'>关注</span></p>
+  @if($user->id==$users->id)
+  
+  @elseif($users->is_follow)
+  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='have-disalbed' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #e62b3c;margin: 20px auto;color: #fff;cursor:pointer !important;'>取消关注</span></p>
+  @else
+  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='gzuser' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #3d87f1;margin: 20px auto;color: #fff;cursor: pointer !important;'>关注</span></p>
+  @endif
   <div class="home_nav" style='width:610px;left:52%;'>
     <ul>
 	      <li class="current"><a  href="/member/{{$users->id}}">TA的主页</a></li>
@@ -126,11 +132,11 @@
 </div>
 <section class="wrapper">
   <div class="mt30 home_box">
+    <!-- TA的收藏 -->
     <div class="title">
       <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>TA的收藏</span></h2>
       <span class="fr"><a href="/member/homepage_collect/{{$users->id}}">更多</a></span>
     </div>
-  
     <div class="masonry my-collection" >   
       @foreach($users->collects as $collect)
       <div class="item collection-item " data-id="{{$collect['folder']['id']}}" onclick="location='/member/hp_collect_detail/{{$users->id}}/{{$collect['folder']['id']}}'">
@@ -148,7 +154,8 @@
       </div>
       @endforeach
     </div>
-
+    <!-- TA的收藏end -->
+    <!-- TA的关注 -->
     <div class="title mt30">
       <div class="title">
         <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>TA的关注</span></h2>
@@ -165,9 +172,149 @@
             @endforeach
       </ul>
     </div>
-
-   
+    <!-- TA的关注end -->
+    <!-- TA的访客 -->
+    <div class="title mt30" style='position:relative'>
+      <div class="title">
+        <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>访客</span><span style='position:absolute;top:0;right:60%;'>评论：</span></h2>
+      </div>
+    </div>
+    <div class='designer' style='width:30%;float:left;'>
+      <ul>
+        @foreach ($visited as $follow)
+            <li class="guanzhu-item" style='margin-bottom:10px;'>
+              <a href="/member/{{$follow->user_id}}" ><span class="select-item"></span>  
+              <img onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /> </a> 
+              @if($follow->created_at < date('Y-m-d H:i:s',time()-60))
+              <span>1分钟前</span>
+              @elseif($follow->created_at < date('Y-m-d H:i:s',time()-600))
+              <span>10分钟前</span>
+              @elseif($follow->created_at < date('Y-m-d H:i:s',time()-1800))
+              <span>30分钟前</span>
+              @elseif($follow->created_at < date('Y-m-d H:i:s',time()-6000))
+              <span>1小时前</span>
+              @elseif($follow->created_at < date('Y-m-d H:i:s',time()-86400))
+              <span>1天前</span>
+              @endif
+            </li>
+        @endforeach
+      </ul>
+    </div>
+    <div class='fkright' style='width:65%;float:right;'>
+        <div class="msgCon"> 
+          @foreach ($comments as $comment)
+          @if($comment->content!='')
+          <div class="msgBox">
+              <!-- 只显示有评论的 -->
+          <dl>
+              <dt><img src="{{$comment->user->avatar}}" width="50" height="50"></dt>
+              
+              <dd>
+                  <span style="float:left">{{$comment->user->nickname}}
+                      <img src="{{App\User::getVipLevel($comment->user->id)}}" alt="">
+                  </span>
+                  <ul class="show_number clearfix" style=" float:left;margin:10px 0 0 30px;">
+                  <li style="width:200px;">
+                      <div class="atar_Show2">
+                      <p tip="{{$comment->stars}}"></p>
+                      </div>
+                      <span></span>
+                  </li>
+                  </ul>  
+                  <span>发布于：{{$comment->created_at}}</span>
+              </dd>
+              <div class="msgTxt">{!!$comment->content!!}</div>
+          
+          </dl>
+          </div> 
+          @endif
+          @endforeach 
+        </div>
+        <div class='fbpl'>
+          <h2><span>发表评论</span></h2>
+          
+          <textarea style="resize:none;" name="con" id="con" cols="30" rows="10"></textarea>
+          <span class='fbbtn' style='display: inline-block;padding: 10px 20px;background: #000;color: #fff;margin: 20px 0;'>发表评论</span>
+        </div>
+    </div>
   </div>
-</section>  
+</section>
+ 
+<script> 
+  // 关注TA
+  $('.gzuser').click(function(){
+    let gzid=$(this).attr('uid');
+    let that=$(this);
+    $.ajax({
+        url: '/member/gzta',
+        type: 'POST',
+        dataType: 'json',
+        data: {_token:'{{csrf_token()}}',gzid:gzid},
+        success: function (data) {
+            if (data.status_code == 100) {
+                layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+                that.text('取消关注');
+                that.removeClass('gzuser');
+                that.addClass('have-disalbed').css('background','#e62b3c');
+                window.location.reload();
+            } else {
+                layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+            }
+        }
+    });
+  });
+
+  //取消关注TA
+  $('.have-disalbed').click(function(){
+    let gzid=$(this).attr('uid');
+    let that=$(this);
+    $.ajax({
+        url: '/member/qxgzta',
+        type: 'POST',
+        dataType: 'json',
+        data: {_token:'{{csrf_token()}}',gzid:gzid},
+        success: function (data) {
+            if (data.status_code == 100) {
+                layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+                that.text('关注');
+                that.removeClass('have-disalbed');
+                that.addClass('gzuser').css('background','#3d87f1');
+                window.location.reload();
+            } else {
+                layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+            }
+        }
+    });
+  });
+
+  //统计访问
+  $(function(){
+
+    let urls=window.location.href;
+    let uid=urls.split('/')[4];
+    console.log(uid)
+    $.ajax({
+        url: '/member/visited_hp',
+        type: 'POST',
+        dataType: 'json',
+        data: {_token:'{{csrf_token()}}',uid:uid},
+        success: function (data) {
+            if (data.status_code == 100) {
+                // layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+                
+            } else {
+                // layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+            }
+        }
+    });
+  })
+
+  //发表评论
+  $('.fbbtn').click(function(){
+    let con=$('#con').val();
+    // console.log(con)
+  })
+
+</script>
 
 @endsection

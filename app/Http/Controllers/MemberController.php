@@ -24,6 +24,7 @@ use App\Http\Output;
 use App\User;
 use App\Models\VipPrice;
 use App\Models\Article;
+use App\Models\ViewNum;
 use Carbon\Carbon;
 // use Mail;
 use Illuminate\Support\Facades\Mail;
@@ -486,10 +487,10 @@ class MemberController extends Controller
 
         $result = UserFollow::followByUserId($request->follow_id);
         
-        if (true === $result) {
+        if (true === $result['status']) {
             return Output::makeResult($request, null);
         }else{
-            return Output::makeResult($request, null, 500,'您没有权限，请先开通会员获取权限');
+            return Output::makeResult($request, null, 500,$result['data']);
         }
         return Output::makeResult($request, null, Error::SYSTEM_ERROR);
     }
@@ -674,11 +675,13 @@ class MemberController extends Controller
         $attendances = UserAttendance::getAttendanceLog();
         $last_days = UserAttendance::getLastDays($users->id);
         $tips = UserAttendance::getAttendanceTips();
-
+        $users->is_follow=UserFollow::where('user_id',$user->id)->where('follow_id',$users->id)->first();
         $today_start = date('Y-m-d 00:00:00');
         $today_end   = date('Y-m-d 23:59:59');
         $is_qiandao = UserAttendance::where('user_id', $users->id)->where('created_at', '>=', $today_start)->where('created_at', '<=', $today_end)->first();
-
+        $visited=ViewNum::leftjoin('users','users.id','=','view_nums.user_id')->select('users.avatar','view_nums.user_id','view_nums.visited_id','view_nums.created_at')->where('view_nums.visited_id',$id)->get();
+        $comments=[];
+        
         $data = [
             'lang' => $lang,
             'user' => $user,
@@ -687,6 +690,8 @@ class MemberController extends Controller
             'last_days' => $last_days,
             'tips' => $tips,
             'is_qiandao' => $is_qiandao,
+            'visited' => $visited,
+            'comments' => $comments,
         ];
         return view('member.homepage', $data);
     }
@@ -856,13 +861,113 @@ class MemberController extends Controller
         $lang = $request->session()->get('language') ?? 'zh-CN';
         $user = User::find(Auth::id());
         $users = User::find($id);
-
+        // date("Y-m-d",strtotime('created_at'))
+        
+        // $record=UserPoint::where('user_id',$users->id)->select('remark','user_id',DB::raw("FROM_UNIXTIME(UNIX_TIMESTAMP(created_at),'%Y-%m-%d %H:%i:%s') as date"))
+                // ->
+                // ->orderBy("created_at","asc")
+                // ->limit(10)
+                // ->get();
+        $record=UserPoint::where('user_id',$users->id)->select('remark','user_id',DB::raw("FROM_UNIXTIME(UNIX_TIMESTAMP(created_at),'%Y-%m-%d %H:%i:%s') as date"))->get();
+        $dates=date("Y-m-d",strtotime($record->created_at));
+        $tmp=[];
+        foreach($record as $k=>$v){
+            if(preg_match($dates,$v->date,$m)){
+                dump($m);
+            }
+        }
+        dd($tmp);
         $data = [
             'lang' => $lang,
             'users' => $users,
             'user' => $user,
+            'record' => $record,
         ];
         return view('member.homepage_record', $data);
+    }
+
+    /**
+    * 关注TA 
+    */
+    public function gzta(Request $request){
+        if(!Auth::check()){
+            return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
+        }
+
+        if(empty($request->gzid)){
+            return Output::makeResult($request, null, 500,'请选择关注的用户');
+        }
+
+        $result=UserFollow::followByUserId($request->gzid);
+        if($result['status']===true){
+            return Output::makeResult($request, null, 100,'关注成功');
+        }else{
+            return Output::makeResult($request, null, 500,$result['data']);
+        }
+
+    }
+
+    /**
+    * 取消关注TA 
+    */
+    public function qxgzta(Request $request){
+        if(!Auth::check()){
+            return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
+        }
+
+        if(empty($request->gzid)){
+            return Output::makeResult($request, null, 500,'请选择取消关注的用户');
+        }
+
+        $result=UserFollow::cancelFollowByUserId($request->gzid);
+        if($result===true){
+            return Output::makeResult($request, null, 100,'取消关注成功');
+        }else{
+            return Output::makeResult($request, null, Error::SYSTEM_ERROR);
+        }
+
+    }
+
+    /**
+    * 关注TA的订阅 
+    */
+    public function gztady(Request $request)
+    {
+        if(!Auth::check()){
+            return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
+        }
+
+        $result = UserSubscription::subscriptionByDesignerId($request->designer_id);
+        if (true === $result) {
+            return Output::makeResult($request, null,100,'订阅成功');
+        }else{
+            return Output::makeResult($request, null,500,'订阅过');
+        }
+    }
+
+    /**
+    * 统计访问主页的用户
+    */
+    public function visited_hp(Request $request)
+    {
+        if(!Auth::check()){
+            header("Location: /user/login");die;
+        }
+
+        $uid=$request->uid;
+        $user_id=Auth::id();
+        $today_start = date('Y-m-d 00:00:00');
+        $today_end   = date('Y-m-d 23:59:59');
+        $res=ViewNum::where('user_id',$user_id)->where('visited_id',$uid)->where('created_at', '>=', $today_start)->where('created_at', '<', $today_end)->first();
+        if($uid!=$user_id){
+            if(!$res){
+                $data=[
+                    'user_id'=>$user_id,
+                    'visited_id'=>$uid,
+                ];
+                ViewNum::create($data);                
+            }
+        }
     }
 
     public function finderDetail(Request $request, $id)

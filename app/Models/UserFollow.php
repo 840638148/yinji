@@ -31,7 +31,7 @@ class UserFollow extends Model
             ->first();
 
             if($obj){
-                return true;
+                return ['status'=>true,'data'=>'已经关注'];
             } else {
                 $data = [
                     'user_id' => Auth::id(),
@@ -39,9 +39,9 @@ class UserFollow extends Model
                 ];
                 self::create($data);
             }
-            return true;
+            return ['status'=>true,'data'=>'关注成功'];
         }else{
-            return false;
+            return ['status'=>false,'data'=>'权限不够，请开通会员'];
         }
     }
 

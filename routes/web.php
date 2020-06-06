@@ -139,6 +139,10 @@ Route::get('member/homepage_record/{id}', 'MemberController@homepage_record');//
 Route::get('member/hp_collect_detail/{uid}/{id}', 'MemberController@hp_collect_detail');//TA的收藏详情
 Route::get('member/hp_finder_detail/{uid}/{id}', 'MemberController@hp_finder_detail');//TA的发现详情
 Route::get('member/homepage_record/{id}', 'MemberController@homepage_record');//TA的印记
+Route::post('member/gzta', 'MemberController@gzta');//关注TA
+Route::post('member/qxgzta', 'MemberController@qxgzta');//取消关注TA
+Route::post('member/gztady', 'MemberController@gztady');//关注TA的订阅
+Route::post('member/visited_hp', 'MemberController@visited_hp');//统计访问个人主页的用户
 
 
 

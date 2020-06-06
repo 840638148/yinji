@@ -17,9 +17,9 @@
   <div class="home_tongji">
     <ul>
         <li>人气</br>{{$users->view_num}} </li>
-        <li>收藏</br>{{$users->collect_num}} </li>
-        <li>关注</br>{{$users->follow_num}} </li>
-        <li>粉丝</br>{{$users->follow_num}} </li>
+        <li>收藏</br>{{App\User::getCollectNum($users->id)}} </li>
+        <li>关注</br>{{App\User::getFollowNum($users->id)}} </li>
+        <li>粉丝</br>{{App\User::getFansNum($users->id)}} </li>
     </ul>
   </div>
   <div class="home_personal"> <img src="@if($users->avatar) {{$users->avatar}} @else /img/avatar.png @endif" alt="{{$users->nickname}}" />
@@ -41,7 +41,7 @@
 <section class="wrapper">
   <div class="mt30 home_box">
     <div class="title" style='position: relative;'>
-      <h2><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>我的订阅</span></h2>
+      <h2><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>TA的订阅</span></h2>
       <div class="desearch" style='position: absolute;top: 1px;right: 0;'>
         <form id="myform" action="/member/desearch"  style="position:relative;padding:0;" method="post" class="search_form" onkeydown="if (event.keyCode == 13) return false"  >
             <i class="findersearch_btn" style="position: absolute;left: 10px;top: 10px;padding: 5px;cursor: pointer;border:none;background:url(/images/findersearch.png) center no-repeat;width: 30px;display: block;height: 30px;"></i>
@@ -76,7 +76,7 @@
               <span>{!! get_designer_description($subscription) !!}</span> 
             </div>
             <div class="focus"> 
-              <a href="javascript:void(0)" data-id="{{$subscription->id}}" class="focus_btn2 click cancelSubscription"> 取消订阅 </a>
+              <a href="javascript:void(0)" data-id="{{$subscription->id}}" class="focus_btn2 click cancelSubscription"> 订阅 </a>
               <div class="focus_msg"><span>作品：{{$subscription->article_num}}</span> | <span>粉丝：{{$subscription->fans_num}}</span></div>
             </div>
           </div>
@@ -102,25 +102,25 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    //取消订阅
+    //订阅
     $(document).on('click','.cancelSubscription',function(e){
-    // $(".cancelSubscription").click(function(e){
-      var designer_id = $(this).attr('data-id');
+      let designer_id = $(this).attr('data-id');
       $.ajax({
-        url: '/member/cancel_subscription',
+        url: '/member/gztady',
         type: 'POST',
         dataType: 'json',
         data: {_token:'{{csrf_token()}}',designer_id:designer_id},
         success: function (data) {
-          if (data.status_code == 0) {
-            window.location.reload();
+          if (data.status_code == 100) {
+            layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+            // window.location.reload();
           } else {
-            alert(data.message);
+            layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
           }
         }
       });
     });
-  });
+
 
   //绑定回车事件
   $("#myform #txt_name").keydown(function (e) { 
@@ -151,7 +151,7 @@
         success:function(data) {
           console.log(data.data)
           if(data.status_code==0){
-            layer.msg(data.data.msg,{skin: 'intro-login-class layui-layer-hui'});
+            // layer.msg(data.data.msg,{skin: 'intro-login-class layui-layer-hui'});
             $('.public_list').html(data.data.result); 
           }else{
             layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});

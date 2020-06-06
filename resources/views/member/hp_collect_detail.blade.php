@@ -15,9 +15,9 @@ body{background:#f8f8f8 !important;}
   <div class="home_tongji">
   <ul>
       <li>人气</br>{{$users->view_num}} </li>
-      <li>收藏</br>{{$users->collect_num}} </li>
-      <li>关注</br>{{$users->follow_num}} </li>
-      <li>粉丝</br>{{$users->follow_num}} </li>
+      <li>收藏</br>{{App\User::getCollectNum($users->id)}} </li>
+      <li>关注</br>{{App\User::getFollowNum($users->id)}} </li>
+      <li>粉丝</br>{{App\User::getFansNum($users->id)}} </li>
     </ul>
   </div>
   <div class="home_personal"> <img src="@if($users->avatar) {{$users->avatar}} @else /img/avatar.png @endif" alt="{{$users->nickname}}" />

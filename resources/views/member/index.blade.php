@@ -169,8 +169,7 @@
       <ul>
         @foreach ($user->follows as $key => $follow)
               @if ($key < 13)
-                {{--<li class="guanzhu-item"> <a href="/user/index/{{$follow->id}}" target="_blank" title="{{$follow->nickname}}" onclick="selectItemGuanZhu({{$key}})"><span class="select-item"></span>  <img onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /> </a> </li>--}}
-                <li class="guanzhu-item"> <a href="javascript:alert1();" title="{{$follow->nickname}}" onclick="selectItemGuanZhu({{$key}})"><span class="select-item"></span>  <img onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /> </a> </li>
+                <li class="guanzhu-item"> <a href="/member/{{$follow->id}}" title="{{$follow->nickname}}" onclick="selectItemGuanZhu({{$key}})"><span class="select-item"></span>  <img onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /> </a> </li>
               @elseif($key == 13)
                       <li><a href="/member/follow" class="more-content"></a></li>
                 @endif
