@@ -40,14 +40,14 @@ class VipPrice extends Model
 
         $pay_total=0;
         if($request->dkyb==50){
-            // $pay_total=94;
-            $pay_total=0.01;
+            $pay_total=94;
+            // $pay_total=0.01;
         }else if($request->dkyb==280){
-            // $pay_total=260;
-            $pay_total=0.02;
+            $pay_total=260;
+            // $pay_total=0.02;
         }else if($request->dkyb==880){
-            // $pay_total=911;
-            $pay_total=0.03;
+            $pay_total=911;
+            // $pay_total=0.03;
             
         }else{
             $pay_total = VipPrice::getPrice($request->vip_type);

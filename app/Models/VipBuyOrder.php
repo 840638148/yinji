@@ -14,7 +14,7 @@ class VipBuyOrder extends Model
 	 */
 	protected $guarded = [];
 
-	public static function dealVip($order_no,$buyer_pay_amount)
+	public static function dealVip($order_no,$buyer_pay_amount=null)
     {
         $order = VipBuyOrder::where('order_no', $order_no)->first();
         if (!$order) {
