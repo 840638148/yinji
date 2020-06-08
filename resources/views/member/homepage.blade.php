@@ -94,6 +94,47 @@
     display: none;
     z-index: 999;
   }
+  .replyBox{
+    background: #fff;
+    width: 100%;
+    float: left;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+  }
+  .replyBox:hover{
+    background: #f8f8f8;
+    cursor: pointer;
+  }
+  .replyBox dl{
+    min-height: 60px;
+    float: left;
+    width: 100%;
+  }
+  .replyBox dt{
+    width: 50px;
+    height: 50px;
+    float: left;
+    margin-top: 10px;
+    border-radius: 25px;
+    overflow: hidden;
+  }
+  .replyBox dd{
+    float: right;
+    width: 93%;
+    height: 36px;
+    line-height: 36px;
+    font-size: 16px;
+    font-family: "微软雅黑";
+  }
+  .replyBox .msgTxt{
+    float: right;
+    width: 93%;
+    font-size: 14px;
+    color: #999;
+    padding: 5px 0;
+    min-height: 36px;
+    line-height: 24px;
+  }
 </style>
 <!--笼罩层-->
 <div class="lzcfg"></div>
@@ -101,7 +142,7 @@
   <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
   <div class="home_tongji">
     <ul>
-      <li>人气</br>{{$users->view_num}} </li>
+      <li>人气</br>{{App\User::getViewNum($users->id)}} </li>
       <li>收藏</br>{{App\User::getCollectNum($users->id)}} </li>
       <li>关注</br>{{App\User::getFollowNum($users->id)}} </li>
       <li>粉丝</br>{{App\User::getFansNum($users->id)}} </li>
@@ -125,8 +166,8 @@
 	      <li><a href="/member/homepage_finder/{{$users->id}}">TA的发现</a></li>
 	      <li><a href="/member/homepage_collect/{{$users->id}}">TA的收藏</a></li>
 	      <li><a href="/member/homepage_subscription/{{$users->id}}">TA的订阅</a></li>
-	      <li><a href="/member/homepage_interactive/{{$users->id}}">TA的互动</a></li>
-	      <li><a href="/member/homepage_record/{{$users->id}}">印记</a></li>
+	      <li><a href="/member/homepage_interactive/{{$users->id}}">TA的关注</a></li>
+	      <li><a href="/member/homepage_fans/{{$users->id}}">TA的粉丝</a></li>
     </ul>
   </div>
 </div>
@@ -176,26 +217,17 @@
     <!-- TA的访客 -->
     <div class="title mt30" style='position:relative'>
       <div class="title">
-        <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>访客</span><span style='position:absolute;top:0;right:60%;'>评论：</span></h2>
+        <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>访客</span><span style='position:absolute;top:0;right:60%;'>评论：</span><span style='position:absolute;top:0;right:0%;font-size:12px;color:#9E9E9E;'>共{{$commentsum}}条评论，访客：{{$messagenum}}条，博主：{{$replynum}}条</span></h2>
       </div>
     </div>
-    <div class='designer' style='width:30%;float:left;'>
+    <div class='designer' style='width:30%;float:left;height:400px;height:400px;'>
       <ul>
         @foreach ($visited as $follow)
-            <li class="guanzhu-item" style='margin-bottom:10px;'>
+            <li class="guanzhu-item" style='margin-bottom:10px;text-align: center;'>
               <a href="/member/{{$follow->user_id}}" ><span class="select-item"></span>  
               <img onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /> </a> 
-              @if($follow->created_at < date('Y-m-d H:i:s',time()-60))
-              <span>1分钟前</span>
-              @elseif($follow->created_at < date('Y-m-d H:i:s',time()-600))
-              <span>10分钟前</span>
-              @elseif($follow->created_at < date('Y-m-d H:i:s',time()-1800))
-              <span>30分钟前</span>
-              @elseif($follow->created_at < date('Y-m-d H:i:s',time()-6000))
-              <span>1小时前</span>
-              @elseif($follow->created_at < date('Y-m-d H:i:s',time()-86400))
-              <span>1天前</span>
-              @endif
+              <span>{{ $follow->created_at->diffForHumans() }}</span>
+
             </li>
         @endforeach
       </ul>
@@ -203,44 +235,53 @@
     <div class='fkright' style='width:65%;float:right;'>
         <div class="msgCon"> 
           @foreach ($comments as $comment)
-          @if($comment->content!='')
-          <div class="msgBox">
-              <!-- 只显示有评论的 -->
-          <dl>
-              <dt><img src="{{$comment->user->avatar}}" width="50" height="50"></dt>
-              
-              <dd>
-                  <span style="float:left">{{$comment->user->nickname}}
-                      <img src="{{App\User::getVipLevel($comment->user->id)}}" alt="">
-                  </span>
-                  <ul class="show_number clearfix" style=" float:left;margin:10px 0 0 30px;">
-                  <li style="width:200px;">
-                      <div class="atar_Show2">
-                      <p tip="{{$comment->stars}}"></p>
-                      </div>
-                      <span></span>
-                  </li>
-                  </ul>  
-                  <span>发布于：{{$comment->created_at}}</span>
-              </dd>
-              <div class="msgTxt">{!!$comment->content!!}</div>
-          
-          </dl>
-          </div> 
-          @endif
+          <div class="msgBox cons" onclick='getID(this)' data-id='{{$user->id}}'>
+            <dl>
+                <dt><img style='width:100%;height:100%;' src="{{$comment->avatar}}"></dt>
+                <dd>
+                    <span style="float:left;margin-left:10px;">{{$comment->nickname}}
+                        <img src="{{App\User::getVipLevel($comment->user_id)}}" alt="">
+                    </span>
+                    <span>发布于：{{$comment->created_at}}</span>
+                </dd>
+                <div class="msgTxt" style='padding-left:10px;'>{!!$comment->content!!}</div>
+            </dl>
+          </div>
           @endforeach 
-        </div>
+
+          @foreach ($reply as $v)
+          <div class="replyBox cons" onclick='getID(this)' data-id='{{$user->id}}'>
+            <dl>
+                <dt><img style='width:100%;height:100%;' src="{{$v->avatar}}"></dt>
+                <dd>
+                    <span style="float:left;margin-left:10px;">{{$v->nickname}}
+                        <img src="{{App\User::getVipLevel($v->user_id)}}" alt="">
+                    </span>
+                    <span style='font-size: 12px;color: #999;float: right;'>发布于：{{$v->created_at}}</span>
+                </dd>
+                <div class="msgTxt" style='padding-left:10px;'>回复{{$v->reply_nickname}}：{!!$v->content!!}</div>
+            </dl>
+          </div> 
+        
+          @endforeach
+         </div>
         <div class='fbpl'>
           <h2><span>发表评论</span></h2>
           
           <textarea style="resize:none;" name="con" id="con" cols="30" rows="10"></textarea>
-          <span class='fbbtn' style='display: inline-block;padding: 10px 20px;background: #000;color: #fff;margin: 20px 0;'>发表评论</span>
-        </div>
+          <span class='fbbtn' style='display: inline-block;padding: 10px 20px;background: #000;color: #fff;margin: 20px 0;cursor: pointer;'>发表评论</span>
+          <span class='hfbtn' style='display: none;padding: 10px 20px;background: #000;color: #fff;margin: 20px 0;cursor: pointer;'>回复评论</span>
+        </div> 
+        
     </div>
   </div>
 </section>
  
 <script> 
+  function getID(obj){
+    comment_ids = $(obj).attr('data-id');console.log(comment_ids)
+  }
+
   // 关注TA
   $('.gzuser').click(function(){
     let gzid=$(this).attr('uid');
@@ -292,27 +333,89 @@
 
     let urls=window.location.href;
     let uid=urls.split('/')[4];
-    console.log(uid)
     $.ajax({
         url: '/member/visited_hp',
         type: 'POST',
         dataType: 'json',
         data: {_token:'{{csrf_token()}}',uid:uid},
         success: function (data) {
+          //
+        }
+    });
+  })
+  
+  //发表评论
+  $('.fbbtn').click(function(){
+    let con=$('#con').val();
+    let urls=window.location.href;
+    let comment_id=urls.split('/')[4];
+    let type=2;
+    console.log(comment_id)
+    if(con==''||con==null||con==undefined){
+      layer.msg('评论不能为空',{skin: 'intro-login-class layui-layer-hui'});
+      return false;
+    }
+    $.ajax({
+        url: '/member/homepage_messages',
+        type: 'POST',
+        dataType: 'json',
+        data: {_token:'{{csrf_token()}}',con:con,comment_id:comment_id,type:type},
+        success: function (data) {
             if (data.status_code == 100) {
-                // layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
-                
+                layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+                setTimeout(function () {
+                  window.location.reload();
+                }, 1500);
             } else {
-                // layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+                layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
             }
         }
     });
   })
 
-  //发表评论
-  $('.fbbtn').click(function(){
+  $('.msgBox').click(function(){
+    $(".fbbtn").css('display','none');
+    $(".hfbtn").css('display','inline-block');
+    $(".fbpl h2 span").text('回复评论');
+  })
+
+  $('.replyBox').click(function(){
+    $(".fbbtn").css('display','none');
+    $(".hfbtn").css('display','inline-block');
+    $(".fbpl h2 span").text('回复评论');
+  })
+
+
+  //回复评论
+  $('.hfbtn').click(function(){
     let con=$('#con').val();
-    // console.log(con)
+    let urls=window.location.href;
+    // let comment_id=$('.cons').attr('data-id');
+    let comment_id=urls.split('/')[4];
+    // let user_id=urls.split('/')[4];
+    let user_id=comment_ids
+    let type=-2;
+    console.log('评论id'+user_id,'被评论id'+comment_id)
+    if(con==''||con==null||con==undefined){
+      layer.msg('评论不能为空',{skin: 'intro-login-class layui-layer-hui'});
+      return false;
+    }
+    $.ajax({
+        url: '/member/reply_messages',
+        type: 'POST',
+        dataType: 'json',
+        data: {_token:'{{csrf_token()}}',con:con,comment_id:comment_id,type:type,user_id:user_id},
+        success: function (data) {
+            if (data.status_code == 100) {
+                layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+                setTimeout(function () {
+                  window.location.reload();
+                }, 1500);
+            } else {
+                layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+            }
+        }
+    });
   })
 
 </script>

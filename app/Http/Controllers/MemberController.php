@@ -25,6 +25,7 @@ use App\User;
 use App\Models\VipPrice;
 use App\Models\Article;
 use App\Models\ViewNum;
+use App\Models\HomepageMessage;
 use Carbon\Carbon;
 // use Mail;
 use Illuminate\Support\Facades\Mail;
@@ -109,9 +110,19 @@ class MemberController extends Controller
             return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
         }
 
-        $user=User::where('id',Auth::id())->where('username','like','%ohPM_%')->where('created_at','<','2020-06-02 00:00:00')->where('mobile','=','')->first();
+        // $user=User::where('id',Auth::id())->where('username','like','%ohPM_%')->where('created_at','<','2020-06-02 00:00:00')->where('mobile','=','')->first();
+        // // dd($user);
+        // if($user->one_visited==1 || $user){
+        //     return Output::makeResult($request, null, 100,'欢迎来到印际,请移步填写信息');
+        // }else{
+        //     return Output::makeResult($request, null, 200,'欢迎回来');
+        // }
+
+
+        $res=User::find(Auth::id());
+        $info=User::where('id',Auth::id())->where('username','like','%ohPM_%')->where('created_at','<','2020-06-07 00:00:00')->where('mobile','=','')->first();
         // dd($user);
-        if($user->one_visited==1 || $user){
+        if($res->one_visited==1 || $info){
             return Output::makeResult($request, null, 100,'欢迎来到印际,请移步填写信息');
         }else{
             return Output::makeResult($request, null, 200,'欢迎回来');
@@ -679,9 +690,13 @@ class MemberController extends Controller
         $today_start = date('Y-m-d 00:00:00');
         $today_end   = date('Y-m-d 23:59:59');
         $is_qiandao = UserAttendance::where('user_id', $users->id)->where('created_at', '>=', $today_start)->where('created_at', '<=', $today_end)->first();
-        $visited=ViewNum::leftjoin('users','users.id','=','view_nums.user_id')->select('users.avatar','view_nums.user_id','view_nums.visited_id','view_nums.created_at')->where('view_nums.visited_id',$id)->get();
-        $comments=[];
-        
+        $visited=ViewNum::leftjoin('users','users.id','=','view_nums.user_id')->select('users.avatar','view_nums.user_id','view_nums.visited_id','view_nums.created_at')->where('view_nums.visited_id',$id)->orderby('created_at','desc')->get();
+        $comments=HomepageMessage::getMessages($id);
+        $reply=HomepageMessage::getReply($id,$user->id);
+        $messagenum=HomepageMessage::where('comment_id',$id)->where('type',2)->count();
+        $replynum=HomepageMessage::where('user_id',$id)->where('type',-2)->count();
+        $commentsum=$messagenum+$replynum;
+        // dd($reply);
         $data = [
             'lang' => $lang,
             'user' => $user,
@@ -692,6 +707,10 @@ class MemberController extends Controller
             'is_qiandao' => $is_qiandao,
             'visited' => $visited,
             'comments' => $comments,
+            'commentsum'=>$commentsum,
+            'messagenum'=>$messagenum,
+            'replynum'=>$replynum,
+            'reply'=>$reply,
         ];
         return view('member.homepage', $data);
     }
@@ -760,17 +779,14 @@ class MemberController extends Controller
     }
 
     /**
-    * TA的互动
+    * TA的关注
     */
     public function homepage_interactive(Request $request, $id){
         $this->checkLogin();
         $lang = $request->session()->get('language') ?? 'zh-CN';
         $user = User::find(Auth::id());
         $users = User::find($id);
-
         $users->follows = UserFollow::getFollows($users->id);
-        $users->fans = UserFollow::getFans($users->id);
-
         $data = [
             'lang' => $lang,
             'users' => $users,
@@ -854,36 +870,20 @@ class MemberController extends Controller
     }
 
     /**
-    * TA的印记 
+    * TA的粉丝
     */
-    public function homepage_record(Request $request, $id){
+    public function homepage_fans(Request $request, $id){
         $this->checkLogin();
         $lang = $request->session()->get('language') ?? 'zh-CN';
         $user = User::find(Auth::id());
         $users = User::find($id);
-        // date("Y-m-d",strtotime('created_at'))
-        
-        // $record=UserPoint::where('user_id',$users->id)->select('remark','user_id',DB::raw("FROM_UNIXTIME(UNIX_TIMESTAMP(created_at),'%Y-%m-%d %H:%i:%s') as date"))
-                // ->
-                // ->orderBy("created_at","asc")
-                // ->limit(10)
-                // ->get();
-        $record=UserPoint::where('user_id',$users->id)->select('remark','user_id',DB::raw("FROM_UNIXTIME(UNIX_TIMESTAMP(created_at),'%Y-%m-%d %H:%i:%s') as date"))->get();
-        $dates=date("Y-m-d",strtotime($record->created_at));
-        $tmp=[];
-        foreach($record as $k=>$v){
-            if(preg_match($dates,$v->date,$m)){
-                dump($m);
-            }
-        }
-        dd($tmp);
+        $users->fans = UserFollow::getFans($users->id);
         $data = [
             'lang' => $lang,
             'users' => $users,
             'user' => $user,
-            'record' => $record,
         ];
-        return view('member.homepage_record', $data);
+        return view('member.homepage_fans', $data);
     }
 
     /**
@@ -898,9 +898,13 @@ class MemberController extends Controller
             return Output::makeResult($request, null, 500,'请选择关注的用户');
         }
 
+        if($request->gzid==Auth::id()){
+            return Output::makeResult($request, null, 500,'不能关注自己');
+        }
+
         $result=UserFollow::followByUserId($request->gzid);
         if($result['status']===true){
-            return Output::makeResult($request, null, 100,'关注成功');
+            return Output::makeResult($request, null, 100,$result['data']);
         }else{
             return Output::makeResult($request, null, 500,$result['data']);
         }
@@ -959,7 +963,12 @@ class MemberController extends Controller
         $today_start = date('Y-m-d 00:00:00');
         $today_end   = date('Y-m-d 23:59:59');
         $res=ViewNum::where('user_id',$user_id)->where('visited_id',$uid)->where('created_at', '>=', $today_start)->where('created_at', '<', $today_end)->first();
+        $result=ViewNum::where('user_id',$user_id)->where('visited_id',$uid)->first();
+
         if($uid!=$user_id){
+            if($result){
+                ViewNum::where('user_id',$user_id)->first()->touch();
+            }else
             if(!$res){
                 $data=[
                     'user_id'=>$user_id,
@@ -969,6 +978,67 @@ class MemberController extends Controller
             }
         }
     }
+
+    /**
+    * 个人主页评论
+    */
+    public function homepage_messages(Request $request){
+        if(!Auth::check()){
+            header("Location: /user/login");die;
+        }
+
+        $con=HomepageMessage::where('user_id',Auth::id())->where('comment_id',$request->comment_id)->first();
+        if($con){
+            return Output::makeResult($request, null, 500,'已评过');
+        }else
+
+        if($request->con && $request->comment_id && $request->type){
+            $data=[
+                'user_id'=>Auth::id(),
+                'comment_id'=>$request->comment_id,
+                'content'=>$request->con,
+                'type'=>$request->type
+            ];
+            $res=HomepageMessage::create($data);    
+            if($res){
+                return Output::makeResult($request, null, 100,'评论成功');
+            }
+        }else{
+            return Output::makeResult($request, null, Error::SYSTEM_ERROR);
+        }
+
+    }
+
+    /**
+     * 个人主页回复评论
+     */
+    public function reply_messages(Request $request){
+        if(!Auth::check()){
+            header("Location: /user/login");die;
+        }
+
+        if($request->user_id==$request->comment_id){
+            return Output::makeResult($request, null, 500,'不能给自己评论');
+        }
+
+        if($request->con && $request->comment_id && $request->type){
+            $data=[
+                'user_id'=>$request->user_id,
+                'comment_id'=>$request->comment_id,
+                'content'=>$request->con,
+                'type'=>$request->type
+            ];
+            $res=HomepageMessage::create($data);    
+            if($res){
+                return Output::makeResult($request, null, 100,'回复成功');
+            }
+        }else{
+            return Output::makeResult($request, null, Error::SYSTEM_ERROR);
+        }
+
+    }
+
+
 
     public function finderDetail(Request $request, $id)
     {

@@ -135,14 +135,15 @@ Route::get('member/homepage_finder/{id}', 'MemberController@homepage_finder');//
 Route::get('member/homepage_collect/{id}', 'MemberController@homepage_collect');//TA的收藏
 Route::get('member/homepage_subscription/{id}', 'MemberController@homepage_subscription');//TA的订阅
 Route::get('member/homepage_interactive/{id}', 'MemberController@homepage_interactive');//TA的互动
-Route::get('member/homepage_record/{id}', 'MemberController@homepage_record');//TA的印记
+Route::get('member/homepage_fans/{id}', 'MemberController@homepage_fans');//TA的粉丝
 Route::get('member/hp_collect_detail/{uid}/{id}', 'MemberController@hp_collect_detail');//TA的收藏详情
 Route::get('member/hp_finder_detail/{uid}/{id}', 'MemberController@hp_finder_detail');//TA的发现详情
-Route::get('member/homepage_record/{id}', 'MemberController@homepage_record');//TA的印记
 Route::post('member/gzta', 'MemberController@gzta');//关注TA
 Route::post('member/qxgzta', 'MemberController@qxgzta');//取消关注TA
 Route::post('member/gztady', 'MemberController@gztady');//关注TA的订阅
 Route::post('member/visited_hp', 'MemberController@visited_hp');//统计访问个人主页的用户
+Route::post('member/homepage_messages', 'MemberController@homepage_messages');//个人主页评论
+Route::post('member/reply_messages', 'MemberController@reply_messages');//个人主页回复评论
 
 
 

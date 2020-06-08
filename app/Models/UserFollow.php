@@ -31,7 +31,7 @@ class UserFollow extends Model
             ->first();
 
             if($obj){
-                return ['status'=>true,'data'=>'已经关注'];
+                return ['status'=>true,'data'=>'关注过'];
             } else {
                 $data = [
                     'user_id' => Auth::id(),

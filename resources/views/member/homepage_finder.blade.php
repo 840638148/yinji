@@ -86,7 +86,7 @@
   <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
   <div class="home_tongji">
     <ul>
-        <li>人气</br>{{$users->view_num}} </li>
+        <li>人气</br>{{App\User::getViewNum($users->id)}} </li>
         <li>收藏</br>{{App\User::getCollectNum($users->id)}} </li>
         <li>关注</br>{{App\User::getFollowNum($users->id)}} </li>
         <li>粉丝</br>{{App\User::getFansNum($users->id)}} </li>
@@ -104,8 +104,8 @@
         <li class="current"><a href="/member/homepage_finder/{{$users->id}}">TA的发现</a></li>
         <li><a href="/member/homepage_collect/{{$users->id}}">TA的收藏</a></li>
         <li><a href="/member/homepage_subscription/{{$users->id}}">TA的订阅</a></li>
-        <li><a href="/member/homepage_interactive/{{$users->id}}">TA的互动</a></li>
-        <li><a href="/member/homepage_record/{{$users->id}}">印记</a></li>
+        <li><a href="/member/homepage_interactive/{{$users->id}}">TA的关注</a></li>
+        <li><a href="/member/homepage_fans/{{$users->id}}">TA的粉丝</a></li>
     </ul>
   </div>
 </div>

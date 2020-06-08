@@ -79,7 +79,7 @@
   <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
   <div class="home_tongji">
     <ul>
-        <li>人气</br>{{$users->view_num}} </li>
+        <li>人气</br>{{App\User::getViewNum($users->id)}} </li>
         <li>收藏</br>{{App\User::getCollectNum($users->id)}} </li>
         <li>关注</br>{{App\User::getFollowNum($users->id)}} </li>
         <li>粉丝</br>{{App\User::getFansNum($users->id)}} </li>
@@ -97,18 +97,15 @@
         <li><a href="/member/homepage_finder/{{$users->id}}">TA的发现</a></li>
         <li><a href="/member/homepage_collect/{{$users->id}}">TA的收藏</a></li>
         <li><a href="/member/homepage_subscription/{{$users->id}}">TA的订阅</a></li>
-        <li class="current"><a href="/member/homepage_interactive/{{$users->id}}">TA的互动</a></li>
-        <li><a href="/member/homepage_record/{{$users->id}}">印记</a></li>
+	      <li><a href="/member/homepage_interactive/{{$users->id}}">TA的关注</a></li>
+	      <li><a href="/member/homepage_fans/{{$users->id}}">TA的粉丝</a></li>
     </ul>
   </div>
 </div>
 <section class="wrapper">
   <div class="mt30 home_box">
-    <div class="TabTitle">
-      <ul id="myTab1" style="float:left; width:600px;">
-        <li class="active" onclick="nTabs(this,0);">TA的关注</li>
-        <li class="normal" onclick="nTabs(this,1);">TA的粉丝</li>
-      </ul>
+    <div class="title">
+      <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>TA的关注</span></h2>
     </div>
     <div class="TabContent content-post"> 
       
@@ -128,7 +125,7 @@
                 <div class="users">
                   <div class="border-bottom1">
                     {{--<div class="head"><a href="/vip/index/{{$follow->id}}"><img src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>--}}
-                    <div class="head"><a href="javascript:void(0)" onclick="showNoEnter()"><img style="margin-top:unset;" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>
+                    <div class="head"><a href="javascript:void(0)"><img style="margin-top:unset;" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>
                     <h2><a href="/vip/index/{{$follow->id}}">{{$follow->nickname}}</a> </h2>
                     <p style="position:relative;"> 
                       
@@ -144,7 +141,7 @@
                       <li><span>{{$follow->fans_num}}</span>粉丝</li>
                     </ul>
                   </div>
-                  <!-- <a href="javascript:void(0)" data-id="{{$follow->id}}" class="Button cancelFollow" style="width:60px;">取消关注</a>  -->
+                  <a href="javascript:void(0)" data-id="{{$follow->id}}" class="Button cancelFollow" style="width:60px;">关注</a> 
                   </div>
               </div>
             
@@ -156,41 +153,7 @@
       </div>
       <!-- TA的关注结束 -->
 
-      <!-- TA的粉丝开始 -->
-      <div id="myTab1_Content1"  class="none">
-        <section class="wrapper">
-        <div class="mt30 home_box">
 
-          <div class="masonry" > @foreach ($users->fans as $follow)
-            <div class="item">
-              <div class="users">
-                <div class="border-bottom1">
-                  {{--<div class="head"><a href="/vip/index/{{$follow->id}}"><img src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>--}}
-                  <div class="head"><a href="javascript:void(0)" onclick="showNoEnter()"><img style="margin-top:unset;" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>
-                  <h2><a href="/vip/index/{{$follow->id}}">{{$follow->nickname}}</a> </h2>
-                  <p style="position:relative;"> 
-                    
-                    @if($follow->zhiwei){{$follow->zhiwei}} @else 其他 @endif
-                    -
-                    {{$follow->city}}
-
-                  <span style="background:none;background: none;position: absolute;top: -3px;" class="VIP1"><img style="width:32px;" src="{{$follow->vip_level}}" alt=""></span> </p>
-                  </div>
-                <div class="Statistics">
-                  <ul>
-                    <li><span>{{$follow->collect_num}}</span>收藏</li>
-                    <li><span>{{$follow->fans_num}}</span>粉丝</li>
-                  </ul>
-                </div>
-                 </div>
-            </div>
-
-            @endforeach </div>
-          </div>
-        </section>
-      </div>
-      <!-- 我的粉丝结束 -->
-    </div>
   </div>
 
 
@@ -236,30 +199,6 @@
 
 
 </section>
-
-
-
-
-<script type="text/javascript">
-
-function nTabs(thisObj,Num){
-  if(thisObj.className == "active")return;
-    var tabObj = thisObj.parentNode.id;
-    var tabList = document.getElementById(tabObj).getElementsByTagName("li");
-
-  for(i=0; i <tabList.length; i++){
-    if (i == Num){
-      thisObj.className = "active";
-          document.getElementById(tabObj+"_Content"+i).style.display = "block";
-    }else{
-      tabList[i].className = "normal";
-      document.getElementById(tabObj+"_Content"+i).style.display = "none";
-    }
-  }
-
-}
-
-</script> 
 
 <script src="/js/layer.js"></script> 
 <script src="/js/member.js"></script>
@@ -393,24 +332,24 @@ $(document).ready(function(){
 
 
 <script type="text/javascript">
-  function showNoEnter(){
-    layer.msg('敬请期待！',{skin: 'intro-login-class layui-layer-hui'})
-  }
+
 
     $(document).ready(function(){
-      //取消关注
+      //关注
       $(".cancelFollow").click(function(e){
-        var follow_id = $(this).attr('data-id');
+        let gzid = $(this).attr('data-id');
+        console.log(gzid)
         $.ajax({
-          url: '/member/cancel_follow',
+          url: '/member/gzta',
           type: 'POST',
           dataType: 'json',
-          data: {_token:'{{csrf_token()}}',follow_id:follow_id},
+          data: {_token:'{{csrf_token()}}',gzid:gzid},
           success: function (data) {
-            if (data.status_code == 0) {
-              window.location.reload();
+            if (data.status_code == 100) {
+              layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
+              // window.location.reload();
             } else {
-              alert(data.message);
+              layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
             }
           }
         });

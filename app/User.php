@@ -12,6 +12,7 @@ use App\Models\PointSet;
 use App\Models\UserCollectFolder;
 use App\Models\UserFinder;
 use App\Models\NicknameSum;
+use App\Models\ViewNum;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
@@ -606,4 +607,13 @@ class User extends Authenticatable
     {
         return UserSubscription::where('user_id', $user_id)->count();
     }
+
+    /**
+     * 获取个人主页人气
+     */
+    public static function getViewNum($user_id)
+    {
+        return ViewNum::where('visited_id', $user_id)->count();
+    }
+
 }
