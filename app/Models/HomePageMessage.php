@@ -42,7 +42,7 @@ class HomepageMessage extends Model
             $res[$k]['reply_nickname']=User::where('id',$v->comment_id)->value('nickname');
         }
        
-       
+    //    dd($res);
         return $res;
     }
 }

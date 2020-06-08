@@ -696,7 +696,7 @@ class MemberController extends Controller
         $messagenum=HomepageMessage::where('comment_id',$id)->where('type',2)->count();
         $replynum=HomepageMessage::where('user_id',$id)->where('type',-2)->count();
         $commentsum=$messagenum+$replynum;
-        // dd($reply);
+        // dd($comments,$reply);
         $data = [
             'lang' => $lang,
             'user' => $user,
@@ -987,7 +987,7 @@ class MemberController extends Controller
             header("Location: /user/login");die;
         }
 
-        $con=HomepageMessage::where('user_id',Auth::id())->where('comment_id',$request->comment_id)->first();
+        $con=HomepageMessage::where('user_id',Auth::id())->where('comment_id',$request->comment_id)->where('type',2)->first();
         if($con){
             return Output::makeResult($request, null, 500,'已评过');
         }else
@@ -1017,13 +1017,13 @@ class MemberController extends Controller
             header("Location: /user/login");die;
         }
 
-        if($request->user_id==$request->comment_id){
+        if($request->comment_id==Auth::id()){
             return Output::makeResult($request, null, 500,'不能给自己评论');
         }
 
         if($request->con && $request->comment_id && $request->type){
             $data=[
-                'user_id'=>$request->user_id,
+                'user_id'=>Auth::id(),
                 'comment_id'=>$request->comment_id,
                 'content'=>$request->con,
                 'type'=>$request->type

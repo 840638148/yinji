@@ -235,7 +235,7 @@
     <div class='fkright' style='width:65%;float:right;'>
         <div class="msgCon"> 
           @foreach ($comments as $comment)
-          <div class="msgBox cons" onclick='getID(this)' data-id='{{$user->id}}'>
+          <div class="msgBox cons" onclick='getID(this)' data-id='{{$comment->user_id}}'>
             <dl>
                 <dt><img style='width:100%;height:100%;' src="{{$comment->avatar}}"></dt>
                 <dd>
@@ -391,9 +391,9 @@
     let con=$('#con').val();
     let urls=window.location.href;
     // let comment_id=$('.cons').attr('data-id');
-    let comment_id=urls.split('/')[4];
+    let comment_id=comment_ids
     // let user_id=urls.split('/')[4];
-    let user_id=comment_ids
+    let user_id=urls.split('/')[4];
     let type=-2;
     console.log('评论id'+user_id,'被评论id'+comment_id)
     if(con==''||con==null||con==undefined){
@@ -404,7 +404,7 @@
         url: '/member/reply_messages',
         type: 'POST',
         dataType: 'json',
-        data: {_token:'{{csrf_token()}}',con:con,comment_id:comment_id,type:type,user_id:user_id},
+        data: {_token:'{{csrf_token()}}',con:con,comment_id:comment_id,type:type},
         success: function (data) {
             if (data.status_code == 100) {
                 layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
