@@ -344,7 +344,7 @@ class ArticleController extends Controller
 
         //最新
         // $new_article = Article::getNewArticles(1);
-        $new_article = Article::orderBy('created_at','desc')->limit(1)->get();
+        $new_article = Article::where('display',0)->where('article_status',2)->orderby('release_time','desc')->limit(1)->get();
 
         $ads_right = Popularize::getPopularize(6);
         $hot_tags = ArticleTag::getHotTags();
