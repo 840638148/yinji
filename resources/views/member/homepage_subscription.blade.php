@@ -13,7 +13,14 @@
   .home_top{background:#fff !important;}
 </style>
 <div class="home_top">
-  <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
+  <div class="home_banber"> 
+    @if($users->zhuti)
+    <img src="{{$users->zhuti}}" alt="个人主页图片" />
+    @else
+    <img src="/images/zhutibj.jpg" alt="个人主页图片" />
+    @endif
+  </div>
+
   <div class="home_tongji">
     <ul>
         <li>人气</br>{{App\User::getViewNum($users->id)}} </li>
@@ -26,7 +33,13 @@
   </div>
   <h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> {{$users->nickname}} <img src="{{$users->vip_level}}" alt=""></h2>
   <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">@if($users->zhiwei){{$users->zhiwei}}@else 保密 @endif - {{$users->city}} <img src="{{App\User::getVipLevel($users->id)}}" alt=""></p>
-  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span style='padding: 5px 25px;display: inline-block;background: #3d87f1;margin: 20px auto;color: #fff;'>关注</span></p>
+  @if($user->id==$users->id)
+  
+  @elseif($users->is_follow)
+  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='have-disalbed' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #eee;margin: 20px auto;color: #666;cursor:no-drop !important;border-radius: 5px;'>已关注</span></p>
+  @else
+  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='gzuser' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #3d87f1;margin: 20px auto;color: #fff;cursor: pointer !important;border-radius: 5px;'>关注</span></p>
+  @endif
   <div class="home_nav" style='width:610px;left:52%;'>
     <ul>
         <li><a  href="/member/{{$users->id}}">TA的主页</a></li>
@@ -38,7 +51,7 @@
     </ul>
   </div>
 </div>
-<section class="wrapper">
+<section class="wrapper" style='width:1245px;'>
   <div class="mt30 home_box">
     <div class="title" style='position: relative;'>
       <h2><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>TA的订阅</span></h2>
@@ -75,8 +88,12 @@
               </span> 
               <span>{!! get_designer_description($subscription) !!}</span> 
             </div>
-            <div class="focus"> 
-              <a href="javascript:void(0)" data-id="{{$subscription->id}}" class="focus_btn2 click cancelSubscription"> 订阅 </a>
+            <div class="focus">
+            @if($subscription->has_dy)
+              <a href="javascript:void(0)"  style='background: #eee;color: #999;padding: 3px 30px;border-radius: 30px;cursor: no-drop;'> 已订阅 </a>
+            @else 
+              <a href="javascript:void(0)" data-id="{{$subscription->id}}" class="focus_btn2 click cancelSubscription" style='background: #636af3;color: #FFF;'> 订阅 </a>
+            @endif
               <div class="focus_msg"><span>作品：{{$subscription->article_num}}</span> | <span>粉丝：{{$subscription->fans_num}}</span></div>
             </div>
           </div>
@@ -101,6 +118,32 @@
 </section>
 
 <script type="text/javascript">
+  // 关注TA
+  $('.gzuser').click(function(){
+  let gzid=$(this).attr('uid');
+  let that=$(this);
+  $.ajax({
+      url: '/member/gzta',
+      type: 'POST',
+      dataType: 'json',
+      data: {_token:'{{csrf_token()}}',gzid:gzid},
+      success: function (data) {
+          if (data.status_code == 100) {
+              layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+              that.text('取消关注');
+              that.removeClass('gzuser');
+              that.addClass('have-disalbed').css('background','#e62b3c');
+              window.location.reload();
+          } else {
+              layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+          }
+      }
+    });
+  });
+
+
+
+
   $(document).ready(function(){
     //订阅
     $(document).on('click','.cancelSubscription',function(e){
@@ -122,46 +165,47 @@
     });
 
 
-  //绑定回车事件
-  $("#myform #txt_name").keydown(function (e) { 
-      var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode; //兼容IE 火狐 谷歌
-      if (keyCode == 13) {
-        $(this).siblings('.findersearch_btn').trigger("click");
-          // $(".findersearch_btn").trigger("click");
-          return false;
-      }
-  });
-
-  // 搜索框
-  window.content='';
-  $(document).on('click','.findersearch_btn',function(){
-    window.content=$(this).siblings('.text_input').val();
-    if(content=='' || content==null){
-      layer.msg('请填写搜索关键词!!!',{skin: 'intro-login-class layui-layer-hui'});
-      return false;
-    }else{
-      let h='';
-      // console.log(content)
-      $.ajax({
-        async:false,
-        url: '/member/desearch',
-        type: 'POST',
-        //dataType: 'json',
-        data: {content:content},
-        success:function(data) {
-          console.log(data.data)
-          if(data.status_code==0){
-            // layer.msg(data.data.msg,{skin: 'intro-login-class layui-layer-hui'});
-            $('.public_list').html(data.data.result); 
-          }else{
-            layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
-            $('.text_input').val('');
-          }
+    //绑定回车事件
+    $("#myform #txt_name").keydown(function (e) { 
+        var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode; //兼容IE 火狐 谷歌
+        if (keyCode == 13) {
+          $(this).siblings('.findersearch_btn').trigger("click");
+            // $(".findersearch_btn").trigger("click");
+            return false;
         }
-      });
-    }  
+    });
 
+    // 搜索框
+    window.content='';
+    $(document).on('click','.findersearch_btn',function(){
+      window.content=$(this).siblings('.text_input').val();
+      if(content=='' || content==null){
+        layer.msg('请填写搜索关键词!!!',{skin: 'intro-login-class layui-layer-hui'});
+        return false;
+      }else{
+        let h='';
+        // console.log(content)
+        $.ajax({
+          async:false,
+          url: '/member/desearch',
+          type: 'POST',
+          dataType: 'json',
+          data: {content:content},
+          success:function(data) {
+            console.log(data.data)
+            if(data.status_code==0){
+              // layer.msg(data.data.msg,{skin: 'intro-login-class layui-layer-hui'});
+              $('.public_list').html(data.data.result); 
+            }else{
+              layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
+              $('.text_input').val('');
+            }
+          }
+        });
+      }  
+
+    })
   })
 
-  </script> 
+</script> 
 @endsection

@@ -696,6 +696,21 @@ class MemberController extends Controller
         $messagenum=HomepageMessage::where('comment_id',$id)->where('type',2)->count();
         $replynum=HomepageMessage::where('user_id',$id)->where('type',-2)->count();
         $commentsum=$messagenum+$replynum;
+
+        $users->city=explode('-',$users->city);
+        if(isset($users->city[0]) && isset($users->city[1])){
+            if($users->city[1]=='市辖区' || $users->city[1]=='县'){
+                $users->city=$users->city[0];
+            }else{
+                $users->city=$users->city[1];
+            }
+        }else
+        if(isset($users->city[0]) && isset($users->city[1])){
+            $users->city=$users->city[1];
+        }else{
+            $users->city='保密';
+        }
+
         // dd($comments,$reply);
         $data = [
             'lang' => $lang,
@@ -725,7 +740,20 @@ class MemberController extends Controller
         $user = User::find(Auth::id());
         $users = User::find($id);
         $users->finders = UserFinder::getFinders($users->id);
-
+        $users->is_follow=UserFollow::where('user_id',$user->id)->where('follow_id',$users->id)->first();
+        $users->city=explode('-',$users->city);
+        if(isset($users->city[0]) && isset($users->city[1])){
+            if($users->city[1]=='市辖区' || $users->city[1]=='县'){
+                $users->city=$users->city[0];
+            }else{
+                $users->city=$users->city[1];
+            }
+        }else
+        if(isset($users->city[0]) && isset($users->city[1])){
+            $users->city=$users->city[1];
+        }else{
+            $users->city='保密';
+        }
         $month_price = VipPrice::getPrice(1);
         $season_price = VipPrice::getPrice(2);
         $year_price = VipPrice::getPrice(3);
@@ -751,7 +779,20 @@ class MemberController extends Controller
         $user = User::find(Auth::id());
         $users = User::find($id);
         $users->collects = UserCollect::getCollects($users->id);
-		
+        $users->is_follow=UserFollow::where('user_id',$user->id)->where('follow_id',$users->id)->first();
+        $users->city=explode('-',$users->city);
+        if(isset($users->city[0]) && isset($users->city[1])){
+            if($users->city[1]=='市辖区' || $users->city[1]=='县'){
+                $users->city=$users->city[0];
+            }else{
+                $users->city=$users->city[1];
+            }
+        }else
+        if(isset($users->city[0]) && isset($users->city[1])){
+            $users->city=$users->city[1];
+        }else{
+            $users->city='保密';
+        }
         $data = [
             'lang' => $lang,
             'users' => $users,
@@ -768,8 +809,26 @@ class MemberController extends Controller
         $lang = $request->session()->get('language') ?? 'zh-CN';
         $user = User::find(Auth::id());
         $users = User::find($id);
-
+        $users->is_follow=UserFollow::where('user_id',$user->id)->where('follow_id',$users->id)->first();
+        $users->city=explode('-',$users->city);
+        if(isset($users->city[0]) && isset($users->city[1])){
+            if($users->city[1]=='市辖区' || $users->city[1]=='县'){
+                $users->city=$users->city[0];
+            }else{
+                $users->city=$users->city[1];
+            }
+        }else
+        if(isset($users->city[0]) && isset($users->city[1])){
+            $users->city=$users->city[1];
+        }else{
+            $users->city='保密';
+        }
         $users->subscriptions = UserSubscription::getSubscriptions($users->id);
+       
+        foreach($users->subscriptions as $k=>$v){
+            $users->subscriptions[$k]['has_dy'] = UserSubscription::where('user_id',$user->id)->where('designer_id',$v->id)->first();
+        }
+
         $data = [
             'lang' => $lang,
             'users' => $users,
@@ -786,7 +845,24 @@ class MemberController extends Controller
         $lang = $request->session()->get('language') ?? 'zh-CN';
         $user = User::find(Auth::id());
         $users = User::find($id);
+        $users->is_follow=UserFollow::where('user_id',$user->id)->where('follow_id',$users->id)->first();
         $users->follows = UserFollow::getFollows($users->id);
+        $users->city=explode('-',$users->city);
+        if(isset($users->city[0]) && isset($users->city[1])){
+            if($users->city[1]=='市辖区' || $users->city[1]=='县'){
+                $users->city=$users->city[0];
+            }else{
+                $users->city=$users->city[1];
+            }
+        }else
+        if(isset($users->city[0]) && isset($users->city[1])){
+            $users->city=$users->city[1];
+        }else{
+            $users->city='保密';
+        }
+        foreach($users->follows as $k=>$v){
+            $users->follows[$k]['has_follow'] = UserFollow::where('user_id',$user->id)->where('follow_id',$v->id)->first();
+        }
         $data = [
             'lang' => $lang,
             'users' => $users,
@@ -803,7 +879,20 @@ class MemberController extends Controller
         $lang = $request->session()->get('language') ?? 'zh-CN';
         $user = User::find(Auth::id());
         $users = User::find($uid);
-
+        $users->is_follow=UserFollow::where('user_id',$user->id)->where('follow_id',$users->id)->first();
+        $users->city=explode('-',$users->city);
+        if(isset($users->city[0]) && isset($users->city[1])){
+            if($users->city[1]=='市辖区' || $users->city[1]=='县'){
+                $users->city=$users->city[0];
+            }else{
+                $users->city=$users->city[1];
+            }
+        }else
+        if(isset($users->city[0]) && isset($users->city[1])){
+            $users->city=$users->city[1];
+        }else{
+            $users->city='保密';
+        }
         $users->collect_details = UserCollect::getCollectDetails($users->id, $id);
         $folder_name = '';
         $folder_obj = UserCollectFolder::find($id);
@@ -821,14 +910,27 @@ class MemberController extends Controller
     }
     
     /**
-    * TA的收藏详情
+    * TA的发现详情
     */
     public function hp_finder_detail(Request $request,$uid,$id){
         $this->checkLogin();
         $lang = $request->session()->get('language') ?? 'zh-CN';
         $user = User::find(Auth::id());
         $users = User::find($uid);
-
+        $users->is_follow=UserFollow::where('user_id',$user->id)->where('follow_id',$users->id)->first();
+        $users->city=explode('-',$users->city);
+        if(isset($users->city[0]) && isset($users->city[1])){
+            if($users->city[1]=='市辖区' || $users->city[1]=='县'){
+                $users->city=$users->city[0];
+            }else{
+                $users->city=$users->city[1];
+            }
+        }else
+        if(isset($users->city[0]) && isset($users->city[1])){
+            $users->city=$users->city[1];
+        }else{
+            $users->city='保密';
+        }
         $users->finder_details = UserFinder::getFinderDetails($users->id, $id);
         $folder_name = '';
         $folder_obj = UserFinderFolder::find($id);
@@ -877,7 +979,26 @@ class MemberController extends Controller
         $lang = $request->session()->get('language') ?? 'zh-CN';
         $user = User::find(Auth::id());
         $users = User::find($id);
+        $users->is_follow=UserFollow::where('user_id',$user->id)->where('follow_id',$users->id)->first();
         $users->fans = UserFollow::getFans($users->id);
+        $users->city=explode('-',$users->city);
+        if(isset($users->city[0]) && isset($users->city[1])){
+            if($users->city[1]=='市辖区' || $users->city[1]=='县'){
+                $users->city=$users->city[0];
+            }else{
+                $users->city=$users->city[1];
+            }
+        }else
+        if(isset($users->city[0]) && isset($users->city[1])){
+            $users->city=$users->city[1];
+        }else{
+            $users->city='保密';
+        }
+
+        foreach($users->fans as $k=>$v){
+            $users->fans[$k]['has_fans'] = UserFollow::where('user_id',$user->id)->where('follow_id',$v->id)->first();
+        }
+
         $data = [
             'lang' => $lang,
             'users' => $users,

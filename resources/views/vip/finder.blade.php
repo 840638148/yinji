@@ -72,14 +72,14 @@
       margin-top: 10px;
     }
     .imgvip{ width:32px !important;}
-  .masonry{
+  /* .masonry{
 	  display: flex;
 	  justify-content: flex-start;
 	  flex-wrap: wrap;
   }
   .masonry .item{
 	  width: 24%;
-  }
+  } */
 </style>
 <div class="banner_news" style="background-image:url(/images/find.jpg)"> —— NEWS —— </div>
 <section class="wrapper"> 
@@ -560,11 +560,11 @@ $("#myform #txt_name").keydown(function (e) {
       h += '    </div>';
       h += '    <div class="who_find" style="display:none">';
       item.who_find.map(function(user,index){
-        h += '      <img src="' + user.userIcon + '"  />';
+        h += '     <a href="/member/'+user.userNo+'"><img src="' + user.userIcon + '"  /></a>';
 		if(user.userName){
-        	h += '      <span > <a href="javascript:;">'+ user.userName +'</a> 收藏到 <a href="folderlist/'+ item.id+'">'+ user.folderName + '</a></span>';
+        h += '      <span > <a href="/member/'+user.userNo+'">'+ user.userName +'</a> 收藏到 <a href="/member/hp_finder_detail/'+user.userNo+'/'+ item.id+'">'+ user.folderName + '</a></span>';
         }else{
-        	h += '      <span > <a href="javascript:;">匿名用户</a> 收藏到 <a href="folderlist/'+ item.id+'">'+ user.folderName + '</a></span>';
+        	h += '      <span > <a href="/member/'+user.userNo+'">匿名用户</a> 收藏到 <a href="/member/hp_finder_detail/'+user.userNo+'/'+ item.id+'">'+ user.folderName + '</a></span>';
         }
       })
       h += '    </div>';
@@ -613,20 +613,21 @@ $("#myform #txt_name").keydown(function (e) {
 
     // 获取收藏每一项的Dom
     function getCollectionItemDom(item){
+      // console.log(item)
       var h= '';
       h += '<div class="item collection-item" data-id="' + item.id + '">';
       h += ' <div class="item__content">';
-      h += '  <ul onclick="location=\'/folderlist/' + item.id+ '\'">';
+      h += '  <ul onclick="location=\'/member/hp_finder_detail/'+item.user_id+'/' + item.id+ '\'">';
       item.imgs.map(function(img){
       	
-			h += '    <li><a href="folderlist/'+ item.id+'"><img src="' + img.src +'" alt="' + img.alt + '" /></a></li>';
+			h += '    <li><a href="/member/hp_finder_detail/'+item.user_id+'/' + item.id+'"><img src="' + img.src +'" alt="' + img.alt + '" /></a></li>';
       })
       h += '  </ul>';
       h += '  <div class="find_title">';
-      h += '    <h2><a href="folderlist/'+ item.id+'">'+ item.title + '</a></h2>';
+      h += '    <h2><a href="/member/hp_finder_detail/'+item.user_id+'/' + item.id+'">'+ item.title + '</a></h2>';
       if(item.who_find && item.who_find.length > 0){
         item.who_find.map(function(user,idx){
-          h += '   <a href="javascript:void(0);" class="collect-user-icon"><img id="errimg" src="' + user.userIcon + '" onerror="this.onerror=``;this.src=`/img/avatar.png`" /></a> ';
+          h += '   <a href="/member/'+user.userNo+'" class="collect-user-icon"><img id="errimg" src="' + user.userIcon + '" onerror="this.onerror=``;this.src=`/img/avatar.png`" /></a> ';
         })
       }
       h += '  </div>';
@@ -641,8 +642,8 @@ $("#myform #txt_name").keydown(function (e) {
       var h= '';
       h += ' <div class="item">';
       h += '   <div class="users">';
-      h += '     <div class="border-bottom1">';
-      h += '       <div class="head"><img width="100%" height="100%" src="' + (user.icon?user.icon:'/img/avatar.png') + '" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" /></div>';
+      h += '     <div class="border-bottom1" onclick="location=\'/member/'+user.id+'\'">';
+      h += '       <div class="head"><a href="/member/'+user.id+'"><img width="100%" height="100%" src="' + (user.icon?user.icon:'/img/avatar.png') + '" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" /></a></div>';
       h += '       <h2><a href="#">' + user.name.substr(0,12) + '</a> </h2>';
       h += '       <div>' +user.gender+ '-' + user.addr + ' <img class="imgvip" width="32px" src="'+user.vip_level+'" /></div>';
       h += '     </div>';
@@ -1075,13 +1076,13 @@ $("#myform #txt_name").keydown(function (e) {
                 if(data.status_code == 0 && cates=='tjfinder'){
                     page++;
                     $.each(list.finders,function(index, item){
-                      // console.log(arrs)
+                      // console.log(item)
                       h+='<div class="item discovery-item" style="display:flex">';
                       h+='<div class="item_content"> ';
                       h+='<img src="'+item.img+'" class="bg-img" data-id="'+item.id+'" id="sourceimg" source="'+item.source+'" /> ';
                       h+='<div class="find_title" data-source="'+item.source+'">'+item.tinames+'<a href="javascript:;" class="find_info_more"></a></div>';
                       h+='<div class="who_find" style="display:none">';
-                      h+='<img src="'+item.who_find[0].userIcon+'" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" />';
+                      h+='<a href="/member/'+item.user_id+'"><img src="'+item.who_find[0].userIcon+'" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" /></a>';
                       h+='<span> <a href="javascript:;">'+item.who_find[0].userName+'</a> 收藏到 <a href="#">'+item.who_find[0].folderName+'</a></span></div>';
                       h+='<div class="folder" style="display: none;"><div class="fl folder_bj" style="width:80%">';
                       h+='选择文件夹<span class="fr show-more-selcect-item" style="background:url(images/arrow-ico.png); width:36px; height:36px;"></span></div>';
@@ -1103,17 +1104,17 @@ $("#myform #txt_name").keydown(function (e) {
                       let ims=item.imgs;
                       h+='<div class="item collection-item" data-id="'+item.id+'">';
                       h+='<div class="item__content">';
-                      h+='<ul onclick="location=\'/folderlist/'+item.id+'\'">';
+                      h+='<ul onclick="location=\'/member/hp_finder_detail/'+item.user_id+'/' + item.id+'\'">';
                       
                       $.each(item.imgs,function(indexs, items){
                         h+='<li>';
-                        h+='<a href="folderlist/'+item.id+'">';
+                        h+='<a href="/member/hp_finder_detail/'+item.user_id+'/' + item.id+'">';
                         h+='<img src="'+items.src+'" alt="'+items.title+'"></a>';
                         h+='</li>';
                       })
                       h+='</ul><div class="find_title"><h2>';
-                      h+='<a href="folderlist/'+item.id+'">'+item.who_find[0].folderName+'</a></h2>';
-                      h+='<a href="javascript:void(0);" class="collect-user-icon">';
+                      h+='<a href="/member/hp_finder_detail/'+item.user_id+'/' + item.id+'">'+item.who_find[0].folderName+'</a></h2>';
+                      h+='<a href="/member/'+item.userNo+'" class="collect-user-icon"></a>';
                       h+='<img id="errimg" src="'+item.who_find[0].userIcon+'" onerror="this.onerror=``;this.src=`/img/avatar.png`"></a>';
                       h+='</div></div></div>';
                     })
@@ -1126,9 +1127,9 @@ $("#myform #txt_name").keydown(function (e) {
                   $.each(list.finders,function(index, item){
                     h+='<div class="item">';
                     h+='<div class="users">';
-                    h+='<div class="border-bottom1">';
+                    h+='<div class="border-bottom1" onclick="location=\'/member/'+item.id+'\'">';
                     h+='<div class="head">';
-                    h+='<img width="100%" height="100%" src="'+item.icon+'" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`">';
+                    h+='<a href="/member/'+item.id+'"><img width="100%" height="100%" src="'+item.icon+'" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`"></a>';
                     h+='</div>';
                     h+='<h2>'+item.name+'</h2>';
                     h+='<div>'+item.zhiwei+'- '+item.addr+' <img class="imgvip" width="32px" src="'+item.vip_level+'"></div>';

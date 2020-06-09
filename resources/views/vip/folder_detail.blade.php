@@ -63,7 +63,7 @@
   <hr class="line-one"/>
   <div class="discoverer">
     <div class="head">
-      <img width="100%" height="100%" src="{{$folder_detail['user']['avatar']}}" alt="头像" />
+      <a href="/member/{{$folder_detail['user']['id']}}"><img width="100%" height="100%" src="{{$folder_detail['user']['avatar']}}" alt="头像" /></a>
     </div>
     <div class='headright'>
       <a href="#" style="font-size:18px;">{{$folder_detail['user']['nickname']=='' ? '匿名用户' : $folder_detail['user']['nickname']}}</a> <span style="background:none;" class="vip1"><img style="margin: -10px 0 0 -8px;" src="{{$folder_detail['user']['vip_level']}}" alt=""></span>

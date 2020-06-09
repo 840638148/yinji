@@ -83,7 +83,13 @@
 
 <div class="longzhao"></div>
 <div class="home_top">
-  <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
+    <div class="home_banber"> 
+        @if($users->zhuti)
+        <img src="{{$users->zhuti}}" alt="个人主页图片" />
+        @else
+        <img src="/images/zhutibj.jpg" alt="个人主页图片" />
+        @endif
+    </div>
   <div class="home_tongji">
     <ul>
         <li>人气</br>{{App\User::getViewNum($users->id)}} </li>
@@ -97,7 +103,13 @@
   </div>
   <h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> {{$users->nickname}} <img src="{{$users->vip_level}}" alt=""></h2>
   <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">@if($users->zhiwei){{$users->zhiwei}}@else 保密 @endif - {{$users->city}} <img src="{{App\User::getVipLevel($users->id)}}" alt=""></p>
-  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span style='padding: 5px 25px;display: inline-block;background: #3d87f1;margin: 20px auto;color: #fff;'>关注</span></p>
+  @if($user->id==$users->id)
+  
+  @elseif($users->is_follow)
+  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='have-disalbed' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #eee;margin: 20px auto;color: #666;cursor:no-drop !important;border-radius: 5px;'>已关注</span></p>
+  @else
+  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='gzuser' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #3d87f1;margin: 20px auto;color: #fff;cursor: pointer !important;border-radius: 5px;'>关注</span></p>
+  @endif
   <div class="home_nav" style='width:610px;left:52%;'>
     <ul>
         <li><a  href="/member/{{$users->id}}">TA的主页</a></li>
@@ -110,7 +122,7 @@
   </div>
 </div>
 
-<section class="wrapper" >
+<section class="wrapper" style='width:1245px;'>
   <div class="mt30 home_box" >
     <div class="title1" style='width: 100%;border-bottom: 1px solid #eee;margin-bottom: 20px;overflow: hidden;'>
       <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;display:block !important;'>TA的发现</span></h2>
@@ -235,6 +247,31 @@
 
 
 <script>
+    // 关注TA
+    $('.gzuser').click(function(){
+    let gzid=$(this).attr('uid');
+    let that=$(this);
+    $.ajax({
+        url: '/member/gzta',
+        type: 'POST',
+        dataType: 'json',
+        data: {_token:'{{csrf_token()}}',gzid:gzid},
+        success: function (data) {
+            if (data.status_code == 100) {
+                layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+                that.text('取消关注');
+                that.removeClass('gzuser');
+                that.addClass('have-disalbed').css('background','#e62b3c');
+                window.location.reload();
+            } else {
+                layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+            }
+        }
+    });
+  });
+
+
+
     $(document).ready(function(){
         if(!IS_VIP){
             $('.home_box .title').hide()

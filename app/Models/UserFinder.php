@@ -240,8 +240,7 @@ class UserFinder extends Model
             $userfinders[] = $v->take(1)->all();
         }        
         $userfinderss=collect($userfinders)->collapse();
-
-// dd($user_finders,$userfinders,$userfinderss);        
+     
         $finders = self::formatFinders($userfinderss);
         foreach($finders as $k=>$v){
             foreach($v['finder'] as $key=>$val){
@@ -251,6 +250,7 @@ class UserFinder extends Model
                     'img' => $val['img'],
                     'source' => $val['source'],
                     'tinames' => $val['tinames'],
+                    'user_id'=>$v['who_find']['user_id'],
                     'who_find' => [[
                         'userIcon' => $v['who_find']['avatar'],
                         'userName' => $v['who_find']['nickname'],
@@ -263,7 +263,6 @@ class UserFinder extends Model
                 ];         
             }
         }
-        // dd($recommend_finders);
         return json_encode($recommend_finders);
     }
 
@@ -291,13 +290,13 @@ class UserFinder extends Model
                     'title' => $img_finder->title,
                 ];
             }
-            // dump($finder);
 
             $user_info = User::find($finder->user_id);
             $recommend_folders[] = [
                 'id' => $finder->folder->id,
                 'title' => $finder->folder->name,
                 'imgs' => $imgs,
+                'user_id'=>$finder->user_id,
                 'who_find' => [[
                     'userIcon' => @$user_info->avatar ?? '/img/avatar.png',
                     'userName' => @$user_info->nickname,
@@ -310,7 +309,7 @@ class UserFinder extends Model
 
             ];
         }
-		// dd($recommend_folders);
+		
         return json_encode($recommend_folders);
     }
 
@@ -375,7 +374,6 @@ class UserFinder extends Model
                 'zhiwei'=>$user->zhiwei ? $user->zhiwei :'其他' ,
             ];
         }
-		// dd($recommend_users);
         return json_encode($recommend_users);
     }
     
@@ -393,7 +391,7 @@ class UserFinder extends Model
            
             ];
         }
-        // dd($my_folders);
+        
         return json_encode($my_folders);
     }
 
@@ -418,7 +416,7 @@ class UserFinder extends Model
         ];
         $folders = UserFinder::where('user_finder_folder_id', $folder_id)->orderBy('created_at', 'desc')->get();
         
-    //    dd($folders[0]->folder);
+    
         if ($folders) {
 
             $folder_detail['folder'] = [
@@ -451,7 +449,7 @@ class UserFinder extends Model
                 
                 $articleid=Article::where('id',$folder->photo_source)->value('static_url');
                 $articletitle=Article::where('id',$folder->photo_source)->value('title_name_cn');
-                // dd($articleid);
+                
                 $folder_detail['images'][] = [
                     'photo_url' => $folder->photo_url,
                     'title' => $folder->title,
@@ -461,7 +459,6 @@ class UserFinder extends Model
             }
         }
 
-        // dd($folder_detail);
         return $folder_detail;
     }
 
@@ -492,7 +489,6 @@ class UserFinder extends Model
      */
     public static function getMoreTuijians(& $request,$cates)
     {   
-        // dd($request->all());
         $user_id= Auth::id();
         if($request->content){
             switch ($cates) {
@@ -551,7 +547,6 @@ class UserFinder extends Model
      */
     public static function findercollect($request)
     {   
-        // dd($request->all());
         $is_sc=$request->is_sc;
         $user_id = Auth::id();
         if (empty($request->photo_url) || empty($user_id)) {
@@ -576,7 +571,7 @@ class UserFinder extends Model
             ->where('photo_url', $photo_url)
             ->where('is_sc',$is_sc)
             ->first();
-        // dd($obj);    
+ 
         if ($obj){
             return '你已经发现过了';
         }else{
@@ -651,14 +646,16 @@ class UserFinder extends Model
             $html='';
             $data=[];
             foreach($arr as $favorite){
-                // dd($favorite['tuijianfinder']);
+               
                 $html.='<div class="item discovery-item" style="display:flex">
                         <div class="item_content"> 
                             <img src="'.$favorite["tuijianfinder"]->photo_url.'" class="bg-img" data-id="'.$favorite['tuijianfinder']->user_finder_folder_id.'" id="sourceimg" source="'.$favorite['tuijianfinder']->photo_source.'" /> 
                             <div class="find_title" data-source="'.$favorite['tuijianfinder']->photo_source.'">'.$favorite['tuijianfinder']->title_name_cn.'<a href="javascript:;" class="find_info_more"></a></div>
                             <div class="who_find" style="display:none">
+                                <a href="/member/'.$favorite['tuijianfinder']->user_id.'">
                                 <img src="'.$favorite['tuijianfinder']->avatar.'" onerror="this.onerror=``;this.src=`/img/avatar.png`" alt="头像"/>
-                                <span> <a href="javascript:;">'.$favorite['tuijianfinder']->nickname.'</a> 收藏到 <a href="#">'.$favorite['tuijianfinder']->name.'</a></span>
+                                </a>
+                                <span> <a href="/member/'.$favorite['tuijianfinder']->user_id.'">'.$favorite['tuijianfinder']->nickname.'</a> 收藏到 <a href="/member/hp_finder_detail/'.$favorite['tuijianfinder']->user_id.'/'.$favorite['tuijianfinder']->user_finder_folder_id.'">'.$favorite['tuijianfinder']->name.'</a></span>
                             </div>
                             <div class="folder" style="display: none;">
                                 <div class="fl folder_bj" style="width:80%">选择文件夹<span class="fr show-more-selcect-item" style="background:url(images/arrow-ico.png); width:36px; height:36px;"></span>
@@ -693,7 +690,6 @@ class UserFinder extends Model
             $arr=[];
             foreach($folders as $folder){
                 $favorites = $favorites->reject(function ($value) use ($folder) {
-                    // dd($value->id,$folders->id);
                     return $value->id == $folder->id;
                 });               
             }
@@ -708,16 +704,16 @@ class UserFinder extends Model
             foreach($lists as $favorite){
                 $html.='<div class="item collection-item" data-id="'.$favorite->id.'">
                         <div class="item__content">
-                        <ul onclick="location=\'/folderlist/'.$favorite->id.'\'">';
+                        <ul onclick="location=\'/member/hp_finder_detail/'.$favorite->user_id.'/'.$favorite->id.'\'">';
                         foreach($favorite['imgall'] as $val){
                             $html.='<li>
-                                    <a href="/folderlist/'.$favorite->id.'">
+                                    <a href="/member/hp_finder_detail/'.$favorite->user_id.'/'.$favorite->id.'">
                                     <img src="'.$val->photo_url.'" alt="'.$favorite->title.'"></a>
                                     </li>';
                         }
                 $html.='</ul><div class="find_title"><h2>
-                        <a href="folderlist/'.$favorite->id.'">'.$favorite->name.'</a></h2>
-                        <a href="javascript:void(0);" class="collect-user-icon">
+                        <a href="/member/hp_finder_detail/'.$favorite->user_id.'/'.$favorite->id.'">'.$favorite->name.'</a></h2>
+                        <a href="/member/'.$favorite->user_id.'" class="collect-user-icon">
                         <img id="errimg" src="'.$favorite->avatar.'" onerror="this.onerror=``;this.src=`/img/avatar.png`"></a>
                         </div></div></div>';
             }
@@ -759,9 +755,10 @@ class UserFinder extends Model
             foreach($arr as $favorite){
                 $html.='<div class="item">
                 <div class="users">
-                <div class="border-bottom1">
+                <div class="border-bottom1" onclick="location=\'/member/'.$favorite['tuijianuser']->id.'\'">
                 <div class="head">
-                <img width="100%" height="100%" src="'.$favorite['tuijianuser']->avatar.'" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" ></div>
+                <a href="/member/'.$favorite['tuijianuser']->id.'">
+                <img width="100%" height="100%" src="'.$favorite['tuijianuser']->avatar.'" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" ></a></div>
                 <h2>
                 <h2>
                 '.mb_substr($favorite['tuijianuser']->nickname,0,10).'</h2><div>'.$favorite['tuijianuser']->zhiwei.' - '.$favorite['tuijianuser']->city.'<img class="vipimg" style="width:32px !important;" src="'.$favorite['tuijianuser']->vip_level.'" /></div></div>

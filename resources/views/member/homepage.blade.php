@@ -4,6 +4,9 @@
 @endsection
 @section('content')
 <style>
+  body{background:#f8f8f8 !important;}
+  .home_box{border-radius:10px !important;}
+  .home_top{background:#fff !important;}
   .item .edit_favorites{
     position: absolute;
     display: inline-block;
@@ -139,7 +142,13 @@
 <!--笼罩层-->
 <div class="lzcfg"></div>
 <div class="home_top">
-  <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
+  <div class="home_banber"> 
+    @if($users->zhuti)
+    <img src="{{$users->zhuti}}" alt="个人主页图片" />
+    @else
+    <img src="/images/zhutibj.jpg" alt="个人主页图片" />
+    @endif
+  </div>
   <div class="home_tongji">
     <ul>
       <li>人气</br>{{App\User::getViewNum($users->id)}} </li>
@@ -156,9 +165,9 @@
   @if($user->id==$users->id)
   
   @elseif($users->is_follow)
-  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='have-disalbed' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #e62b3c;margin: 20px auto;color: #fff;cursor:pointer !important;'>取消关注</span></p>
+  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='have-disalbed' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #eee;margin: 20px auto;color: #666;cursor:no-drop !important;border-radius: 5px;'>已关注</span></p>
   @else
-  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='gzuser' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #3d87f1;margin: 20px auto;color: #fff;cursor: pointer !important;'>关注</span></p>
+  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='gzuser' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #3d87f1;margin: 20px auto;color: #fff;cursor: pointer !important;border-radius: 5px;'>关注</span></p>
   @endif
   <div class="home_nav" style='width:610px;left:52%;'>
     <ul>
@@ -171,14 +180,40 @@
     </ul>
   </div>
 </div>
-<section class="wrapper">
+<section class="wrapper" style='width:1245px;'>
   <div class="mt30 home_box">
+    <!-- TA的发现 -->
+    <div class="title">
+      <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>TA的发现</span></h2>
+      <span class="fr"><a href="/member/homepage_finder/{{$users->id}}">更多</a></span>
+    </div>
+    <div class="masonry" style='height:350px;width: 1200px;overflow: hidden;'>
+        @foreach($users->finders as $key=>$finder)
+              <div class="item collection-item " data-id="{{$finder['folder']['id']}}" onclick="location='/member/hp_finder_detail/{{$users->id}}/{{$finder['folder']['id']}}'">
+                <div class="item__content">
+                  <ul data-id="{{$finder['folder']['id']}}" 	>
+                    @foreach($finder['finder'] as  $img_obj)
+                          @if ($img_obj['img'])
+                            <li><a href="/member/hp_finder_detail/{{$users->id}}/{{$finder['folder']['id']}}"><img src="{{$img_obj['img']}}" /></a></li>
+                          @endif
+                    @endforeach
+                  </ul>
+                  <div class="find_title">
+                    <h2><a>{{$finder['folder']['name']}}</a></h2>
+                   <div class="find_images"> <i class="icon-eye" title="公开"></i> {{$finder['folder']['total']}}</div>
+                   </div>
+                </div>
+              </div>
+           @endforeach
+    </div>
+    <!-- TA的发现end -->
+
     <!-- TA的收藏 -->
     <div class="title">
       <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>TA的收藏</span></h2>
       <span class="fr"><a href="/member/homepage_collect/{{$users->id}}">更多</a></span>
     </div>
-    <div class="masonry my-collection" >   
+    <div class="masonry my-collection"  style='height:350px;width: 1200px;overflow: hidden;'>   
       @foreach($users->collects as $collect)
       <div class="item collection-item " data-id="{{$collect['folder']['id']}}" onclick="location='/member/hp_collect_detail/{{$users->id}}/{{$collect['folder']['id']}}'">
         <div class="item__content">
@@ -196,6 +231,7 @@
       @endforeach
     </div>
     <!-- TA的收藏end -->
+
     <!-- TA的关注 -->
     <div class="title mt30">
       <div class="title">
@@ -214,10 +250,16 @@
       </ul>
     </div>
     <!-- TA的关注end -->
-    <!-- TA的访客 -->
-    <div class="title mt30" style='position:relative'>
-      <div class="title">
-        <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>访客</span><span style='position:absolute;top:0;right:60%;'>评论：</span><span style='position:absolute;top:0;right:0%;font-size:12px;color:#9E9E9E;'>共{{$commentsum}}条评论，访客：{{$messagenum}}条，博主：{{$replynum}}条</span></h2>
+  </div>
+</section>
+  <!-- TA的访客 -->
+<section class="wrapper" style='width:1245px;'>
+  <div class="mt30 home_box">
+    
+    <div class="title mt30" style='position:relative;border:unset !important;'>
+      <div class="title" style="border:unset !important;">
+        <h2 class="fl" style='width: 33%;border-bottom: 1px solid #eee;line-height: 40px;'>访客</h2>
+        <h2 class="fr" style='width: 65%;border-bottom: 1px solid #eee;line-height: 40px;'>评论：<span style='position:absolute;top:0;right:0%;font-size:12px;color:#9E9E9E;'>共{{$commentsum}}条评论，访客：{{$messagenum}}条，博主：{{$replynum}}条</span></h2>
       </div>
     </div>
     <div class='designer' style='width:30%;float:left;height:400px;height:400px;'>
@@ -232,6 +274,7 @@
         @endforeach
       </ul>
     </div>
+    
     <div class='fkright' style='width:65%;float:right;'>
         <div class="msgCon"> 
           @foreach ($comments as $comment)
@@ -274,9 +317,11 @@
         </div> 
         
     </div>
+    <div style='clear:both;'></div>
   </div>
 </section>
- 
+
+
 <script> 
   function getID(obj){
     comment_ids = $(obj).attr('data-id');console.log(comment_ids)
@@ -297,29 +342,6 @@
                 that.text('取消关注');
                 that.removeClass('gzuser');
                 that.addClass('have-disalbed').css('background','#e62b3c');
-                window.location.reload();
-            } else {
-                layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
-            }
-        }
-    });
-  });
-
-  //取消关注TA
-  $('.have-disalbed').click(function(){
-    let gzid=$(this).attr('uid');
-    let that=$(this);
-    $.ajax({
-        url: '/member/qxgzta',
-        type: 'POST',
-        dataType: 'json',
-        data: {_token:'{{csrf_token()}}',gzid:gzid},
-        success: function (data) {
-            if (data.status_code == 100) {
-                layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
-                that.text('关注');
-                that.removeClass('have-disalbed');
-                that.addClass('gzuser').css('background','#3d87f1');
                 window.location.reload();
             } else {
                 layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
