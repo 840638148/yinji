@@ -177,9 +177,8 @@ Route::post('vip/edit_folder_info', 'VipController@editFolderInfo');
 Route::post('vip/finder_collect', 'VipController@finder_collect');//发现页-》点击收藏  文章详情页点击图片进行收藏
 
 
-Route::get('folderlist/{id}', 'VipController@folderlist');//推荐收藏夹列表
-Route::post('vip/addfolders', 'VipController@addfolders');//推荐收藏夹列表
-Route::post('vip/scstatus', 'VipController@scstatus');//推荐收藏夹列表收藏的真实状态
+// Route::get('folderlist/{id}', 'VipController@folderlist');//推荐收藏夹列表
+// Route::post('vip/addfolders', 'VipController@addfolders');//推荐收藏夹列表
 Route::post('vip/autodelpay', 'VipController@autodelpay');//半小时后未付款的自动取消订单
 Route::post('finder_ajax', 'VipController@finderajax');//发现页-->发现的分页 
 Route::post('vip/finderslistsearch', 'VipController@finderslistsearch');//发现页-->搜索框

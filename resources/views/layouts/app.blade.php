@@ -1136,6 +1136,7 @@
         var title = $(this).attr('data-title');
         var photo_url = $(this).attr('data-img');
         var source = $(this).attr('data-source');
+        let is_sc=1;
         console.log(photo_source);
         if (photo_url == '') {
             photo_url = $("#imageUrlJs").val();
@@ -1154,7 +1155,8 @@
                 user_finder_folder_id:user_finder_folder_id,
                 title:title,
                 photo_url:photo_url,
-                source:source
+                source:source,
+                is_sc:is_sc,
             },
             success: function (data) {
                 if (data.status_code == 0) {

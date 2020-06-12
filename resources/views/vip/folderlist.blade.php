@@ -441,74 +441,7 @@
         });
         $(".asd").data("pid-i", photo_id_i);//这个啥意思，自定义属性？相当于attr('data-pid-i', photo_id_i),,好吧
         
-        /*$.ajax({
-          async:false,
-          url: '/vip/scstatus',
-          type: 'POST',
-          dataType: 'json',
-          data: {
-            _token:'dinkbrs5zOGhIn0S2AAfXE1AzZCTmGiC2slhoZLD',
-            user_finder_folder_id:user_finder_folder_id,
-            photo_url:photo_url,
-            source:source,
-            is_sc:is_sc,
-          },
-          success: function (data) {
-            // 重置按钮
-            $('.asd[scid]').html('收藏')
-            .addClass('to_find_floder_act')
-            .addClass('Button2')
-            .removeClass('Button')
-            .removeClass('have-disalbed')
-            .removeClass('have-collect');
-            for (let i = 0; i < data.data.length; i++) {
-              // 为已收藏的按钮添加效果
-              const user_collect_folder_id = data.data[i];
-              let btn = $(`.asd[scid=${user_collect_folder_id}]`);
-              btn.html('已收藏')
-              .removeClass('to_find_floder_act')
-              .removeClass('Button2')
-              .addClass('Button')
-              .addClass('have-disalbed')
-              .addClass('have-collect');
-            }
-          }
-        });
 
-        for (let i = 0;i < folder_ids.length;i++) {
-          let folder_id = folder_ids[i];
-          console.group(folder_id)
-          $.ajax({
-                    async:false,
-                    url: '/vip/scstatus',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {_token:'dinkbrs5zOGhIn0S2AAfXE1AzZCTmGiC2slhoZLD',collect_id:collect_id,tpsrc:tpsrc,folder_id:folder_id},
-                    success: function (data){
-                      console.log(data);
-                      let btn = $(`.asd[scid=${folder_id}]`);
-                        if (data.status_code == 100001) {
-                          // let btn = $('.asd[scid=' . folder_id . ']');
-                          $('.showscbtn').css('display','none');
-                          $('.lzcfg').css('display','none');
-                          btn.html('已收藏')
-                          .removeClass('to_find_floder_act')
-                          .removeClass('Button2')
-                          .addClass('Button')
-                          .addClass('have-disalbed')
-                          .addClass('have-collect');
-                        }else{
-                          btn.html('收藏')
-                          .addClass('to_find_floder_act')
-                          .addClass('Button2')
-                          .removeClass('Button')
-                          .removeClass('have-disalbed')
-                          .removeClass('have-collect');
-                        }
-                    }
-                });
-                console.groupEnd();
-        }*/
         tpid=$('.scbtmlbt').attr('data-id');
         $('.lzcfg').css('display','block');
         $('.showscbtnlbt').css('display','block');

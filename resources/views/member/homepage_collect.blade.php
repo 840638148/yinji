@@ -126,10 +126,10 @@
     <div class="masonry" > @foreach($users->collects as $collect)
       <div class="item">
         <div class="item__content" style="position:relative">
-          <ul  onclick="location.href='/member/hp_collect_detail/{{$collect['folder']['id']}}'">
+          <ul  onclick="location.href='/member/hp_collect_detail/{{$users->id}}/{{$collect['folder']['id']}}'">
             @foreach($collect['collect'] as $img_obj)
                   @if ($img_obj['img'])
-                    <li><a href="/member/hp_collect_detail/{{$collect['folder']['id']}}"><img src="{{$img_obj['img']}}" /></a></li>
+                    <li><a href="/member/hp_collect_detail/{{$users->id}}/{{$collect['folder']['id']}}"><img src="{{$img_obj['img']}}" /></a></li>
                   @endif
             @endforeach
           </ul>

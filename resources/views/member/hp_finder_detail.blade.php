@@ -5,6 +5,9 @@
 @section('content')
 
 <style>
+    body{background:#f8f8f8 !important;}
+    .home_box{border-radius:10px !important;}
+    .home_top{background:#fff !important;}
     .item .edit_favorites{
         position: absolute;
         display: inline-block;
@@ -177,7 +180,7 @@
     }
     .scbtmlbt{
         background: #e1244e;
-        width: 50px;
+        width: 35px;
         height: 35px;
         line-height: 35px;
         text-align: center;
@@ -318,7 +321,7 @@
     <article class="swiper-slide slide-single" data-swiper-slide-index="{{$loop->iteration}}">
     	<div class="wrap" style="position: relative">
     		<img id="btntp" width="600px" height="600px" src="{{$v['photo_url']}}" data-id="{{$v['photo_source']}}" alt="{{$v['name']}}">
-    		<div class="scbtmlbt" data-id="{{$v['photo_source']}}" data-pid-i="{{ $i }}" onclick="getID(this)">发现</div>
+    		<div class="scbtmlbt" data-id="{{$v['photo_source']}}" data-pid-i="{{ $i }}" onclick="getID(this)" ><img style='width:20px;height:20px;margin-top:8px;' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACUAAAAlCAQAAABvl+iIAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfiDA0XHTkZwnQUAAAAVUlEQVRIx2P8z0AtwEQ1k0aNGjWKJkaxYIhgS/6MWMUZh6YHsToeTRxrGTA4PTg4jcIV7KgBy0jYoAFNDPRx1bA3ivTEgLMOHpweZBxtM4waNbiNAgDn9QhSF9pevwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0xMi0xM1QyMzoyOTo1NyswODowMMypGaQAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMTItMTNUMjM6Mjk6NTcrMDg6MDC99KEYAAAAAElFTkSuQmCC" alt=""></div>
     	</div>
     </article>
     @endforeach 
@@ -332,95 +335,96 @@
 
 
 <section class="wrapper" style='width:1245px;'>
-    <div class="title">
-        <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>{{$folder_name or ''}}</span></h2>
-        <span class="fr"><a href="javascript:window.history.go(-1);" data-type="collect" >&lt; 返回</a></span> 
-    </div> 
-  <!-- 内容开始 -->
-    <div class="box"> 
-        @foreach ($users->finder_details as $i =>$v)
-            <div class="itemww"> 
-                <img src="{{$v['photo_url']}}" data-id="{{$v['user_finder_folder_id']}}" source='{{$v["photo_source"]}}' data-photo-index="{{ $i }}" alt="{{mb_substr($v['titlename'],0,30)}}">
-                <div class="titlename" onclick="location='@if($v['static_url']) /article/{{$v['static_url']}} @else /article/detail/{{$v['id']}} @endif'">
-                @if(strlen($v['titlename']) < 20) {{$v['titlename']}} @else {{mb_substr($v['titlename'],0,20)}} @endif</div>
-                <div class="scbtm" photoid="{{$v['photo_source']}}" imgsrc="{{$v['photo_url']}}" data-id="{{$v['photo_source']}}" data-pid-i="{{ $i }}" onclick="getID(this)">ED</div>
+    <div class="mt30 home_box">
+        <div class="title">
+            <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>{{$folder_name or ''}}</span></h2>
+            <span class="fr"><a href="javascript:window.history.go(-1);" data-type="collect" >&lt; 返回</a></span> 
+        </div> 
+    <!-- 内容开始 -->
+        <div class="box"> 
+            @foreach ($users->finder_details as $i =>$v)
+                <div class="itemww"> 
+                    <img src="{{$v['photo_url']}}" data-id="{{$v['user_finder_folder_id']}}" source='{{$v["photo_source"]}}' data-photo-index="{{ $i }}" alt="{{mb_substr($v['titlename'],0,30)}}">
+                    <div class="titlename" onclick="location='@if($v['static_url']) /article/{{$v['static_url']}} @else /article/detail/{{$v['id']}} @endif'">
+                    @if(strlen($v['titlename']) < 20) {{$v['titlename']}} @else {{mb_substr($v['titlename'],0,20)}} @endif</div>
+                    <div class="scbtm" photoid="{{$v['photo_source']}}" imgsrc="{{$v['photo_url']}}" data-id="{{$v['photo_source']}}" data-pid-i="{{ $i }}" onclick="getID(this)"><img style='width:20px;height:20px;margin-top:7px;' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACUAAAAlCAQAAABvl+iIAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfiDA0XHTkZwnQUAAAAVUlEQVRIx2P8z0AtwEQ1k0aNGjWKJkaxYIhgS/6MWMUZh6YHsToeTRxrGTA4PTg4jcIV7KgBy0jYoAFNDPRx1bA3ivTEgLMOHpweZBxtM4waNbiNAgDn9QhSF9pevwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0xMi0xM1QyMzoyOTo1NyswODowMMypGaQAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMTItMTNUMjM6Mjk6NTcrMDg6MDC99KEYAAAAAElFTkSuQmCC" alt=""></div>
+                </div>
+            @endforeach 
+        </div>
+    <!-- 内容结束 -->
+
+        <!--点击收藏出现弹窗-->
+        <div class="showscbtn">
+            <div class="create_folder_title">
+                <h2>图片收藏到</h2>
             </div>
-        @endforeach 
+            <div class="close">关闭</div>
+            <div class="pic-name" style="padding: 8px 0 8px 8px;">
+                <label for="" style="font-size: 14px;color: #333;margin-left:-10px;"> 图片名称 </label>
+                <input type="text" name="imgtitle" id="imgtitle" value="" placeholder="图片名称" style="width: 512px;">
+            </div>
+            <div class="collection_to">
+                <ul class="discover-folders2">
+                @foreach($userscname as $key => $value)
+                <li>
+                    <h3>{{$value['name']}}</h3>
+                    <span  floder_id='{{$value["id"]}}'  class='folderattr null' title='{{$value["name"]}}'></span> 
+                    <div id="modal_btns"> <a href='javascript:void(0);' class='Button2 to_find_floder_act asd' scid='{{$value["id"]}}'  data-img='' >收藏</a> </div>
+                </li>
+                @endforeach
+                </ul>
+            </div>
+            <a href="javascript:void(0);" class="create create-new-folder-btn">创建收藏夹</a>
+            <div class="error_code"></div>
+        </div>
+
+        <!--点击轮播图收藏出现弹窗-->
+        <div class="showscbtnlbt">
+            <div class="create_folder_title">
+                <h2>图片收藏到</h2>
+            </div>
+            <div class="close closelbtbtn">关闭</div>
+            <div class="pic-name" style="padding: 8px 0 8px 8px;">
+                <label for="" style="font-size: 14px;color: #333;margin-left:-10px;"> 图片名称 </label>
+                <input type="text" name="imgtitle" id="imgtitle" value="" placeholder="图片名称" style="width: 512px;">
+            </div>
+            <div class="collection_to">
+                <ul class="discover-folders2">
+                @foreach($userscname as $key => $value)
+                <li>
+                    <h3>{{$value['name']}}</h3>
+                    <span img='' floder_id='{{$value["id"]}}'  class='folderattr null' title='{{$value["name"]}}'></span> 
+                    <div id="modal_btns"> <a href='javascript:void(0);' class='Button2 to_find_floder_act asd' scid='{{$value["id"]}}'  data-img='' >收藏</a> </div>
+                </li>
+                @endforeach
+                </ul>
+            </div>
+            <a href="javascript:void(0);" class="create create-new-folder-btn">创建收藏夹</a>
+            <div class="error_code"></div>
+        </div>
+
+        <!--创建收藏文件夹-->
+        <div class="create_folder modal" id="new-find-model-folder" style="height:450px">
+            <div class="create_folder_title">
+                <h2>创建收藏文件夹</h2>
+            </div>
+            <div class="close">关闭</div>
+            <input type="text" value=""  placeholder="收藏夹名称（必填）" class="mt30" name="favorite" id="finder_folder_name"/>
+            <textarea id="finder_folder_brief" name="memo" placeholder="简介"  rows="5" class="mt30 folder_introduction"></textarea>
+            <input type="hidden" id="finder_folder_id" value="1" />
+            <p class="mt30"> <i class="sourceinput" sourceid=""></i>
+                <input name="is_open" type="radio" value="1" checked="checked" />
+                公开
+                <input name="is_open" type="radio" value="0" />
+                不公开 </p>
+            <div class="error_msg" id="error_msg"></div>
+            <div class="create_button">
+                <input type="hidden" name="folder_type" id="add_folder_type"  />
+                <input type="button" value="取消" class="button_gray concle-create-folder" />
+                <input type="button" value="确定" class="button_red create_finder_folder_enter_btn"/>
+            </div>
+        </div>
     </div>
-  <!-- 内容结束 -->
-  
-  <!--点击收藏出现弹窗-->
-  <div class="showscbtn">
-    <div class="create_folder_title">
-      <h2>图片收藏到</h2>
-    </div>
-    <div class="close">关闭</div>
-    <div class="pic-name" style="padding: 8px 0 8px 8px;">
-      <label for="" style="font-size: 14px;color: #333;margin-left:-10px;"> 图片名称 </label>
-      <input type="text" name="imgtitle" id="imgtitle" value="" placeholder="图片名称" style="width: 512px;">
-    </div>
-    <div class="collection_to">
-      <ul class="discover-folders2">
-        @foreach($userscname as $key => $value)
-        <li>
-          <h3>{{$value['name']}}</h3>
-          <span  floder_id='{{$value["id"]}}'  class='folderattr null' title='{{$value["name"]}}'></span> 
-          <div id="modal_btns"> <a href='javascript:void(0);' class='Button2 to_find_floder_act asd' scid='{{$value["id"]}}'  data-img='' >收藏</a> </div>
-        </li>
-        @endforeach
-      </ul>
-    </div>
-    <a href="javascript:void(0);" class="create create-new-folder-btn">创建收藏夹</a>
-    <div class="error_code"></div>
-  </div>
-  
-  <!--点击轮播图收藏出现弹窗-->
-  <div class="showscbtnlbt">
-    <div class="create_folder_title">
-      <h2>图片收藏到</h2>
-    </div>
-    <div class="close closelbtbtn">关闭</div>
-    <div class="pic-name" style="padding: 8px 0 8px 8px;">
-      <label for="" style="font-size: 14px;color: #333;margin-left:-10px;"> 图片名称 </label>
-      <input type="text" name="imgtitle" id="imgtitle" value="" placeholder="图片名称" style="width: 512px;">
-    </div>
-    <div class="collection_to">
-      <ul class="discover-folders2">
-        @foreach($userscname as $key => $value)
-        <li>
-          <h3>{{$value['name']}}</h3>
-          <span img='' floder_id='{{$value["id"]}}'  class='folderattr null' title='{{$value["name"]}}'></span> 
-          <div id="modal_btns"> <a href='javascript:void(0);' class='Button2 to_find_floder_act asd' scid='{{$value["id"]}}'  data-img='' >收藏</a> </div>
-        </li>
-        @endforeach
-      </ul>
-    </div>
-    <a href="javascript:void(0);" class="create create-new-folder-btn">创建收藏夹</a>
-    <div class="error_code"></div>
-  </div>
-  
-  <!--创建收藏文件夹-->
-  
-  <div class="create_folder modal" id="new-find-model-folder" style="height:450px">
-    <div class="create_folder_title">
-      <h2>创建收藏文件夹</h2>
-    </div>
-    <div class="close">关闭</div>
-    <input type="text" value=""  placeholder="收藏夹名称（必填）" class="mt30" name="favorite" id="finder_folder_name"/>
-    <textarea id="finder_folder_brief" name="memo" placeholder="简介"  rows="5" class="mt30 folder_introduction"></textarea>
-    <input type="hidden" id="finder_folder_id" value="1" />
-    <p class="mt30"> <i class="sourceinput" sourceid=""></i>
-      <input name="is_open" type="radio" value="1" checked="checked" />
-      公开
-      <input name="is_open" type="radio" value="0" />
-      不公开 </p>
-    <div class="error_msg" id="error_msg"></div>
-    <div class="create_button">
-      <input type="hidden" name="folder_type" id="add_folder_type"  />
-      <input type="button" value="取消" class="button_gray concle-create-folder" />
-      <input type="button" value="确定" class="button_red create_finder_folder_enter_btn"/>
-    </div>
-  </div>
 </section>
 
 
@@ -822,7 +826,7 @@
         $('.swiper-slide').mouseleave(function() {
             // bannerSwiper.startAutoplay();
             start()
-            console.log(i)
+            // console.log(i)
         })
 
 
@@ -896,7 +900,7 @@
             let photo_url=$(`.itemww img[data-photo-index=${photo_id_i}]`).attr('src');
             let source = collect_id;//图片所在的文章id
             let is_sc=1;
-            console.log(photo_url);
+           
             $.ajax({
                     async:false,
                     url: '/vip/finder_collect',
@@ -910,19 +914,17 @@
                         is_sc:is_sc,
                     },
                     success: function (data){
-                        console.log(data);
                         if(data.status_code == 0){
-                            layer.msg('收藏成功',{skin: 'intro-login-class layui-layer-hui'});
+                            layer.msg(data.message,{zIndex:99999999999999999999,skin: 'intro-login-class layui-layer-hui'});
                             that.html('已收藏');
                             that.addClass('have-collect');
                             that.removeClass('Button2');
                             that.removeClass('to_find_floder_act');
                             that.addClass('Button');
                             that.addClass('have-disalbed');
-                            // location.reload();
                         }
                         else{
-                            layer.msg('已经收藏过了',{skin: 'intro-login-class layui-layer-hui'});
+                            layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
                             $('.showscbtn').css('display','none');
                             $('.lzcfg').css('display','none');
                             that.text('已收藏');

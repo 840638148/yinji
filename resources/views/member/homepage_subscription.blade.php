@@ -85,8 +85,8 @@
                 {{$category['name']}},
                 @endif
                 @endforeach 
-              </span> 
-              <span>{!! get_designer_description($subscription) !!}</span> 
+              </span>
+              <span style='height:25px !important;'>{!! get_designer_description($subscription) !!}</span> 
             </div>
             <div class="focus">
             @if($subscription->has_dy)

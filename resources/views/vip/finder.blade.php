@@ -561,7 +561,7 @@ $("#myform #txt_name").keydown(function (e) {
       h += '    <div class="who_find" style="display:none">';
       item.who_find.map(function(user,index){
         h += '     <a href="/member/'+user.userNo+'"><img src="' + user.userIcon + '"  /></a>';
-		if(user.userName){
+		  if(user.userName){
         h += '      <span > <a href="/member/'+user.userNo+'">'+ user.userName +'</a> 收藏到 <a href="/member/hp_finder_detail/'+user.userNo+'/'+ item.id+'">'+ user.folderName + '</a></span>';
         }else{
         	h += '      <span > <a href="/member/'+user.userNo+'">匿名用户</a> 收藏到 <a href="/member/hp_finder_detail/'+user.userNo+'/'+ item.id+'">'+ user.folderName + '</a></span>';
@@ -580,8 +580,8 @@ $("#myform #txt_name").keydown(function (e) {
         h += '        <li>';
         h += '          <h3>'+ folder.title + '</h3>';
         		
-		var isscobj={!!json_encode($issc)!!};
-		var isscarr=JSON.parse(isscobj);
+		  var isscobj={!!json_encode($issc)!!};
+		  var isscarr=JSON.parse(isscobj);
     	let uc = {};
     	let is_sc = false;
     	for (let i = 0;i < isscarr.length;i++) {
@@ -592,7 +592,7 @@ $("#myform #txt_name").keydown(function (e) {
     			}
     		}
     	}
-		// console.log(isscarr,item,folder,uc);
+		  // console.log(isscarr,item,folder,uc);
         if(is_sc){
         	h += '          <span class="' + (folder.type == 'private' ? 'private' :'') +'" title="'+(folder.typeText ? folder.typeText : '') + '" ></span> <a style="width:50px;" href="javascript:void(0)" class="have-disalbed Button fr add_finder_btn" data-id="' + folder.id + '" data-img="' + item.img + '" data-title="' + item.title + '" data-source="' + item.source + '">已收藏</a>';
         }else{

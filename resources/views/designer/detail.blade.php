@@ -100,8 +100,12 @@
                             </div>
                         </div>
                     </li>
-                    
-                        <li style="width:32.85%;" class="have-disalbed"><a href="/job/detail/{{$designer->companyids}}"><i class="icon-bookmark "></i>招聘</a> </li>
+                        <style>
+                            #zp{width:32.85%;cursor: pointer !important;}
+                            #zp:hover a{color:#fff;}
+                            #zp:hover i{color:#fff;}
+                        </style>
+                        <li id='zp' class="have-disalbed"><a href="/job/detail/{{$designer->companyids}}"><i class="icon-bookmark "></i>招聘</a> </li>
                         
 
                         @if($is_subscription)

@@ -77,7 +77,7 @@
                 @endif
                 @endforeach 
               </span> 
-              <span>{!! get_designer_description($subscription) !!}</span> 
+              <span style='height:25px !important;'>{!! get_designer_description($subscription) !!}</span> 
             </div>
             <div class="focus"> 
               <a href="javascript:void(0)" data-id="{{$subscription->id}}" class="focus_btn2 click cancelSubscription"> 取消订阅 </a>

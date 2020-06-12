@@ -703,7 +703,7 @@
           },
           success: function (data) {
               //console.log(data.status_code);
-              if (data.status_code == 0) {
+              if (data.status_code == 100) {
                   layer.msg(data.message,{time:1500,skin: 'intro-login-class layui-layer-hui'});
                   setTimeout(function () {
                       location.href = "/member";

@@ -591,63 +591,39 @@
         <!--------新闻----------->
 
         <div class="search-result">
-
             <div class="title">
-
                 <h2>相关新闻 <span>共找到{{$newses->total()}}条结果</span></h2>
-
             </div>
 
             <div class="left" style="width:100%">
-
                 <div class="news3">
-
-                    <ul>
-
+                    <ul class="layout_li ajaxpost">
+                        <div class="post_list">
+                        <ul>
                         @foreach ($newses as $news)
-
-                            <li class="left">
-
-                                <article class="postlist">
-
-                                    <a href="/news/detail/{{$news->id}}">
-
-                                        <figure>
-
-                                            <img class="thumb" src="{{get_article_thum($news)}}" data-original="{{get_article_thum($news)}}" alt="{{get_article_title($news)}}" style="display: block;">
-
+                            <li class="left layout_li ajaxpost">
+                                <article class="postlist postgrid">
+                                    
+                                        <figure><a href="/news/detail/{{$news->id}}">
+                                            <img class="thumb" src="{{get_article_thum($news)}}" data-original="{{get_article_thum($news)}}" alt="{{get_article_title($news)}}" style="display: block;width:unset;"></a>
                                         </figure>
-
-                                    </a>
-
+                                    
                                     <h3> <a href="/news/detail/{{$news->id}}">{{get_article_title($news)}}</a></h3>
-
-                                    <div class="news_brief"><a href="/news/detail/{{$news->id}}">{!!get_article_description($news)!!}</a></div>
-
+                                    <div class="news_brief" style='text-indent: 0.9em;'><a href="/news/detail/{{$news->id}}">{!!get_article_description($news)!!}</a></div>
                                     <div class="homeinfo">
-
                                         <a href="/news/detail/{{$news->id}}">
-
                                             <span class="date">{{str_limit($news->release_time, 10, '')}}</span>
-
                                             <span class="comment"><i class="icon-eye"></i>{{$news->view_num}}</span>
-
                                         </a>
-
                                     </div>
-
                                 </article>
-
                             </li>
-
                         @endforeach
-
+                        <div>
+                        </ul>
                     </ul>
-
                 </div>
-
             </div>
-
         </div>
 
         <!------新闻结束-------->

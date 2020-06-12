@@ -37,19 +37,22 @@ class VipBuyOrder extends Model
         switch ($order->vip_type) {
             case '1':
                 $add_time = strtotime('+1 month');
-                $point_set = PointSet::find(12);
+                $point_set = PointSet::find(16);
                 break;
             case '2':
                 $add_time = strtotime('+3 months');
-                $point_set = PointSet::find(13);
+                $point_set = PointSet::find(17);
                 break;
             case '3':
                 $add_time = strtotime('+12 months');
-                $point_set = PointSet::find(14);
+                $point_set = PointSet::find(18);
                 break;
         }
 
         if ($add_time + $left_time > 0) {
+            //记录过期前的vip类型和剩余时间
+            $user->be_expire =$user->expire_time;
+            $user->be_type =$user->level;
             $user->expire_time = date('Y-m-d H:i:s', ($add_time + $left_time));
         }
 

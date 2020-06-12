@@ -171,13 +171,18 @@ class VipController extends Controller
         }
 
         $result = UserFinder::findercollect($request);
-		
-        if($result<=50){
-            return Output::makeResult($request, null, 0, '收藏成功,印币+1');
-        }else if($result>50){
-            return Output::makeResult($request, null,0,'收藏成功!');
+        // dd($result);
+        if($result['status']===true){
+            if($result['num']<=50){
+                return Output::makeResult($request, null, 0, '收藏成功,印币+1');
+            }else if($result>50){
+                return Output::makeResult($request, null,0,'收藏成功!');
+            }
+        }else{
+            return Output::makeResult($request, null, 500, $result['res']);
         }
-        return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
+
+        
     }
 
 
@@ -228,33 +233,17 @@ class VipController extends Controller
         return view('vip.folderlist', $data);
     } 
     
-    //发现页-》推荐收藏中心的收藏
-    public function addfolders(Request $request){
-    	// dd('123');
-    	$result = UserCollect::foldercollectById('0', $request);
+    // //发现页-》推荐收藏中心的收藏
+    // public function addfolders(Request $request){
+    // 	// dd('123');
+    // 	$result = UserCollect::foldercollectById('0', $request);
 		
-        if (true === $result) {
-            return Output::makeResult($request, null);
-        }
-        return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
-    }
+    //     if (true === $result) {
+    //         return Output::makeResult($request, null);
+    //     }
+    //     return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
+    // }
     
-    /**
-     * 发现页-》推荐收藏-》显示收藏夹的目录
-     * @param request
-     */
-    public function scstatus(Request $request){
-        if (!Auth::check()) {
-            return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
-        }
-
-        $result = UserFinder::findercollect($request);
-		
-        if (true === $result) {
-            return Output::makeResult($request, null);
-        }
-        return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
-    }
 
     /**
      * 发现页搜索框
@@ -522,9 +511,9 @@ class VipController extends Controller
 	public function prePay(Request $request)
 	{
 		$user = $this->getUserInfo();
-        if (isset($user) && $user->is_vip) {
-            return Output::makeResult($request, null, Error::SYSTEM_ERROR, '您已经是本站会员！');
-        }
+        // if (isset($user) && $user->is_vip) {
+        //     return Output::makeResult($request, null, Error::SYSTEM_ERROR, '您已经是本站会员！');
+        // }
 		
 		$wx_url = VipPrice::wxpay($request);
         $alipay_url = VipPrice::alipay($request);
@@ -571,137 +560,6 @@ class VipController extends Controller
     }
 
 
-
-    /**
-     * 兑换会员
-     * 
-     */
-    /*public function duihuanvip(Request $request){
-        $user = $this->getUserInfo();
-        $vip_type = $request->yb;
-
-        $pay_total = $pay_total = VipPrice::getPrice($vip_type);
-
-        switch ($vip_type) {
-			case '50':
-				$order_title = '印际月度会员';
-				break;
-			case '280':
-				$order_title = '印际季度会员';
-				break;
-			case '880':
-				$order_title = '印际年度会员';
-				break;
-			default:
-			    $order_title = '印际月度会员';
-		}
-
-
-        if($request->yb){
-            $remark='';
-            if($request->yb==50){
-                $remark='兑换月会员';
-            }else if($request->yb==280){
-                $remark='兑换季会员';
-            }else if($request->yb==880){
-                $remark='兑换年会员';
-            }
-            $point_total = 1;
-            $wx_code_url = '';
-            $data = [
-                'lang' => $lang,
-                'user' => $user,
-                'pay_total' => $pay_total,
-                'point_total' => $point_total,
-                'order_title' => $order_title,
-                'wx_code_url' => $wx_code_url,
-            ];
-            
-            if($remark!=''){
-                $das=[
-                    'user_id' => $user->id,
-                    'type' => '1',
-                    'point' => $request->yb,
-                    'remark' => $remark,
-                ];
-                $re=UserPoint::create($das);
-                if($re){
-                    $left_points=User::where('id',$user->id)->value('left_points');
-                    $a=User::where('id',$user->id)->update(['left_points'=>$left_points-$request->yb]);
-                    // dd($a);
-                }  
-                             
-            }
-
-            $data=[
-                'remark'=>$remark.'成功',
-            ];
-
-            $payment = Payment::where('payment_code', $request->payment_code)->firstOrFail();
-            $prefix = 'YJVIP';
-            $order_no = $this->generateOrderNo($prefix, Auth::id());
-            $pay_total = VipPrice::getPrice($request->vip_type);
-            $record = [
-                'user_id'         => Auth::id(),
-                'order_no'        => $order_no,
-                'vip_type'        => $request->vip_type,
-                'payment_code'    => $request->payment_code,
-                'payment_name'    => $payment->payment_name,
-                'pay_status'      => '0',
-                'pay_status_name' => '未支付',
-                'pay_total'       => $pay_total,
-                'pay_no'          => '',
-            ];
-            $ret  = VipBuyOrder::create($record);
-            //微信支付
-            //gateways: WechatPay_App, WechatPay_Native, WechatPay_Js, WechatPay_Pos, WechatPay_Mweb
-            $gateway    = Omnipay::create('WechatPay_Native');
-            $gateway->setAppId(env('WECHATPAY_APP_ID'));
-            $gateway->setMchId(env('WECHATPAY_MCH_ID'));
-            $gateway->setApiKey(env('WECHATPAY_MCH_API_KEY'));//注意这里的 ApiKey 是我们在微信商户后台设置的一个32位的随机字符串，和微信公众号里面的 AppSecret 不是一回事。
-            $gateway->setNotifyUrl(env('APP_URL') . '/notify/weixin');
-    
-            $order = [
-                'body'              => 'VIP',
-                'out_trade_no'      => $record['order_no'],
-                'total_fee'         => intval($record['pay_total'] * 100),
-                'spbill_create_ip'  => $request->getClientIp(),
-                'fee_type'          => 'CNY',
-                //'open_id'           => $request->open_id,
-            ];
-    
-            $response    = $gateway->purchase($order)->send();
-    
-            //available methods
-            //$response->isSuccessful();
-            //$response->getData(); //For debug
-            //$response->getAppOrderData(); //For WechatPay_App
-            //$response->getJsOrderData(); //For WechatPay_Js
-            //$response->getCodeUrl(); //For Native Trade Type
-            //dd($order);
-    
-            if ($response->isSuccessful()) {
-                $tmp_data = $response->getData();
-                $payment_info = [
-                        'prepay_id' => $tmp_data['prepay_id'],
-                ];
-                $ret->pay_no = $tmp_data['prepay_id'];
-                $ret->save();
-                $code_url = $response->getCodeUrl(); //For Native Trade Type
-                return Output::makeResult($request, ['code_url' => $code_url, 'payment_info' => $payment_info]);
-            } else {
-                return Output::makeResult($request, $response->getData(), Error::CREATE_ORDER_FAIL);
-            }
-    
-
-            return Output::makeResult($request, $data);
-            
-        }
-
-        return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
-    }*/
-
-
     /**
      * 微信支付检查支付状态并跳转
      */
@@ -735,9 +593,9 @@ class VipController extends Controller
     public function buy(Request $request)
     {
         $user = $this->getUserInfo();
-        if (isset($user) && $user->is_vip) {
-            return Output::makeResult($request, null, Error::SYSTEM_ERROR, '您已经是本站会员！');
-        }
+        // if (isset($user) && $user->is_vip) {
+        //     return Output::makeResult($request, null, Error::SYSTEM_ERROR, '您已经是本站会员！');
+        // }
         $payment = Payment::where('payment_code', $request->payment_code)->firstOrFail();
         $prefix = 'YJVIP';
         $order_no = $this->generateOrderNo($prefix, Auth::id());
@@ -784,9 +642,9 @@ class VipController extends Controller
     public function wxbuy(Request $request)
     {
         $user = $this->getUserInfo();
-        if (isset($user) && $user->is_vip) {
-            return Output::makeResult($request, null, Error::SYSTEM_ERROR, '您已经是本站会员！');
-        }
+        // if (isset($user) && $user->is_vip) {
+        //     return Output::makeResult($request, null, Error::SYSTEM_ERROR, '您已经是本站会员！');
+        // }
         $payment = Payment::where('payment_code', $request->payment_code)->firstOrFail();
         $prefix = 'YJVIP';
         $order_no = $this->generateOrderNo($prefix, Auth::id());
@@ -939,20 +797,22 @@ class VipController extends Controller
                     $logInfo = ['status' => '已经支付', 'request' => $post_data, 'order_info' => $order];
                     $logger->info('', $logInfo);
                     return 'success';
-                }
+                }else
 
                 if ($post_data['total_amount'] != $order->pay_total) {
                     $logInfo = ['status' => '支付金额不符', 'request' => $post_data, 'order_info' => $order];
                     $logger->info('', $logInfo);
 
                     return 'success';
+                }else{
+                    $order->pay_status      = '2';
+                    $order->pay_status_name = '已支付';
+                    $order->pay_no          = $post_data['trade_no'];
+                    $order->pay_time        = $post_data['gmt_payment'];
+                    $order->save();
+                    VipBuyOrder::dealVip($order->order_no,$post_data['buyer_pay_amount']);                    
                 }
-                $order->pay_status      = '2';
-                $order->pay_status_name = '已支付';
-                $order->pay_no          = $post_data['trade_no'];
-                $order->pay_time        = $post_data['gmt_payment'];
-                $order->save();
-                VipBuyOrder::dealVip($order->order_no,$post_data['buyer_pay_amount']);
+
             
 
             }  

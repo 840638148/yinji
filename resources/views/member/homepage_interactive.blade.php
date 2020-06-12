@@ -119,54 +119,41 @@
   <div class="mt30 home_box">
     <div class="title">
       <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>TA的关注</span></h2>
-    </div>
-    <div class="TabContent content-post"> 
-      
+    </div>      
       <!---我的关注开始--->
-      
-      <div id="myTab1_Content0" >
-        
-        <section class="wrapper">
-          <div class="mt30 home_box">
-
-            @if($user->level==0)
-              <!--VIP专栏提示-->	
-            <div class="vip_prompt modal vip_prompt-member" id="vip-img"><a href="javascript:void(0);" id="vip_buy" class="vip_buy">开通VIP会员</a><a href="/vip/intro" class="vip_detail">了解VIP详情>></a></div>
-            @else
-            <div class="masonry" > 
-            @foreach ($users->follows as $follow)
-              <div class="item">
-                <div class="users">
-                  <div class="border-bottom1" onclick='location="/member/{{$follow->id}}"'>
-                    <div class="head"><a href="/member/{{$follow->id}}"><img style="margin-top:unset;" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>
-                    <h2 style='line-height:unset;'><a href="/member/{{$follow->id}}">{{$follow->nickname}}</a> </h2>
-                    <p style="position:relative;margin:unset;"> 
-                      
-                      @if($follow->zhiwei){{$follow->zhiwei}} @else 其他 @endif
-                      -
-                      {{$follow->city}}
-
-                    <span style="background:none;background: none;position: absolute;top: -3px;" class="VIP1"><img style="width:32px;" src="{{$follow->vip_level}}" alt=""></span> </p>
-                    </div>
-                  <div class="Statistics">
-                    <ul>
-                      <li><span>{{$follow->collect_num}}</span>收藏</li>
-                      <li><span>{{$follow->fans_num}}</span>粉丝</li>
-                    </ul>
-                  </div>
-                  @if($follow->has_follow)
-                  <a href="javascript:void(0)" style="width:55px;background: #eee;color:#666;cursor: no-drop !important;padding: 8px 13px;border-radius: 5px;">已关注</a>
-                  @else
-                  <a href="javascript:void(0)" data-id="{{$follow->id}}" class="Button cancelFollow" style="width:60px;background: #636af3;color:#fff;">关注</a> 
-                  @endif
-                  </div>
+      @if($user->level==0)
+      <!--VIP专栏提示-->	
+      <div class="vip_prompt modal vip_prompt-member" id="vip-img"><a href="javascript:void(0);" id="vip_buy" class="vip_buy">开通VIP会员</a><a href="/vip/intro" class="vip_detail">了解VIP详情>></a></div>
+      @else
+      <div class="masonry" > 
+      @foreach ($users->follows as $follow)
+        <div class="item">
+          <div class="users">
+            <div class="border-bottom1" onclick='location="/member/{{$follow->id}}"'>
+              <div class="head"><a href="/member/{{$follow->id}}"><img style="margin-top:unset;" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>
+              <h2><a href="/member/{{$follow->id}}">{{$follow->nickname}}</a> </h2>
+                <div> 
+                @if($follow->zhiwei){{$follow->zhiwei}} @else 其他 @endif
+                -
+                {{$follow->city}}
+                <img style="width:32px;" src="{{$follow->vip_level}}" alt="VIP">
+                </div>
               </div>
-            @endforeach </div>
+            <div class="Statistics">
+              <ul>
+                <li><span>{{$follow->collect_num}}</span>收藏</li>
+                <li><span>{{$follow->fans_num}}</span>粉丝</li>
+              </ul>
             </div>
-          @endif
-        </section>
-
-      </div>
+            @if($follow->has_follow)
+            <a href="javascript:void(0)" style="width:55px;background: #eee;color:#666;cursor: no-drop !important;padding: 8px 13px;border-radius: 5px;">已关注</a>
+            @else
+            <a href="javascript:void(0)" data-id="{{$follow->id}}" class="Button cancelFollow" style="width:60px;background: #636af3;color:#fff;">关注</a> 
+            @endif
+            </div>
+        </div>
+      @endforeach 
+      @endif
       <!-- TA的关注结束 -->
 
 

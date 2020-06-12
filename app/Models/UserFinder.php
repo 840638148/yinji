@@ -573,7 +573,7 @@ class UserFinder extends Model
             ->first();
  
         if ($obj){
-            return '你已经发现过了';
+            return ['res'=>'你已经发现过了','num'=>'','status'=>false];
         }else{
             $data = [
                 'user_id' => $user_id,
@@ -599,7 +599,7 @@ class UserFinder extends Model
                 ];
                 UserPoint::create($point_log);  
             }
-            return $fx_sum;            
+            return ['res'=>'可以收藏','num'=>$fx_sum,'status'=>true];            
         }
 
     }

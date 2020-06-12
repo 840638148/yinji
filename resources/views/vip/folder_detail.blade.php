@@ -114,9 +114,9 @@
                 <span img="" floder_id="{{$folder_detail['article']['id']}}" class="folderattr null" title="{{$value['name']}}"></span>
                 {{--@foreach($issc as $isscs)
                 @if($isscs)--}}
-                <a href=" " class="Button2 fr to_find_floder_act add_finder_btn" data-id="{{$value['id']}}" data-img="" data-source="{{$folder_detail['article']['id']}}">收藏</a >
+                <a href="javascript:;" class="Button2 fr to_find_floder_act add_finder_btn" photo_url="{{$value['name']}}" data-id="{{$value['id']}}" data-img="" data-source="{{$folder_detail['article']['id']}}">收藏</a >
                 {{--@else
-                <a href=" " class="Button fr to_find_floder_act add_finder_btn have-disalbed" data-id="{{$value['id']}}" data-img="" data-source="{{$folder_detail['article']['id']}}">已收藏</a >
+                <a href="javascript:;" class="Button fr to_find_floder_act add_finder_btn have-disalbed" data-id="{{$value['id']}}" data-img="" data-source="{{$folder_detail['article']['id']}}">已收藏</a >
                 @endif
                 @endforeach--}}
             </li>
@@ -317,7 +317,7 @@ $(".add_finder_btn").click(function () {
   let user_finder_folder_id = $(this).attr('data-id');
   let title = $(this).attr('data-title');
   let photo_url = $(this).attr('data-img');
-  let photo_source = $(this).attr('data-source');
+  let source = $(this).attr('data-source');
   let is_sc=1;
   if (photo_url == '') {
     photo_url = $("#imageUrlJs").val();
@@ -325,8 +325,9 @@ $(".add_finder_btn").click(function () {
   if (title == '') {
     title = $("#imgtitle").val();
   }
+
   $.ajax({
-    url: '/vip/add_finder',
+    url: '/vip/finder_collect',
     type: 'POST',
     dataType: 'json',
     data: {
@@ -334,22 +335,21 @@ $(".add_finder_btn").click(function () {
       user_finder_folder_id:user_finder_folder_id,
       title:title,
       photo_url:photo_url,
-      photo_source:photo_source,
+      source:source,
       is_sc:is_sc,
     },
     success: function (data) {
       if (data.status_code == 0) {
-        layer.msg('收藏成功',{skin: 'intro-login-class layui-layer-hui'})
+        layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
         that.text('已收藏')
         that.removeClass('Button2')
         that.addClass('Button')
         that.addClass('have-disalbed')
       } 
-      if(data.status_code == 100001) {
-      	
-      	layer.msg('已经收藏过了',{skin: 'intro-login-class layui-layer-hui'})
+      else{
+      	layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
       	that.text('已收藏')
-      	that.css('width','70px')
+      	// that.css('width','70px')
         that.removeClass('Button2')
         that.addClass('Button')
         that.addClass('have-disalbed')
@@ -367,17 +367,15 @@ $(document).on('click','.to_find_floder_act',function(ev){
   }
   $(".to_find_floder_act").data("open",1);
   $dom = $(this).parents("li");
-  _floder_id = $dom.find(".folderattr").attr("floder_id");
-  _title = $("#imgtitle").val();
-  $data = {};
-  $data.favor_id = _floder_id;
-  $data.img =  $dom.find('.folderattr').attr("img");
-  $data.img_title = _title;
-  $data.url = "http://yinji.nenyes.com/nerihu-sz.html";
-  $data.post_id = "17729";
+  photo_source = $dom.find(".folderattr").attr("floder_id");
+  user_finder_folder_id=$(this).attr('data-id');
+  title = null;
+  photo_url=$('.selected-image').attr('src');
+
+  // console.log(user_finder_folder_id,photo_url,photo_source);
 
 
-  $.post("http://yinji.nenyes.com/finderfuc?action=add_find_Collection",$data,function (_res) {
+ /* $.post("http://yinji.nenyes.com/finderfuc?action=add_find_Collection",$data,function (_res) {
 
     setTimeout(function () {
       $(".to_find_floder_act").removeData("open");
@@ -393,7 +391,7 @@ $(document).on('click','.to_find_floder_act',function(ev){
     if (_obj.error_code==1) {
       return false;
     }
-  })
+  })*/
   return false;
 
 })

@@ -120,27 +120,25 @@
       
       <div id="myTab1_Content0" >
         
-        <section class="wrapper">
-          <div class="mt30 home_box">
+        <section class="wrapper" style='width:1160px;'>
+          <div class="mt30 ">
 
-            <!--@if(!$user->is_vip)-->
+            @if($user->level==0)
               <!--VIP专栏提示-->	
             <div class="vip_prompt modal vip_prompt-member" id="vip-img"><a href="javascript:void(0);" id="vip_buy" class="vip_buy">开通VIP会员</a><a href="/vip/intro" class="vip_detail">了解VIP详情>></a></div>
-            <!--@endif-->
+            @else
             <div class="masonry" > @foreach ($user->follows as $follow)
               <div class="item">
                 <div class="users">
                   <div class="border-bottom1">
-                    {{--<div class="head"><a href="/vip/index/{{$follow->id}}"><img src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>--}}
-                    <div class="head"><a href="javascript:void(0)" onclick="showNoEnter()"><img style="margin-top:unset;" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>
-                    <h2><a href="/vip/index/{{$follow->id}}">{{$follow->nickname}}</a> </h2>
-                    <p style="position:relative;"> 
+                    <div class="head"><a href="/member/{{$follow->id}}"><img style="margin-top:unset;" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>
+                    <h2 style='line-height:0;'><a href="/member/{{$follow->id}}">{{$follow->nickname}}</a> </h2>
+                    <p style="margin-bottom:0;"> 
                       
                       @if($follow->zhiwei){{$follow->zhiwei}} @else 其他 @endif
                       -
                       {{$follow->city}}
-
-                    <span style="background:none;background: none;position: absolute;top: -3px;" class="VIP1"><img style="width:32px;" src="{{$follow->vip_level}}" alt=""></span> </p>
+                    <img style="width:32px;display:unset;" src="{{$follow->vip_level}}" alt=""> </p>
                     </div>
                   <div class="Statistics">
                     <ul>
@@ -151,7 +149,9 @@
                   <a href="javascript:void(0)" data-id="{{$follow->id}}" class="Button cancelFollow" style="width:60px;">取消关注</a> </div>
               </div>
             
-              @endforeach </div>
+              @endforeach 
+              @endif
+              </div>
           </div>
         </section>
 
@@ -170,16 +170,13 @@
             <div class="item">
               <div class="users">
                 <div class="border-bottom1">
-                  {{--<div class="head"><a href="/vip/index/{{$follow->id}}"><img src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>--}}
-                  <div class="head"><a href="javascript:void(0)" onclick="showNoEnter()"><img style="margin-top:unset;" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>
-                  <h2><a href="/vip/index/{{$follow->id}}">{{$follow->nickname}}</a> </h2>
-                  <p style="position:relative;"> 
-                    
+                  <div class="head"><a href="/member/{{$follow->id}}"><img style="margin-top:unset;" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" src="@if($follow->avatar) {{$follow->avatar}} @else /img/avatar.png @endif" alt="{{$follow->nickname}}" /></a></div>
+                  <h2 style='line-height:0;'><a href="/member/{{$follow->id}}">{{$follow->nickname}}</a> </h2>
+                  <p style="margin-bottom: 0;"> 
                     @if($follow->zhiwei){{$follow->zhiwei}} @else 其他 @endif
                     -
                     {{$follow->city}}
-
-                  <span style="background:none;background: none;position: absolute;top: -3px;" class="VIP1"><img style="width:32px;" src="{{$follow->vip_level}}" alt=""></span> </p>
+                  <img style="width:32px;display:unset;" src="{{$follow->vip_level}}" alt=""></p>
                   </div>
                 <div class="Statistics">
                   <ul>
@@ -398,9 +395,6 @@ $(document).ready(function(){
 
 
 <script type="text/javascript">
-  function showNoEnter(){
-    layer.msg('敬请期待！',{skin: 'intro-login-class layui-layer-hui'})
-  }
 
     $(document).ready(function(){
       //取消关注

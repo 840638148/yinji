@@ -118,13 +118,13 @@
             <ul>
                 
                 <li><i><img src="/images/vip_03.png" alt="月VIP会员"></i><h2>月VIP会员</h2><p>月度VIP会员尊享权益</p><span>尊贵表示</span><span>个人主页</span><span>限量下载</span><span>9折优惠</span>
-                    <button onclick="toMonth()">@if($user->level==1) 继费会员 @else 开通月会员 @endif</button>
+                    <button onclick="toMonth()" price='99' omit='108' class='yuevip' >@if($user->level==1) 继费会员 @else 开通月会员 @endif</button>
                 </li>
                 <li><i><img src="/images/vip_05.png" alt="月VIP会员"></i><h2>季VIP会员</h2><p>季度VIP会员尊享权益</p><span>10G大空间</span><span>海量下载</span><span>下载加速</span><span>85折优惠</span>
-                    <button style="background-color:blueviolet; " onclick="toSeason()">@if($user->level==2) 继费会员 @else 开通季会员 @endif</button>
+                    <button style="background-color:blueviolet; " class='jivip' price='288' omit='324' onclick="toSeason()">@if($user->level==2) 继费会员 @else 开通季会员 @endif</button>
                 </li>
                 <li><i><img src="/images/vip_07.png" alt="月VIP会员"></i><h2>年VIP会员</h2><p>年度VIP会员尊享权益</p><span>20G大空间</span><span>海量下载</span><span>上传图片</span><span>8折优惠</span>
-                    <button style="background-color:#16b387; " onclick="toYear()">@if($user->level==3) 继费会员 @else 开通年会员 @endif</button>
+                    <button style="background-color:#16b387; " class='nianvip' price='999' omit='1296' onclick="toYear()">@if($user->level==3) 继费会员 @else 开通年会员 @endif</button>
                 </li>
             </ul>
         </div>
@@ -260,16 +260,24 @@
 
 
     function toSeason(){
+        let price=$('.jivip').attr("price");
+        let omit=$('.jivip').attr("omit");
+        let c=parseInt(omit)-parseInt(price);
         $(".new_folder_box").show();
-        $('.vip_select li').removeClass('determine')
-        $('.vip_select li').eq(1).addClass('determine')
+        $('.vip_select li').removeClass('determine');
+        $('.vip_select li').eq(1).addClass('determine');
+        $(".vip_pay_msg").html("应付：<span>"+price+".00</span>元 ( 立省"+c+"元)");
         return false;
     }
 
     function toYear(){
+        let price=$('.nianvip').attr("price");
+        let omit=$('.nianvip').attr("omit");
+        let c=parseInt(omit)-parseInt(price);
         $(".new_folder_box").show();
-        $('.vip_select li').removeClass('determine')
-        $('.vip_select li').eq(2).addClass('determine')
+        $('.vip_select li').removeClass('determine');
+        $('.vip_select li').eq(2).addClass('determine');
+        $(".vip_pay_msg").html("应付：<span>"+price+".00</span>元 ( 立省"+c+"元)");
         return false;
     }
 
@@ -330,8 +338,8 @@
                     alert('请选择会员类型');
                     return false;
                 }
-                //window.location = '/vip/buy?vip_type=' + vip_type;
-                //return;
+                window.location = '/vip/pay?vip_type=' + vip_type;
+                return;
 
                 //submit the form
                 // console.log($('#pay_total').val())
@@ -355,9 +363,9 @@
                             if ('alipay' == data.data.payment_code) {
                                 window.location = data.data.redirect_url;
                             } else {
-                                alert('微信支付返回二维码地址');
+                                layer.msg('请重新点击会员类型',{zIndex:999999999,time: 1500,skin: 'intro-login-class layui-layer-hui'});
                             }
-                            layer.closeAll();
+                            // layer.closeAll();
                         } else {
                             alert(data.message);
                         }
