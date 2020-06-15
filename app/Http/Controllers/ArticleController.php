@@ -199,11 +199,7 @@ class ArticleController extends Controller
         global $articles;
         $articles = Article::getArticles($request, $category_ids);
 
-        // foreach($articles as $k=>$articleslist){
-        //     $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $articleslist['id'])->avg('stars');
-        //     $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
-        // }
-        // dd($articles);
+
         $data = [
             'user' => $this->getUserInfo(),
             'lang' => $lang,
@@ -284,11 +280,7 @@ class ArticleController extends Controller
         $topics = ArticleCategory::getTopics($id);
 
         $articles = Article::getArticles($request, $category_ids);
-        // foreach($articles as $k=>$articleslist){
-        //     $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $articleslist['id'])->avg('stars');
-        //     $articles[$k]['starsavg'] = sprintf("%.1f",$articles[$k]['starsavg']);//保留小数点一位
-        // }
-        // dd($topics);
+
         $data = [
             'user' => $this->getUserInfo(),
             'lang' => $lang,
@@ -360,14 +352,14 @@ class ArticleController extends Controller
         if (Auth::check()) {
             $user_finder_folders = UserFinderFolder::getSelectOptionsByUserId(Auth::id());
             $user_collect_folders = UserCollectFolder::getSelectOptionsByUserId(Auth::id());
-            // dd($user_finder_folders);
+            
         } else {
             $user_finder_folders = [];
             $user_collect_folders = [];
         }
         $comments_total = ArticleComment::where('comment_id', $id)->where('display', '1')->count();
         $comments_all=ArticleComment::where('comment_id', $id)->where('display', '1')->where('content','!=','')->count();//评论条数
-        // dd($comments_all);
+        
         $comments = ArticleComment::where('comment_id', $id)
             ->where('display', '1')
             ->orderBy('created_at', 'desc')
@@ -421,7 +413,7 @@ class ArticleController extends Controller
                 $topics =ArticleCategory::getTopics($cid);
             }
         }
-        // dd($topics);
+        
         $data = [
             'user' => $this->getUserInfo(),
             'lang' => $lang,
@@ -436,7 +428,6 @@ class ArticleController extends Controller
             'hot_tags' => $hot_tags,
             'is_like' => $is_like,
             'is_collect' => $is_collect,
-            // 'iscollects' => $iscollects,
             'is_subscription' => $is_subscription,
             'user_collect_folders' => $user_collect_folders,
             'user_finder_folders' => $user_finder_folders,
@@ -475,45 +466,7 @@ class ArticleController extends Controller
             $category_ids = [$request->category_id];
             
             $articles =Article::getMoreArticles($request, $category_ids);
-            // dd($articles);
-            /*foreach ($articles as $k=>$article) {
-                $category_html = '';
-                if ($article->category) {
-                    foreach ($article->category as $category) {
-                        $category_html .= ' <a href="/article/category/' .$category['id'] . '" rel="category tag">' .$category['name'] . '</a>';
-                    }
-                }
-                if ($article->static_url) {
-                    $url = url('/article/' . $article->static_url);
-                } else {
-                    $url = url('/article/detail/' . $article->id);
-                }
-                $tmp_html = '<li class="layout_li ajaxpost">
-                        <article class="postgrid">
-                        <div class="interior_dafen">'.($article->article_avg !="" || $article->article_avg !=null ? sprintf("%.1f",$article->article_avg) : "5.0").'</div>
-                        <figure>
-                        <a href="' . $url . '" title="' .get_article_title($article) . '" target="_blank">
-                            <img class="thumb" src="' .get_article_thum($article) . '" data-original="' .get_article_thum($article) . '" alt="' .get_article_title($article) . '" style="display: block;">
-                        </a>
-                    </figure>
-                    <div class="chengshi">' .get_article_location($article) . '</div>
-                    <h2>
-                        <a href="' . $url . '" title="' .get_article_title($article) . '" target="_blank">
-                            <div style="font-size:12px; line-height:30px; color:#999; font-family:Georgia , Times, serif;">' .get_article_title($article, 1) . '</div>
-                            <div style=" color:#666; line-height:24px;">' .get_article_title($article, 2) . '</div>
-                        </a>
-                    </h2>
-                    <div class="homeinfo">
-                        <!--分类-->
-                        ' . $category_html . '
-                        <!--时间-->
-                        <span class="date">' .str_limit($article->release_time, 10, "") . '</span>
-                        <!--点赞-->
-                        <span title="" class="like"><i class="icon-eye"></i><span class="count">' .$article->view_num . '</span></span> </div>
-                    </article>
-                </li>';
-                $data[] = $tmp_html;
-            }*/
+
             foreach ($articles as $k=>$article) {
                 $data[] = $article;
             }
@@ -713,7 +666,6 @@ class ArticleController extends Controller
             return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
         }
 
-        //$user = $this->getUserInfo();
         $user = User::find(Auth::id());
         $article = Article::find($request->article_id);
         if (!$article->vip_download) {
@@ -725,7 +677,7 @@ class ArticleController extends Controller
         $koudown=User::getKouDownloadNum($user->id);
         $has_koudown=UserDownRecord::where('user_id', $user->id)->where('is_free','2')->where('created_at', '>=', $today_start)->where('created_at', '<', $today_end)->count();
         $leftkou=USer::getKouSum($user->id);
-        // dd($user->left_points);
+        
         //检查是否可以兑换
         if($user->left_points>10){
             // dd($leftkou);

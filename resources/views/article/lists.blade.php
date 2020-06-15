@@ -107,29 +107,32 @@
     window.type='';
     window.sjx='';
     $(document).on('click','.allsort',function(){
+        page=1;
         let that=$(this);
         type=that.attr('so');
         sjx=that.find(".arrow").attr('aw');
         let url = window.location.href;
- 
         // let types=url.split('/')[3];//分类名
         let category_id=url.split('/')[5];//分类id
         
-        console.log(type,sjx,category_id); 
+        console.log(page); 
 
         layer.closeAll();  
             $.ajax({
                 url: '/article/allsortlist',
                 type: 'POST',
                 dataType: 'json',
-                data: {type:type,sjx:sjx,category_id:category_id},
+                data: {type:type,sjx:sjx,category_id:category_id,},
                 success: function (data) {
                     // window.vm.$data.list=data.data;
                     console.log(data)
                     //改变排序的值
                     if (data.status_code == 0) {
-                       console.log('传过来了');
-                       if(that.find(".arrow").attr('aw')=='desc' && that.find(".arrow").html()=='↓'){
+                        isEnd=false;
+                        // 
+                        page++;
+                        console.log('传过来了');
+                        if(that.find(".arrow").attr('aw')=='desc' && that.find(".arrow").html()=='↓'){
                                 that.find(".arrow").attr('aw','asc');
                                 that.find(".arrow").html('↑');  
                         }
@@ -152,95 +155,81 @@
             });
     })
 
- 
 
+    var page = 2;isEnd = false
+    function getMoreArticle(){
+        var h = `<li class="layout_li ajaxpost">
+            <div class="interior_dafen">5.0</div>
+                <article class="postgrid">
+                    <figure>
+                        <a href="/article/detail/1107" title="贝聿铭 | 梅萨实验室 , 现代主义建筑的回响" target="_blank">
+                            <img class="thumb" src="http://120.79.234.88/photo/images/00-CN/Leoh%20Ming%20Pei/02-Mesa%20Lab/01.jpg" data-original="http://120.79.234.88/photo/images/00-CN/Leoh%20Ming%20Pei/02-Mesa%20Lab/01.jpg" alt="贝聿铭 | 梅萨实验室 , 现代主义建筑的回响" style="display: block;">
+                        </a>
+                    </figure>
+                    <div class="chengshi">科罗拉多</div>
+                    <h2>
+                        <a href="/article/detail/1107" title="贝聿铭 | 梅萨实验室 , 现代主义建筑的回响" target="_blank">
+                            <div style="font-size:12px; line-height:30px; color:#999; font-family:Georgia , Times, serif;">贝聿铭 </div>
+                            <div style=" color:#666; line-height:24px;"> 梅萨实验室 , 现代主义建筑的回响</div>
+                        </a>
+                    </h2>
+                    <div class="homeinfo">
+                        <!--分类-->
+            <a href="/article/category/1" rel="category tag">建筑</a>
+            <a href="/article/category/11" rel="category tag">公用建筑</a>
+            <!--时间-->
+            <span class="date">2017-06-08</span>
+            <!--点赞-->
+            <span title="" class="like"><i class="icon-eye"></i><span class="count">7575</span></span> </div>
+            </article>
+            </li>`
 
+            var arr = [];
+            for(var i = 0; i< 6;i++){
+            arr.push(h)
+            }
 
+            return arr.join('')
+    }
 
-
-
-
-
-
-
-
-        var page = 2;isEnd = false
-        function getMoreArticle(){
-            var h = `<li class="layout_li ajaxpost">
-                <div class="interior_dafen">5.0</div>
-                    <article class="postgrid">
-                        <figure>
-                            <a href="/article/detail/1107" title="贝聿铭 | 梅萨实验室 , 现代主义建筑的回响" target="_blank">
-                                <img class="thumb" src="http://120.79.234.88/photo/images/00-CN/Leoh%20Ming%20Pei/02-Mesa%20Lab/01.jpg" data-original="http://120.79.234.88/photo/images/00-CN/Leoh%20Ming%20Pei/02-Mesa%20Lab/01.jpg" alt="贝聿铭 | 梅萨实验室 , 现代主义建筑的回响" style="display: block;">
-                            </a>
-                        </figure>
-                        <div class="chengshi">科罗拉多</div>
-                        <h2>
-                            <a href="/article/detail/1107" title="贝聿铭 | 梅萨实验室 , 现代主义建筑的回响" target="_blank">
-                                <div style="font-size:12px; line-height:30px; color:#999; font-family:Georgia , Times, serif;">贝聿铭 </div>
-                                <div style=" color:#666; line-height:24px;"> 梅萨实验室 , 现代主义建筑的回响</div>
-                            </a>
-                        </h2>
-                        <div class="homeinfo">
-                            <!--分类-->
-                <a href="/article/category/1" rel="category tag">建筑</a>
-                <a href="/article/category/11" rel="category tag">公用建筑</a>
-                <!--时间-->
-                <span class="date">2017-06-08</span>
-                <!--点赞-->
-                <span title="" class="like"><i class="icon-eye"></i><span class="count">7575</span></span> </div>
-                </article>
-                </li>`
-
-                var arr = [];
-                for(var i = 0; i< 6;i++){
-                arr.push(h)
-                }
-
-                return arr.join('')
-        }
-
-
-
-        $(window).on('scroll',function(e){
-            var bodyHeight=document.body.scrollHeight==0?document.documentElement.scrollHeight:document.body.scrollHeight;
-                if(bodyHeight - $('body').scrollTop() -10 < window.innerHeight && !isEnd){
-                    let h  = '';
-                    let url = window.location.href;
-                    // let category=
-                    let types =url.split('/').slice(3).join('/');
-                    let category_id=url.split('/')[5];
-                    // category_id =types.substr(-2,2);
-                    // console.log(newurl)
-                    if(type == '' || sjx =='' || category_id==''){
-                        urls=url + '_ajax?page=' + page;
-                    }else if(category_id != ''){
-                        urls=url + '_ajax?page=' + page+'&category_id='+category_id+'&type='+type+'&sjx='+sjx;
-                    }else{
-                        urls=url + '_ajax?page=' + page+''+'&type='+type+'&sjx='+sjx;
+    //分页
+    $(window).on('scroll',function(e){
+        var bodyHeight=document.body.scrollHeight==0?document.documentElement.scrollHeight:document.body.scrollHeight;
+        if(bodyHeight - $('body').scrollTop() -10 < window.innerHeight && !isEnd){
+            let h  = '';
+            let url = window.location.href;
+            let types =url.split('/').slice(3).join('/');
+            let category_id=url.split('/')[5];
+            
+            if(type == '' || sjx =='' || category_id==''){
+                urls=url + '_ajax?page=' + page;
+            }else if(category_id != ''){
+                urls=url + '_ajax?page=' + page+'&category_id='+category_id+'&type='+type+'&sjx='+sjx;
+            }else{
+                urls=url + '_ajax?page=' + page+''+'&type='+type+'&sjx='+sjx;
+            }
+            $.ajax({
+                async: false,
+                url: urls,
+                type: 'POST',
+                dataType: 'json',
+                data: {type:type,sjx:sjx,category_id:category_id},
+                success: function (data) {
+                    // console.log(data);
+                    if (data.status_code == 0) {
+                        page++;
+                        // h =  data.data.join('')
+                        h =  data.data
+                        $('.article-content').append(h)
+                        if(data.data.length<15){isEnd = true}else{isEnd=false}
+                    } else {
+                        isEnd = true
+                        alert(data.message);
                     }
-                    $.ajax({
-                        async: false,
-                        url: urls,
-                        type: 'POST',
-                        dataType: 'json',
-                        data: {type:type,sjx:sjx,category_id:category_id},
-                        success: function (data) {
-                            console.log(data);
-                            if (data.status_code == 0) {
-                                page++;
-                                // h =  data.data.join('')
-                                h =  data.data
-                                $('.article-content').append(h)
-                                if(data.data.length<15){isEnd = true}else{isEnd=false}
-                            } else {
-                                isEnd = true
-                                alert(data.message);
-                            }
-                        }
-                    });
                 }
-            })
+            });
+        }
+    })
 
     </script>
 
