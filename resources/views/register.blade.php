@@ -38,7 +38,7 @@ body.login div#login h1 a { -webkit-background-size: 85px 85px; background-size:
       <label for="user_phone">
         <input type="tel" name="user_phone" maxlength='11' id="user_phone" class="input" value="" size="20" onkeyup="checkIsPhone(event)" placeholder="输入手机号">
         <span class="click_email">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱</span>
-        <input type="email" name="email" id="user_email" class="input" value="" size="20" onkeyup="checkIsEmail(event)" placeholder="输入邮箱">
+        <input type="email" name="email" id="user_email" class="input" value="" size="20" placeholder="输入邮箱">
         <span style="padding: 15px 27px;" class="click_phone">手&nbsp;机&nbsp;号</span>
       </label>
     </p>
@@ -63,10 +63,12 @@ body.login div#login h1 a { -webkit-background-size: 85px 85px; background-size:
     <p>
       <label for="user_login">
         <input type="text" class="input" value="" id="user_login" name="user_login" size="20" placeholder="用户的昵称。">
+        <p style='font-size:14px;margin-top:-18px;color:#ccc;'>(非会员用户不能更改昵称)</p>
       </label>
     </p>
     <p>
         <select style="width:292px;border: 1px solid #ddd;height: 48px;line-height: 48px;color:#666;border-radius: 5px;" id="zhiwei" name="zhiwei" value="职位">
+            <option name="jzs" value="" >请选择您的职业</option>
             <option name="jzs" value="建筑师" >建筑师</option>
             <option name="snsjs" value="室内设计师">室内设计师</option>
             <option name="rzsjs" value="软装设计师">软装设计师</option>
@@ -74,12 +76,12 @@ body.login div#login h1 a { -webkit-background-size: 85px 85px; background-size:
             <option name="sys" value="摄影师">摄影师</option>
             <option name="mtr" value="媒体人">媒体人</option>
             <option name="fckf" value="地产开发">地产开发</option>
-            <option name="qt" value="其他" selected>其他</option>    
+            <option name="qt" value="其他">其他</option>    
         </select>
     </p>
     <p style="padding-left:4px;"> 
-        省：<select name='provinces' id="provinces" style="height: 48px;border-radius: 5px;width: 110px;">  <option value="" id="selectpro"  >请选择省份</option></select>  
-        市：<select id="citys" name='citys' style="height: 48px;border-radius: 5px;width: 110px;"><option value="">请选择市</option></select> 
+        地区：<select name='provinces' id="provinces" style="height: 48px;border-radius: 5px;width: 116px;">  <option value="" id="selectpro"  >请选择省份</option></select>  
+        <select id="citys" name='citys' style="height: 48px;border-radius: 5px;width: 116px;"><option value="">请选择市</option></select> 
     </p>
     <p>
       <label for="pass1" style="position:relative">
@@ -109,7 +111,7 @@ $(function() {
         dataType: "json",  
         success: function(data) {  
             //遍历json数据，组装下拉选框添加到html中
-            $("#provinces").append("<option value=''>请选择省</option>");  
+            $("#provinces").append("<option value=''>请选择省份</option>");  
             $.each(data, function(i, item) {  
                 $("#provinces").append("<option value='" + item.province_num + "'>" + item.province_name + "</option>");  
             });
@@ -352,7 +354,22 @@ $('.verification_email').click(function () {
                 return false;
             }
         }
-
+        if(user_login=='' || user_login == null || user_login == undefined){
+            layer.msg('请填写昵称',{time:1500,skin: 'intro-login-class layui-layer-hui'});
+            return false;
+        }
+        if(zhiwei=='' || zhiwei == null || zhiwei == undefined){
+            layer.msg('请填写职位',{time:1500,skin: 'intro-login-class layui-layer-hui'});
+            return false;
+        }    
+        if(provinces=='' || provinces == null || provinces == undefined){
+            layer.msg('请填写省份',{time:1500,skin: 'intro-login-class layui-layer-hui'});
+            return false;
+        }
+        if(city=='' || city == null || city == undefined){
+            layer.msg('请填写市县',{time:1500,skin: 'intro-login-class layui-layer-hui'});
+            return false;
+        }
         $.ajax({
             url: '/user/register',
             type: 'POST',

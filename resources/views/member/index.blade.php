@@ -371,20 +371,17 @@
 </div>
     
   <script type="text/javascript">
-    function alert1(){
-      layer.msg('敬请期待！',{time: 1500,skin: 'intro-login-class layui-layer-hui'});
-    }
-    
+
     function selectItem(index){
-        $('.dingyue-item .select-item').hide()
-        $($('.dingyue-item')[index]).find('.select-item').show()
-        localStorage.setItem("selectdD", index);
+      $('.dingyue-item .select-item').hide()
+      $($('.dingyue-item')[index]).find('.select-item').show()
+      localStorage.setItem("selectdD", index);
     }
 
     function selectItemGuanZhu(index){
-        $('.guanzhu-item .select-item').hide()
-        $($('.guanzhu-item')[index]).find('.select-item').show()
-        localStorage.setItem("selectdG", index);
+      $('.guanzhu-item .select-item').hide()
+      $($('.guanzhu-item')[index]).find('.select-item').show()
+      localStorage.setItem("selectdG", index);
     }
 
 
@@ -405,53 +402,33 @@
 
         //最多显示8条数据
         for(var i=0;i<$('.my-collection .collection-item').length;i++){
-            if(i>7){
-                $($('.my-collection .collection-item')[i]).hide()
-            }
+          if(i>7){
+            $($('.my-collection .collection-item')[i]).hide()
+          }
         }
 
         for(var i=0;i<$('.my-finder .collection-item').length;i++){
-            if(i>7){
-                $($('.my-finder .collection-item')[i]).hide()
-            }
+          if(i>7){
+            $($('.my-finder .collection-item')[i]).hide()
+          }
         }
 
       //取消订阅
-
       $(".cancelSubscription").click(function(e){
-
         var designer_id = $(this).attr('data-id');
-
         $.ajax({
-
           url: '/member/cancel_subscription',
-
           type: 'POST',
-
           dataType: 'json',
-
           data: {_token:'{{csrf_token()}}',designer_id:designer_id},
-
           success: function (data) {
-
             if (data.status_code == 0) {
-
               window.location.reload();
-
             } else {
-
               alert(data.message);
-
-
-
             }
-
           }
-
         });
-
-
-
       });
 
     });
@@ -522,6 +499,7 @@
     </p>
     <p>职位：
       <select style="width:245px;border: 1px solid #ddd;height:42px;line-height:27px;color:#666;margin-top:10px;border-radius: 5px;" id="zhiwei" name="zhiwei" value="职位">
+          <option name="jzs" value="" >请选择您的职业</option>
           <option name="jzs" value="建筑师" >建筑师</option>
           <option name="snsjs" value="室内设计师">室内设计师</option>
           <option name="rzsjs" value="软装设计师">软装设计师</option>
@@ -529,7 +507,7 @@
           <option name="sys" value="摄影师">摄影师</option>
           <option name="mtr" value="媒体人">媒体人</option>
           <option name="fckf" value="地产开发">地产开发</option>
-          <option name="qt" value="其他" selected>其他</option>    
+          <option name="qt" value="其他">其他</option>    
       </select>
     </p>
     <p style="margin-top:20px ;"> 
@@ -542,6 +520,31 @@
     </p>
   </form>
 </div>
+
+
+<!-- 邮箱注册第一次进入个人主页出现弹窗 -->
+<div class='emailxx' style='width: 340px;height: 246px;background: #fff;position:absolute;top:40%;left: 40%;z-index:9999;padding:20px;border-radius: 10px;display:none;'>
+  <form id="info-form" class="contribute_form" role="form" method="POST" action="/member/one_check"  onsubmit="return checkforms()">
+
+    <p style="position:relative;width:292px;margin: 10px 0;">
+      <label for="user_phone">
+        <input type="tel" style='border-radius: 5px;' name="user_phone" maxlength='11' id="user_phone" class="input" value="" size="20" placeholder="输入手机号">
+      </label>
+    </p>
+    <p style="width:292px;">
+      <label class='code_tel' for="verification_code" style="position:relative">
+        <input type="text" name="verification_code" style="height:46px;border-radius: 5px;" id="verification_code" class="input" value="" size="20" placeholder="输入手机验证码">
+        <input style="padding: 0 19px;height:46px;" name="发送验证码" type="button" value="获取验证码" class="verification">
+      </label>
+    </p>
+
+    <p class="submit0" style='margin-top:23px;'>
+      <input type="hidden" name="_token" value="{{csrf_token()}}">
+      <button type="button" id="wp-submit-2" class="button button-primary button-large" value=""> 确定 </button>
+    </p>
+  </form>
+</div>
+
 <script src="/js/laravel-sms.js"></script>
 <script src="/js/layer.js"></script>
 <script src="/js/member.js"></script>
@@ -591,10 +594,14 @@
         dataType: "json",  
         success: function(data) {  
           // console.log(data)
-          if(data.status_code == 100){
-            // layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
+          if(data.status_code == 200){
             $('.lzcfg').show(500)
             $('.txxx').show(500)
+            $('.emailxx').empty()
+          }else if(data.status_code == 100){
+            $('.lzcfg').show(500)
+            $('.emailxx').show(500)
+            $('.txxx').empty()
           }else{
             // layer.msg(data.message,{time: 1500,skin: 'intro-login-class layui-layer-hui'});
           }
@@ -688,31 +695,70 @@
       }
     }
 
-      $.ajax({
-          url: '/member/one_check',
-          type: 'POST',
-          dataType: 'json',
-          data: {
-              mobile: mobile,
-              nickname: nickname,
-              zhiwei: zhiwei,
-              provinces: provinces,
-              citys: citys,
-              verification_code: verification_code,
-              _token: "{{csrf_token()}}",
-          },
-          success: function (data) {
-              //console.log(data.status_code);
-              if (data.status_code == 100) {
-                  layer.msg(data.message,{time:1500,skin: 'intro-login-class layui-layer-hui'});
-                  setTimeout(function () {
-                      location.href = "/member";
-                  },1600);
-              }else{
-                  layer.msg(data.message,{time:1500,skin: 'intro-login-class layui-layer-hui'});
-              }
-          }
-      });
+    $.ajax({
+        url: '/member/one_check',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            mobile: mobile,
+            nickname: nickname,
+            zhiwei: zhiwei,
+            provinces: provinces,
+            citys: citys,
+            verification_code: verification_code,
+            _token: "{{csrf_token()}}",
+        },
+        success: function (data) {
+            //console.log(data.status_code);
+            if (data.status_code == 100) {
+                layer.msg(data.message,{time:1500,skin: 'intro-login-class layui-layer-hui'});
+                setTimeout(function () {
+                    location.href = "/member";
+                },1600);
+            }else{
+                layer.msg(data.message,{time:1500,skin: 'intro-login-class layui-layer-hui'});
+            }
+        }
+    });
+    
+  });
+
+  $("#wp-submit-2").click(function () {
+    let mobile = $.trim($('#user_phone').val());
+    let verification_code = $.trim($('#verification_code').val());
+
+    if(mobile=='' || mobile == null || mobile == undefined){
+      layer.msg('请填写手机号',{time:1500,skin: 'intro-login-class layui-layer-hui'});
+      return false;
+    }else
+    if(mobile!='' && mobile != null && mobile != undefined){
+      if (!/1[3-8][0-9]{9}/.test(mobile)) {
+          layer.msg('请输入正确手机号',{time:1500,skin: 'intro-login-class layui-layer-hui'});
+          return false;
+      }
+    }
+
+    $.ajax({
+        url: '/member/one_check',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            mobile: mobile,
+            verification_code: verification_code,
+            _token: "{{csrf_token()}}",
+        },
+        success: function (data) {
+            //console.log(data.status_code);
+            if (data.status_code == 100) {
+                layer.msg(data.message,{time:1500,skin: 'intro-login-class layui-layer-hui'});
+                setTimeout(function () {
+                    location.href = "/member";
+                },1600);
+            }else{
+                layer.msg(data.message,{time:1500,skin: 'intro-login-class layui-layer-hui'});
+            }
+        }
+    });
     
   });
 

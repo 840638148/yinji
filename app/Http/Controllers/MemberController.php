@@ -109,23 +109,16 @@ class MemberController extends Controller
         if(!Auth::check()){
             return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
         }
-
-        // $user=User::where('id',Auth::id())->where('username','like','%ohPM_%')->where('created_at','<','2020-06-02 00:00:00')->where('mobile','=','')->first();
-        // // dd($user);
-        // if($user->one_visited==1 || $user){
-        //     return Output::makeResult($request, null, 100,'欢迎来到印际,请移步填写信息');
-        // }else{
-        //     return Output::makeResult($request, null, 200,'欢迎回来');
-        // }
-
-
+        
         $res=User::find(Auth::id());
         $info=User::where('id',Auth::id())->where('username','like','%ohPM_%')->where('created_at','<','2020-06-07 00:00:00')->where('mobile','=','')->first();
         // dd($user);
-        if($res->one_visited==1 || $info){
-            return Output::makeResult($request, null, 100,'欢迎来到印际,请移步填写信息');
+        if($res->one_visited==1 && !empty($res->email)){
+            return Output::makeResult($request, null, 100,'邮箱注册的');
+        }elseif($info){
+            return Output::makeResult($request, null, 200,'微信注册的');
         }else{
-            return Output::makeResult($request, null, 200,'欢迎回来');
+            return Output::makeResult($request, null, 500,'欢迎回来');
         }
         
     }
@@ -163,7 +156,27 @@ class MemberController extends Controller
         $province=Db::table("province")->where('province_num',$request->provinces)->value('province_name');
         $city=Db::table("city")->where('city_num',$request->citys)->value('city_name');
         $edit_info['city']=$province.'-'.$city;
-        $result = User::where('id',Auth::id())->update(['nickname' =>$edit_info['nickname'],'mobile' =>$edit_info['mobile'],'zhiwei' =>$edit_info['zhiwei'],'city' =>$edit_info['city'],'one_visited'=>2,'nicksum'=>0]); 
+
+        if($edit_info['nickname']){
+            $result = User::where('id',Auth::id())->update(['nickname' =>$edit_info['nickname'],'mobile' =>$edit_info['mobile'],'zhiwei' =>$edit_info['zhiwei'],'city' =>$edit_info['city'],'one_visited'=>2,'nicksum'=>0]);        
+        }else{
+            $result = User::where('id',Auth::id())->update(['mobile' =>$edit_info['mobile'],'one_visited'=>2,'nicksum'=>0]);        
+            
+        }
+
+        if($edit_info['mobile']){
+            $user = User::find(Auth::id());
+            $point_log = [
+                'user_id' => $user->id,
+                'type' => '0',
+                'point' => 10,
+                'remark' => '首绑手机',
+            ];
+            UserPoint::create($point_log);
+            $user->points=$user->left_points+10;
+            $user->left_points=$user->left_points+10;
+            $user->save();
+        }
 
         if($result){
             return Output::makeResult($request, null, 100,'填写完毕');
@@ -434,7 +447,8 @@ class MemberController extends Controller
 
 
     public function interest(Request $request)
-    {
+    {   
+        $this->checkLogin();
         $lang = $request->session()->get('language') ?? 'zh-CN';
 
         $user = $this->getUserInfo();

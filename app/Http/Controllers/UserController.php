@@ -214,16 +214,30 @@ class UserController extends Controller
         $citys=$province.'-'.$city;
         
      
-        $user = [
-            'username'     => $request->user_login,
-            'nickname'     => $request->user_login,
-            'password'     => bcrypt($request->pass1),
-            'mobile'       => $request->user_phone,
-            'register_key' => '',
-            'zhiwei' => $request->zhiwei,
-            'city' => $citys,
-            'email' => $request->email,
-        ];
+        if($request->user_phone){
+            $user = [
+                'username'     => $request->user_login,
+                'nickname'     => $request->user_login,
+                'password'     => bcrypt($request->pass1),
+                'mobile'       => $request->user_phone,
+                'register_key' => '',
+                'zhiwei' => $request->zhiwei,
+                'city' => $citys,
+                'email' => $request->email,
+                'one_visited'=>2
+            ];
+        }else{
+            $user = [
+                'username'     => $request->user_login,
+                'nickname'     => $request->user_login,
+                'password'     => bcrypt($request->pass1),
+                'register_key' => '',
+                'zhiwei' => $request->zhiwei,
+                'city' => $citys,
+                'email' => $request->email,
+            ];            
+        }
+        
         $result = User::createUser($user);
         if (true === $result) {
             $user=User::where("username",$request->user_login)->first();
