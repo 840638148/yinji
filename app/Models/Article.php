@@ -186,6 +186,17 @@ class Article extends Model
         return $articles;
     }
 
+    public static function getSelectOptions()
+    {
+        $options = self::select('id','title_name_cn as text')->get();
+        $selectOption = [];
+        foreach ($options as $option){
+            $selectOption[$option->id] = $option->text;
+        }
+        return $selectOption;
+    }
+
+
     public static function getArticles(& $request, $category_ids = [], $keyword = null)
     {
         // dd($request->all());

@@ -10,7 +10,9 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Illuminate\Http\Request;
 use Validator;
-
+use App\Models\Designer;
+use App\Models\Article;
+use App\Models\News;
 use App\Models\Popularize as CurrentModel;
 
 class PopularizeController extends BaseController
@@ -99,6 +101,9 @@ class PopularizeController extends BaseController
         );
         $form->text('ad_title', '标题');
         $form->text('ad_url', '跳转地址');
+        $form->select('designer_id', '设计师ID')->options(Designer::getSelectOptions());
+        $form->select('article_id', '文章ID')->options(Article::getSelectOptions());
+        $form->select('new_id', '新闻ID')->options(News::getSelectOptions());
         $form->image('ad_img', '图片')->uniqueName()->move('/public/photo/images/popularize');
         $form->radio('display', '是否启用')->options(['0' => '启用', '-1'=> '隐藏'])->default('0');
 

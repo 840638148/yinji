@@ -37,6 +37,18 @@ class News extends Model
         return $this->hasOne(NewsDetail::class);
     }
     
+
+    public static function getSelectOptions()
+    {
+        $options = self::select('id','title_designer_cn as text')->get();
+        $selectOption = [];
+        foreach ($options as $option){
+            $selectOption[$option->id] = $option->text;
+        }
+        return $selectOption;
+    }
+
+
     public static function formatTitle(&$obj, $type='cn')
     {
         $title_designer = "title_designer_{$type}";
