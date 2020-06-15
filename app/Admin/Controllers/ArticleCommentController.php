@@ -71,7 +71,7 @@ class ArticleCommentController extends BaseController
             return '用户不存在';
         });
 
-
+        $grid->stars('评分')->sortable();
         $grid->content('评论内容')->display(function ($content) {
             return str_limit($content, 50, '...')?? '无评论';
         })->expand(function ($model) {
