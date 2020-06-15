@@ -44,6 +44,15 @@ class ArticleCommentController extends BaseController
             $actions->disableEdit();
         });
 
+        $grid->filter(function($filter){
+            // 去掉默认的id过滤器
+            $filter->disableIdFilter();
+
+            // 在这里添加字段过滤器
+            $filter->equal('display', '审核状态');
+
+        });
+
         $grid->id('ID')->sortable();
         $grid->comment_id('文章ID')->sortable();
         $grid->comment_title('文章标题')->sortable()->display(function () {
