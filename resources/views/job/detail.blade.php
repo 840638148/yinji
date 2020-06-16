@@ -84,7 +84,7 @@
 				<p>公司项目 Projects</p >
 			</div>
 
-				<img onclick="location='{{$list['link_url']}}'" class="img-responsive" src="/uploads/{{$list['project_photo']}}" title="{{$list['project_name']}}" name="{{$list['project_name']}}" />
+				<img onclick="location='/article/{{$list['link_url']}}'" class="img-responsive" src="/uploads/{{$list['project_photo']}}" title="{{$list['project_name']}}" name="{{$list['project_name']}}" />
   
 				<p class="detail" >
 					<span>{{$list['project_name']}}</span>	

@@ -10,7 +10,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Http\Request;
 use Validator;
-
+use App\Models\Article;
 use App\Models\CompanyProject as CurrentModel;
 
 class CompanyProjectController extends BaseController
@@ -64,7 +64,8 @@ class CompanyProjectController extends BaseController
         $form->select('company_id', '公司名称')->options(Company::getSelectOptions());
         $form->text('project_name', '项目名称');
         $form->image('project_photo', '项目图片')->uniqueName()->move('public/photo/images/custom_thum/');
-        $form->url('link_url', '项目链接');
+        // $form->url('link_url', '项目链接');
+        $form->select('link_url', '项目链接')->options(Article::getJobUrl());
         $form->radio('display', '公开度')->options(['0' => '公开', '-1'=> '保密'])->default('0');
         //$form->display('created_at', 'Created At');
         //$form->display('updated_at', 'Updated At');

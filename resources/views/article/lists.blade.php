@@ -200,8 +200,9 @@
             let url = window.location.href;
             let types =url.split('/').slice(3).join('/');
             let category_id=url.split('/')[5];
-            
-            if(type == '' || sjx =='' || category_id==''){
+            // 他不应该走第一条吗，怎么变成第二条了
+            // console.log(type,sjx,)我知道了
+            if(type == '' || sjx =='' || category_id=='' || category_id==undefined ){
                 urls=url + '_ajax?page=' + page;
             }else if(category_id != ''){
                 urls=url + '_ajax?page=' + page+'&category_id='+category_id+'&type='+type+'&sjx='+sjx;
