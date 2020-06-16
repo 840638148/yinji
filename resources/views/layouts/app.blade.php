@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta http-equiv="Cache-Control" content="no-transform">
 <meta http-equiv="Cache-Control" content="no-siteapp">
-
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
 <meta http-equiv="Access-Control-Allow-Origin" content="*" />
 
 <title>@yield('title')</title>
