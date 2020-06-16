@@ -28,7 +28,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'username', 'nickname', 'email', 'password', 'mobile', 'avatar', 'sex', 'city', 'wx', 'personal_note', 'level','zhiwei',
-        'expire_time', 'points', 'left_points', 'friends', 'follower', 'register_key', 'last_login_time', 'last_login_ip', 'last_session_id', 'continuity_day','nicksum',
+        'expire_time', 'points', 'left_points', 'friends', 'follower', 'register_key', 'last_login_time', 'last_login_ip', 'last_session_id', 'continuity_day','nicksum','one_visited'
     ];
 
     /**
@@ -59,6 +59,16 @@ class User extends Authenticatable
         }
         return false;
     }
+
+    /**
+     * 获取vip等级的价钱
+     */
+    public static function getVipPrice($user_id)
+    {
+        $options = self::leftjoin('vip_prices','users.level','=','vip_prices.id')->select('vip_prices.price')->where('users.id',$user_id)->where('expire_time', '>', date('Y-m-d H:i:s'))->first();
+        return $options;
+    }
+    
 
     /**
      *  获取VIP等级

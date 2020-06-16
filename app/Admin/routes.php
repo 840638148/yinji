@@ -163,6 +163,8 @@ Route::group([
     // $router->delete('/user/{id}', 'UserController@remove');
     $router->delete('/user/{id}', 'UserController@removes');
 
+    //会员统计
+    $router->get('/vipsum', 'VipsumController@index');
     
     //会员设置
     $router->get('/member/create', 'MemberController@getCreate');
