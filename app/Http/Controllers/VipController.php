@@ -45,6 +45,9 @@ class VipController extends Controller
         $month_price = VipPrice::getPrice(1);
         $season_price = VipPrice::getPrice(2);
         $year_price = VipPrice::getPrice(3);
+        $be_month_price= VipPrice::where('id',1)->value('be_price');
+        $be_season_price= VipPrice::where('id',2)->value('be_price');
+        $be_year_price= VipPrice::where('id',3)->value('be_price');
 
         $data = [
             'lang' => $lang,
@@ -52,6 +55,9 @@ class VipController extends Controller
             'month_price' => $month_price,
             'season_price' => $season_price,
             'year_price' => $year_price,
+            'be_month_price' => $be_month_price,
+            'be_season_price' => $be_season_price,
+            'be_year_price' => $be_year_price,
         ];
         return view('vip.intro', $data);
     }
@@ -103,12 +109,19 @@ class VipController extends Controller
         $season_price = VipPrice::getPrice(2);
         $year_price = VipPrice::getPrice(3);
 
+        $be_month_price= VipPrice::where('id',1)->value('be_price');
+        $be_season_price= VipPrice::where('id',2)->value('be_price');
+        $be_year_price= VipPrice::where('id',3)->value('be_price');
+
         $data = [
             'lang' => $lang,
             'user' => $user,
             'month_price' => $month_price,
             'season_price' => $season_price,
             'year_price' => $year_price,
+            'be_month_price' => $be_month_price,
+            'be_season_price' => $be_season_price,
+            'be_year_price' => $be_year_price,
         ];
         return view('vip.vip_service', $data);
     }
@@ -123,6 +136,9 @@ class VipController extends Controller
         $month_price = VipPrice::getPrice(1);
         $season_price = VipPrice::getPrice(2);
         $year_price = VipPrice::getPrice(3);
+        $be_month_price= VipPrice::where('id',1)->value('be_price');
+        $be_season_price= VipPrice::where('id',2)->value('be_price');
+        $be_year_price= VipPrice::where('id',3)->value('be_price');
 
         if ($user) {
             $user->finders = UserFinder::recommendFinders($user->id);
@@ -150,6 +166,9 @@ class VipController extends Controller
             'month_price' => $month_price,
             'season_price' => $season_price,
             'year_price' => $year_price,
+            'be_month_price' => $be_month_price,
+            'be_season_price' => $be_season_price,
+            'be_year_price' => $be_year_price,
             'issc' => $issc,
         ];
         return view('vip.finder', $data);

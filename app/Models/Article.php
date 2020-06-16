@@ -196,6 +196,17 @@ class Article extends Model
         return $selectOption;
     }
 
+    public static function getJobUrl()
+    {
+        $options = self::select('id','static_url as text')->where('article_status',2)->where('display', '0')->get();
+        $selectOption = [];
+        foreach ($options as $option){
+            $selectOption[$option->id] = $option->text;
+        }
+        return $selectOption;
+    }
+
+
 
     public static function getArticles(& $request, $category_ids = [], $keyword = null)
     {

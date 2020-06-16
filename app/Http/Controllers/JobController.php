@@ -13,6 +13,7 @@ use App\Models\CompanyWork;
 use App\Models\CompanyProject;
 use App\Models\Company;
 use App\Models\Companyhot;
+use App\Models\Article;
 
 class JobController extends Controller
 {
@@ -137,7 +138,11 @@ class JobController extends Controller
 		});
 		$lists=$lists->toArray();
         $jobproject=CompanyProject::where('company_id',$company_id)->get()->toArray();//获取所有项目
-		
+
+        foreach($jobproject as $k=>$v){
+            $jobproject[$k]['link_url']=Article::where('id',$v['link_url'])->value('static_url');
+        }
+        
         $data = [
             'user' => $this->getUserInfo(),
             'lang' => $lang,
@@ -181,7 +186,9 @@ class JobController extends Controller
             });
             $lists=$lists->toArray();
             $jobproject=CompanyProject::where('company_id',$company_id)->get()->toArray();//获取所有项目
-
+            foreach($jobproject as $k=>$v){
+                $jobproject[$k]['link_url']=Article::where('id',$v['link_url'])->value('static_url');
+            }
             $data = [
                 'user' => $this->getUserInfo(),
                 'lang' => $lang,
@@ -198,7 +205,9 @@ class JobController extends Controller
             // dd($company_id);
             $jobproject=CompanyProject::where('company_id',$company_id)->get()->toArray();//获取所有项目
             $companyde=CompanyWork::leftjoin('companies','companies.id','company_works.company_id')->where('companies.id',$id)->get();
-
+            foreach($jobproject as $k=>$v){
+                $jobproject[$k]['link_url']=Article::where('id',$v['link_url'])->value('static_url');
+            }
             //连表查询并用company_id进行分组  右边推荐招聘
             $companyall=Company::leftJoin('company_works','companies.id','company_works.company_id')->orderby('companies.sort','desc')->orderby('company_works.updated_at','desc')->get()->groupby('company_id');
 

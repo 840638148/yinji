@@ -418,15 +418,15 @@
     <div class="close vip_close">关闭</div>
     <div class="vip_select mt30">
       <ul>
-        <li class="determine vipfee_type1" vip_level="1" price="{{$month_price or '0.01'}}" omit="108"><em>{{$month_price or '0.01'}}</em>元
+        <li class="determine vipfee_type1" vip_level="1" price="{{$month_price or '0.01'}}" omit="{{$be_month_price}}"><em>{{$month_price or '0.01'}}</em>元
           <p>月会员</p>
-          <del>原价：108元</del></li>
-        <li class="vipfee_type2" vip_level="2" price="{{$season_price or '0.01'}}" omit="324"><em>{{$season_price or '0.01'}}</em>元
+          <del>原价：{{$be_month_price}}元</del></li>
+        <li class="vipfee_type2" vip_level="2" price="{{$season_price or '0.01'}}" omit="{{$be_season_price}}"><em>{{$season_price or '0.01'}}</em>元
           <p>季会员</p>
-          <del>原价：324元</del></li>
-        <li class="vipfee_type3" vip_level="3" price="{{$year_price or '0.01'}}" omit="1296"><em>{{$year_price or '0.01'}}</em>元
+          <del>原价：{{$be_season_price}}元</del></li>
+        <li class="vipfee_type3" vip_level="3" price="{{$year_price or '0.01'}}" omit="{{$be_year_price}}"><em>{{$year_price or '0.01'}}</em>元
           <p>年会员</p>
-          <del>原价：1296元</del></li>
+          <del>原价：{{$be_year_price}}元</del></li>
       </ul>
     </div>
     <div class="vip_check">
