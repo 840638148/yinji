@@ -80,6 +80,34 @@
   .masonry .item{
 	  width: 24%;
   } */
+  #users ,#collectionItems{
+    display:-webkit-flex;
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+   }
+  #users .item{ 
+    flex-basis: auto;
+    width: 25%;
+   }
+   #collectionItems .item{
+    flex-basis: auto;
+    width: 24%;
+   }
+
+   #discoveryItems {
+    margin: 10px;
+    column-count: 4;
+    column-gap: 10px;
+  }
+  #discoveryItems .item {
+    margin-bottom: 10px;
+  }
+  #discoveryItems .item .bg-img{
+    width: 100%;
+    height: auto;
+  }
+
 </style>
 <div class="banner_news" style="background-image:url(/images/find.jpg)"> —— NEWS —— </div>
 <section class="wrapper"> 
