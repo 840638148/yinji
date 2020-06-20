@@ -549,49 +549,65 @@
   
   <div class="sidebar right cat4_sidebar" style="margin-top:-220px;position:absolute;right: 50%;margin-right: -600px;">
     <article designerid="2690">
-      <div class="item author-info" style=" padding:0">
-                <div class="users"> @if ($designer)
-          <div class="border-bottom1" style="position:relative">
-                    <div class="head"><img src="{{get_designer_thum($designer)}}" width="440" height="375" alt="{{get_designer_title($designer)}}"></div>
-                    @if ('1' == $designer->industry)
-                    <div class="biaoqian">INTERIOR</div>
-                    @else
-                    <div class="biaoqian" >ARCHITECT</div>
-                    @endif
-                    <h2><a href="@if($designer->static_url) /designer/{{$designer->static_url}} @else /designer/detail/{{$designer->id}} @endif">{{get_designer_title($designer)}}</a> </h2>
-                  </div>
-          <div class="Statistics">
+        <div class="item author-info" style=" padding:0">
+            <div class="users"> 
+                @if ($designer)
+                    <div class="border-bottom1" style="position:relative">
+                        <div class="head"><img src="{{get_designer_thum($designer)}}" width="440" height="375" alt="{{get_designer_title($designer)}}"></div>
+                        @if ('1' == $designer->industry)
+                        <div class="biaoqian">INTERIOR</div>
+                        @else
+                        <div class="biaoqian" >ARCHITECT</div>
+                        @endif
+                        <h2><a href="@if($designer->static_url) /designer/{{$designer->static_url}} @else /designer/detail/{{$designer->id}} @endif">{{get_designer_title($designer)}}</a> </h2>
+                    </div>
+                    <div class="Statistics">
+                        <ul>
+                            <li><a href="@if($designer->static_url)/designer/{{$designer->static_url}} @else /designer/detail/{{$designer->id}} @endif"><span>{{$designer->article_num}}</span>作品</a></li>
+                            <li><span> {{$designer->subscription_num}} </span>粉丝</li>
+                        </ul>
+                    </div>
+                    @if($is_subscription) <span class="Button wpfp_designer_act designer have-disalbed " title=""> 已订阅 </span> @else <span class="Button3 wpfp_designer_act designer subscription_designer" designer_id="{{$designer->id}}" title=""> 订阅 </span> @endif
+                @endif
+        
+                @if ($more_designer)
+                <div class="mt20 more_design"></div>
+                <div class="works_design" style='display:block;'>
                     <ul>
-              <li><a href="@if($designer->static_url)/designer/{{$designer->static_url}} @else /designer/detail/{{$designer->id}} @endif"><span>{{$designer->article_num}}</span>作品</a></li>
-              <li><span> {{$designer->subscription_num}} </span>粉丝</li>
-            </ul>
-                  </div>
-          @if($is_subscription) <span class="Button wpfp_designer_act designer have-disalbed " title=""> 已订阅 </span> @else <span class="Button3 wpfp_designer_act designer subscription_designer" designer_id="{{$designer->id}}" title=""> 订阅 </span> @endif
-          
-    
-          @endif
-          
-          
-          @if ($more_designer)
-          <div class="mt20 more_design"><a href="#" >{{trans('designer.more_designers')}} <i class="icon-eye"></i> </a></div>
-          <div class="works_design">
+                    @foreach ($more_designer as $designer)
+                        <li>
+                            <div class="more_head fl"><img src="{{get_designer_thum($designer)}}" alt="{{get_designer_title($designer)}}"  class="left"/></div>
+                            <div class="right" style="width:160px; text-align:left">
+                                <h3><a href="@if($designer->static_url) /designer/{{$designer->static_url}} @else /designer/detail/{{$designer->id}} @endif" title="{{get_designer_title($designer)}}" target="_blank">{{get_designer_title($designer)}}</a></h3>
+                                @if ('1' == $designer->industry)
+                                    <p>INTERIOR  @if (!$designer->is_subscription) <a href="javascript:void(0)" class="subscription_next_designer" designer_id="{{$designer->id}}" class="right">+订阅</a>@endif</p>
+                                @else
+                                    <p>Architect @if (!$designer->is_subscription)<a href="javascript:void(0)" class="subscription_next_designer" designer_id="{{$designer->id}}" class="right">+订阅</a>@endif</p>
+                                @endif 
+                            </div>
+                        </li>
+                    @endforeach
+                    </ul>
+                </div>
+                @endif
+
+                @if($sys)
+                <div class="mt20 more_design0"></div>
+                <div class="works_design" style='display:block;'>
                     <ul>
-              @foreach ($more_designer as $designer)
-              <li>
-                        <div class="more_head fl"><img src="{{get_designer_thum($designer)}}" alt="{{get_designer_title($designer)}}"  class="left"/></div>
-                        <div class="right" style="width:160px; text-align:left">
-                  <h3><a href="@if($designer->static_url) /designer/{{$designer->static_url}} @else /designer/detail/{{$designer->id}} @endif" title="{{get_designer_title($designer)}}" target="_blank">{{get_designer_title($designer)}}</a></h3>
-                  @if ('1' == $designer->industry)
-                  <p>INTERIOR  @if (!$designer->is_subscription) <a href="javascript:void(0)" class="subscription_next_designer" designer_id="{{$designer->id}}" class="right">+订阅</a>@endif</p>
-                  @else
-                  <p>Architect @if (!$designer->is_subscription)<a href="javascript:void(0)" class="subscription_next_designer" designer_id="{{$designer->id}}" class="right">+订阅</a>@endif</p>
-                  @endif </div>
-                      </li>
-              @endforeach
-            </ul>
-                  </div>
-          @endif </div>
-              </div>
+                        <li>
+                            <div class="more_head fl"><a href="{{$sys->url}}" title="{{$sys->name}}" target="_blank"><img style='height:84px;' src="/uploads/{{$sys->avatar}}" alt="{{$sys->avatar}}"  class="left"/></a></div>
+                            <div class="right" style="width:160px; text-align:left">
+                                <h3><a href="{{$sys->url}}" title="{{$sys->name}}" target="_blank">{{$sys->name}}</a></h3>
+                                <p><a href="{{$sys->url}}" title="{{$sys->name}}" target="_blank">{{$sys->url}}</a></p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                @endif
+
+            </div>
+        </div>
     </article>
 
     @if($topics)
@@ -880,15 +896,15 @@
             <div class="close vip_close">关闭</div>
             <div class="vip_select mt30">
       <ul>
-                <li class="determine vipfee_type1" vip_level="1" price="{{$month_price or '0.01'}}" omit="108"><em>{{$month_price or '0.01'}}</em>元
+                <li class="determine vipfee_type1" vip_level="1" price="{{$month_price or '0.01'}}" omit="{{$be_month_price}}"><em>{{$month_price or '0.01'}}</em>元
           <p>月会员</p>
-          <del>原价：108元</del></li>
-                <li class="vipfee_type2" vip_level="2" price="{{$season_price or '0.01'}}" omit="324"><em>{{$season_price or '0.01'}}</em>元
+          <del>原价：{{$be_month_price}}元</del></li>
+                <li class="vipfee_type2" vip_level="2" price="{{$season_price or '0.01'}}" omit="{{$be_season_price}}"><em>{{$season_price or '0.01'}}</em>元
           <p>季会员</p>
-          <del>原价：324元</del></li>
-                <li class="vipfee_type3" vip_level="3" price="{{$year_price or '0.01'}}" omit="1296"><em>{{$year_price or '0.01'}}</em>元
+          <del>原价：{{$be_season_price}}元</del></li>
+                <li class="vipfee_type3" vip_level="3" price="{{$year_price or '0.01'}}" omit="{{$be_year_price}}"><em>{{$year_price or '0.01'}}</em>元
           <p>年会员</p>
-          <del>原价：1296元</del></li>
+          <del>原价：{{$be_year_price}}元</del></li>
               </ul>
     </div>
             <div class="vip_check">

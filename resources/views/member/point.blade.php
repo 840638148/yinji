@@ -223,16 +223,28 @@
                     <div class="today-point">{{ $today_point['today'] }}</div>
                     <div class="qiandao" style="right: 15px;width:110px;">
                         <p>
-                            <span style="margin-left: 16px;">签到：
                             @if ($today_point['attendance'] > 0)
+                            <span style="margin-left: 11px;">签到：
                                 {{ $today_point['attendance'] }}/{{ $today_point['attendance'] }}
-                            @else
-                                <a href="javascript:void(0);" class="bookInSign"  style="color: #a6c4df">去签到</a>
-                            @endif
                             </span>
+                            @else
+                            <span style="margin-left: 17px;">签到：
+                                <a href="javascript:void(0);" class="bookInSign"  style="color: #a6c4df">去签到</a>
+                            </span>
+                            @endif
                         </p>
-                        <p><span>发现：</span>{{ $today_point['faxian'] }}/50</p>
+
+                        @if ($today_point['faxian'] > 9)
+                        <p><span style="padding-left: 7px;">发现：</span>{{ $today_point['faxian'] }}/50</p>
+                        @else
+                        <p><span style="padding-left: 0px;">发现：</span>{{ $today_point['faxian'] }}/50</p>
+                        @endif
+
+                        @if ($today_point['comment'] > 0)
+                        <p><span style="padding-left: 15px;">评论：</span>{{ $today_point['comment'] }}/600</p>
+                        @else
                         <p><span style="padding-left: 7px;">评论：</span>{{ $today_point['comment'] }}/600</p>
+                        @endif
                     </div>
                 </div>
                 <div class="bar"><span class="bar-length" style="width: {{($today_point['today']/(650+$today_point['attendance']))*100}}%"></span><p><span>{{ $today_point['today'] }}</span>/{{650+$today_point['attendance']}}</p></div>

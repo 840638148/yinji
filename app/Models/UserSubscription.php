@@ -203,7 +203,7 @@ class UserSubscription extends Model
             // dd($designer);
             $designer->article_num = Article::where('designer_id', 'like', "%,{$designer->id},%")->count();
             $designer->fans_num = UserSubscription::where('designer_id', $designer->id)->count();
-            $designer->articles = Article::where('designer_id', 'like', "%,{$designer->id},%")->limit(4)->get();
+            $designer->articles = Article::where('designer_id', 'like', "%,{$designer->id},%")->where('article_status', '2')->where('display', '0')->limit(4)->get();
         }
 
         return $designers;

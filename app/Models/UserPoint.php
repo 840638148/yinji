@@ -30,11 +30,11 @@ class UserPoint extends Model
             'pingfen' => 0,
         ];
         $user = User::find($user_id);
-        $res=UserPoint::where('user_id', $user_id)
-            ->where('type', '0')
-            ->where('created_at', '>', date('Y-m-d 00:00:00'))
-            ->where('created_at', '<=', date('Y-m-d 23:59:59'));
-
+        $res=UserPoint::where('user_id', $user_id)->where('type', '0')
+            ->where('created_at', '>=', date('Y-m-d 00:00:00'))
+            ->where('created_at', '<', date('Y-m-d 23:59:59'))
+            ->get();
+        
         $today = $res->sum('point');
 
         $attendance = $res->where('remark', '签到')->sum('point');

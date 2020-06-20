@@ -3,6 +3,26 @@
     {{trans('article.all_article')}}_{{trans('comm.yinji')}}
 @endsection
 @section('content')
+<style>
+/* 小屏幕（平板，大于等于 768px） */
+@media (max-width:768px) {
+.nav_fenlei{
+    position:relative;
+}
+    .nav_fenlei .sort {
+        width: 32px;
+        height: 32px;
+        right: 30px;
+        top: 2px;
+        position: absolute;
+        cursor: pointer;
+    }   
+    
+}
+
+
+</style>
+
     @if ('INTERIOR' == strtoupper($type))
         <div class="banner_news" style="background-image:url(/images/banner_news2.jpg)"> —— {{strtoupper($type)}} —— </div>
     @else

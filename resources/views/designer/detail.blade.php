@@ -200,68 +200,51 @@
         <h2  style="margin-bottom:30px;">{{trans('designer.related_designer')}}</h2>
 
         <ul class="layout_ul ajaxposts">
-
             @foreach ($related_designers as $key=>$related_designer)
-
                 @if ($key < 3)
+                    <li class="layout_li ajaxpost">
+                        <div class="interior_dafen">
+                        @if($related_designer->designersavg)
+                        {{sprintf("%.1f",$related_designer->designersavg)}}
+                        @else
+                        5.0
+                        @endif
+                        </div>
+                        <article class="postgrid wow bounceInUp animated" style="visibility: visible; animation-name: bounceInUp;">
+                            <a href="@if($related_designer->static_url) /designer/{{$related_designer->static_url}} @else /designer/detail/{{$related_designer->id}} @endif" title="{{get_designer_title($related_designer)}}" target="_blank"> <img class="thumb" src="{{url('uploads/' . $related_designer->custom_thum)}}" data-original="{{url('uploads/' . $related_designer->custom_thum)}}" alt="{{get_designer_title($related_designer)}}" style="display: block;"> </a>
 
-                        <li class="layout_li ajaxpost">
-                        <div class="interior_dafen">{{sprintf("%.1f",$related_designer->designeravg==0 ? '5.0' : $related_designer->designeravg)}}</div>
-                            <article class="postgrid wow bounceInUp animated" style="visibility: visible; animation-name: bounceInUp;">
+                            <section class="ffe_main"  style=" position:relative;">
+                                <h2><a href="@if($related_designer->static_url) /designer/{{$related_designer->static_url}} @else /designer/detail/{{$related_designer->id}} @endif" title="{{get_designer_title($related_designer)}}" target="_blank">{{get_designer_title($related_designer)}}</a></h2>
 
-                                <a href="@if($related_designer->static_url) /designer/{{$related_designer->static_url}} @else /designer/detail/{{$related_designer->id}} @endif" title="{{get_designer_title($related_designer)}}" target="_blank"> <img class="thumb" src="{{url('uploads/' . $related_designer->custom_thum)}}" data-original="{{url('uploads/' . $related_designer->custom_thum)}}" alt="{{get_designer_title($related_designer)}}" style="display: block;"> </a>
+                                <div class="xg_design"> 
+                                    <!--分类-->
+                                    <span class="guojia2">
+                                        @foreach ($related_designer->categorys as $category)
+                                            <a href="#" rel="tag">{{$category['name']}}</a>
+                                        @endforeach
+                                    </span>
+                                </div>
 
-                                <section class="ffe_main"  style=" position:relative;">
+                                <span class="xg_dingyue"><i class="icon-bookmark"></i> {{$related_designer->subscription_num}}</span>
+                                <span class="xg_fenlei">
+                                    @if ('1' == $related_designer->industry)
+                                        INTERIOR
+                                    @else
+                                        ARCHITECT
+                                    @endif
+                                </span>
 
-                                    <h2><a href="@if($related_designer->static_url) /designer/{{$related_designer->static_url}} @else /designer/detail/{{$related_designer->id}} @endif" title="{{get_designer_title($related_designer)}}" target="_blank">{{get_designer_title($related_designer)}}</a></h2>
-
-                        <div class="xg_design"> 
- 
-                          <!--分类-->
-
-                          <span class="guojia2">
-
-                               @foreach ($related_designer->categorys as $category)
-
-                                  <a href="#" rel="tag">{{$category['name']}}</a>
-
-                              @endforeach
-
-                            </span>
-
-                           </div>
-
-                       <span class="xg_dingyue"><i class="icon-bookmark"></i> {{$related_designer->subscription_num}}</span>
-
-                       <span class="xg_fenlei">
-
-                            @if ('1' == $related_designer->industry)
-
-                                INTERIOR
-
-                           @else
-
-                                ARCHITECT
-
-                           @endif
-
-                       </span>
-
-                      </section>
-
-                    </article>
-
-                        </li>
-
-                 @endif
-
+                            </section>
+                        </article>
+                    </li>
+                @endif
             @endforeach
 
             </li>
 
         </ul>
 
-            @endif
+        @endif
 
     </section>
 
