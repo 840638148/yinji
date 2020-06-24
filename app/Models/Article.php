@@ -357,27 +357,30 @@ class Article extends Model
 
 
         }else if(empty($request->category_id) && $request->type && $request->sjx){
+
+            $aris=Article::where('article_status', '2')->where('display', '0')->select('id','title_designer_cn','title_designer_en','title_name_cn','title_name_en','title_intro_cn','title_intro_en','article_avg','description_cn','description_en','article_status','display','release_time','category_ids','topic_ids','sys_id','tag_ids','view_num','like_num','favorite_num','vip_download','designer_id','location_cn','location_en','custom_thum','special_photo','static_url');
+
             if($request->type=='starssort'){
                 if($request->sjx=='desc'){
-                    $articles = Article::orderBy('article_avg','desc')->paginate(15);
+                    $articles = $aris->orderBy('article_avg','desc')->paginate(15);
                 }else{
-                    $articles = Article::orderby('article_avg','asc')->paginate(15);
+                    $articles = $aris->orderby('article_avg','asc')->paginate(15);
                 }
             }
                    
             if($request->type=='timesort'){
                 if($request->sjx=='desc' ){
-                    $articles = Article::orderBy('release_time','desc')->paginate(15);
+                    $articles = $aris->orderBy('release_time','desc')->paginate(15);
                 }else{
-                    $articles = Article::orderBy('release_time','asc')->paginate(15);
+                    $articles = $aris->orderBy('release_time','asc')->paginate(15);
                 }
             }
             
             if($request->type=='llsort'){
                 if($request->sjx=='desc'){
-                    $articles = Article::orderBy('view_num','desc')->paginate(15);
+                    $articles = $aris->orderBy('view_num','desc')->paginate(15);
                 }else{
-                    $articles = Article::orderBy('view_num','asc')->paginate(15);
+                    $articles = $aris->orderBy('view_num','asc')->paginate(15);
                 }
             }
 
