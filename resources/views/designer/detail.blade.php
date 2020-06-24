@@ -87,7 +87,7 @@
 
                     @endif---->
                     @if($designer->company_id)
-                    <li style="margin-left:0;width:32.85%;"><i class="icon-share"></i>分享
+                    <li style="margin-left:0;width:32.85%;"><i class="icon-share"></i>{{trans('designer.share')}}
                         <div class="fenbox">
                             <div class="jiantou"></div>
                             <div class="fenxiang">
@@ -105,18 +105,18 @@
                             #zp:hover a{color:#fff;}
                             #zp:hover i{color:#fff;}
                         </style>
-                        <li id='zp' class="have-disalbed"><a href="/job/detail/{{$designer->companyids}}"><i class="icon-bookmark "></i>招聘</a> </li>
+                        <li id='zp' class="have-disalbed"><a href="/job/detail/{{$designer->companyids}}"><i class="icon-bookmark "></i>{{trans('designer.job')}}</a> </li>
                         
 
                         @if($is_subscription)
-                            <li style="width:32.85%;" class="have-disalbed"><i class="icon-bookmark "></i>已订阅</li>
+                            <li style="width:32.85%;" class="have-disalbed"><i class="icon-bookmark "></i>{{trans('designer.subscribed')}}</li>
                         @else
-                            <li style="width:32.85%;" class="subscription_designer"><i class="icon-bookmark"></i>订阅</li>
+                            <li style="width:32.85%;" class="subscription_designer"><i class="icon-bookmark"></i>{{trans('designer.subscription')}}</li>
                         @endif
 
                     @else
 
-                        <li><i class="icon-share"></i>分享
+                        <li><i class="icon-share"></i>{{trans('designer.share')}}
                             <div class="fenbox">
                                 <div class="jiantou"></div>
                                 <div class="fenxiang">
@@ -131,9 +131,9 @@
                         </li>
 
                         @if($is_subscription)
-                            <li style=" border-right:none;" class="have-disalbed"><i class="icon-bookmark "></i>已订阅</li>
+                            <li style=" border-right:none;" class="have-disalbed"><i class="icon-bookmark "></i>{{trans('designer.subscribed')}}</li>
                         @else
-                            <li style=" border-right:none;" class="subscription_designer"><i class="icon-bookmark"></i>订阅</li>
+                            <li style=" border-right:none;" class="subscription_designer"><i class="icon-bookmark"></i>{{trans('designer.subscription')}}</li>
                         @endif
 
                     @endif

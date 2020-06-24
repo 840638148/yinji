@@ -4,5 +4,8 @@ return [
     'all_designer' => 'All Designer',
     'related_designer' => 'Related Designer',
     'related_article' => 'Related Article',
-    'more_designers' => 'More Designers'
+    'more_designers' => 'More Designers',
+    'share' => 'Share',
+    'job' => 'Job',
+    'subscription' => 'Subscription',
 ];

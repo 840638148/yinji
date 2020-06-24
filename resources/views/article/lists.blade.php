@@ -39,10 +39,9 @@
             </ul>
             <div class="sort"><i class="icon-list-bullet"></i>
                 <ul class="sortlist">
-                    <li class="allsort" so="starssort">按评分排序<span class="arrow" aw="desc">↓</span></li>
-                    <li class="allsort" so="timesort">按时间排序<span class="arrow" aw="desc">↓</span></li>
-                    <li class="allsort" so="llsort">按浏览排序<span class="arrow" aw="desc">↓</span></li>
-                    
+                    <li class="allsort" so="starssort">{{trans('article.sort_by_grade')}}<span class="arrow" aw="desc">↓</span></li>
+                    <li class="allsort" so="timesort">{{trans('article.sort_by_time')}}<span class="arrow" aw="desc">↓</span></li>
+                    <li class="allsort" so="llsort">{{trans('article.sorted_by_browse')}}<span class="arrow" aw="desc">↓</span></li>
                 </ul>
             </div> 
         </div>

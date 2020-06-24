@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-  {{trans('comm.yinji')}} - 个人中心
+  {{trans('comm.yinji')}} - {{trans('index.home')}}
 @endsection
 @section('content')
 <style>
@@ -101,13 +101,13 @@
   <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
   <div class="home_tongji">
   <ul>
-      <li>发现</br>
+      <li>{{trans('index.discovery')}}</br>
         {{$user->finder_num}} </li>
-      <li> 收藏</br>
+      <li> {{trans('index.collection')}}</br>
         {{$user->collect_num}} </li>
-      <li> 订阅</br>
+      <li> {{trans('index.subscription')}}</br>
         {{$user->subscription_num}} </li>
-      <li> 关注</br>
+      <li> {{trans('index.focus_on')}}</br>
         {{$user->follow_num}} </li>
     </ul>
   </div>
@@ -115,17 +115,17 @@
    
   </div>
   <h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> {{$user->nickname}} <img src="{{$user->vip_level}}" alt=""></h2>
-  <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">个人说明： {{$user->personal_note}}</p>
+  <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">{{trans('index.personal_description')}}： {{$user->personal_note}}</p>
   <div class="home_nav">
     <ul>
     	
-	      <li class="current"><a  href="/member">个人中心</a></li>
-	      <li><a href="/member/finder">我的发现</a></li>
-	      <li><a href="/member/collect">我的收藏</a></li>
-	      <li><a href="/member/subscription">我的订阅</a></li>
-	      <li><a href="/member/follow">我的互动</a></li>
-	      <li><a href="/member/mydown">我的下载</a></li>
-	      <li><a href="/member/profile">个人资料</a></li>
+	      <li class="current"><a  href="/member">{{trans('index.home')}}</a></li>
+	      <li><a href="/member/finder">{{trans('index.my_finder')}}</a></li>
+	      <li><a href="/member/collect">{{trans('index.my_collection')}}</a></li>
+	      <li><a href="/member/subscription">{{trans('index.my_subscription')}}</a></li>
+	      <li><a href="/member/follow">{{trans('index.my_interactive')}}</a></li>
+	      <li><a href="/member/mydown">{{trans('index.my_download')}}</a></li>
+	      <li><a href="/member/profile">{{trans('index.the_personal_data')}}</a></li>
     </ul>
   </div>
 </div>
@@ -134,14 +134,14 @@
     <div class="order_center">
       <ul>
         <!-- <li class="order1"><a href="/vip/index/{{$user->id}}">我的主页</a><i class="order1_bj"></i> </li> -->
-        <li class="order1"><a href="/member/{{$user->id}}">我的主页</a><i class="order1_bj"></i> </li>
-        <li class="order2"><a href="/vip/intro">成为会员</a><i class="order1_bj"></i> </li>
-        <li class="order3"><a href="/member/point">我的积分</a><i class="order1_bj"></i> </li>
-        <li class="order4 bookInSign"><a href="javascript:;">签到</a></li>
+        <li class="order1"><a href="/member/{{$user->id}}">{{trans('index.home')}}</a><i class="order1_bj"></i> </li>
+        <li class="order2"><a href="/vip/intro">{{trans('index.become_a_member')}}</a><i class="order1_bj"></i> </li>
+        <li class="order3"><a href="/member/point">{{trans('index.my_points')}}</a><i class="order1_bj"></i> </li>
+        <li class="order4 bookInSign"><a href="javascript:;">{{trans('index.sign_in')}}</a></li>
       </ul>
     </div>
     <div class="title">
-      <h2>我的订阅</h2>
+      <h2>{{trans('index.my_subscription')}}</h2>
     </div>
     <div class="designer">
       <ul>
@@ -163,7 +163,7 @@
     <!----------设计师订阅结束------->
     @if($user->is_vip)
     <div class="title mt30">
-      <h2>我的关注</h2>
+      <h2>{{trans('index.my_attention')}}</h2>
     </div>
     <div class="designer">
       <ul>
@@ -178,8 +178,8 @@
     </div>
     
     <div class="title  mt30">
-      <h2 class="fl">我的发现</h2>
-      <span class="fr"><a href="/member/finder">更多</a></span>
+      <h2 class="fl">{{trans('index.my_finder')}}</h2>
+      <span class="fr"><a href="/member/finder">{{trans('index.more')}}</a></span>
     </div>
     <!--<div class="masonry my-finder" >需要点击图片打开弹窗就开启这个 -->
     <!--<div class="masonry flex-item" >-->
@@ -208,8 +208,8 @@
     @endif
     <div class="title  mt30">
     
-      <h2 class="fl">我的收藏</h2>
-      <span class="fr"><a href="/member/collect">更多</a></span> </div>
+      <h2 class="fl">{{trans('index.my_collection')}}</h2>
+      <span class="fr"><a href="/member/collect">{{trans('index.more')}}</a></span> </div>
     <div class="masonry my-collection" >   
       @foreach($user->collects as $collect)
       <div class="item collection-item " data-id="{{$collect['folder']['id']}}" onclick="location='/member/collect_detail/{{$collect['folder']['id']}}'">
@@ -294,7 +294,7 @@
       </tbody>
     
   </table>
-  <div class="shuomin">说明：连续签到可获得更多积 ，本站印币可增加下载次数和会员费用抵扣。<br>
+  <div class="shuomin">说明：连续签到可获得{{trans('index.more')}}积 ，本站印币可增加下载次数和会员费用抵扣。<br>
    使用规则：即10印币=1元，每增加一次下载次数使用10印币！</div>
 </div>
 <!------签到记录结束---------->
@@ -363,7 +363,7 @@
         <td>+16</td>
         <td>+20</td>
       </tr>
-      <tr><td colspan='9'>说明：签到最终印币=基础印币+会员额外印币+等级额外印币，节日更多惊喜等着你哦！</td></tr>
+      <tr><td colspan='9'>说明：签到最终印币=基础印币+会员额外印币+等级额外印币，节日{{trans('index.more')}}惊喜等着你哦！</td></tr>
     </table>
   </div>
 </div>
@@ -388,7 +388,7 @@
 
     $(document).ready(function(){
         if(IS_VIP){
-            $('.order_center .order2').find('a').html('会员中心')
+            $('.order_center .order2').find('a').html('{{trans("index.the_member_center")}}')
             $('.order_center .order2').find('a').attr('href','/member/interest')
         }
 

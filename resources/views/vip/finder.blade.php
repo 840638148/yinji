@@ -118,9 +118,9 @@
     <!-- 标题开始 -->
     <div class="TabTitle">
       <ul id="myTab1">
-        <li class="active tabka" cate='tjfinder' onclick="nTabs(this,0);">发现</li>
-        <li class="normal tabka" cate='tjfolder' onclick="nTabs(this,1);">推荐收藏夹</li>
-        <li class="normal tabka" cate='tjuser' onclick="nTabs(this,2);">推荐用户</li>
+        <li class="active tabka" cate='tjfinder' onclick="nTabs(this,0);">{{trans('index.finder')}}</li>
+        <li class="normal tabka" cate='tjfolder' onclick="nTabs(this,1);">{{trans('index.favorites')}}</li>
+        <li class="normal tabka" cate='tjuser' onclick="nTabs(this,2);">{{trans('index.users')}}</li>
       </ul>
     </div>
     

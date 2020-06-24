@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-  {{trans('comm.yinji')}} - TA的收藏详情
+  {{trans('comm.yinji')}} - TA {{trans('index.collection_detail')}}
 @endsection
    
 @section('content')
@@ -20,10 +20,10 @@ body{background:#f8f8f8 !important;}
   </div>
   <div class="home_tongji">
   <ul>
-      <li>人气</br>{{App\User::getViewNum($users->id)}} </li>
-      <li>收藏</br>{{App\User::getCollectNum($users->id)}} </li>
-      <li>关注</br>{{App\User::getFollowNum($users->id)}} </li>
-      <li>粉丝</br>{{App\User::getFansNum($users->id)}} </li>
+      <li>{{trans('index.sentiment')}}</br>{{App\User::getViewNum($users->id)}} </li>
+      <li>{{trans('index.collection')}}</br>{{App\User::getCollectNum($users->id)}} </li>
+      <li>{{trans('index.follow')}}</br>{{App\User::getFollowNum($users->id)}} </li>
+      <li>{{trans('index.fans')}}</br>{{App\User::getFansNum($users->id)}} </li>
     </ul>
   </div>
   <div class="home_personal"> <img src="@if($users->avatar) {{$users->avatar}} @else /img/avatar.png @endif" alt="{{$users->nickname}}" />
@@ -34,18 +34,18 @@ body{background:#f8f8f8 !important;}
   @if($user->id==$users->id)
   
   @elseif($users->is_follow)
-  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='have-disalbed' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #eee;margin: 20px auto;color: #666;cursor:no-drop !important;border-radius: 5px;'>已关注</span></p>
+  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='have-disalbed' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #eee;margin: 20px auto;color: #666;cursor:no-drop !important;border-radius: 5px;'>{{trans('index.following')}}</span></p>
   @else
-  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='gzuser' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #3d87f1;margin: 20px auto;color: #fff;cursor: pointer !important;border-radius: 5px;'>关注</span></p>
+  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='gzuser' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #3d87f1;margin: 20px auto;color: #fff;cursor: pointer !important;border-radius: 5px;'>{{trans('index.follow')}}</span></p>
   @endif
   <div class="home_nav" style='width:610px;left:52%;'>
     <ul>
-	      <li><a  href="/member/{{$users->id}}">TA的主页</a></li>
-	      <li><a href="/member/homepage_finder/{{$users->id}}">TA的发现</a></li>
-	      <li class="current"><a href="/member/homepage_collect/{{$users->id}}">TA的收藏</a></li>
-	      <li><a href="/member/homepage_subscription/{{$users->id}}">TA的订阅</a></li>
-	      <li><a href="/member/homepage_interactive/{{$users->id}}">TA的关注</a></li>
-	      <li><a href="/member/homepage_fans/{{$users->id}}">TA的粉丝</a></li>
+        <li><a href="/member/{{$users->id}}">{{trans('index.home_page')}}</a></li>
+        <li><a href="/member/homepage_finder/{{$users->id}}">{{trans('index.discovery')}}</a></li>
+        <li class="current"><a href="/member/homepage_collect/{{$users->id}}">{{trans('index.collection')}}</a></li>
+        <li><a href="/member/homepage_subscription/{{$users->id}}">{{trans('index.subscription')}}</a></li>
+        <li><a href="/member/homepage_interactive/{{$users->id}}">{{trans('index.follow')}}</a></li>
+        <li><a href="/member/homepage_fans/{{$users->id}}">{{trans('index.fans')}}</a></li>
     </ul>
   </div>
 </div>
@@ -54,7 +54,7 @@ body{background:#f8f8f8 !important;}
     <div class="title">
       <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>{{$folder_name or ''}}</span></h2>
       
-      <span class="fr"><a href="javascript:window.history.go(-1);" data-type="collect" >&lt; 返回</a></span> </div>
+      <span class="fr"><a href="javascript:window.history.go(-1);" data-type="collect" >&lt; {{trans('index.back')}}</a></span> </div>
     <ul class="layout_ul ajaxposts">
       <div class="post_list">
         <ul>

@@ -4,7 +4,7 @@
 
 
 
-    印际_{{trans('comm.yinji')}}- 文章推广
+    {{trans('comm.yinji')}}- {{trans('index.the_article_to_promote')}}
 
 
 
@@ -17,14 +17,14 @@
 
   <ul>
 
-    <li  class="current"><a href="/vip/promotion">文章推广</a></li>
+    <li  class="current"><a href="/vip/promotion">{{trans('index.the_article_to_promote')}}</a></li>
 
-    <li><a href="/vip/ad">广告合作</a></li>
+    <li><a href="/vip/ad">{{trans('index.advertising_cooperation')}}</a></li>
 
     <!--<li><a href="vip_service.html">会员服务</a></li>-->
-    <li><a href="/vip/vip_service">会员服务</a></li>
+    <li><a href="/vip/vip_service">{{trans('index.membership_service')}}</a></li>
 
-    <li><a href="/vip/job_service">招聘服务</a></li>
+    <li><a href="/vip/job_service">{{trans('index.recruitment_services')}}</a></li>
 
   </ul>
   

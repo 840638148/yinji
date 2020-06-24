@@ -132,11 +132,11 @@
             <div class="new_25">
       <ul>      
                 @if($userstars !=null )
-                <li class="like_article"><a href="#df"><i class="icon-thumbs-up"></i>评语{{$userstars}}.0</a></li>
+                <a href="#df"><li class="like_article"><i class="icon-thumbs-up"></i>{{trans('article.comments')}}{{sprintf("%.1f",$userstars)}}</li></a>
                 @else 
-                <li class="like_article"><a href="#df"><i class="icon-thumbs-up"></i>评语</a></li>
-               @endif
-                <li><i class="icon-share"></i>分享
+                <a href="#df"><li class="like_article"><i class="icon-thumbs-up"></i>{{trans('article.comments')}}</li></a>
+                @endif
+                <li><i class="icon-share"></i>{{trans('article.share')}}
           <div class="fenbox">
                     <div class="jiantou"></div>
                     <div class="fenxiang">
@@ -152,9 +152,9 @@
                 {{--@if($is_collect)
                 <li><i class="icon-bookmark"></i>已收藏</li>
                 @else@endif--}}
-                <li data-toggle="modal"  id="article-collect"><i class="icon-bookmark"></i>收藏</li>
+                <li data-toggle="modal"  id="article-collect"><i class="icon-bookmark"></i>{{trans('article.collection')}}</li>
                 
-                <li style=" border-right:none" id="vip-download"> <a href="javascript:void(0)" ><i class="icon-download"></i>下载</a>
+                <li style=" border-right:none" id="vip-download"> <a href="javascript:void(0)" ><i class="icon-download"></i>{{trans('article.down')}}</a>
                 <div class="down-load-tip" style='min-width:271px;'>
                     <div class="down-jiantou"></div>
                     <p class='down_con' style="height: 30px">今日剩余免费下载次数：<span id="left_down_num">0</span>次</p>
@@ -262,8 +262,8 @@
             <div id="qq">
                 <div class="qq_liuyan">
                     <a name="df"></a>
-                    <h2 class="left">评语</h2>
-                    <span class=" right">共<span class=" c_red">{{$comments_all or '0'}}</span>条评语</span> 
+                    <h2 class="left">{{trans('article.comments')}}</h2>
+                    <span class=" right">{{trans('article.total')}}&nbsp;<span class=" c_red">{{$comments_all or '0'}}&nbsp;</span>{{trans('article.comments')}}</span> 
                 </div>
                 <div class="msgCon"> 
                 
@@ -287,7 +287,7 @@
                                 <span></span>
                             </li>
                             </ul>  
-                            <span>发布于：{{$comment->created_at}}</span>
+                            <span>{{trans('article.released_in')}}：{{$comment->created_at}}</span>
                         </dd>
                         <div class="msgTxt">{!!$comment->content!!}</div>
                     
@@ -301,15 +301,15 @@
      <div class="pingfen">
       <div id="startone"  class="block clearfix" >
           <div class="star_score"></div>
-          <p style="float:left;">您的评分：<span class="fenshu"></span> 分</p>
+          <p style="float:left;">{{trans('article.your_score')}}：<span class="fenshu"></span> {{trans('article.score')}}</p>
           <div class="attitude"></div>
     </div>
     </div>
     <!--打分结束--->
     
       <div class="message" contentEditable='true'></div>
-      <div class="But"> <span class='submit' data-comment-type="article">发表</span> <img src="/images/qq/ico-biaoqing.png" class='bq'/> 
-       <p style=" color:#ccc;">（选填）</p>         
+      <div class="But"> <span class='submit' data-comment-type="article">{{trans('article.published')}}</span> <img src="/images/qq/ico-biaoqing.png" class='bq'/> 
+       <p style=" color:#ccc;">（{{trans('article.optional')}}）</p>         
                 <!--face begin--> 
                 @component('face')
                 
@@ -563,11 +563,11 @@
                     </div>
                     <div class="Statistics">
                         <ul>
-                            <li><a href="@if($designer->static_url)/designer/{{$designer->static_url}} @else /designer/detail/{{$designer->id}} @endif"><span>{{$designer->article_num}}</span>作品</a></li>
-                            <li><span> {{$designer->subscription_num}} </span>粉丝</li>
+                            <li><a href="@if($designer->static_url)/designer/{{$designer->static_url}} @else /designer/detail/{{$designer->id}} @endif"><span>{{$designer->article_num}}</span>{{trans('article.works')}}</a></li>
+                            <li><span> {{$designer->subscription_num}} </span>{{trans('article.fans')}}</li>
                         </ul>
                     </div>
-                    @if($is_subscription) <span class="Button wpfp_designer_act designer have-disalbed " title=""> 已订阅 </span> @else <span class="Button3 wpfp_designer_act designer subscription_designer" designer_id="{{$designer->id}}" title=""> 订阅 </span> @endif
+                    @if($is_subscription) <span style='width:82px;' class="Button wpfp_designer_act designer have-disalbed " title=""> {{trans('article.subscribed')}} </span> @else <span class="Button3 wpfp_designer_act designer subscription_designer" designer_id="{{$designer->id}}" title=""> {{trans('article.subscription')}} </span> @endif
                 @endif
         
                 @if ($more_designer)
@@ -580,9 +580,9 @@
                             <div class="right" style="width:160px; text-align:left">
                                 <h3><a href="@if($designer->static_url) /designer/{{$designer->static_url}} @else /designer/detail/{{$designer->id}} @endif" title="{{get_designer_title($designer)}}" target="_blank">{{get_designer_title($designer)}}</a></h3>
                                 @if ('1' == $designer->industry)
-                                    <p>INTERIOR  @if (!$designer->is_subscription) <a href="javascript:void(0)" class="subscription_next_designer" designer_id="{{$designer->id}}" class="right">+订阅</a>@endif</p>
+                                    <p>INTERIOR  @if (!$designer->is_subscription) <a href="javascript:void(0)" class="subscription_next_designer" designer_id="{{$designer->id}}" class="right">+{{trans('article.subscription')}}</a>@endif</p>
                                 @else
-                                    <p>Architect @if (!$designer->is_subscription)<a href="javascript:void(0)" class="subscription_next_designer" designer_id="{{$designer->id}}" class="right">+订阅</a>@endif</p>
+                                    <p>Architect @if (!$designer->is_subscription)<a href="javascript:void(0)" class="subscription_next_designer" designer_id="{{$designer->id}}" class="right">+{{trans('article.subscription')}}</a>@endif</p>
                                 @endif 
                             </div>
                         </li>

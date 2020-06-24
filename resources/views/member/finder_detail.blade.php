@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
- {{trans('comm.yinji')}} - 个人中心 -发现详情
+ {{trans('comm.yinji')}} - {{trans('index.home')}} - {{trans('index.discovery_detail')}}
 @endsection
 @section('content')
 
@@ -347,13 +347,13 @@
   <div class="home_tongji">
 
   <ul>
-      <li>发现</br>
+      <li>{{trans('index.discovery')}}</br>
         {{$user->finder_num}} </li>
-      <li> 收藏</br>
+      <li> {{trans('index.collection')}}</br>
         {{$user->collect_num}} </li>
-      <li> 订阅</br>
+      <li> {{trans('index.subscription')}}</br>
         {{$user->subscription_num}} </li>
-      <li> 关注</br>
+      <li> {{trans('index.focus_on')}}</br>
         {{$user->follow_num}} </li>
     </ul>
 
@@ -364,17 +364,17 @@
    
   </div>
   <h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> {{$user->nickname}} <img src="{{$user->vip_level}}" alt=""></h2>
-  <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">个人说明： {{$user->personal_note}}</p>
+  <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">{{trans('index.personal_description')}}： {{$user->personal_note}}</p>
 
   <div class="home_nav">
     <ul>
-      <li><a  href="/member">个人中心</a></li>
-      <li class="current"><a href="/member/finder">我的发现</a></li>
-      <li><a href="/member/collect">我的收藏</a></li>
-      <li><a href="/member/subscription">我的订阅</a></li>
-      <li><a href="/member/follow">我的互动</a></li>
-      <li><a href="/member/mydown">我的下载</a></li>
-      <li><a href="/member/profile">个人资料</a></li>
+        <li><a href="/member">{{trans('index.home')}}</a></li>
+	      <li class="current"><a href="/member/finder">{{trans('index.my_finder')}}</a></li>
+	      <li><a href="/member/collect">{{trans('index.my_collection')}}</a></li>
+	      <li><a href="/member/subscription">{{trans('index.my_subscription')}}</a></li>
+	      <li><a href="/member/follow">{{trans('index.my_interactive')}}</a></li>
+	      <li><a href="/member/mydown">{{trans('index.my_download')}}</a></li>
+	      <li><a href="/member/profile">{{trans('index.the_personal_data')}}</a></li>
     </ul>
   </div>
 </div>
@@ -405,7 +405,7 @@
   <div class="mt30 home_box ">
     <div class="title">
       <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>{{$folder_name or ''}}</span></h2>
-      <span class="fr"><a href="javascript:window.history.go(-1);" data-type="collect" >&lt; 返回</a></span> </div>
+      <span class="fr"><a href="javascript:window.history.go(-1);" data-type="collect" >&lt; {{trans('index.back')}}</a></span> </div>
     <div class="masonry">
 
       @foreach ($user->finder_details as $detail)

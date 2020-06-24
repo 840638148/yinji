@@ -79,7 +79,8 @@ class MemberController extends Controller
         $lang = $request->session()->get('language') ?? 'zh-CN';
 
         $user = $this->getUserInfo();
-        $user->is_wxbd=UserThird::leftjoin('users','users.id','=','user_thirds.user_id')->select('users.id','user_thirds.unique_id','users.username')->where('user_thirds.user_id',$user->id)->where('user_thirds.unique_id',$user->username)->orwhere('users.username','like','%ohPM_%')->first();
+        $user->is_wxbd=UserThird::leftjoin('users','users.id','=','user_thirds.user_id')->select('users.id','user_thirds.unique_id','users.username')->where('user_thirds.unique_id',$user->username)->where('users.username','like','ohPM_%')->first();
+        // dd($user->is_wxbd);
         if($user->city){
             $user->city=explode('-',$user->city);
             $province=Db::table("province")->where('province_name',$user->city[0])->value('province_num');
@@ -679,13 +680,18 @@ class MemberController extends Controller
         $month_price = VipPrice::getPrice(1);
         $season_price = VipPrice::getPrice(2);
         $year_price = VipPrice::getPrice(3);
-
+        $be_month_price= VipPrice::where('id',1)->value('be_price');
+        $be_season_price= VipPrice::where('id',2)->value('be_price');
+        $be_year_price= VipPrice::where('id',3)->value('be_price');
         $data = [
             'lang' => $lang,
             'user' => $user,
             'month_price' => $month_price,
             'season_price' => $season_price,
             'year_price' => $year_price,
+            'be_month_price' => $be_month_price,
+            'be_season_price' => $be_season_price,
+            'be_year_price' => $be_year_price,
         ];
         return view('member.finder', $data);
     }

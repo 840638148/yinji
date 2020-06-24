@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-  {{trans('comm.yinji')}} - 关注中心
+  {{trans('comm.yinji')}} {{trans('index.home')}} - {{trans('index.interactive_cenetr')}}
 @endsection
 
 
@@ -79,13 +79,13 @@
   <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
   <div class="home_tongji">
   <ul>
-      <li>发现</br>
+      <li>{{trans('index.discovery')}}</br>
         {{$user->finder_num}} </li>
-      <li> 收藏</br>
+      <li> {{trans('index.collection')}}</br>
         {{$user->collect_num}} </li>
-      <li> 订阅</br>
+      <li> {{trans('index.subscription')}}</br>
         {{$user->subscription_num}} </li>
-      <li> 关注</br>
+      <li> {{trans('index.focus_on')}}</br>
         {{$user->follow_num}} </li>
     </ul>
   </div>
@@ -93,16 +93,16 @@
    
   </div>
   <h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> {{$user->nickname}} <img src="{{$user->vip_level}}" alt=""></h2>
-  <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">个人说明： {{$user->personal_note}}</p>
+  <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">{{trans('index.personal_description')}}： {{$user->personal_note}}</p>
   <div class="home_nav">
     <ul>
-      <li><a  href="/member">个人中心</a></li>
-      <li><a href="/member/finder">我的发现</a></li>
-      <li><a href="/member/collect">我的收藏</a></li>
-      <li><a href="/member/subscription">我的订阅</a></li>
-      <li class="current"><a href="/member/follow">我的关注</a></li>
-      <li><a href="/member/mydown">我的下载</a></li>
-      <li><a href="/member/profile">个人资料</a></li>
+        <li><a href="/member">{{trans('index.home')}}</a></li>
+	      <li><a href="/member/finder">{{trans('index.my_finder')}}</a></li>
+	      <li><a href="/member/collect">{{trans('index.my_collection')}}</a></li>
+	      <li><a href="/member/subscription">{{trans('index.my_subscription')}}</a></li>
+	      <li class="current"><a href="/member/follow">{{trans('index.my_interactive')}}</a></li>
+	      <li><a href="/member/mydown">{{trans('index.my_download')}}</a></li>
+	      <li><a href="/member/profile">{{trans('index.the_personal_data')}}</a></li>
     </ul>
   </div>
 </div>
@@ -110,8 +110,8 @@
   <div class="mt30 home_box">
     <div class="TabTitle">
       <ul id="myTab1" style="float:left; width:600px;">
-        <li class="active" onclick="nTabs(this,0);">我的关注</li>
-        <li class="normal" onclick="nTabs(this,1);">我的粉丝</li>
+        <li class="active" onclick="nTabs(this,0);">{{trans('index.my_attention')}}</li>
+        <li class="normal" onclick="nTabs(this,1);">{{trans('index.my_fans')}}</li>
       </ul>
     </div>
     <div class="TabContent content-post"> 
@@ -142,11 +142,11 @@
                     </div>
                   <div class="Statistics">
                     <ul>
-                      <li><span>{{$follow->collect_num}}</span>收藏</li>
-                      <li><span>{{$follow->fans_num}}</span>粉丝</li>
+                      <li><span>{{$follow->collect_num}}</span>{{trans('index.collection')}}</li>
+                      <li><span>{{$follow->fans_num}}</span>{{trans('index.fans')}}</li>
                     </ul>
                   </div>
-                  <a href="javascript:void(0)" data-id="{{$follow->id}}" class="Button cancelFollow" style="width:60px;">取消关注</a> </div>
+                  <a href="javascript:void(0)" data-id="{{$follow->id}}" class="Button cancelFollow" style="width:60px;">{{trans('index.cancel_attention')}}</a> </div>
               </div>
             
               @endforeach 
@@ -180,8 +180,8 @@
                   </div>
                 <div class="Statistics">
                   <ul>
-                    <li><span>{{$follow->collect_num}}</span>收藏</li>
-                    <li><span>{{$follow->fans_num}}</span>粉丝</li>
+                      <li><span>{{$follow->collect_num}}</span>{{trans('index.collection')}}</li>
+                      <li><span>{{$follow->fans_num}}</span>{{trans('index.fans')}}</li>
                   </ul>
                 </div>
                  </div>

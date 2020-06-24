@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-  {{trans('comm.yinji')}} - 个人中心 -积分中心
+  {{trans('comm.yinji')}} - {{trans('index.home')}} - {{trans('index.integral_center')}}
 @endsection
 
 @section('content')
@@ -158,30 +158,30 @@
 <div class="home_top">
   <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
   <div class="home_tongji">
-  <ul>
-      <li>发现</br>
+    <ul>
+        <li>{{trans('index.discovery')}}</br>
         {{$user->finder_num}} </li>
-      <li> 收藏</br>
+        <li> {{trans('index.collection')}}</br>
         {{$user->collect_num}} </li>
-      <li> 订阅</br>
+        <li> {{trans('index.subscription')}}</br>
         {{$user->subscription_num}} </li>
-      <li> 关注</br>
+        <li> {{trans('index.focus_on')}}</br>
         {{$user->follow_num}} </li>
     </ul>
   </div>
   <div class="home_personal"> <img src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}" />
   </div>
   <h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> {{$user->nickname}} <img src="{{$user->vip_level}}" alt=""></h2>
-  <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">个人说明： {{$user->personal_note}}</p>
+  <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">{{trans('index.personal_description')}}： {{$user->personal_note}}</p>
   <div class="home_nav">
     <ul>
-      <li><a  href="/member">个人中心</a></li>
-      <li><a href="/member/finder">我的发现</a></li>
-      <li><a href="/member/collect">我的收藏</a></li>
-      <li><a href="/member/subscription">我的订阅</a></li>
-      <li><a href="/member/follow">我的互动</a></li>
-      <li><a href="/member/mydown">我的下载</a></li>
-      <li><a href="/member/profile">个人资料</a></li>
+        <li><a href="/member">{{trans('index.home')}}</a></li>
+        <li><a href="/member/finder">{{trans('index.my_finder')}}</a></li>
+        <li><a href="/member/collect">{{trans('index.my_collection')}}</a></li>
+        <li><a href="/member/subscription">{{trans('index.my_subscription')}}</a></li>
+        <li><a href="/member/follow">{{trans('index.my_interactive')}}</a></li>
+        <li><a href="/member/mydown">{{trans('index.my_download')}}</a></li>
+        <li class="current"><a href="/member/profile">{{trans('index.the_personal_data')}}</a></li>
     </ul>
   </div>
 </div>
@@ -192,34 +192,34 @@
       <ul>
         <li class="ico_jftj01">
           <div class="tj_shuzi">
-            <span class="point-title">我的印币</span>
+            <span class="point-title">{{trans('index.my_points')}}</span>
             <p>{{$user->points}}</p>
 
           </div>
         </li>
         <li class="ico_jftj02">
           <div class="tj_shuzi">
-            <span class="point-title">剩余印币</span>
+            <span class="point-title">{{trans('index.remaining_points')}}</span>
             <p>{{$user->left_points}}</p>
            </div>
         </li>
         <li class="ico_jftj03">
              <div class="tj_shuzi">
-                <span class="point-title">已用印币</span>
+                <span class="point-title">{{trans('index.have_used_integral')}}</span>
                 <p>{{$user->points - $user->left_points}}</p>
             </div>
         </li>
         <li class="ico_jftj04" style="font-size:13px;">
           <div class="tj_shuzi">
-            <span class="point-title">总下载次数: <b style="color:red">{{$user->download_num}}</b></span>
+            <span class="point-title">{{trans('index.today_downloads')}}: <b style="color:red">{{$user->download_num}}</b></span>
             </div>
-            <p class="down-show" style="padding:0 !important;padding-right:16px !important;">{{$user->getFreeSum}}<span style="font-size:13px;">免费可下载次数</span></p><p class="down-show" style="padding:0 !important;padding-left: 16px !important;">{{$user->getKouSum}}<span style="font-size:13px;">印币可抵扣次数</span></p>
+            <p class="down-show" style="padding:0 !important;padding-right:16px !important;">{{$user->getFreeSum}}<span style="font-size:13px;">{{trans('index.free_downloads')}}  </span></p><p class="down-show" style="padding:0 !important;padding-left: 16px !important;">{{$user->getKouSum}}<span style="font-size:13px;">{{trans('index.deductible_number')}}</span></p>
         </li>
       </ul>
        <ul>
             <li class="ico_jftj-inner">
                 <div class="tj_shuzi">
-                    <span class="point-title-small">今日印币</span>
+                    <span class="point-title-small">{{trans('index.today_integral')}}</span>
                     <div class="today-point">{{ $today_point['today'] }}</div>
                     <div class="qiandao" style="right: 15px;width:110px;">
                         <p>
@@ -237,7 +237,7 @@
                         @if ($today_point['faxian'] > 9)
                         <p><span style="padding-left: 7px;">发现：</span>{{ $today_point['faxian'] }}/50</p>
                         @else
-                        <p><span style="padding-left: 0px;">发现：</span>{{ $today_point['faxian'] }}/50</p>
+                        <p><span style="margin-left: -1px;">发现：</span>{{ $today_point['faxian'] }}/50</p>
                         @endif
 
                         @if ($today_point['comment'] > 0)
@@ -253,25 +253,25 @@
                 <div class="tj_shuzi">
                     <span class="point-title vip_type">月度会员兑换</span>
                     <!-- <span class="point-duihuan activity">25+50积分兑换</span> -->
-                    <span class="point-duihuan" yb="50" money="94">94+50印币兑换</span>
+                    <span class="point-duihuan" yb="50" money="94">94+50积分兑换</span>
                 </div>
             </li>
             <li class="ico_jftj-inner">
                 <div class="tj_shuzi">
                     <span class="point-title vip_type">季度会员兑换</span>
-                    <span class="point-duihuan" yb="280" money="260">260+280印币兑换</span>
+                    <span class="point-duihuan" yb="280" money="260">260+280积分兑换</span>
                 </div>
             </li>
             <li class="ico_jftj-inner">
                 <div class="tj_shuzi">
                     <span class="point-title vip_type">年度会员兑换</span>
-                    <span class="point-duihuan" yb="880" money="911">911+880印币兑换</span>
+                    <span class="point-duihuan" yb="880" money="911">911+880积分兑换</span>
                 </div>
             </li>
         </ul>
     </div>
     <div class="title" style="position:relative">
-      <h2 class="fl">印币记录<span class="ybrole" style="position: absolute;right: 10px;cursor: pointer;font-size: 15px;">印币规则</span></h2>
+      <h2 class="fl">{{trans('index.integral_record')}}<span class="ybrole" style="position: absolute;right: 10px;cursor: pointer;font-size: 15px;">{{trans('index.integral_rules')}}</span></h2>
       {{--<a class="fr" href="/static/integral.html" style="line-height:48px; color:#06C">如何印币?</a>--}}
     </div>
 
@@ -479,7 +479,7 @@
 
 
     <!-- 印币规则开始 -->
-    <div class="ybtab" style="position: absolute;top: 80%;left: 22%;z-index: 99;width: 900px;height: 660px;background:#fff;border-radius: 7px;text-align: center;display:none;">
+    <div class="ybtab" style="position: absolute;top: 50%;left: 22%;z-index: 99;width: 900px;height: 660px;background:#fff;border-radius: 7px;text-align: center;display:none;">
         <span class="closeybtab" style="position: absolute;right:0;top:0;padding: 10px 10px 5px 10px;cursor: pointer;font-size: 18px;">╳</span>
         <table style="text-align:center;margin:50px auto;width:850px;">
             <tr style="text-align:center;font-size:18px;"><td colspan="9">印币规则</td></tr>

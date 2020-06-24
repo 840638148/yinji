@@ -135,7 +135,7 @@
 
 
 
-                                    <li> <a href="/user/logout" title="登出"> 退出登录 </a> </li>
+                                    <li> <a href="/user/logout" title="登出"> {{trans('index.sign_out')}} </a> </li>
 
 
 
@@ -897,7 +897,7 @@
 
     <div class="wrapper">
 
-        <div class="social fl"><a href="/static/about.html">关于我们</a> | <a href="/static/bqbh.html">版权保护</a> | <a href="/static/flsm.html">法律声明</a>  | <a href="/static/map.html">网站地图</a></div>
+        <div class="social fl"><a href="/static/about.html">{{trans('index.about_us')}}</a> | <a href="/static/bqbh.html">{{trans('index.copyright_protection')}}</a> | <a href="/static/flsm.html">{{trans('index.legal_notices')}}</a>  | <a href="/static/map.html">{{trans('index.site_map')}}</a></div>
 
         Copyright © 2016-<?php echo date('Y'); ?> 印际 / Yinji.space / 粤ICP备17108593号
 
@@ -905,7 +905,7 @@
 
         <div class="social fr">
 
-            关注：<a href="https://weibo.com/yinjispace"><img src="/images/foot_31.gif" alt="新浪微博"></a>
+            {{trans('index.focus_on')}}：<a href="https://weibo.com/yinjispace"><img src="/images/foot_31.gif" alt="新浪微博"></a>
 
 
 

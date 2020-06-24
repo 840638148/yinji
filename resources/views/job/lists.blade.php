@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    {{trans('comm.yinji')}} - 招聘
+    {{trans('comm.yinji')}} - {{trans('index.job')}}}
 @endsection
 
 @section('content')
@@ -60,7 +60,7 @@
 			        <input class="text" name="jobcategory" id="jobcategory" type="hidden" value="1">
               <input class="text" id="txt_keyword" name="keywords" type="text" placeholder="请输入职位或公司名称" value="" >
             </div>
-            <input class="search" type="submit" id="btn_search" value="搜索" >
+            <input class="search" type="submit" id="btn_search" value="{{trans('index.search')}}" >
             <div class="clear"></div>
           </form>
         </div>

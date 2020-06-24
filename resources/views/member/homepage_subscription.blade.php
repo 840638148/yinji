@@ -2,7 +2,7 @@
 
 @section('title')
 
-  {{trans('comm.yinji')}} - TA的订阅
+  {{trans('comm.yinji')}} - TA {{trans('index.subscription')}}
 
 @endsection
 
@@ -23,10 +23,10 @@
 
   <div class="home_tongji">
     <ul>
-        <li>人气</br>{{App\User::getViewNum($users->id)}} </li>
-        <li>收藏</br>{{App\User::getCollectNum($users->id)}} </li>
-        <li>关注</br>{{App\User::getFollowNum($users->id)}} </li>
-        <li>粉丝</br>{{App\User::getFansNum($users->id)}} </li>
+      <li>{{trans('index.sentiment')}}</br>{{App\User::getViewNum($users->id)}} </li>
+      <li>{{trans('index.collection')}}</br>{{App\User::getCollectNum($users->id)}} </li>
+      <li>{{trans('index.follow')}}</br>{{App\User::getFollowNum($users->id)}} </li>
+      <li>{{trans('index.fans')}}</br>{{App\User::getFansNum($users->id)}} </li>
     </ul>
   </div>
   <div class="home_personal"> <img src="@if($users->avatar) {{$users->avatar}} @else /img/avatar.png @endif" alt="{{$users->nickname}}" />
@@ -36,25 +36,25 @@
   @if($user->id==$users->id)
   
   @elseif($users->is_follow)
-  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='have-disalbed' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #eee;margin: 20px auto;color: #666;cursor:no-drop !important;border-radius: 5px;'>已关注</span></p>
+  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='have-disalbed' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #eee;margin: 20px auto;color: #666;cursor:no-drop !important;border-radius: 5px;'>{{trans('index.following')}}</span></p>
   @else
-  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='gzuser' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #3d87f1;margin: 20px auto;color: #fff;cursor: pointer !important;border-radius: 5px;'>关注</span></p>
+  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='gzuser' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #3d87f1;margin: 20px auto;color: #fff;cursor: pointer !important;border-radius: 5px;'>{{trans('index.follow')}}</span></p>
   @endif
   <div class="home_nav" style='width:610px;left:52%;'>
     <ul>
-        <li><a  href="/member/{{$users->id}}">TA的主页</a></li>
-        <li><a href="/member/homepage_finder/{{$users->id}}">TA的发现</a></li>
-        <li><a href="/member/homepage_collect/{{$users->id}}">TA的收藏</a></li>
-        <li class="current"><a href="/member/homepage_subscription/{{$users->id}}">TA的订阅</a></li>
-	      <li><a href="/member/homepage_interactive/{{$users->id}}">TA的关注</a></li>
-	      <li><a href="/member/homepage_fans/{{$users->id}}">TA的粉丝</a></li>
+        <li><a href="/member/{{$users->id}}">{{trans('index.home_page')}}</a></li>
+        <li><a href="/member/homepage_finder/{{$users->id}}">{{trans('index.discovery')}}</a></li>
+        <li><a href="/member/homepage_collect/{{$users->id}}">{{trans('index.collection')}}</a></li>
+        <li class="current"><a href="/member/homepage_subscription/{{$users->id}}">{{trans('index.subscription')}}</a></li>
+        <li><a href="/member/homepage_interactive/{{$users->id}}">{{trans('index.follow')}}</a></li>
+        <li><a href="/member/homepage_fans/{{$users->id}}">{{trans('index.fans')}}</a></li>
     </ul>
   </div>
 </div>
 <section class="wrapper" style='width:1245px;'>
   <div class="mt30 home_box">
     <div class="title" style='position: relative;'>
-      <h2><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>TA的订阅</span></h2>
+      <h2><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>TA {{trans('index.subscription')}}</span></h2>
       <div class="desearch" style='position: absolute;top: 1px;right: 0;'>
         <form id="myform" action="/member/desearch"  style="position:relative;padding:0;" method="post" class="search_form" onkeydown="if (event.keyCode == 13) return false"  >
             <i class="findersearch_btn" style="position: absolute;left: 10px;top: 10px;padding: 5px;cursor: pointer;border:none;background:url(/images/findersearch.png) center no-repeat;width: 30px;display: block;height: 30px;"></i>
@@ -90,9 +90,9 @@
             </div>
             <div class="focus">
             @if($subscription->has_dy)
-              <a href="javascript:void(0)"  style='background: #eee;color: #999;padding: 3px 30px;border-radius: 30px;cursor: no-drop;'> 已订阅 </a>
+              <a href="javascript:void(0)"  style='background: #eee;color: #999;padding: 3px 30px;border-radius: 30px;cursor: no-drop;'> {{trans('index.subscribed')}} </a>
             @else 
-              <a href="javascript:void(0)" data-id="{{$subscription->id}}" class="focus_btn2 click cancelSubscription" style='background: #636af3;color: #FFF;'> 订阅 </a>
+              <a href="javascript:void(0)" data-id="{{$subscription->id}}" class="focus_btn2 click cancelSubscription" style='background: #636af3;color: #FFF;'> {{trans('index.subscription')}} </a>
             @endif
               <div class="focus_msg"><span>作品：{{$subscription->article_num}}</span> | <span>粉丝：{{$subscription->fans_num}}</span></div>
             </div>

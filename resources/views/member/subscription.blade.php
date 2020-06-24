@@ -2,7 +2,7 @@
 
 @section('title')
 
-  {{trans('comm.yinji')}} - 个人中心 -订阅中心
+  {{trans('comm.yinji')}} - {{trans('index.home')}} - {{trans('index.subscription_cenetr')}}
 
 @endsection
 
@@ -16,40 +16,40 @@
   <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
   <div class="home_tongji">
   <ul>
-      <li>发现</br>
+      <li>{{trans('index.discovery')}}</br>
         {{$user->finder_num}} </li>
-      <li> 收藏</br>
+      <li> {{trans('index.collection')}}</br>
         {{$user->collect_num}} </li>
-      <li> 订阅</br>
+      <li> {{trans('index.subscription')}}</br>
         {{$user->subscription_num}} </li>
-      <li> 关注</br>
+      <li> {{trans('index.focus_on')}}</br>
         {{$user->follow_num}} </li>
     </ul>
   </div>
   <div class="home_personal"> <img src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}" />
   </div>
   <h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> {{$user->nickname}} <img src="{{$user->vip_level}}" alt=""></h2>
-  <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">个人说明： {{$user->personal_note}}</p>
+  <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">{{trans('index.personal_description')}}： {{$user->personal_note}}</p>
   <div class="home_nav">
     <ul>
-      <li><a  href="/member">个人中心</a></li>
-      <li><a href="/member/finder">我的发现</a></li>
-      <li><a href="/member/collect">我的收藏</a></li>
-      <li class="current"><a href="/member/subscription">我的订阅</a></li>
-      <li><a href="/member/follow">我的互动</a></li>
-      <li><a href="/member/mydown">我的下载</a></li>
-      <li><a href="/member/profile">个人资料</a></li>
+        <li><a href="/member">{{trans('index.home')}}</a></li>
+	      <li><a href="/member/finder">{{trans('index.my_finder')}}</a></li>
+	      <li><a href="/member/collect">{{trans('index.my_collection')}}</a></li>
+	      <li class="current"><a href="/member/subscription">{{trans('index.my_subscription')}}</a></li>
+	      <li><a href="/member/follow">{{trans('index.my_interactive')}}</a></li>
+	      <li><a href="/member/mydown">{{trans('index.my_download')}}</a></li>
+	      <li><a href="/member/profile">{{trans('index.the_personal_data')}}</a></li>
     </ul>
   </div>
 </div>
 <section class="wrapper">
   <div class="mt30 home_box">
     <div class="title" style='position: relative;'>
-      <h2><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>我的订阅</span></h2>
+      <h2><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>{{trans('index.my_subscription')}}</span></h2>
       <div class="desearch" style='position: absolute;top: 1px;right: 0;'>
         <form id="myform" action="/member/desearch"  style="position:relative;padding:0;" method="post" class="search_form" onkeydown="if (event.keyCode == 13) return false"  >
             <i class="findersearch_btn" style="position: absolute;left: 10px;top: 10px;padding: 5px;cursor: pointer;border:none;background:url(/images/findersearch.png) center no-repeat;width: 30px;display: block;height: 30px;"></i>
-            <input name="content" id="txt_name" class="text_input" type="text" placeholder="输入设计师名" style=" width:100%;height:46px;text-indent: 3.5em;border-radius: 50px;" >
+            <input name="content" id="txt_name" class="text_input" type="text" placeholder="{{trans('index.Please_enter_the_designer_name')}}" style=" width:100%;height:46px;text-indent: 3.5em;border-radius: 50px;" >
         </form>
       </div>
     </div>
@@ -80,8 +80,8 @@
               <span style='height:25px !important;'>{!! get_designer_description($subscription) !!}</span> 
             </div>
             <div class="focus"> 
-              <a href="javascript:void(0)" data-id="{{$subscription->id}}" class="focus_btn2 click cancelSubscription"> 取消订阅 </a>
-              <div class="focus_msg"><span>作品：{{$subscription->article_num}}</span> | <span>粉丝：{{$subscription->fans_num}}</span></div>
+              <a href="javascript:void(0)" data-id="{{$subscription->id}}" class="focus_btn2 click cancelSubscription"> {{trans('index.unsubscribe')}} </a>
+              <div class="focus_msg"><span>{{trans('index.works')}}：{{$subscription->article_num}}</span> | <span>{{trans('index.fans')}}：{{$subscription->fans_num}}</span></div>
             </div>
           </div>
         </div>

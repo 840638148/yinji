@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-  {{trans('comm.yinji')}} - 个人主页
+  {{trans('comm.yinji')}} - TA Home Page
 @endsection
 @section('content')
 <style>
@@ -151,10 +151,10 @@
   </div>
   <div class="home_tongji">
     <ul>
-      <li>人气</br>{{App\User::getViewNum($users->id)}} </li>
-      <li>收藏</br>{{App\User::getCollectNum($users->id)}} </li>
-      <li>关注</br>{{App\User::getFollowNum($users->id)}} </li>
-      <li>粉丝</br>{{App\User::getFansNum($users->id)}} </li>
+      <li>{{trans('index.sentiment')}}</br>{{App\User::getViewNum($users->id)}} </li>
+      <li>{{trans('index.collection')}}</br>{{App\User::getCollectNum($users->id)}} </li>
+      <li>{{trans('index.follow')}}</br>{{App\User::getFollowNum($users->id)}} </li>
+      <li>{{trans('index.fans')}}</br>{{App\User::getFansNum($users->id)}} </li>
     </ul>
   </div>
   <div class="home_personal"> <img src="@if($users->avatar) {{$users->avatar}} @else /img/avatar.png @endif" alt="{{$users->nickname}}" />
@@ -165,18 +165,18 @@
   @if($user->id==$users->id)
   
   @elseif($users->is_follow)
-  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='have-disalbed' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #eee;margin: 20px auto;color: #666;cursor:no-drop !important;border-radius: 5px;'>已关注</span></p>
+  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='have-disalbed' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #eee;margin: 20px auto;color: #666;cursor:no-drop !important;border-radius: 5px;'>{{trans('index.following')}}</span></p>
   @else
-  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='gzuser' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #3d87f1;margin: 20px auto;color: #fff;cursor: pointer !important;border-radius: 5px;'>关注</span></p>
+  <p style="position:absolute; text-align:center;left: 0;top:450px;width: 100%;"><span class='gzuser' uid='{{$users->id}}' style='padding: 5px 25px;display: inline-block;background: #3d87f1;margin: 20px auto;color: #fff;cursor: pointer !important;border-radius: 5px;'>{{trans('index.follow')}}</span></p>
   @endif
   <div class="home_nav" style='width:610px;left:52%;'>
     <ul>
-	      <li class="current"><a  href="/member/{{$users->id}}">TA的主页</a></li>
-	      <li><a href="/member/homepage_finder/{{$users->id}}">TA的发现</a></li>
-	      <li><a href="/member/homepage_collect/{{$users->id}}">TA的收藏</a></li>
-	      <li><a href="/member/homepage_subscription/{{$users->id}}">TA的订阅</a></li>
-	      <li><a href="/member/homepage_interactive/{{$users->id}}">TA的关注</a></li>
-	      <li><a href="/member/homepage_fans/{{$users->id}}">TA的粉丝</a></li>
+	      <li class="current"><a  href="/member/{{$users->id}}">{{trans('index.home_page')}}</a></li>
+	      <li><a href="/member/homepage_finder/{{$users->id}}">{{trans('index.discovery')}}</a></li>
+	      <li><a href="/member/homepage_collect/{{$users->id}}">{{trans('index.collection')}}</a></li>
+	      <li><a href="/member/homepage_subscription/{{$users->id}}">{{trans('index.subscription')}}</a></li>
+	      <li><a href="/member/homepage_interactive/{{$users->id}}">{{trans('index.follow')}}</a></li>
+	      <li><a href="/member/homepage_fans/{{$users->id}}">{{trans('index.fans')}}</a></li>
     </ul>
   </div>
 </div>
@@ -184,8 +184,8 @@
   <div class="mt30 home_box">
     <!-- TA的发现 -->
     <div class="title">
-      <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>TA的发现</span></h2>
-      <span class="fr"><a href="/member/homepage_finder/{{$users->id}}">更多</a></span>
+      <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>TA {{trans('index.discovery')}}</span></h2>
+      <span class="fr"><a href="/member/homepage_finder/{{$users->id}}">{{trans('index.more')}}</a></span>
     </div>
     <div class="masonry" style='height:350px;width: 1200px;overflow: hidden;'>
         @foreach($users->finders as $key=>$finder)
@@ -210,8 +210,8 @@
 
     <!-- TA的收藏 -->
     <div class="title">
-      <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>TA的收藏</span></h2>
-      <span class="fr"><a href="/member/homepage_collect/{{$users->id}}">更多</a></span>
+      <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>TA {{trans('index.collection')}}</span></h2>
+      <span class="fr"><a href="/member/homepage_collect/{{$users->id}}">{{trans('index.more')}}</a></span>
     </div>
     <div class="masonry my-collection"  style='height:350px;width: 1200px;overflow: hidden;'>   
       @foreach($users->collects as $collect)
@@ -235,7 +235,7 @@
     <!-- TA的关注 -->
     <div class="title mt30">
       <div class="title">
-        <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>TA的关注</span></h2>
+        <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>TA {{trans('index.follow')}}</span></h2>
       </div>
     </div>
     <div class="designer">
@@ -258,8 +258,8 @@
     
     <div class="title mt30" style='position:relative;border:unset !important;'>
       <div class="title" style="border:unset !important;">
-        <h2 class="fl" style='width: 33%;border-bottom: 1px solid #eee;line-height: 40px;'>访客</h2>
-        <h2 class="fr" style='width: 65%;border-bottom: 1px solid #eee;line-height: 40px;'>评论：<span style='position:absolute;top:0;right:0%;font-size:12px;color:#9E9E9E;'>共{{$commentsum}}条评论，访客：{{$messagenum}}条，博主：{{$replynum}}条</span></h2>
+        <h2 class="fl" style='width: 33%;border-bottom: 1px solid #eee;line-height: 40px;'>{{trans('index.visitors')}}</h2>
+        <h2 class="fr" style='width: 65%;border-bottom: 1px solid #eee;line-height: 40px;'>{{trans('index.comments')}}：<span style='position:absolute;top:0;right:0%;font-size:12px;color:#9E9E9E;'>共{{$commentsum}}条评论，访客：{{$messagenum}}条，博主：{{$replynum}}条</span></h2>
       </div>
     </div>
     <div class='designer' style='width:30%;float:left;height:400px;height:400px;'>
@@ -309,10 +309,10 @@
           @endforeach
          </div>
         <div class='fbpl'>
-          <h2><span>发表评论</span></h2>
+          <h2><span>{{trans('index.comment')}}</span></h2>
           
           <textarea style="resize:none;" name="con" id="con" cols="30" rows="10"></textarea>
-          <span class='fbbtn' style='display: inline-block;padding: 10px 20px;background: #000;color: #fff;margin: 20px 0;cursor: pointer;'>发表评论</span>
+          <span class='fbbtn' style='display: inline-block;padding: 10px 20px;background: #000;color: #fff;margin: 20px 0;cursor: pointer;'>{{trans('index.published')}}</span>
           <span class='hfbtn' style='display: none;padding: 10px 20px;background: #000;color: #fff;margin: 20px 0;cursor: pointer;'>回复评论</span>
         </div> 
         
