@@ -434,9 +434,7 @@
         <li>
           <input name="" type="checkbox" value="" checked="checked" />
           到期自动续费一个月，可随时取消</li>
-        <li>
-          <input  name="" type="checkbox" value="" checked="checked"/>
-          <a href="#">同意并接受《服务条款》</a></li>
+          <li><input  name="" type="checkbox" value="" id="agree" /><a href="javascript:void(0);">同意并接受《服务条款》</a></li>
       </ul>
     </div>
     <div class="vip_pay">
@@ -456,35 +454,25 @@
 <!--------选购会员结束-------> 
 
 <script type="text/javascript">
-$(document).on("click",".openVip",function () {
-  if(!IS_LOGIN){
-      $('.login_box').show();
-    }else{
-      $(".new_folder_box").show();
-      return false;
-    }
-})
-
-$(document).on("click",".vip_close",function () {
-    $(".new_folder_box").hide();
-    return false;
-})
-
-</script> 
-<script>
-
-
-
-    _omit  = 58;
-
-    _price = '0.01';
-    $(document).on("submit",".cart",function () {
-      var agree = document.getElementById("agree").checked;
-      if (!agree) {
-        alert('请阅读并接受《服务条款》');
+  $(document).on("click",".openVip",function () {
+    if(!IS_LOGIN){
+        $('.login_box').show();
+      }else{
+        $(".new_folder_box").show();
         return false;
       }
-    });
+  })
+
+  $(document).on("click",".vip_close",function () {
+      $(".new_folder_box").hide();
+      return false;
+  })
+
+</script> 
+{{--会员购买--}}
+<script>
+    _omit  = 58;
+    _price = '0.01';
 
     $(document).on("click",".vip_select li",function () {
       _self = $(this);
@@ -500,111 +488,112 @@ $(document).on("click",".vip_close",function () {
     });
 
 
-$(document).ready(function(){
-      // listen if someone clicks 'Buy Now' button
-  $(document).on("click","#buy_now_button",function(){
-      var vip_type = $('#vip_type').val();
-      if (vip_type == '') {
-        alert('请选择会员类型');
-        return false;
-      }
-      window.location = '/vip/pay?vip_type=' + vip_type;
-      return;
-
-      var url = '/vip/wxbuy';
-      var folder_data = {
-        _token:_token,
-        vip_type : $('#vip_type').val(),
-        payment_code : $('#payment_code').val(),
-        pay_total : $('#pay_total').val(),
-      };
-
-      $.ajax({
-        async:false,
-        url: url,
-        type: 'POST',
-        dataType: 'json',
-        data: folder_data,
-        success: function (data) {
-          if (data.status_code == 0) {
-            if ('alipay' == data.data.payment_code) {
-              window.location = data.data.redirect_url;
-            }else{
-              alert('微信支付返回二维码地址');
-            }
-            layer.closeAll();
-          }else{
-            alert(data.message);
-          }
+  $(document).ready(function(){
+    // listen if someone clicks 'Buy Now' button
+    $(document).on("click","#buy_now_button",function(){
+        var vip_type = $('#vip_type').val();
+        let agree = document.getElementById("agree").checked;
+        if(!agree){
+            layer.msg('请阅读并接受《服务条款》!',{zIndex:999999999,time: 1500,skin: 'intro-login-class layui-layer-hui'});
+            return false;
         }
-      });
+        if (vip_type == '') {
+          alert('请选择会员类型');
+          return false;
+        }
+        window.location = '/vip/pay?vip_type=' + vip_type;
+        return;
 
+        var url = '/vip/wxbuy';
+        var folder_data = {
+          _token:_token,
+          vip_type : $('#vip_type').val(),
+          payment_code : $('#payment_code').val(),
+          pay_total : $('#pay_total').val(),
+        };
+
+        $.ajax({
+          async:false,
+          url: url,
+          type: 'POST',
+          dataType: 'json',
+          data: folder_data,
+          success: function (data) {
+            if (data.status_code == 0) {
+              if ('alipay' == data.data.payment_code) {
+                window.location = data.data.redirect_url;
+              }else{
+                alert('微信支付返回二维码地址');
+              }
+              layer.closeAll();
+            }else{
+              alert(data.message);
+            }
+          }
+        });
+
+    });
+        
   });
-       
-});
 
     
-
-  </script> 
+</script> 
 {{--登录模块--}} 
 <script type="text/javascript">
-    function WeChatLogin() {
-      if ($(".ma_box").hasClass("hide")) {
-        $(".ma_box").removeClass("hide");
-      } else {
-        $(".ma_box").addClass("hide");
+  function WeChatLogin() {
+    if ($(".ma_box").hasClass("hide")) {
+      $(".ma_box").removeClass("hide");
+    } else {
+      $(".ma_box").addClass("hide");
+    }
+  }
+
+  function toLogin() {
+    //以下为按钮点击事件的逻辑。注意这里要重新打开窗口
+    //否则后面跳转到QQ登录，授权页面时会直接缩小当前浏览器的窗口，而不是打开新窗口
+    var A = window.open("/auth/qq", "_self");
+  }
+  function wp_attempt_focus() {
+    setTimeout(function () {
+      try {
+        d = document.getElementById('user_login');
+        d.focus();
+        d.select();
+      } catch (e) {
+
       }
-    }
+    }, 200);
+  }
 
-    function toLogin() {
-      //以下为按钮点击事件的逻辑。注意这里要重新打开窗口
-      //否则后面跳转到QQ登录，授权页面时会直接缩小当前浏览器的窗口，而不是打开新窗口
-      var A = window.open("/auth/qq", "_self");
+  //监听回车事件
+  $(document).keyup(function(event){
+    if(event.keyCode ==13){
+      $('#wp-submit-login').trigger("click");
     }
-    function wp_attempt_focus() {
-     setTimeout(function () {
-        try {
-          d = document.getElementById('user_login');
-          d.focus();
-          d.select();
-        } catch (e) {
+  });
 
+  $("#wp-submit-login").click(function () {
+    // var loginform = new FormData();
+    var url = $.trim($('#loginform').attr("action"));
+    $.ajax({
+      url: url,
+      type: 'POST',
+      dataType: 'json',
+      data: $('#loginform').serialize(),
+      success: function (data) {
+        if (data.status_code == 0) {
+          setTimeout(function () {
+            location.href =  '/finder'
+          }, 300);
+        } else {
+          layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
         }
-      }, 200);
-    }
-
-    //监听回车事件
-
-    $(document).keyup(function(event){
-      if(event.keyCode ==13){
-        $('#wp-submit-login').trigger("click");
       }
     });
-
-
-
-    $("#wp-submit-login").click(function () {
-      // var loginform = new FormData();
-      var url = $.trim($('#loginform').attr("action"));
-      $.ajax({
-        url: url,
-        type: 'POST',
-        dataType: 'json',
-        data: $('#loginform').serialize(),
-        success: function (data) {
-          if (data.status_code == 0) {
-            setTimeout(function () {
-              location.href =  '/finder'
-            }, 300);
-          } else {
-            layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
-          }
-        }
-      });
-    });
-    wp_attempt_focus();
-    if (typeof wpOnload == 'function') wpOnload();
-  </script> 
+  });
+  wp_attempt_focus();
+  if (typeof wpOnload == 'function') wpOnload();
+</script> 
 @endsection 
 
 

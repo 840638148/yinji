@@ -167,9 +167,10 @@ class News extends Model
                 $query->orWhere('description_cn', 'like', "%{$keyword}%");
                 $query->orWhere('description_en', 'like', "%{$keyword}%");
             });
+            $newses = $obj->paginate(intval($request->per_page), ['*'], 'newses_page');
+        }else{
+            $newses = $obj->paginate(intval($request->per_page));
         }
-
-        $newses = $obj->paginate(intval($request->per_page));
 
         $lang = Session::get('language') ?? 'zh-CN';
         if ('zh-CN' == $lang) {

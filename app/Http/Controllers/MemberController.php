@@ -482,10 +482,21 @@ class MemberController extends Controller
         $user = $this->getUserInfo();
         $user->follows = UserFollow::getFollows($user->id);
         $user->fans = UserFollow::getFans($user->id);
-
+        $month_price = VipPrice::getPrice(1);
+        $season_price = VipPrice::getPrice(2);
+        $year_price = VipPrice::getPrice(3);
+        $be_month_price= VipPrice::where('id',1)->value('be_price');
+        $be_season_price= VipPrice::where('id',2)->value('be_price');
+        $be_year_price= VipPrice::where('id',3)->value('be_price');
         $data = [
             'lang' => $lang,
             'user' => $user,
+            'month_price' => $month_price,
+            'season_price' => $season_price,
+            'year_price' => $year_price,
+            'be_month_price' => $be_month_price,
+            'be_season_price' => $be_season_price,
+            'be_year_price' => $be_year_price,
         ];
         return view('member.follow', $data);
     }
@@ -783,6 +794,9 @@ class MemberController extends Controller
         $month_price = VipPrice::getPrice(1);
         $season_price = VipPrice::getPrice(2);
         $year_price = VipPrice::getPrice(3);
+        $be_month_price= VipPrice::where('id',1)->value('be_price');
+        $be_season_price= VipPrice::where('id',2)->value('be_price');
+        $be_year_price= VipPrice::where('id',3)->value('be_price');
 
         $data = [
             'lang' => $lang,
@@ -791,6 +805,9 @@ class MemberController extends Controller
             'month_price' => $month_price,
             'season_price' => $season_price,
             'year_price' => $year_price,
+            'be_month_price' => $be_month_price,
+            'be_season_price' => $be_season_price,
+            'be_year_price' => $be_year_price,
         ];
         return view('member.homepage_finder', $data);
     }
@@ -889,10 +906,22 @@ class MemberController extends Controller
         foreach($users->follows as $k=>$v){
             $users->follows[$k]['has_follow'] = UserFollow::where('user_id',$user->id)->where('follow_id',$v->id)->first();
         }
+        $month_price = VipPrice::getPrice(1);
+        $season_price = VipPrice::getPrice(2);
+        $year_price = VipPrice::getPrice(3);
+        $be_month_price= VipPrice::where('id',1)->value('be_price');
+        $be_season_price= VipPrice::where('id',2)->value('be_price');
+        $be_year_price= VipPrice::where('id',3)->value('be_price');
         $data = [
             'lang' => $lang,
             'users' => $users,
             'user' => $user,
+            'month_price' => $month_price,
+            'season_price' => $season_price,
+            'year_price' => $year_price,
+            'be_month_price' => $be_month_price,
+            'be_season_price' => $be_season_price,
+            'be_year_price' => $be_year_price,
         ];
         return view('member.homepage_interactive', $data);
     }
@@ -985,6 +1014,11 @@ class MemberController extends Controller
     	$userscname = UserFinderFolder::where('user_finder_folders.user_id',$user->id)->get()->toArray();
 
         $folist=UserFinderFolder::where('user_finder_folders.id',$request->id)->leftjoin('user_finders','user_finder_folders.id','user_finders.user_finder_folder_id')->get()->toArray();
+
+        foreach($folist as $k=>$v){
+            $folist[$k]['static_url']=Article::where('id',$v['photo_source'])->value('static_url');
+        }
+
         $data = [
             'lang' => $lang,
             'users' => $users,

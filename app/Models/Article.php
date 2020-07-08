@@ -262,9 +262,12 @@ class Article extends Model
                 $query->orWhere('description_cn', 'like', "%{$keyword}%");
                 $query->orWhere('description_en', 'like', "%{$keyword}%");
             });
+
+            $articles = $obj->paginate(intval($request->per_page), ['*'], 'articles_page');
+        }else{
+            $articles = $obj->paginate(intval($request->per_page));
         }
-        // dd($obj);
-        $articles = $obj->paginate(intval($request->per_page));
+        
         // dd(intval($request->page));
         $lang = Session::get('language') ?? 'zh-CN';
         if ('zh-CN' == $lang) {

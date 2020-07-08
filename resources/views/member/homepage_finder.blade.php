@@ -174,66 +174,39 @@
 
         <div class="close vip_close">关闭</div>
         <div class="vip_select mt30">
-          <ul>
-              <li class="determine vipfee_type1" vip_level="1" price="{{$month_price or '0.01'}}" omit="108"><em>{{$month_price or '0.01'}}</em>元<p>月会员</p><del>原价：108元</del></li>
-              <li class="vipfee_type2" vip_level="2" price="{{$season_price or '0.01'}}" omit="324"><em>{{$season_price or '0.01'}}</em>元<p>季会员</p><del>原价：324元</del></li>
-              <li class="vipfee_type3" vip_level="3" price="{{$year_price or '0.01'}}" omit="1296"><em>{{$year_price or '0.01'}}</em>元<p>年会员</p><del>原价：1296元</del></li>
-          </ul>
+            <ul>
+                <li class="determine vipfee_type1" vip_level="1" price="{{$month_price or '0.01'}}" omit="{{$be_month_price}}"><em>{{$month_price or '0.01'}}</em>元
+                <p>月会员</p>
+                <del>原价：{{$be_month_price}}元</del></li>
+                <li class="vipfee_type2" vip_level="2" price="{{$season_price or '0.01'}}" omit="{{$be_season_price}}"><em>{{$season_price or '0.01'}}</em>元
+                <p>季会员</p>
+                <del>原价：{{$be_season_price}}元</del></li>
+                <li class="vipfee_type3" vip_level="3" price="{{$year_price or '0.01'}}" omit="{{$be_year_price}}"><em>{{$year_price or '0.01'}}</em>元
+                <p>年会员</p>
+                <del>原价：{{$be_year_price}}元</del></li>
+            </ul>
         </div>
 
         <div class="vip_check">
             <ul>
                 <!---li><input name="" type="checkbox" value="" checked="checked" />到期自动续费一个月，可随时取消</li--->
-                <li><input name="" type="checkbox" value="" checked="checked"  /><a href="#">同意并接受《服务条款》</a></li>
+                <li><input name="" type="checkbox" value="" id="agree" /><a href="javascript:void(0);">同意并接受《服务条款》</a></li>
             </ul>
         </div>
 
 
 
         <div class="vip_pay">
-
-
-
             <form class="cart vip_pay" action="/vip/wxbuy" method="post" enctype="multipart/form-data">
-
                 <input type="hidden" name="vip_type" id="vip_type" value="1" />
-
                 <input type="hidden" name="payment_code" id="payment_code" value="wechatpay" />
-
                 <input type="hidden" name="pay_total" id="pay_total" value="{{$month_price or '0.01'}}" />
-
                 <input type="hidden" name="open_id" id="open_id" value="ohPM_1TdJ-oXTAWy7rP-82CT3glo" />
-
-
-
                 <p class="vip_pay_msg">应付：<span>{{$month_price or '0.01'}}</span>元 ( 立省9元)</p>
-
-
-
-                <p>
-
-
-
-                    <button type="button" class="single_add_to_cart_button button_red alt" id="buy_now_button">立即购买 </button>
-
-
-
-                </p>
-
-
-
+                <p><button type="button" class="single_add_to_cart_button button_red alt" id="buy_now_button">立即购买 </button></p>
             </form>
-
-
-
         </div>
-
-
-
     </div>
-
-
-
 </div>
 
 <!--------选购会员结束------->
@@ -327,15 +300,6 @@
     _omit  = 58;
     _price = '0.01';
 
-    $(document).on("submit",".cart",function () {
-        var agree = document.getElementById("agree").checked;
-        if (!agree) {
-            alert('请阅读并接受《服务条款》');
-            return false;
-        }
-    });
-
-
     $(document).on("click",".vip_select li",function () {
         _self = $(this);
         _price = _self.attr("price");
@@ -358,6 +322,11 @@
 
         $(document).on("click","#buy_now_button",function(){
             var vip_type = $('#vip_type').val();
+            let agree = document.getElementById("agree").checked;
+            if(!agree){
+                layer.msg('请阅读并接受《服务条款》!',{zIndex:999999999,time: 1500,skin: 'intro-login-class layui-layer-hui'});
+                return false;
+            }
             if (vip_type == '') {
                 alert('请选择会员类型');
                 return false;

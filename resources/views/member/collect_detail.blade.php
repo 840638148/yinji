@@ -20,7 +20,7 @@ body{background:#f8f8f8 !important;}
         {{$user->collect_num}} </li>
       <li> {{trans('index.subscription')}}</br>
         {{$user->subscription_num}} </li>
-      <li> {{trans('index.focus_on')}}</br>
+      <li> {{trans('index.follow')}}</br>
         {{$user->follow_num}} </li>
     </ul>
   </div>

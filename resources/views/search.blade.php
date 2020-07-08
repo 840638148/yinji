@@ -1,177 +1,101 @@
 @extends('layouts.app')
 
-
-
-
-
-
-
 @section('title')
 
     {{trans('comm.yinji')}} - {{trans('comm.second_title')}}
 
 @endsection
 
-
-
 @section('content')
 
 <div class="about_bj" style="background-image:url(images/banner.jpg)"> </div>
-
 <div class="search_box">
-
     <div class="search_nav_bj">
-
         <div class="wrapper">
-
             <div class="search_nav">
-
                 {{--<a href="#" class="cat search_nav_item" data-type="article">文章</a>--}}
-
                 {{--<a href="#" class="search_nav_item" data-type="designers">设计师</a>--}}
-
                 {{--<a href="#" class="search_nav_item" data-type="finders"> 发现/收藏夹</a>--}}
-
                 {{--<a href="#" class="search_nav_item" data-type="jobs">工作</a>--}}
-
                 {{--<a href="#" class="search_nav_item" data-type="news">新闻</a>--}}
-
             </div>
 
-            <div class="search_nav_right">  <input  id="keywords" name="keywords" type="text" placeholder="输入搜索的关键词" value="{{$keyword}}"> <a href="#" class="icon-search-1 fr" id="search-btn"></a></div>
-
+            <div class="search_nav_right">  
+                <input  id="keywords" name="keywords" type="text" placeholder="输入搜索的关键词" value="{{$keyword}}"> 
+                <a href="#" class="icon-search-1 fr" id="search-btn"></a>
+            </div>
         </div>
-
     </div>
 
     <div class="wrapper" style=" padding-top:20px">
-
-
-
         <!----------设计师搜索结果------->
-
         <div class="mt30 search-result">
-
             <div class="title">
-
-                <h2>相关设计师 <span>共找到{{$designers->total()}}条结果</span></h2>
-
+                <h2>{{trans('index.related_designer')}} <span>{{trans('index.a_total_of_found')}} {{$designers->total()}} {{trans('index.result')}}</span></h2>
             </div>
 
-
-
-            <div class="public_list"> @foreach ($designers as $designer)
-
+            <div class="public_list"> 
+                @foreach ($designers as $designer)
                     <div class="public_item" data-id="{{$designer->id}}">
-
-                        <div class="item_left"> <a href="@if($designer->static_url) /designer/{{$designer->static_url}} @else /designer/detail/{{$designer->id}} @endif" title="{{get_designer_title($designer)}}" target="_blank">
-
+                        <div class="item_left"> 
+                            <a href="@if($designer->static_url) /designer/{{$designer->static_url}} @else /designer/detail/{{$designer->id}} @endif" title="{{get_designer_title($designer)}}" target="_blank">
                                 <div class="tx"> <img src="@if(get_designer_thum($designer)) {{get_designer_thum($designer)}} @else /img/avatar.png @endif"  data-original="{{get_designer_thum($designer)}}" alt="{{get_designer_title($designer)}}" style="display: block;" > </div>
-
                             </a>
 
                             <div class="item_msg">
-
-                                <div class="title"> <a href="@if($designer->static_url) /designer/{{$designer->static_url}} @else /designer/detail/{{$designer->id}} @endif" title="{{get_designer_title($designer)}}" target="_blank">{{get_designer_title($designer)}}</a> </div>
-
-                                <div class="describe"> <span>国家：
-
-
-
-                                         @foreach ($designer->categorys as $category)
-
-
-
+                                <div class="title"> 
+                                    <a href="@if($designer->static_url) /designer/{{$designer->static_url}} @else /designer/detail/{{$designer->id}} @endif" title="{{get_designer_title($designer)}}" target="_blank">{{get_designer_title($designer)}}</a> 
+                                </div>
+                                <div class="describe"> 
+                                    <span>国家：
+                                        @foreach ($designer->categorys as $category)
                                             @if($loop->last)
-
-
-
                                                 {{$category['name']}}
-
-
-
                                             @else
-
-
-
                                                 {{$category['name']}},
-
-
-
                                             @endif
-
-
-
-                                        @endforeach </span>
-
+                                        @endforeach 
+                                    </span>
                                     <span>{!! get_designer_description($designer) !!}</span>
 
-                                    </div>
+                                </div>
 
-                                        <div class="focus">
+                                <div class="focus">
+                                    <div class="focus_msg"> <span>文章：{{$designer->article_num}}</span> | <span>粉丝：{{$designer->fans_num}}</span> </div>
+                                </div>
 
-                                            <div class="focus_msg"> <span>文章：{{$designer->article_num}}</span> | <span>粉丝：{{$designer->fans_num}}</span> </div>
-
-                                        </div>
-
-                                    </div>
+                            </div>
 
                         </div>
 
-                        <div class="item_right"> @foreach($designer->articles as $article)
-
+                        <div class="item_right"> 
+                            @foreach($designer->articles as $article)
                                 <div class="works" data-id="1722"> <a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif" target="_blank"> <img src="{{get_article_thum($article)}}" alt=""> <span>{{get_article_title($article)}}</span> </a> </div>
-
                             @endforeach
-
                         </div>
 
                     </div>
-
                 @endforeach
-
             </div>
-
-
-
-            <!----------设计师订阅结束------->
-
-
-
+            {{$designers->appends(['keyword' => $keyword,array_except(Request::query(), 'designers')])->links()}}
         </div>
-
+        <!----------设计师订阅结束------->
 
 
         {{--<!------------设计师----->--}}
-
         {{--<div class="designers_box search_result_box" data-type="designers">--}}
-
-
-
             {{--<section class="ffe ffe_list ffe_content mt20">--}}
-
-                {{--<ul class="layout_ul ajaxposts designer-content">--}}
-
+                {{--<ul class="layout_ul ajaxposts designer-content">--}
                     {{--@foreach ($designers as $designer)--}}
-
                         {{--<li class="layout_li ajaxpost ">--}}
-
                             {{--@if ('1' == $designer->industry)--}}
-
                                 {{--<div class="interior"></div>--}}
-
                             {{--@else--}}
-
                                 {{--<div class="architect"></div>--}}
-
                             {{--@endif--}}
 
-
-
                             {{--<article class="postgrid design" style="visibility: visible; animation-name: bounceInUp;">--}}
-
                                 {{--<figure> <a href="@if($designer->static_url) /designer/{{$designer->static_url}} @else /designer/detail/{{$designer->id}} @endif" title="{{get_designer_title($designer)}}" target="_blank">--}}
-
                                         {{--<img class="thumb" src="{{get_designer_thum($designer)}}" data-original="{{get_designer_thum($designer)}}" alt="{{get_designer_title($designer)}}" style="display: block;"> </a> </figure>--}}
 
                                 {{--<section class="ffe_main">--}}
@@ -207,105 +131,61 @@
             {{--</section>--}}
 
         {{--</div>--}}
-
-
-
         {{--<!------------设计师结束----->--}}
 
 
 
-
-
         <!--------文章----------->
-
         <div class="mt30 search-result">
-
             <div class="title">
-
-                <h2>相关作品 <span>共找到{{$articles->total()}}条结果</span></h2>
-
+                <h2>{{trans('index.related_works')}} <span>{{trans('index.a_total_of_found')}} {{$articles->total()}} {{trans('index.result')}}</span></h2>
             </div>
 
-                <div class="article_box search_result_box " data-type="article">
+            <div class="article_box search_result_box " data-type="article">
+                <section class="content" file="wp-content/themes/lensnews/category.php:14">
+                    <section class="post_list box post_bottom triangle wow bounceInUp animated" style="visibility: visible; animation-name: bounceInUp;">
+                        <ul class="layout_ul ajaxposts article-content">
+                            @foreach ($articles as $article)
+                                <li class="layout_li ajaxpost">
+                                    <article class="postgrid">
+                                        <figure>
+                                            <a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif" title="{{get_article_title($article)}}" target="_blank">
+                                                <img class="thumb" src="{{get_article_thum($article)}}" data-original="{{get_article_thum($article)}}" alt="{{get_article_title($article)}}" style="display: block;">
+                                            </a>
+                                        </figure>
 
-                    <section class="content" file="wp-content/themes/lensnews/category.php:14">
-
-                        <section class="post_list box post_bottom triangle wow bounceInUp animated" style="visibility: visible; animation-name: bounceInUp;">
-
-                            <ul class="layout_ul ajaxposts article-content">
-
-                                @foreach ($articles as $article)
-
-                                    <li class="layout_li ajaxpost">
-
-                                        <article class="postgrid">
-
-                                            <figure>
-
-                                                <a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif" title="{{get_article_title($article)}}" target="_blank">
-
-                                                    <img class="thumb" src="{{get_article_thum($article)}}" data-original="{{get_article_thum($article)}}" alt="{{get_article_title($article)}}" style="display: block;">
-
-                                                </a>
-
-                                            </figure>
-
-                                            <div class="chengshi">{{get_article_location($article)}}</div>
-
-                                            <h2>
-
-                                                <a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif" title="{{get_article_title($article)}}" target="_blank">
-
-                                                    <div style="font-size:12px; line-height:30px; color:#999; font-family:Georgia , Times, serif;">{{get_article_title($article, 1)}}</div>
-
-                                                    <div style=" color:#666; line-height:24px;">{{get_article_title($article, 2)}}</div>
-
-                                                </a>
-
-                                            </h2>
-
-                                            <div class="homeinfo">
-
-                                                <!--分类-->
-
-                                                @if ($article->category)
-
-                                                    @foreach ($article->category as $category)
-
-                                                        <a href="/article/category/{{$category['id']}}" rel="category tag">{{$category['name']}}</a>
-
+                                        <div class="chengshi">{{get_article_location($article)}}</div>
+                                        <h2>
+                                            <a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif" title="{{get_article_title($article)}}" target="_blank">
+                                                <div style="font-size:12px; line-height:30px; color:#999; font-family:Georgia , Times, serif;">{{get_article_title($article, 1)}}</div>
+                                                <div style=" color:#666; line-height:24px;">{{get_article_title($article, 2)}}</div>
+                                            </a>
+                                        </h2>
+                                        <div class="homeinfo">
+                                            <!--分类-->
+                                            @if ($article->category)
+                                                @foreach ($article->category as $category)
+                                                    <a href="/article/category/{{$category['id']}}" rel="category tag">{{$category['name']}}</a>
                                                 @endforeach
-
                                             @endif
 
                                             <!--时间-->
+                                            <span class="date">{{str_limit($article->release_time, 10, '')}}</span>
 
-                                                <span class="date">{{str_limit($article->release_time, 10, '')}}</span>
-
-                                                <!--点赞-->
-
-                                                <span title="" class="like"><i class="icon-eye"></i><span class="count">{{$article->view_num}}</span></span>
-
-                                            </div>
-
-                                        </article>
-
-                                    </li>
-
-                                @endforeach
-
-                            </ul>
-
-                        </section>
-
+                                            <!--点赞-->
+                                            <span title="" class="like"><i class="icon-eye"></i><span class="count">{{$article->view_num}}</span></span>
+                                        </div>
+                                    </article>
+                                </li>
+                            @endforeach
+                        </ul>
                     </section>
-
-                </div>
-
+                </section>
+            </div>
+            <!-- 分页 -->
+            {{$articles->appends(['keyword' => $keyword,array_except(Request::query(), 'articles')])->links()}}
+            <!-- 分页结束 -->
         </div>
-
-
-
         <!------文章结束-------->
 
 
@@ -379,9 +259,7 @@
 
 
         {{--<!---------发现/收藏夹结束-------->--}}
-
         {{--<!---------工作开始-------->--}}
-
         {{--<div class="jobs_box search_result_box" data-type="jobs">--}}
 
             {{--<div class="search_title">共找到<span>200</span>个结果</div>--}}
@@ -581,51 +459,49 @@
             {{--</div>--}}
 
         {{--</div>--}}
-
-
-
         <!---------工作结束-------->
 
 
 
         <!--------新闻----------->
-
         <div class="search-result">
             <div class="title">
-                <h2>相关新闻 <span>共找到{{$newses->total()}}条结果</span></h2>
+                <h2>{{trans('index.related_news')}} <span>{{trans('index.a_total_of_found')}} {{$newses->total()}} {{trans('index.result')}}</span></h2>
             </div>
 
             <div class="left" style="width:100%">
                 <div class="news3">
                     <ul class="layout_li ajaxpost">
                         <div class="post_list">
-                        <ul>
-                        @foreach ($newses as $news)
-                            <li class="left layout_li ajaxpost">
-                                <article class="postlist postgrid">
-                                    
-                                        <figure><a href="/news/detail/{{$news->id}}">
-                                            <img class="thumb" src="{{get_article_thum($news)}}" data-original="{{get_article_thum($news)}}" alt="{{get_article_title($news)}}" style="display: block;width:unset;"></a>
-                                        </figure>
-                                    
-                                    <h3> <a href="/news/detail/{{$news->id}}">{{get_article_title($news)}}</a></h3>
-                                    <div class="news_brief" style='text-indent: 0.9em;'><a href="/news/detail/{{$news->id}}">{!!get_article_description($news)!!}</a></div>
-                                    <div class="homeinfo">
-                                        <a href="/news/detail/{{$news->id}}">
-                                            <span class="date">{{str_limit($news->release_time, 10, '')}}</span>
-                                            <span class="comment"><i class="icon-eye"></i>{{$news->view_num}}</span>
-                                        </a>
-                                    </div>
-                                </article>
-                            </li>
-                        @endforeach
-                        <div>
+                            <ul>
+                            @foreach ($newses as $news)
+                                <li class="left layout_li ajaxpost">
+                                    <article class="postlist postgrid">
+                                        
+                                            <figure><a href="/news/detail/{{$news->id}}">
+                                                <img class="thumb" src="{{get_article_thum($news)}}" data-original="{{get_article_thum($news)}}" alt="{{get_article_title($news)}}" style="display: block;width:unset;"></a>
+                                            </figure>
+                                        
+                                        <h3> <a href="/news/detail/{{$news->id}}">{{get_article_title($news)}}</a></h3>
+                                        <div class="news_brief" style='text-indent: 0.9em;'><a href="/news/detail/{{$news->id}}">{!!get_article_description($news)!!}</a></div>
+                                        <div class="homeinfo">
+                                            <a href="/news/detail/{{$news->id}}">
+                                                <span class="date">{{str_limit($news->release_time, 10, '')}}</span>
+                                                <span class="comment"><i class="icon-eye"></i>{{$news->view_num}}</span>
+                                            </a>
+                                        </div>
+                                    </article>
+                                </li>
+                            @endforeach
+                            <div>
                         </ul>
                     </ul>
                 </div>
             </div>
+            <!-- 分页 -->
+            {{$newses->appends(['keyword' => $keyword,array_except(Request::query(), 'newses')])->links()}}
+            <!-- 分页结束 -->
         </div>
-
         <!------新闻结束-------->
 
     </div>
@@ -633,26 +509,21 @@
 </div>
 
 
-
 <script>
-
     $('#search-btn').on('click',function(){
-
-        var value = $('#keywords').val();
-
+        let value = $('#keywords').val();
         window.location.href = '/search?keyword=' + encodeURIComponent(value);
-
     });
+
+    //绑定回车事件
+    let $inp=$('input');
+    $inp.keypress(function(e){
+        let key=e.which;
+        if(key==13){
+            $('#search-btn').trigger("click");
+        }
+    }) 
 
 </script>
 
-
-
-
-
-
-
 @endsection
-
-
-

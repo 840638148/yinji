@@ -22,7 +22,7 @@
         {{$user->collect_num}} </li>
       <li> {{trans('index.subscription')}}</br>
         {{$user->subscription_num}} </li>
-      <li> {{trans('index.focus_on')}}</br>
+      <li> {{trans('index.follow')}}</br>
         {{$user->follow_num}} </li>
     </ul>
   </div>
@@ -46,10 +46,10 @@
   <div class="mt30 home_box">
     <div class="title" style='position: relative;'>
       <h2><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>{{trans('index.my_subscription')}}</span></h2>
-      <div class="desearch" style='position: absolute;top: 1px;right: 0;'>
+      <div class="desearch" style='position: absolute;top: 6px;right: 0;'>
         <form id="myform" action="/member/desearch"  style="position:relative;padding:0;" method="post" class="search_form" onkeydown="if (event.keyCode == 13) return false"  >
-            <i class="findersearch_btn" style="position: absolute;left: 10px;top: 10px;padding: 5px;cursor: pointer;border:none;background:url(/images/findersearch.png) center no-repeat;width: 30px;display: block;height: 30px;"></i>
-            <input name="content" id="txt_name" class="text_input" type="text" placeholder="{{trans('index.Please_enter_the_designer_name')}}" style=" width:100%;height:46px;text-indent: 3.5em;border-radius: 50px;" >
+            <i class="findersearch_btn icon-search-1 fr" style="position: absolute;left: 10px;top:-3px;padding: 5px;cursor: pointer;border:none;width: 20px;display: block;height: 20px;"></i>
+            <input name="content" id="txt_name" class="text_input" type="text" placeholder="{{trans('index.Please_enter_the_designer_name')}}" style=" width:90%;height:33px;text-indent: 2.5em;border-radius: 50px;" >
         </form>
       </div>
     </div>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    {{trans('comm.yinji')}} - {{trans('index.job')}}}
+    {{trans('comm.yinji')}} - {{trans('index.job')}}
 @endsection
 
 @section('content')
@@ -29,6 +29,7 @@
       font-size: 16px;
       cursor: pointer;
   }
+  /* .job_ab{max-height: 895px;overflow: hidden;} */
 </style>
 <section class="wrapper">
 
@@ -111,7 +112,7 @@
 		}
 	</style>
 	<!-- {--!!$joblist->links()!!--} -->
-	{{--$joblist--}}
+	{{$joblist}}
   <!---翻页结束---->
 
   </div>
@@ -127,20 +128,26 @@
     <div class="job_ab">
 
       <ul>
-		@foreach ($company_all_n as $key => $list)       <!-- 获取companies表的数据  -->
+      
+		  @foreach ($company_all_n as $key => $list)       <!-- 获取companies表的数据  -->
+        @if($key<6)
         <li><img src="/uploads/{{$list[0]['company_logo']}}" alt="{{$list[0]['company_name']}}" />
+          
           <div class="job_ab_info">
             <div class="title">正在热招:</div>
-            @if(count($list) < 7 )
+            
             @foreach ($list as $k)
             <div class="main_li"><a target="_blank" title="{{$k['job_name']}}" href="/job/detail/{{$k['id']}}">{{$k['job_name']}}</a></div>
             @endforeach
             <div style="display:block;float:right;position:absolute;bottom:10px;right:30px" class="whole"><a target="_blank" href="/job/detail/{{$list[0]['id']}}">查看全部</a></div>
-            @endif
+            
           </div>
           
+          
         </li>
-        @endforeach
+        @endif
+      @endforeach
+      
       </ul>
 
     </div>

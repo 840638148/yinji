@@ -68,7 +68,7 @@
       height:40px;
     }
   }
-
+  .job_ab{max-height: 940px;overflow: hidden;}
 </style>
 <section><img src="/images/job_02.jpg"  alt="工作" /></section>
 <section class="wrapper">

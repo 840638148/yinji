@@ -57,7 +57,7 @@ class Designer extends Model
 
     public static function getDesigners(& $request, $category_ids = [], $keyword = null)
     {
-        $obj = Designer::where('designer_status', '1')->where('display', '0')->orderby('designersavg','DESC');
+        $obj = Designer::where('designer_status', '1')->where('display', '0');
         // $obj=Db::table('designers')->where('designer_status', 1)->where('display', 0)->orderby('designersavg','desc')->toSql();
         // dd($obj); 
 
@@ -74,9 +74,12 @@ class Designer extends Model
                 $query->orWhere('title_cn', 'like', "%{$keyword}%");
                 $query->orWhere('title_en', 'like', "%{$keyword}%");
             });
+
+            $designers = $obj->orderby('designersavg', 'desc')->paginate(intval($request->per_page), ['*'], 'designers_page');
+        }else{
+            $designers = $obj->orderby('designersavg', 'desc')->paginate(intval($request->per_page));
         }
 
-        $designers = $obj->orderBy('designersavg', 'DESC')->paginate(intval($request->per_page));
         $lang = Session::get('language') ?? 'zh-CN';
         if ('zh-CN' == $lang) {
             $display_name = "name_cn";
@@ -100,9 +103,9 @@ class Designer extends Model
                     ];
                 }
             }
-            $designer->article_num = Article::where('article_status', 2)->where('designer_id', 'like', "%,{$designer->id},%")->count();
+            $designer->article_num = Article::where('article_status', 2)->where('display', '0')->where('designer_id', 'like', "%,{$designer->id},%")->count();
             $designer->fans_num = UserSubscription::where('designer_id', $designer->id)->count();
-            $designer->articles = Article::where('article_status', 2)->where('designer_id', 'like', "%,{$designer->id},%")->limit(4)->get();
+            $designer->articles = Article::where('article_status', 2)->where('display', '0')->where('designer_id', 'like', "%,{$designer->id},%")->limit(4)->get();
             $designer->categorys = $tmp;
 
             $res = Article::where('articles.article_status', '2')

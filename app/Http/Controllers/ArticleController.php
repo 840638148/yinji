@@ -25,6 +25,8 @@ use App\Models\UserDownRecord;
 use App\Models\UserExchangeRecord;
 use Illuminate\Support\Facades\Auth;
 use App\Models\VipPrice;
+use App\Models\Photographer;
+
 use Illuminate\Support\Collection;
 class ArticleController extends Controller
 {
@@ -348,6 +350,9 @@ class ArticleController extends Controller
         $month_price = VipPrice::getPrice(1);
         $season_price = VipPrice::getPrice(2);
         $year_price = VipPrice::getPrice(3);
+        $be_month_price= VipPrice::where('id',1)->value('be_price');
+        $be_season_price= VipPrice::where('id',2)->value('be_price');
+        $be_year_price= VipPrice::where('id',3)->value('be_price');
 
         if (Auth::check()) {
             $user_finder_folders = UserFinderFolder::getSelectOptionsByUserId(Auth::id());
@@ -413,7 +418,9 @@ class ArticleController extends Controller
                 $topics =ArticleCategory::getTopics($cid);
             }
         }
-        
+        $sys=Photographer::where('id',$article->sys_id)->first();
+        $sys_works=Photographer::leftjoin('articles','articles.sys_id','=','photographers.id')->select('photographers.id','photographers.name','articles.sys_id')->count('articles.sys_id');
+        // dd($sys);
         $data = [
             'user' => $this->getUserInfo(),
             'lang' => $lang,
@@ -436,12 +443,17 @@ class ArticleController extends Controller
             'month_price' => $month_price,
             'season_price' => $season_price,
             'year_price' => $year_price,
+            'be_month_price' => $be_month_price,
+            'be_season_price' => $be_season_price,
+            'be_year_price' => $be_year_price,
             'issc' => $issc,
             'isvip' => $isvip,
             'starsav' => $starsav,
             'userstars' => $userstars,
             'comments_all' => $comments_all,
             'topics' => $topics,
+            'sys' => $sys,
+            'sys_works' => $sys_works,
         ];
         return view('article.detail', $data);
     }

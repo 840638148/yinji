@@ -125,4 +125,9 @@ return [
     'comments'=>'评论',
     'comment'=>'发表评论',
     'subscribed'=>'已订阅',
+    'related_designer'=>'相关设计师',
+    'related_works'=>'相关作品',
+    'related_news'=>'相关新闻',
+    'a_total_of_found'=>'共找到',
+    'result'=>'条结果',
 ];

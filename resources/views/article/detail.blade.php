@@ -551,7 +551,7 @@
     <article designerid="2690">
         <div class="item author-info" style=" padding:0">
             <div class="users"> 
-                @if ($designer)
+                @if($designer)
                     <div class="border-bottom1" style="position:relative">
                         <div class="head"><img src="{{get_designer_thum($designer)}}" width="440" height="375" alt="{{get_designer_title($designer)}}"></div>
                         @if ('1' == $designer->industry)
@@ -567,44 +567,72 @@
                             <li><span> {{$designer->subscription_num}} </span>{{trans('article.fans')}}</li>
                         </ul>
                     </div>
-                    @if($is_subscription) <span style='width:82px;' class="Button wpfp_designer_act designer have-disalbed " title=""> {{trans('article.subscribed')}} </span> @else <span class="Button3 wpfp_designer_act designer subscription_designer" designer_id="{{$designer->id}}" title=""> {{trans('article.subscription')}} </span> @endif
+                    @if($is_subscription) 
+                    <span style='width:82px;' class="Button wpfp_designer_act designer have-disalbed " title=""> {{trans('article.subscribed')}} </span> 
+                    @else 
+                    <span class="Button3 wpfp_designer_act designer subscription_designer" designer_id="{{$designer->id}}" title=""> {{trans('article.subscription')}} </span> 
+                    @endif
+                    <div class="mt20 more_design"></div>
+
+
+
+                    @if ($more_designer)
+                    <div class="works_design" style='display:block;'>
+                        <ul>
+                        @foreach ($more_designer as $designer)
+                            <li>
+                                <div class="more_head fl"><img src="{{get_designer_thum($designer)}}" alt="{{get_designer_title($designer)}}"  class="left"/></div>
+                                <div class="right" style="width:160px; text-align:left">
+                                    <h3><a href="@if($designer->static_url) /designer/{{$designer->static_url}} @else /designer/detail/{{$designer->id}} @endif" title="{{get_designer_title($designer)}}" target="_blank">{{get_designer_title($designer)}}</a></h3>
+                                    @if ('1' == $designer->industry)
+                                        <p>INTERIOR  @if (!$designer->is_subscription) <a href="javascript:void(0)" class="subscription_next_designer" designer_id="{{$designer->id}}" class="right">+{{trans('article.subscription')}}</a>@endif</p>
+                                    @else
+                                        <p>Architect @if (!$designer->is_subscription)<a href="javascript:void(0)" class="subscription_next_designer" designer_id="{{$designer->id}}" class="right">+{{trans('article.subscription')}}</a>@endif</p>
+                                    @endif 
+                                </div>
+                            </li>
+                        @endforeach
+                        </ul>
+                    </div>
+                    @endif
+
+                    @if($sys)
+                    <div class="works_design" style='display:block;'>
+                        <ul>
+                            <li>
+                                <div class="more_head fl"><a href="{{$sys->url}}" title="{{$sys->name}}" target="_blank"><img style='height:84px;' src="/uploads/{{$sys->avatar}}" alt="{{$sys->avatar}}"  class="left"/></a></div>
+                                <div class="right" style="width:160px; text-align:left">
+                                    <h3><a href="{{$sys->url}}" title="{{$sys->name}}" target="_blank">{{$sys->name}}</a></h3>
+                                    <p><a href="{{$sys->url}}" title="{{$sys->name}}" target="_blank">PHOTOGRAPHER</a></p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    @endif
+
+
+
+
+                @else 
+                    @if($sys)
+                    <div class="border-bottom1" style="position:relative">
+                        <div class="head"><a href="{{$sys->url}}"><img src="/uploads/{{$sys->avatar}}" style='width:100%;height:100%;' alt="/uploads/{{$sys->avatar}}"></a></div>
+                       
+                        <div class="biaoqian" >PHOTOGRAPHER</div>
+                        
+                        <h2><a href="{{$sys->url}}">{{$sys->name}}</a> </h2>
+                    </div>
+                    <div class="Statistics">
+                        <ul>
+                            <li><a href="javascript:;"><span>{{$sys_works}}</span>{{trans('article.works')}}</a></li>
+                            <li><span> 0 </span>{{trans('article.fans')}}</li>
+                        </ul>
+                    </div>
+                    <span style='width:82px;' class="Button wpfp_designer_act designer have-disalbed " title=""> {{trans('article.subscription')}} </span> 
+                    <div class="mt20 more_design"></div>
+                    @endif
                 @endif
         
-                @if ($more_designer)
-                <div class="mt20 more_design"></div>
-                <div class="works_design" style='display:block;'>
-                    <ul>
-                    @foreach ($more_designer as $designer)
-                        <li>
-                            <div class="more_head fl"><img src="{{get_designer_thum($designer)}}" alt="{{get_designer_title($designer)}}"  class="left"/></div>
-                            <div class="right" style="width:160px; text-align:left">
-                                <h3><a href="@if($designer->static_url) /designer/{{$designer->static_url}} @else /designer/detail/{{$designer->id}} @endif" title="{{get_designer_title($designer)}}" target="_blank">{{get_designer_title($designer)}}</a></h3>
-                                @if ('1' == $designer->industry)
-                                    <p>INTERIOR  @if (!$designer->is_subscription) <a href="javascript:void(0)" class="subscription_next_designer" designer_id="{{$designer->id}}" class="right">+{{trans('article.subscription')}}</a>@endif</p>
-                                @else
-                                    <p>Architect @if (!$designer->is_subscription)<a href="javascript:void(0)" class="subscription_next_designer" designer_id="{{$designer->id}}" class="right">+{{trans('article.subscription')}}</a>@endif</p>
-                                @endif 
-                            </div>
-                        </li>
-                    @endforeach
-                    </ul>
-                </div>
-                @endif
-
-                @if($sys)
-                <div class="mt20 more_design0"></div>
-                <div class="works_design" style='display:block;'>
-                    <ul>
-                        <li>
-                            <div class="more_head fl"><a href="{{$sys->url}}" title="{{$sys->name}}" target="_blank"><img style='height:84px;' src="/uploads/{{$sys->avatar}}" alt="{{$sys->avatar}}"  class="left"/></a></div>
-                            <div class="right" style="width:160px; text-align:left">
-                                <h3><a href="{{$sys->url}}" title="{{$sys->name}}" target="_blank">{{$sys->name}}</a></h3>
-                                <p><a href="{{$sys->url}}" title="{{$sys->name}}" target="_blank">{{$sys->url}}</a></p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                @endif
 
             </div>
         </div>
@@ -895,26 +923,24 @@
     </div>
             <div class="close vip_close">关闭</div>
             <div class="vip_select mt30">
-      <ul>
-                <li class="determine vipfee_type1" vip_level="1" price="{{$month_price or '0.01'}}" omit="{{$be_month_price}}"><em>{{$month_price or '0.01'}}</em>元
-          <p>月会员</p>
-          <del>原价：{{$be_month_price}}元</del></li>
-                <li class="vipfee_type2" vip_level="2" price="{{$season_price or '0.01'}}" omit="{{$be_season_price}}"><em>{{$season_price or '0.01'}}</em>元
-          <p>季会员</p>
-          <del>原价：{{$be_season_price}}元</del></li>
-                <li class="vipfee_type3" vip_level="3" price="{{$year_price or '0.01'}}" omit="{{$be_year_price}}"><em>{{$year_price or '0.01'}}</em>元
-          <p>年会员</p>
-          <del>原价：{{$be_year_price}}元</del></li>
-              </ul>
+        <ul>
+            <li class="determine vipfee_type1" vip_level="1" price="{{$month_price or '0.01'}}" omit="{{$be_month_price}}"><em>{{$month_price or '0.01'}}</em>元
+            <p>月会员</p>
+            <del>原价：{{$be_month_price}}元</del></li>
+                    <li class="vipfee_type2" vip_level="2" price="{{$season_price or '0.01'}}" omit="{{$be_season_price}}"><em>{{$season_price or '0.01'}}</em>元
+            <p>季会员</p>
+            <del>原价：{{$be_season_price}}元</del></li>
+                    <li class="vipfee_type3" vip_level="3" price="{{$year_price or '0.01'}}" omit="{{$be_year_price}}"><em>{{$year_price or '0.01'}}</em>元
+            <p>年会员</p>
+            <del>原价：{{$be_year_price}}元</del></li>
+        </ul>
     </div>
             <div class="vip_check">
       <ul>
                 <li>
           <input name="" type="checkbox" value="" checked="checked" />
           到期自动续费一个月，可随时取消</li>
-                <li>
-          <input name="" type="checkbox" value="" checked="checked" />
-          <a href="#">同意并接受《服务条款》</a></li>
+          <li><input name="" type="checkbox" value="" id="agree" /><a href="javascript:void(0);">同意并接受《服务条款》</a></li>
               </ul>
     </div>
             <div class="vip_pay">
@@ -996,8 +1022,8 @@
     })
 
 
-     //新建文件夹
-     $(document).on('click','.create-new-folder-btn',function(){
+    //新建文件夹
+    $(document).on('click','.create-new-folder-btn',function(){
      	sourceid=$(this).attr('sourceid');
         if ($('#new-find-model-folder').data("open")==1) { return false; }
         $('#new-find-model-folder').data("open", 1);
@@ -1013,24 +1039,21 @@
 
 
 
-//点击收藏的
-function resetSCBtn() {
-	$(".add_finder_btn[data-id]").removeClass("Button").addClass("Button2")
-	.removeClass("issca").removeClass("have-disalbed").text("收藏");
-}
+    //点击收藏的
+    function resetSCBtn() {
+        $(".add_finder_btn[data-id]").removeClass("Button").addClass("Button2")
+        .removeClass("issca").removeClass("have-disalbed").text("收藏");
+    }
 
-function disableSCBtn(img_url, folder_id) {
-	// console.log(folder_id);
-	let btn = $(`.add_finder_btn[data-id='${folder_id}']`);
-	btn.removeClass("Button2").addClass("Button");
-	btn.addClass("issca").addClass("have-disalbed");
-	btn.text("已收藏");
-}
-
-
+    function disableSCBtn(img_url, folder_id) {
+        // console.log(folder_id);
+        let btn = $(`.add_finder_btn[data-id='${folder_id}']`);
+        btn.removeClass("Button2").addClass("Button");
+        btn.addClass("issca").addClass("have-disalbed");
+        btn.text("已收藏");
+    }
 
 
-    //分享按钮点击
 
     //分享按钮点击
     let photo_source;
@@ -1080,13 +1103,8 @@ function disableSCBtn(img_url, folder_id) {
                     });
 
                     break;
-
             }
-
         }
-
-
-
     })
 
     $('.vip_prompt .vip_buy').click(function () {
@@ -1095,20 +1113,14 @@ function disableSCBtn(img_url, folder_id) {
 
     })
 
-
-
     $('.vip_prompt .vip_detail').click(function () {
         location.href='/vip/intro'
     })
-
-
 
     $(document).on("click",".vip_close",function () {
         $(".new_folder_box").hide();
         return false;
     })
-
-
 
     $(document).on("click",".new_folder_bj",function () {
         $(".login_box").hide();
@@ -1117,15 +1129,10 @@ function disableSCBtn(img_url, folder_id) {
 
     })
 
-
-
-
-
     $(document).on("click",".vip_prompt",function () {
         layer.closeAll()
         return false;
     })
-
 
 
     $(document).on("click",".layui-layer-shade",function () {
@@ -1134,20 +1141,14 @@ function disableSCBtn(img_url, folder_id) {
     })
 
 
-
     //关闭所有展示框
-
     $(document).on('click','.modal .close',function(){
     	layer.closeAll()
     	class_find_layui_win();
     })
 
 
-
-
-
     //创建收藏收藏夹
-
     $(document).on('click','.create_finder_folder_enter_btn',function(ev){
         $data = {};
         $data.favorite = $("#new-find-model-folder [name='favorite']").val();
@@ -1157,8 +1158,6 @@ function disableSCBtn(img_url, folder_id) {
         if ($("#new-find-model-folder").find("[name='isopen']").prop('checked')) {
             $data.isopen =2;
         }
-
-
 
         if (!$data.favorite) {
             $("#new-find-model-folder .error_msg").text("收藏夹名称必填");
@@ -1188,8 +1187,6 @@ function disableSCBtn(img_url, folder_id) {
         return false;
 
     })
-
-
 
     
 
@@ -1283,272 +1280,145 @@ function disableSCBtn(img_url, folder_id) {
 
 
 </script> 
-        {{--会员购买模块--}} 
-        <script>
+{{--会员购买模块--}} 
+<script>
+    _omit  = 58;
+    _price = '0.01';
 
 
-
-        _omit  = 58;
-
-        _price = '0.01';
-
-
+    $(document).on("click",".vip_select li",function () {
+        _self = $(this);
+        _price = _self.attr("price");
+        _omit = _self.attr("omit");
 
 
+        $('#vip_type').val(_self.attr("vip_level"));
+        $('#pay_total').val(_price);
+        $('#payment_code').val('alipay');
+        $(".vip_select li").removeClass("determine");
 
+        _self.addClass("determine");
 
+        var c = parseInt(_omit)-parseInt(_price);
 
-        $(document).on("submit",".cart",function () {
+        $(".vip_pay_msg").html("应付：<span>"+_price+"</span>元 ( 立省"+c+"元)");
+    });
 
-
-
-            var agree = document.getElementById("agree").checked;
-
-
-
-
-
-
-
-            if (!agree) {
-
-
-
-
-
-
-
-                alert('请阅读并接受《服务条款》');
-
-
-
+    $(document).ready(function(){
+        $(document).on("click","#buy_now_button",function(){
+            var vip_type = $('#vip_type').val();
+            let agree = document.getElementById("agree").checked;
+            if(!agree){
+                layer.msg('请阅读并接受《服务条款》!',{zIndex:999999999,time: 1500,skin: 'intro-login-class layui-layer-hui'});
                 return false;
-
-
-
             }
-
-
-
-        });
-
-
-
-
-
-
-
-        $(document).on("click",".vip_select li",function () {
-
-            _self = $(this);
-
-
-
-            _price = _self.attr("price");
-
-            _omit = _self.attr("omit");
-
-
-
-            $('#vip_type').val(_self.attr("vip_level"));
-
-            $('#pay_total').val(_price);
-
-            $('#payment_code').val('alipay');
-
-
-
-            $(".vip_select li").removeClass("determine");
-
-
-
-            _self.addClass("determine");
-
-
-
-            var c = parseInt(_omit)-parseInt(_price);
-
-
-
-            $(".vip_pay_msg").html("应付：<span>"+_price+"</span>元 ( 立省"+c+"元)");
-
-
-
-        });
-
-
-
-
-
-
-
-        $(document).ready(function(){
-
-            // listen if someone clicks 'Buy Now' button
-
-
-
-            // if(!IS_LOGIN){
-
-            //     $('.login_box').show()
-
-            // }
-
-            $(document).on("click","#buy_now_button",function(){
-
-                var vip_type = $('#vip_type').val();
-
-                if (vip_type == '') {
-
-                    alert('请选择会员类型');
-
-                    return false;
-
-                }
-
-                window.location = '/vip/pay?vip_type=' + vip_type;
-
-                return;
-
-
-
-                //submit the form
-
-
-
-                //$('form.cart').submit();
-
-                var url = '/vip/wxbuy';
-
-                var folder_data = {
-
-                    _token:_token,
-
-                    vip_type : $('#vip_type').val(),
-
-                    payment_code : $('#payment_code').val(),
-
-                    pay_total : $('#pay_total').val(),
-
-                };
-
-
-
-                $.ajax({
-
-                    async:false,
-
-                    url: url,
-
-                    type: 'POST',
-
-                    dataType: 'json',
-
-                    data: folder_data,
-
-                    success: function (data) {
-
-                        if (data.status_code == 0) {
-
-                            if ('alipay' == data.data.payment_code) {
-
-                                window.location = data.data.redirect_url;
-
-                            } else {
-
-                                alert('微信支付返回二维码地址');
-
-                            }
-
-                            layer.closeAll();
-
+            if (vip_type == '') {
+                alert('请选择会员类型');
+                return false;
+            }
+            window.location = '/vip/pay?vip_type=' + vip_type;
+            return;
+            //submit the form
+            //$('form.cart').submit();
+
+            var url = '/vip/wxbuy';
+            var folder_data = {
+                _token:_token,
+                vip_type : $('#vip_type').val(),
+                payment_code : $('#payment_code').val(),
+                pay_total : $('#pay_total').val(),
+            };
+
+
+            $.ajax({
+                async:false,
+                url: url,
+                type: 'POST',
+                dataType: 'json',
+                data: folder_data,
+                success: function (data) {
+                    if (data.status_code == 0) {
+                        if ('alipay' == data.data.payment_code) {
+                            window.location = data.data.redirect_url;
                         } else {
-
-                            alert(data.message);
-
+                            alert('微信支付返回二维码地址');
                         }
-
+                        layer.closeAll();
+                    } else {
+                        alert(data.message);
                     }
-
-                });
-
-
-
+                }
             });
-
-
-
         });
+    });
 
 
 
 </script> 
+{{--会员购买模块结束--}} 
 
 {{--登录模块--}} 
 <script type="text/javascript">
 
-        function WeChatLogin() {
-            if ($(".ma_box").hasClass("hide")) {
-                $(".ma_box").removeClass("hide");
-            } else {
-                $(".ma_box").addClass("hide");
+    function WeChatLogin() {
+        if ($(".ma_box").hasClass("hide")) {
+            $(".ma_box").removeClass("hide");
+        } else {
+            $(".ma_box").addClass("hide");
+        }
+    }
+
+    function toLogin() {
+        //以下为按钮点击事件的逻辑。注意这里要重新打开窗口
+        //否则后面跳转到QQ登录，授权页面时会直接缩小当前浏览器的窗口，而不是打开新窗口
+        var A = window.open("/auth/qq", "_self");
+    }
+
+    function wp_attempt_focus() {
+        setTimeout(function () {
+            try {
+                d = document.getElementById('user_login');
+                d.focus();
+                d.select();
+            } catch (e) {
+
             }
+        }, 200);
+    }
+
+    //监听回车事件
+    $(document).keyup(function(event){
+        if(event.keyCode ==13){
+            $('#wp-submit-login').trigger("click");
         }
+    });
 
-        function toLogin() {
-            //以下为按钮点击事件的逻辑。注意这里要重新打开窗口
-            //否则后面跳转到QQ登录，授权页面时会直接缩小当前浏览器的窗口，而不是打开新窗口
-            var A = window.open("/auth/qq", "_self");
-        }
-
-        function wp_attempt_focus() {
-            setTimeout(function () {
-                try {
-                    d = document.getElementById('user_login');
-                    d.focus();
-                    d.select();
-                } catch (e) {
-
+    $("#wp-submit-login").click(function () {
+        // var loginform = new FormData();
+        var url = $.trim($('#loginform').attr("action"));
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: 'json',
+            data: $('#loginform').serialize(),
+            success: function (data) {
+                if (data.status_code == 0) {
+                    setTimeout(function () {
+                        location.href =  location.href
+                    }, 300);
+                } else {
+                    layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
                 }
-            }, 200);
-        }
-
-        //监听回车事件
-        $(document).keyup(function(event){
-            if(event.keyCode ==13){
-                $('#wp-submit-login').trigger("click");
             }
         });
 
-        $("#wp-submit-login").click(function () {
-            // var loginform = new FormData();
-            var url = $.trim($('#loginform').attr("action"));
-            $.ajax({
-                url: url,
-                type: 'POST',
-                dataType: 'json',
-                data: $('#loginform').serialize(),
-                success: function (data) {
-                    if (data.status_code == 0) {
-                        setTimeout(function () {
-                            location.href =  location.href
-                        }, 300);
-                    } else {
-                        layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'});
-                    }
-                }
-            });
+    });
 
-        });
+    wp_attempt_focus();
 
-        wp_attempt_focus();
-
-        if (typeof wpOnload == 'function') wpOnload();
+    if (typeof wpOnload == 'function') wpOnload();
 
 </script> 
-{{--    登录结束--}}
-
-
-
+{{--登录结束--}}
 
 @endsection

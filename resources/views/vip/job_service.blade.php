@@ -286,9 +286,7 @@
         <li>
           <input name="" type="checkbox" value="" checked="checked" />
           到期自动续费一个月，可随时取消</li>
-        <li>
-          <input  name="" type="checkbox" value="" checked="checked"/>
-          <a href="#">同意并接受《服务条款》</a></li>
+          <li><input  name="" type="checkbox" value="" id="agree" /><a href="javascript:void(0);">同意并接受《服务条款》</a></li>
       </ul>
     </div>
     <div class="vip_pay">
@@ -325,18 +323,15 @@ $(document).on("click",".vip_close",function () {
 </script> 
 <script>
 
-
-
     _omit  = 58;
-
     _price = '0.01';
-    $(document).on("submit",".cart",function () {
-      var agree = document.getElementById("agree").checked;
-      if (!agree) {
-        alert('请阅读并接受《服务条款》');
-        return false;
-      }
-    });
+    // $(document).on("submit",".cart",function () {
+    //   var agree = document.getElementById("agree").checked;
+    //   if (!agree) {
+    //     alert('请阅读并接受《服务条款》');
+    //     return false;
+    //   }
+    // });
 
     $(document).on("click",".vip_select li",function () {
       _self = $(this);
@@ -356,6 +351,11 @@ $(document).ready(function(){
       // listen if someone clicks 'Buy Now' button
   $(document).on("click","#buy_now_button",function(){
       var vip_type = $('#vip_type').val();
+      let agree = document.getElementById("agree").checked;
+      if(!agree){
+          layer.msg('请阅读并接受《服务条款》!',{zIndex:999999999,time: 1500,skin: 'intro-login-class layui-layer-hui'});
+          return false;
+      }
       if (vip_type == '') {
         alert('请选择会员类型');
         return false;

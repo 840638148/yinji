@@ -905,7 +905,7 @@
 
         <div class="social fr">
 
-            {{trans('index.focus_on')}}：<a href="https://weibo.com/yinjispace"><img src="/images/foot_31.gif" alt="新浪微博"></a>
+            {{trans('index.follow')}}：<a href="https://weibo.com/yinjispace"><img src="/images/foot_31.gif" alt="新浪微博"></a>
 
 
 
