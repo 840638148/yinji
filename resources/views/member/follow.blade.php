@@ -160,8 +160,8 @@
 
       <!-- 我的粉丝开始 -->
       <div id="myTab1_Content1"  class="none">
-        <section class="wrapper">
-        <div class="mt30 home_box">
+        <section class="wrapper" style='width:1160px;'>
+        <div class="mt30 ">
           <!--@if(!$user->is_vip)-->
             <!--VIP专栏提示-->	
           <div class="vip_prompt modal vip_prompt-member" id="vip-img"><a href="javascript:void(0);" id="vip_buy" class="vip_buy">开通VIP会员</a><a href="/vip/intro" class="vip_detail">了解VIP详情>></a></div>

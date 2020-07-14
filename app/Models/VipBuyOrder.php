@@ -14,6 +14,13 @@ class VipBuyOrder extends Model
 	 */
 	protected $guarded = [];
 
+
+    public static function getPayType($user_id=null){
+        $res=self::where('user_id',$user_id)->select('id','payment_name')->where('pay_status',2)->where('pay_status_name','已支付')->first();
+        return $res;
+    }
+
+
 	public static function dealVip($order_no,$buyer_pay_amount=null)
     {
         $order = VipBuyOrder::where('order_no', $order_no)->first();
