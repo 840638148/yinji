@@ -5,7 +5,7 @@ use App\Http\Error;
 use App\Http\Output;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
-
+use DB;
 class Article extends Model
 {
     protected $dates = ['created_at', 'updated_at', 'release_time'];
@@ -207,7 +207,6 @@ class Article extends Model
     }
 
 
-
     public static function getArticles(& $request, $category_ids = [], $keyword = null)
     {
         // dd($request->all());
@@ -251,24 +250,28 @@ class Article extends Model
         }
 
         if ($keyword) {
-            $obj->where(function($query) use($keyword){
-                $query->orWhere('title_designer_cn', 'like', "%{$keyword}%");
-                $query->orWhere('title_name_cn', 'like', "%{$keyword}%");
-                $query->orWhere('title_intro_cn', 'like', "%{$keyword}%");
-                $query->orWhere('title_designer_en', 'like', "%{$keyword}%");
-                $query->orWhere('title_name_en', 'like', "%{$keyword}%");
-                $query->orWhere('title_intro_en', 'like', "%{$keyword}%");
-                $query->orWhere('keyword', 'like', "%{$keyword}%");
-                $query->orWhere('description_cn', 'like', "%{$keyword}%");
-                $query->orWhere('description_en', 'like', "%{$keyword}%");
-            });
+            // dd($obj->toSql());
+            // $a=$obj->where(function($query) use($keyword){
+            //     $query->orWhere('title_designer_cn', 'like', "%{$keyword}%");
+            //     $query->orWhere('title_name_cn', 'like', "%{$keyword}%");
+            //     $query->orWhere('title_intro_cn', 'like', "%{$keyword}%");
+            //     $query->orWhere('title_designer_en', 'like', "%{$keyword}%");
+            //     $query->orWhere('title_name_en', 'like', "%{$keyword}%");
+            //     $query->orWhere('title_intro_en', 'like', "%{$keyword}%");
+            //     $query->orWhere('keyword', 'like', "%{$keyword}%");
+            //     $query->orWhere('description_cn', 'like', "%{$keyword}%");
+            //     $query->orWhere('description_en', 'like', "%{$keyword}%");
+            // });
+
+            $obj->where(DB::raw("concat_ws('',title_designer_cn,title_name_cn,title_intro_cn,title_designer_en,title_name_en,title_intro_en,keyword,description_cn,description_en)") ,'LIKE', "%$keyword%");
+            // dd($a->toSql());
+
 
             $articles = $obj->paginate(intval($request->per_page), ['*'], 'articles_page');
         }else{
             $articles = $obj->paginate(intval($request->per_page));
         }
         
-        // dd(intval($request->page));
         $lang = Session::get('language') ?? 'zh-CN';
         if ('zh-CN' == $lang) {
             $display_name = "name_cn";
@@ -430,6 +433,7 @@ class Article extends Model
          
         }else{
             $articles = Article::getArticles($request, $category_ids);
+            // dd($articles);
             foreach ($articles as $k=>$article) {
                 $category_html = '';
                 // $articles[$k]['starsavg'] = ArticleComment::where('comment_id', $article['id'])->orderBy('article_comments.stars','desc')->avg('stars');
@@ -571,6 +575,51 @@ class Article extends Model
             $article->category = $tmp;
         }
         return $articles;
+    }
+
+    public static function jz_dcarticle_id(){
+        $options = self::where('category_ids','like',"%20%")->select('id','title_name_cn as text')->get();
+        $selectOption = [];
+        foreach ($options as $option){
+            $selectOption[$option->id] = $option->text;
+        }
+        return $selectOption;
+    }
+
+    public static function yl_dcarticle_id(){
+        $options = self::where('category_ids','like',"%21%")->select('id','title_name_cn as text')->get();
+        $selectOption = [];
+        foreach ($options as $option){
+            $selectOption[$option->id] = $option->text;
+        }
+        return $selectOption;
+    }
+
+    public static function gq_dcarticle_id(){
+        $options = self::where('category_ids','like',"%22%")->select('id','title_name_cn as text')->get();
+        $selectOption = [];
+        foreach ($options as $option){
+            $selectOption[$option->id] = $option->text;
+        }
+        return $selectOption;
+    }    
+
+    public static function yxzx_dcarticle_id(){
+        $options = self::where('category_ids','like',"%23%")->select('id','title_name_cn as text')->get();
+        $selectOption = [];
+        foreach ($options as $option){
+            $selectOption[$option->id] = $option->text;
+        }
+        return $selectOption;
+    }
+
+    public static function ybf_dcarticle_id(){
+        $options = self::where('category_ids','like',"%24%")->select('id','title_name_cn as text')->get();
+        $selectOption = [];
+        foreach ($options as $option){
+            $selectOption[$option->id] = $option->text;
+        }
+        return $selectOption;
     }
 
 }

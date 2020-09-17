@@ -531,7 +531,7 @@ form.post-password-form input[type="submit"] { background-color: #636af3; color:
 .entry .content-post a { color: #636af3 }
 .entry .content-post a:hover { color: #636af3 }
 .content-post p { margin: 8px 0 24px }
-.content-post img { margin-top: 5px; margin-bottom: 8px; display: block; max-width: 100%; width: auto; height: auto }
+.content-post img { margin-top: 0; margin-bottom: 0; display: block; max-width: 100%; width: auto; height: auto; }
 .content-post .alignnone { margin-right: auto; margin-left: auto }
 .content-post .alignleft { float: left; text-align: left; margin-right: 12px }
 .content-post .aligncenter { margin-right: auto; margin-left: auto; text-align: center; display: block }
@@ -2203,6 +2203,7 @@ width: 10px; height: 10px; margin: 0 5px; border-radius: 10px; background: #fff;
 .zhuanti li a { display: inline-block; position: relative }
 .zhuanti li .title-topic { position: absolute; bottom: 5px; right: 5px; color: #fff; -webkit-transform: translate(-50%, -50%); -moz-transform: translate(-50%, -50%); transform: translate(-50%, -50%); }
 .nav_fenlei, .nav_fenlei2 { width: 100%; background: rgba(250,250,250,.95); margin-top: -60px; margin-bottom: 20px; text-align: center; height: 60px; padding: 0 5%; overflow: hidden }
+.nav_fenlei{padding-left:20px;}
 .nav_fenlei li { width: 10%; float: left; line-height: 58px; font-size: 16px; }
 .nav_fenlei li.current-cat { color: #636af3; border-bottom: 2px solid #636af3; }
 .nav_fenlei2 a { padding: 0 30px; line-height: 58px; font-size: 16px; }
@@ -2489,3 +2490,55 @@ hr { border: 1px solid #666; width: 90%; margin: 10px auto }
 .nav_fenlei .sort ul{position: absolute; width: 100px; background:#eee;bottom: -157px;left:-38px; display:none }
 .nav_fenlei .sort ul li{font-size: 12px; width: 100px !important; text-align:center;line-height:48px; height:48px; cursor:pointer}
 .nav_fenlei .sort ul li:hover{ background:url(/images/ico_chengshi.png) bottom; color:#fff;}
+
+
+
+/****地产集团***/
+.company_banner{ width:100%; height:600px; overflow:hidden;}
+.company_left{ float:left; width:370px; text-align:center; padding-top:50px;}
+.company_right{ float:right; width:800px; padding:50px 0;}
+.company_right h1{ font-size:24px; line-height:48px;}
+.company_Profile{ font-size:14px}
+.company_ico{ font-size:32px; margin:50px;}
+.company_ico a{ width:32px; height:32px; margin: 0 10px}
+.company_Profile{ height:430px; width:800px; overflow: hidden; text-overflow: -o-ellipsis-lastline; overflow: hidden; text-overflow: ellipsis;  display: -webkit-box; -webkit-line-clamp:14;  line-clamp:14; -webkit-box-orient: vertical;}
+.company_bj1{background-color:#f4f4f4; width:100%; height:600px;}
+.company_bj2{background-color:#383838; width:100%; height:700px;}
+.company_luopan{ width:1024px; float:left; margin-top:-150px;}
+.company_luopan li{ width:31.3%; margin:0 1%; float:left; background-color:#666; height:420px; position: relative;cursor:pointer; background-color:#333}
+.company_button { font-size:32px; line-height:32px;margin-top:-50px; position:inherit}
+.company_button h1{ line-height:60px; text-align:center}
+.swiper-button-next1,.swiper-button-prev1 { cursor:pointer; font-size:32px; margin-top:30px; background-color:#ddd; width:32px; height:32px; text-align:center; margin:20px;border-radius: 100%;}
+.swiper-button-next1{ float:right;}
+.swiper-button-prev1 { float:left}
+.swiper-button-next:hover,.swiper-button-prev:hover{ background-color:#636af3; color:#fff}
+.index_dafen i{ display:block;transform:rotate(-45deg);  -webkit-transform:rotate(-45deg);  -moz-transform:rotate(-45deg); font-size:16px}
+.cs a{ background:url(../images/cs.png) repeat-x -5px; height:30px; padding:0 5px; width:auto; margin-bottom:10px;}
+.company_contact{color:#999; margin-top:50px; float:left; width:300px;line-height:30px;}
+.company_contact h2{color:#fff; line-height:48px;}
+.company_news{margin-top:50px; float:right; width:800px;}
+.company_news dl{ margin-bottom:20px;}
+.company_news dt{ color:#999; font-size:16px; line-height:36px;}
+.company_news dd{ text-overflow: -o-ellipsis-lastline; overflow: hidden; text-overflow: ellipsis;  display: -webkit-box; -webkit-line-clamp: 3;  line-clamp: 3; -webkit-box-orient: vertical;}
+.luopan_list li{margin-bottom: 20px; float:left;position: relative; height:510px; overflow:hidden;  cursor: pointer;}
+.luopan_list ul{ -webkit-column-count: 3;  -moz-column-count:3; column-count: 3;}
+.lpbt{ display: none; position:absolute; width:100%; height:100%; background-color:rgba(0,0,0,.3); top:0; left:0; text-align:center;}
+.lpbt h3{ color:#fff; margin-top:200px;font-size:18px}
+.luopan_list li:hover .lpbt{ display:block; }
+.Residential_ico a{ width:80px; height:80px; float:left;border-radius:5px; background-color:#222; margin-right:30px; margin-top:30px; padding:20px 10px; text-align: center; color:#666}
+.Residential_ico a:before{ display:block; font-size:32px;}
+.huxing{ width:1200px; position:absolute; top:40%; left:50%; margin-left:-600px; overflow:hidden}
+.huxing li{ float:left; width:285px; height:415px; margin:0 20px;}
+.huxing ul{ width:10000px; height:415px;}
+.huxing_prev,.huxing_next{ width:50px; position:absolute; top:60%}
+.huxing_prev{left:5%}
+.huxing_next{right:5%}
+.nav_search i{position: absolute;  right: 220px;  z-index: 99999; top: 19px; color:#999}
+input.search_input{position: absolute; right:50px; width:200px; height:36px; top:15px; background:#fff; z-index:9999;border-radius:18px; padding-left:32px}
+.developers{-webkit-column-count: 2;   -moz-column-count: 2; column-count: 2;}
+.developers li{ width:590px; background-color:#f4f4f4; margin-bottom:20px; height:387px; overflow:hidden; text-align:center; position:relative}
+.developers_logo{ width:50%; height:387px;float: left;}
+.property li{float:left; width:50%; height:387px; overflow:hidden;}
+.property_prev,.property__next{ position: absolute;right:10px; bottom:10px; z-index:9999; padding:10px;}
+.property_prev{ right:50px;}
+

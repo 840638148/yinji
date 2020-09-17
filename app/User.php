@@ -28,7 +28,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'username', 'nickname', 'email', 'password', 'mobile', 'avatar', 'sex', 'city', 'wx', 'personal_note', 'level','zhiwei',
-        'expire_time', 'points', 'left_points', 'friends', 'follower', 'register_key', 'last_login_time', 'last_login_ip', 'last_session_id', 'continuity_day','nicksum','one_visited'
+        'expire_time', 'points', 'left_points', 'friends', 'follower', 'register_key', 'last_login_time', 'last_login_ip', 'last_session_id', 'continuity_day','nicksum','one_visited','leiji_freesum','leiji_dhsum'
     ];
 
     /**
@@ -131,8 +131,11 @@ class User extends Authenticatable
             return $num;
         }
         $user = User::find($user_id);
-        $freenum=self::getFreeDownloadNum($user_id);
-        $kounum=self::getKouDownloadNum($user_id);
+        // $freenum=self::getFreeDownloadNum($user_id);
+        // $kounum=self::getKouDownloadNum($user_id);
+        $freenum=self::getFreeSum($user_id);
+        $kounum=self::getKouSum($user_id);
+
         $num = 0;
         // $is_vip = self::isVip($user_id);
         if ($user) {
@@ -213,13 +216,22 @@ class User extends Authenticatable
         }else{
             $kounum = 1;
         } 
-        
-        // dd($kounum);
         return $kounum;
     }
 
+    // 获取当前所在的星期一和星期天
+    public static function mondayTime(){
+        $date=new \DateTime();//时间对象
+        $starts=$date->modify('this week');
+        $start=$date->format('Y-m-d');
+
+        $end_times=$date->modify('this week +6 days');
+        $end_time=$date->format('Y-m-d');
+        return ['start'=>$start,'end'=>$end_time];
+    }
+    
     /**
-     * 获取用户剩余免费下载次数
+     * 获取用户当天剩余免费下载次数
      */
     public static function getFreeSum($user_id = null)
     {  
@@ -228,22 +240,32 @@ class User extends Authenticatable
             return $num;
         }
         $user = User::find($user_id);
-        $is_vip = self::isVip($user_id);
-        $today_start = date('Y-m-d 00:00:00');
-        $today_end   = date('Y-m-d 23:59:59');
         $freedown=self::getFreeDownloadNum($user_id);
-        $hasdown=UserDownRecord::where('user_id',$user_id)->where('is_free',1)->where('created_at', '>=', $today_start)->where('created_at', '<', $today_end)->count();
-        
-        if($freedown-$hasdown>0){
+        $hasdown=self::getUseDownloadNum($user_id,1);
+        if($user && $freedown-$hasdown>0){
             $num=$freedown-$hasdown;
         }else{
             $num=0;
         }
-        return $num;
+
+        $last_downrecord=UserDownRecord::where('user_id',$user_id)->orderby('created_at','desc')->value('created_at');
+        $res=0;
+        $times=date('Y-m-d',strtotime($last_downrecord)); //获取上次下载时间
+        if($times<date('Y-m-d')){
+            //如果上次下载时间小于今天，那么计算上次下载时间距离今天时间有多少天
+            $res=round((strtotime(date('Y-m-d',time()))-strtotime($times))/3600/24);
+            
+        }
+        $nums=$num+$res*$freedown;
+        // dd($freedown,$hasdown,$nums);
+        
+        // $user->leiji_freesum=$num;
+        // $user->save();
+        return $nums;
     }
 
     /**
-     * 获取用户剩余抵扣下载次数
+     * 获取用户当天剩余抵扣下载次数
      */
     public static function getKouSum($user_id = null)
     {  
@@ -252,17 +274,29 @@ class User extends Authenticatable
             return $num;
         }
         $user = User::find($user_id);
-        $is_vip = self::isVip($user_id);
-        $today_start = date('Y-m-d 00:00:00');
-        $today_end   = date('Y-m-d 23:59:59');
         $koudown=self::getKouDownloadNum($user_id);
-        $hasdown=UserDownRecord::where('user_id',$user_id)->where('is_free',2)->where('created_at', '>=', $today_start)->where('created_at', '<', $today_end)->count();
-        if($koudown-$hasdown>0){
+        $hasdown=self::getUseDownloadNum($user_id,2);
+        if($user && $koudown-$hasdown>0){
             $num=$koudown-$hasdown;
         }else{
             $num=0;
         }
-        return $num;
+
+
+        $last_downrecord=UserDownRecord::where('user_id',$user_id)->orderby('created_at','desc')->value('created_at');
+        $res=0;
+        $times=date('Y-m-d',strtotime($last_downrecord)); //获取上次下载时间
+        if($times<date('Y-m-d')){
+            //如果上次下载时间小于今天，那么计算上次下载时间距离今天时间有多少天
+            $res=round((strtotime(date('Y-m-d',time()))-strtotime($times))/3600/24);
+            
+        }
+        $nums=$num+$res*$koudown;
+
+        // dd($koudown,$hasdown,$num,$nums);
+        // $user->leiji_dhsum=$num;
+        // $user->save();
+        return $nums;
     }
 
 
@@ -274,30 +308,47 @@ class User extends Authenticatable
      * @param null $user_id
      * @return bool
      */
-    public static function getUseDownloadNum($user_id = null)
-    {
-        $today_start = date('Y-m-d 00:00:00');
+    public static function getUseDownloadNum($user_id = null,$is_free=null)
+    {   
+        if(date('Y-m-d')<='2020-09-07'){
+            $today_start = date('Y-m-d 00:00:00');
+        }else{
+            $today_start = date('Y-m-d 00:00:00',strtotime('-7 days'));
+        }
+
+        if($today_start<='2020-09-07'){
+            $today_start='2020-09-07 00:00:00';
+        }
+        
         $today_end   = date('Y-m-d 23:59:59');
-        return UserDownRecord::where('user_id', $user_id)
+        if($is_free){
+            return UserDownRecord::where('user_id', $user_id)
+                ->where('is_free',$is_free)
+                ->where('created_at', '>=', $today_start)
+                ->where('created_at', '<', $today_end)
+                ->count();
+        }else{
+            return UserDownRecord::where('user_id', $user_id)
             ->where('created_at', '>=', $today_start)
             ->where('created_at', '<', $today_end)
             ->count();
+        }
     }
     
 
     /**
-     *  获取用户剩余下载次数
+     *  获取用户剩余总下载次数
      *
      * @param null $user_id
      * @return bool
      */
-    public static function getLeftDownloadNum($user_id = null)
+    /*public static function getLeftDownloadNum($user_id = null)
     {
         $total   = self::getDownloadNum($user_id);
         $use_num = self::getUseDownloadNum($user_id);
-        // dd($total,$use_num);
-        return $total - $use_num;
-    }
+        $user=User::find($user_id);
+        return $total - $use_num+$user->leiji_freesum;
+    }*/
     
 
     /**
@@ -306,15 +357,23 @@ class User extends Authenticatable
      * @param null $user_id
      * @return bool
      */
-    public static function getUseExchangeNum($user_id = null)
+    /*public static function getUseExchangeNum($user_id = null)
     {
-        $today_start = date('Y-m-d 00:00:00');
+        if(date('Y-m-d')<='2020-09-07'){
+            $today_start = date('Y-m-d 00:00:00');
+        }else{
+            $today_start = date('Y-m-d 00:00:00',strtotime('-7 days'));
+        }
+
+        if($today_start<='2020-09-07'){
+            $today_start='2020-09-07 00:00:00';
+        }
         $today_end   = date('Y-m-d 23:59:59');
         return UserExchangeRecord::where('user_id', $user_id)
             ->where('created_at', '>=', $today_start)
             ->where('created_at', '<', $today_end)
             ->count();
-    }
+    }*/
     
     
     /**
@@ -323,7 +382,7 @@ class User extends Authenticatable
      * @param null $user_id
      * @return bool
      */
-    public static function getLeftExchangeNum($user_id = null)
+    /*public static function getLeftExchangeNum($user_id = null)
     {
         $use_num = self::getUseExchangeNum($user_id);
         
@@ -332,8 +391,6 @@ class User extends Authenticatable
         $is_vip = self::isVip($user_id);
         if ($is_vip && $user) {
             if ($user->level == 0) {
-                $point_set = PointSet::find(15);
-                $num = $point_set->point;
             } else if ($user->level == 1) {
                 $point_set = PointSet::find(16);
                 $num = $point_set->point;
@@ -352,7 +409,7 @@ class User extends Authenticatable
         
         return $num - $use_num;
         
-    }
+    }*/
 
 
     /**

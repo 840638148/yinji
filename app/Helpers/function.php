@@ -329,3 +329,181 @@ function get_topic_title($topic)
     }
     return $title;
 }
+
+/**
+ * 获取地产名
+ */
+function get_dc_name($list)
+{
+    $lang = Session::get('language') ?? 'zh-CN';
+    if ('zh-CN' == $lang) {
+        $title  = $list->name;
+    } else {
+        $title  = $list->name_en;
+    }
+    return $title;
+}
+
+// 获取地产地区
+function get_dc_area($list)
+{
+    $lang = Session::get('language') ?? 'zh-CN';
+    if ('zh-CN' == $lang) {
+        $title  = $list->area;
+    } else {
+        $title  = $list->area_en;
+    }
+    return $title;
+}
+
+// 获取地产地区
+function get_dc_intro($list)
+{
+    $lang = Session::get('language') ?? 'zh-CN';
+    if ('zh-CN' == $lang) {
+        $title  = $list->intro;
+    } else {
+        $title  = $list->intro_en;
+    }
+    return $title;
+}
+
+// 获取地产地区
+function get_dc_address($list)
+{
+    $lang = Session::get('language') ?? 'zh-CN';
+    if ('zh-CN' == $lang) {
+        $title  = $list->address;
+    } else {
+        $title  = $list->address_en;
+    }
+    return $title;
+}
+
+
+/**
+ * 获取地产文章简介
+ */
+function get_dc_description($article)
+{
+    $lang = Session::get('language') ?? 'zh-CN';
+    if ('zh-CN' == $lang) {
+        $description  = $article->intro ?? str_limit($article->detail->content);
+    } else {
+        $description = $article->intro_en ?? str_limit($article->detail->content_en);
+    }
+    return $description;
+}
+
+/**
+ * 获取地产文章标题
+ */
+function get_dc_title($article, $type = null)
+{
+    $lang = Session::get('language') ?? 'zh-CN';
+    if ('zh-CN' == $lang) {
+        $title  = $article->designer;
+        $title .= $article->name ? ' | ' . $article->name: '';
+        // $title .= $article->intro ? ' , ' . $article->intro: '';
+    } else {
+        $title  = $article->designer_en;
+        $title .= $article->name_en ? ' | ' . $article->name_en : '';
+        // $title .= $article->intro_en ? ',' . $article->intro_en : '';
+    }
+    switch ($type) {
+        case '1':
+            $tmp = explode('|', $title);
+            $title = @$tmp[0];
+            break;
+        case '2':
+            $tmp = explode('|', $title);
+            $title = @$tmp[1];
+            break;
+    }
+    return $title;
+}
+
+/**
+ * 获取文章关键词
+ */
+function get_dc_keyword($article)
+{
+    $lang = Session::get('language') ?? 'zh-CN';
+    $tag_ids = $article->tag_ids;
+    if (!$tag_ids) {
+        return '';
+    }
+    if ('zh-CN' == $lang) {
+        return $tag_ids;
+    } else {
+        $obj = ArticleTag::where('display', '0');
+
+        $obj->where(function($query) use($tag_ids){
+            $tag_ids = explode(',', $tag_ids);
+            foreach ($tag_ids as $tag_id) {
+                $query->orWhere('name_en',  $tag_id);
+            }
+        });
+        $tags = $obj->get();
+        $tmp = [];
+        foreach ($tags as $tag) {
+            $tmp[] = $tag->name_en;
+        }
+        return implode(',', $tmp);
+    }
+
+
+
+}
+
+
+/**
+ * 获取地产文章内容
+ */
+function get_dc_content($article)
+{
+    $lang = Session::get('language') ?? 'zh-CN';
+    if ('zh-CN' == $lang) {
+        $content  = $article->content;
+    } else {
+        $content = $article->content_en;
+    }
+    return $content;
+}
+
+/**
+ * 获取地产文章特色照片
+ */
+function get_dc_special($article)
+{
+
+    if ($article->special_img) {
+        $first_img_url = url('uploads/' . $article->special_img);
+        return $first_img_url;
+    }
+    
+}
+
+/**
+ * 获取地产文章缩略图
+ */
+function get_dc_thum($article)
+{   
+    // dd($article->detail);
+	if (empty($article)) return '';
+    if ($article->bgimg) {
+        $first_img_url = url('uploads/' . $article->bgimg);
+    } else {
+        $lang = Session::get('language') ?? 'zh-CN';
+        if ('zh-CN' == $lang) {
+            $first_img_url = get_html_first_imgurl($article->content);
+        } else {
+            $first_img_url = get_html_first_imgurl($article->content_en);
+        }
+        if ($first_img_url) {
+            $first_img_url = url($first_img_url);
+        }
+    }
+
+    return $first_img_url;
+}

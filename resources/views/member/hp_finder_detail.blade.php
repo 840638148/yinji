@@ -19,16 +19,9 @@
         right:10px;
     }
 
-    .edit_favorites:hover .item-setting-btns{
-        color:#555;
-    }
+    .edit_favorites:hover .item-setting-btns{color:#555;}
 
-    .find_title{
-        overflow:inherit;
-        position:absolute;
-        bottom: -2px;
-
-    }
+    .find_title{overflow:inherit;position:absolute;bottom: -2px;}
 
     .find_title h2{
         float: none;
@@ -45,18 +38,10 @@
         line-height: 35px;
         text-indent: 1em;
     }
-    .find_title a{
-        display: none;
-    }
-    .find_title .find-icon-trash{
-        position: absolute;
-        bottom: 8px;
-        right: 10px;
-    }
+    .find_title a{display: none;}
+    .find_title .find-icon-trash{position: absolute;bottom: 8px;right: 10px;}
 
-    .item_content:hover .find_title h2,.item_content:hover .find_title a,.item_content:hover .find_title .dot{
-        display: block;
-    }
+    .item_content:hover .find_title h2,.item_content:hover .find_title a,.item_content:hover .find_title .dot{display: block;}
 
     .item .item-setting-btns{
         display: none;
@@ -75,13 +60,9 @@
 
 
 
-    .item.selected .item-setting-btns{
-        display: block;
-    }
+    .item.selected .item-setting-btns{display: block;}
 
-    .modal{
-        display:none;
-    }
+    .modal{display:none;}
 
     .img_browse{
         position: fixed;
@@ -98,39 +79,12 @@
         border-radius: 5px;
     }
 
-    .img_browse .right{
-        width:260px;
-        height: 100%;
-    }
+    .img_browse .right{width:260px;height: 100%;}
+    .img_browse .right .head img{width:100%;height: 100%;}
+    .img_browse .right .faxian_info{margin-top: 10px;}
+    .lzcfg{background: rgba(0,0,0,0.5);position: fixed;left: 0px;top: 0px;width: 100%;height: 100%;display: none;z-index: 99999999;}
+    .swiper-container{display:none;position:absolute;z-index:9999999999;top:31%;}
 
-    .img_browse .right .head img{
-        width:100%;
-        height: 100%;
-    }
-
-    .img_browse .right .faxian_info{
-        margin-top: 10px;
-    }
-        
-    .lzcfg{
-        background: rgba(0,0,0,0.5);
-        position: fixed;
-        left: 0px;
-        top: 0px;
-        width: 100%;
-        height: 100%;
-        display: none;
-        z-index: 99999999;
-    }
-
-    .swiper-container{
-        display:none;
-        position:absolute;
-        z-index:9999999999;
-        top:31%;
-    }
-
-    
     .box { 
         -moz-column-count:4; /* Firefox */
         -webkit-column-count:4; /* Safari 和 Chrome */
@@ -321,7 +275,7 @@
     <article class="swiper-slide slide-single" data-swiper-slide-index="{{$loop->iteration}}">
     	<div class="wrap" style="position: relative">
     		<a href="/article/{{$v['static_url']}}" target='_blank'><img id="btntp" width="600px" height="600px" src="{{$v['photo_url']}}" data-id="{{$v['photo_source']}}" alt="{{$v['name']}}"></a>
-    		<div class="scbtmlbt" data-id="{{$v['photo_source']}}" data-pid-i="{{ $i }}" onclick="getID(this)" ><img style='width:20px;height:20px;margin-top:8px;' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACUAAAAlCAQAAABvl+iIAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfiDA0XHTkZwnQUAAAAVUlEQVRIx2P8z0AtwEQ1k0aNGjWKJkaxYIhgS/6MWMUZh6YHsToeTRxrGTA4PTg4jcIV7KgBy0jYoAFNDPRx1bA3ivTEgLMOHpweZBxtM4waNbiNAgDn9QhSF9pevwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0xMi0xM1QyMzoyOTo1NyswODowMMypGaQAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMTItMTNUMjM6Mjk6NTcrMDg6MDC99KEYAAAAAElFTkSuQmCC" alt=""></div>
+    		<div class="scbtmlbt" data-id='{{$v["photo_source"]}}' data-pid-i="{{$i}}" onclick="getID(this)" ><img style='width:20px;height:20px;margin-top:8px;' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACUAAAAlCAQAAABvl+iIAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfiDA0XHTkZwnQUAAAAVUlEQVRIx2P8z0AtwEQ1k0aNGjWKJkaxYIhgS/6MWMUZh6YHsToeTRxrGTA4PTg4jcIV7KgBy0jYoAFNDPRx1bA3ivTEgLMOHpweZBxtM4waNbiNAgDn9QhSF9pevwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0xMi0xM1QyMzoyOTo1NyswODowMMypGaQAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMTItMTNUMjM6Mjk6NTcrMDg6MDC99KEYAAAAAElFTkSuQmCC" alt=""></div>
     	</div>
     </article>
     @endforeach 
@@ -342,12 +296,12 @@
         </div> 
     <!-- 内容开始 -->
         <div class="box"> 
-            @foreach ($users->finder_details as $i =>$v)
+            @foreach ($users->finder_details   as $i =>$v)
                 <div class="itemww"> 
                     <img src="{{$v['photo_url']}}" data-id="{{$v['user_finder_folder_id']}}" source='{{$v["photo_source"]}}' data-photo-index="{{ $i }}" alt="{{mb_substr($v['titlename'],0,30)}}">
                     <div class="titlename" onclick="location='@if($v['static_url']) /article/{{$v['static_url']}} @else /article/detail/{{$v['id']}} @endif'">
                     @if(strlen($v['titlename']) < 20) {{$v['titlename']}} @else {{mb_substr($v['titlename'],0,20)}} @endif</div>
-                    <div class="scbtm" photoid="{{$v['photo_source']}}" imgsrc="{{$v['photo_url']}}" data-id="{{$v['photo_source']}}" data-pid-i="{{ $i }}" onclick="getID(this)"><img style='width:20px;height:20px;margin-top:7px;' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACUAAAAlCAQAAABvl+iIAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfiDA0XHTkZwnQUAAAAVUlEQVRIx2P8z0AtwEQ1k0aNGjWKJkaxYIhgS/6MWMUZh6YHsToeTRxrGTA4PTg4jcIV7KgBy0jYoAFNDPRx1bA3ivTEgLMOHpweZBxtM4waNbiNAgDn9QhSF9pevwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0xMi0xM1QyMzoyOTo1NyswODowMMypGaQAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMTItMTNUMjM6Mjk6NTcrMDg6MDC99KEYAAAAAElFTkSuQmCC" alt=""></div>
+                    <div class="scbtm" photoid="{{$v['photo_source']?$v['photo_source']:$v['dcarticle_id']}}" imgsrc="{{$v['photo_url']}}" data-id='{{$v["photo_source"]}}' data-pid-i="{{ $i }}" onclick="getID(this)"><img style='width:20px;height:20px;margin-top:7px;' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACUAAAAlCAQAAABvl+iIAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfiDA0XHTkZwnQUAAAAVUlEQVRIx2P8z0AtwEQ1k0aNGjWKJkaxYIhgS/6MWMUZh6YHsToeTRxrGTA4PTg4jcIV7KgBy0jYoAFNDPRx1bA3ivTEgLMOHpweZBxtM4waNbiNAgDn9QhSF9pevwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0xMi0xM1QyMzoyOTo1NyswODowMMypGaQAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMTItMTNUMjM6Mjk6NTcrMDg6MDC99KEYAAAAAElFTkSuQmCC" alt=""></div>
                 </div>
             @endforeach 
         </div>
@@ -607,75 +561,40 @@
 <!--个人发现中心的图片浏览-->
 
 <div class="img_browse modal" id="img-browse" >
-
     <div class="close">关闭</div>
-
     <div class="left">
-
         <div style="height:48px;">
-
             <h2 class="fl">文件夹名称333</h2>
-
             <span class="fr">分享到：</div>
-
         <div class="image"><img src="/images/ad_05.gif" alt="发现的图片" class="selected-image"/> </div>
-
     </div>
-
     <div class="right" style="margin-top:48px;">
-
         <div class="more_img">
-
             <a href="#" class="more-img-item selected"><img src="images/imges.jpg" alt="图片一" /> <div class="cover"></div></a>
-
-
-
             <a href="#" class="more-img-item"><img src="images/ad_05.gif" alt="图片一" /><div class="cover"></div></a>
-
             <a href="#" class="more-img-item"><img src="images/design_16-03.gif" alt="图片二" /><div class="cover"></div></a>
-
             <a href="#" class="more-img-item"><img src="images/about_img.jpg" alt="图片一" /><div class="cover"></div></a>
-
             <a href="#" class="more-img-item"><img src="images/ad_22.gif" alt="图片二" /><div class="cover"></div></a>
-
             <a href="#" class="more-img-item"><img src="images/ad_05.gif" alt="图片一" /><div class="cover"></div></a>
-
             <a href="#" class="more-img-item"><img src="images/design_16-03.gif" alt="图片二" /><div class="cover"></div></a>
-
             <a href="#" class="more-img-item"><img src="images/about_img.jpg" alt="图片一" /><div class="cover"></div></a>
-
             <a href="#" class="more-img-item"><img src="images/ad_22.gif" alt="图片二" /><div class="cover"></div></a>
-
             <a href="#" class="more-img-item"><img src="images/ad_05.gif" alt="图片一" /><div class="cover"></div></a>
-
-            <a href="#" class="more-img-item"><img src="images/design_16-03.gif" alt="图片二" /><div class="cover"></div></a> </div>
-
+            <a href="#" class="more-img-item"><img src="images/design_16-03.gif" alt="图片二" /><div class="cover"></div></a> 
+        </div>
         <hr />
-
         <div class="discoverer">
-
             <div class="head"><img width="100%" height="100%" src="images/design_16-03.gif" alt="头像" /></div>
-
             <h2><a href="#">大仁哥1027</a> <span class="vip1">VIP</span></h2>
-
             <a class="Button">关注</a>
-
         </div>
-
         <hr />
-
         <div class="faxian_info">
-
             <p>由 <a href="#">严PPPPPPPP1</a> 收藏于 <a href="#">大厅</a></p>
-
             <p>2017-06-02 14:59:57</p>
-
             <p class="laiyuan"><a href="#">来源：Lera Brumina作品 | 80㎡ Apartmen...</a></p>
-
         </div>
-
     </div>
-
 </div>
 <!--个人发现中心的浏览结束-->
 
@@ -900,10 +819,9 @@
             let photo_url=$(`.itemww img[data-photo-index=${photo_id_i}]`).attr('src');
             let source = collect_id;//图片所在的文章id
             let is_sc=1;
-           
             $.ajax({
                     async:false,
-                    url: '/vip/finder_collect',
+                    url: '/lpintro/finder_collect',
                     type: 'POST',
                     dataType: 'json',
                     data: {
@@ -915,7 +833,7 @@
                     },
                     success: function (data){
                         if(data.status_code == 0){
-                            layer.msg(data.message,{zIndex:99999999999999999999,skin: 'intro-login-class layui-layer-hui'});
+                            layer.msg(data.message,{zIndex:99999999999,skin: 'intro-login-class layui-layer-hui'});
                             that.html('已收藏');
                             that.addClass('have-collect');
                             that.removeClass('Button2');

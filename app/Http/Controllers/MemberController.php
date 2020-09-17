@@ -27,7 +27,7 @@ use App\Models\Article;
 use App\Models\ViewNum;
 use App\Models\HomepageMessage;
 use Carbon\Carbon;
-// use Mail;
+use App\Models\DcArticle;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Intervention\Image\Facades\Image;
@@ -138,10 +138,13 @@ class MemberController extends Controller
             $edit_info[$field] = $request->get($field);
         }
 
-        $has_nick=User::where('nickname',$edit_info['nickname'])->first();
+        $has_nick=User::where('id','!=',Auth::id())->where('nickname',$edit_info['nickname'])->first();
         $has_tel=User::where('mobile',$edit_info['mobile'])->first();
         if($has_nick){
             return Output::makeResult($request, null, 500,'昵称太受欢迎了');
+            
+        }else if(!preg_match("/^[\x80-\xffA-Za-z0-9]+$/",$edit_info['nickname'])){
+            return Output::makeResult($request, null, 500,'昵称规范:中文、英文、数字但不包括下划线等符号');
         }else if($has_tel){
             return Output::makeResult($request, null, 500,'手机已存在');
         }
@@ -473,6 +476,9 @@ class MemberController extends Controller
         return view('member.interest', $data);
     }
 
+    /**
+    *  个人中心->关注中心
+    */
     public function follow(Request $request)
     {
         $this->checkLogin();
@@ -501,6 +507,9 @@ class MemberController extends Controller
         return view('member.follow', $data);
     }
 
+    /**
+    *  个人中心->下载中心
+    */
     public function mydown(Request $request){
         $this->checkLogin();
 
@@ -508,12 +517,12 @@ class MemberController extends Controller
 
         $user = $this->getUserInfo();
 
-        $today_starts = date('Y-m-d H:i:s', strtotime('-3 days'));
+        $today_starts = date('Y-m-d H:i:s', strtotime('-7 days'));
         $today_ends   = date('Y-m-d H:i:s');
         $down=UserDownRecord::leftjoin('articles','user_down_records.down_id','=','articles.id')->select('articles.static_url','articles.custom_thum','user_down_records.id','articles.title_name_cn','articles.title_designer_cn','articles.vip_download','user_down_records.created_at')->where('user_down_records.user_id',$user->id)->where('user_down_records.created_at', '>=', $today_starts)->where('user_down_records.created_at', '<=', $today_ends)->orderby('created_at','desc')->get();
-
+        // dd($down);
         foreach($down as $k=>$v){
-            $down[$k]['guoqitime']=Carbon::parse($v->created_at)->addDays(3)->toDateTimeString();
+            $down[$k]['guoqitime']=Carbon::parse($v->created_at)->addDays(7)->toDateTimeString();
         }
 
         $data = [
@@ -524,6 +533,9 @@ class MemberController extends Controller
         return view('member.mydown', $data);
     }
 
+    /**
+    *  添加关注
+    */
     public function addFollow(Request $request)
     {
         $this->checkLogin();
@@ -538,6 +550,9 @@ class MemberController extends Controller
         return Output::makeResult($request, null, Error::SYSTEM_ERROR);
     }
 
+    /**
+    *  取消关注
+    */
     public function cancelFollow(Request $request)
     {
         $this->checkLogin();
@@ -549,7 +564,9 @@ class MemberController extends Controller
         return Output::makeResult($request, null, Error::SYSTEM_ERROR);
     }
 
-
+    /**
+    *  个人中心->积分中心
+    */
     public function point(Request $request)
     {
         $this->checkLogin();
@@ -582,7 +599,9 @@ class MemberController extends Controller
         return view('member.point', $data);
     }
 
-
+    /**
+    *  个人中心->订阅中心
+    */
     public function subscription(Request $request)
     {
         $this->checkLogin();
@@ -620,7 +639,9 @@ class MemberController extends Controller
         }   
     }
 
-
+    /**
+    *  个人中心->取消订阅
+    */
     public function cancelSubscription(Request $request)
     {
         $this->checkLogin();
@@ -632,7 +653,9 @@ class MemberController extends Controller
         return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
     }
 
-
+    /**
+    *  个人中心->收藏中心
+    */
     public function collect(Request $request)
     {
         $this->checkLogin();
@@ -649,13 +672,13 @@ class MemberController extends Controller
         return view('member.collect', $data);
     }
 
-
+    /**
+    *  个人中心->收藏详情
+    */
     public function collectDetail(Request $request, $id)
     {
         $this->checkLogin();
-
         $lang = $request->session()->get('language') ?? 'zh-CN';
-
         $user = $this->getUserInfo();
         
         $user->collect_details = UserCollect::getCollectDetails($user->id, $id);
@@ -666,19 +689,35 @@ class MemberController extends Controller
         }
         
         foreach($user->collect_details as $k=>$v){
-            //要删除的图片id
-            $user->collect_details[$k]['delid']=UserCollect::where('user_collect_folder_id',$id)->where('collect_id',$v['id'])->value('id');
+            foreach($v as $ks=>$val){
+                // 要删除的图片id
+                if(get_class($val)=='App\Models\Article'){
+                    $v[$ks]['delid']=UserCollect::where('user_collect_folder_id',$id)->where('collect_id',$val->id)->value('id');
+                }else{
+                    $v[$ks]['delid']=UserCollect::where('user_collect_folder_id',$id)->where('dcarticle_id',$val->id)->value('id');
+                }
+            }
+            
         }
-
+        
+        //获取用户所有发现夹，并去掉当前所在发现夹
+        $collectlist=UserCollectFolder::where('user_id',$user->id)->get();
+        $collectlist = $collectlist->reject(function ($value) use ($id) {
+            return $value->id == $id;
+        });
+        
         $data = [
             'lang' => $lang,
             'user' => $user,
             'folder_name' => $folder_name,
+            'collectlist' => $collectlist,
         ];
         return view('member.collect_detail', $data);
     }
 
-
+    /**
+    *  个人中心->发现中心
+    */
     public function finder(Request $request)
     {
         $this->checkLogin();
@@ -955,6 +994,8 @@ class MemberController extends Controller
             $folder_name = $folder_obj->name;
         }
 
+        // dd($user->collect_details);
+
         $data = [
             'lang' => $lang,
             'users' => $users,
@@ -1001,15 +1042,25 @@ class MemberController extends Controller
 		//获取个人中心->发现中心->图片的标题
         foreach ($users->finder_details as $userfinderid){
         	
-        	$tiname=Article::where('id',$userfinderid['photo_source'])->get()->toArray();
-        	
-        	foreach ($tiname as $tinamearr){
-				$tinames=$tinamearr['title_designer_cn'].' | '.$tinamearr['title_name_cn'];
-				$userfinderid['static_url']=$tinamearr['static_url'];
-				$userfinderid['titlename']=$tinames;
-        	}
-			
+        	if($userfinderid['photo_source']){
+                $tiname=Article::where('id',$userfinderid['photo_source'])->get()->toArray();
+                foreach ($tiname as $tinamearr){
+                    $tinames=$tinamearr['title_designer_cn'].' | '.$tinamearr['title_name_cn'];
+                    $userfinderid['static_url']=$tinamearr['static_url'];
+                    $userfinderid['titlename']=$tinames;
+                }
+            }else{
+                $tiname=DcArticle::where('id',$userfinderid['dcarticle_id'])->get()->toArray();
+                foreach ($tiname as $tinamearr){
+                    $tinames=$tinamearr['designer'].' | '.$tinamearr['name'];
+                    $userfinderid['static_url']=$tinamearr['id'];
+                    $userfinderid['titlename']=$tinames;
+                }
+            }
         }
+
+        
+
         //通过用户id获取收藏夹名字
     	$userscname = UserFinderFolder::where('user_finder_folders.user_id',$user->id)->get()->toArray();
 
@@ -1220,7 +1271,9 @@ class MemberController extends Controller
     }
 
 
-
+    /**
+    *  个人中心->发现详情
+    */
     public function finderDetail(Request $request, $id)
     {
         $this->checkLogin();
@@ -1243,14 +1296,21 @@ class MemberController extends Controller
 
 		//获取个人中心->发现中心->图片的标题
         foreach ($user->finder_details as $userfinderid){
-        	
-        	$tiname=Article::where('id',$userfinderid['photo_source'])->get()->toArray();
-        	
-        	foreach ($tiname as $tinamearr){
-				$tinames=$tinamearr['title_designer_cn'].' | '.$tinamearr['title_name_cn'];
-				$userfinderid['static_url']=$tinamearr['static_url'];
-				$userfinderid['titlename']=$tinames;
-        	}
+        	if($userfinderid['photo_source']){
+                $tiname=Article::where('id',$userfinderid['photo_source'])->get()->toArray();
+                foreach ($tiname as $tinamearr){
+                    $tinames=$tinamearr['title_designer_cn'].' | '.$tinamearr['title_name_cn'];
+                    $userfinderid['static_url']=$tinamearr['static_url'];
+                    $userfinderid['titlename']=$tinames;
+                }
+            }else{
+                $tiname=DcArticle::where('id',$userfinderid['dcarticle_id'])->get()->toArray();
+                foreach ($tiname as $tinamearr){
+                    $tinames=$tinamearr['designer'].' | '.$tinamearr['name'];
+                    $userfinderid['static_url']=$tinamearr['id'];
+                    $userfinderid['titlename']=$tinames;
+                }
+            }
 			
         }
 
@@ -1290,6 +1350,25 @@ class MemberController extends Controller
         }
     }
     
+    //移动个人中心->发现中心的->一个收藏夹里的一篇文章到另外一个收藏夹里
+    public function movecollect(Request $request)
+    {
+        if(!Auth::check()){
+            return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
+        }
+
+        $user_collect_folder_id = $request->user_collect_folder_id;
+        $source = $request->source;
+        
+        $res = UserCollect::where('user_id',Auth::id())->where('collect_id', $source)->update(['user_collect_folder_id' => $user_collect_folder_id]); 
+
+        if ($res) {
+            return Output::makeResult($request, null,0,'移动成功');
+        } else {
+            return Output::makeResult($request, null, Error::SYSTEM_ERROR, '您无权移动该图片');
+        }
+    }
+        
 
     //删除个人中心->发现中心的->一个发现夹里的一张图片
     public function deleteFinderItem(Request $request)
@@ -1324,7 +1403,9 @@ class MemberController extends Controller
         }
     }
 
-    
+    /**
+    *  个人中心->签到记录
+    */
     public function attendance(Request $request)
     {
         $this->checkLogin();
@@ -1344,9 +1425,6 @@ class MemberController extends Controller
         }
         return Output::makeResult($request, null, Error::SYSTEM_ERROR, $result);
     }
-
-
-
 
 
 

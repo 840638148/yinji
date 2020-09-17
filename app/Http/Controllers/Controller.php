@@ -51,7 +51,7 @@ class Controller extends BaseController
             $user->finder_num = User::getFinderNum($user->id);
             $user->getKouDownloadNum=User::getKouDownloadNum($user->id);
             $user->getFreeDownloadNum=User::getFreeDownloadNum($user->id);
-            $user->getLeftDownloadNum=User::getLeftDownloadNum($user->id);
+            // $user->getLeftDownloadNum=User::getLeftDownloadNum($user->id);
             $user->getFreeSum=User::getFreeSum($user->id);
             $user->getKouSum=User::getKouSum($user->id);
         }

@@ -6,7 +6,7 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
-        "encore/laravel-admin": "^1.6",
+        "encore/laravel-admin": "^1.8",
         "fideloper/proxy": "~3.3",
         "ignited/laravel-omnipay": "^3.0",
         "intervention/image": "^2.5",
@@ -19,12 +19,15 @@
         "laravel/tinker": "~1.0",
         "lokielse/omnipay-alipay": "^3.0",
         "lokielse/omnipay-wechatpay": "^3.0",
+        "maatwebsite/excel": "^3.1",
         "oakhope/oauth2-wechat": "^1.0",
+        "predis/predis": "^1.1",
         "socialiteproviders/qq": "^3.0",
         "socialiteproviders/weibo": "^3.0",
         "socialiteproviders/weixin-web": "^3.0",
         "toplan/laravel-sms": "^2.6",
-        "yansongda/pay": "^2.7"
+        "yansongda/pay": "^2.7",
+        "zhusaidong/laravel-admin-grid-exporter": "^0.1.1"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

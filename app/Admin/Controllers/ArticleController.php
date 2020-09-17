@@ -16,6 +16,7 @@ use App\Models\Article as CurrentModel;
 use App\Models\ArticleCategory;
 use App\Models\ArticleTag;
 use App\Models\Designer;
+use App\Models\Photographer;
 
 class ArticleController extends BaseController
 {
@@ -88,6 +89,7 @@ class ArticleController extends BaseController
 
         $form->tab('基本信息', function ($form) {
 
+            $form->select('sys_id','摄影师')->options(Photographer::getSelectOptions());
             //$form->display('id', 'ID');
             //$form->text('keyword', '关键词');
             $form->text('static_url', '静态地址')->help("如果输入：New-York-Downtown.html，则访问地址为：http://www.yinjispace.com/article/<span style='color:#F00;'>New-York-Downtown.html</span>");
@@ -110,12 +112,15 @@ class ArticleController extends BaseController
                 }
 
             })->ajax('/admin/article/get_designer_select_options');
+            
             $form->text('article_source', '文章来源');
             $form->text('article_source_url', '文章来源URL');
+
             $form->image('custom_thum', '自定义封面')
                 ->uniqueName()
                 ->widen(880)
                 ->move('public/photo/images/custom_thum/');
+
             $form->image('special_photo', '特色照片')
                 ->uniqueName()
                 ->widen(1920)

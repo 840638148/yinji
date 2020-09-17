@@ -59,27 +59,27 @@ body{background:#f8f8f8 !important;}
       <div class="post_list">
         <ul>
           @foreach ($users->collect_details as $article)
-          <li class="layout_li ajaxpost">
-            <article class="postgrid">
-            <span class="guojia2" >
-              <a style="position:absolute;bottom:60px;right:35px;z-index:9;" href="#" rel="tag">{{$article->location_cn}}</a>
-            </span>
-              <figure> <a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif" title="{{get_article_title($article)}}" target="_blank"> <img class="thumb" src="{{get_article_thum($article)}}" data-original="{{get_article_thum($article)}}" alt="{{get_article_title($article)}}" style="display: block;"> </a> </figure>
-              <h2> <a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif" title="{{get_article_title($article)}}" target="_blank">
-                <div style="font-size:12px; line-height:30px; color:#999; font-family:Georgia , Times, serif;">{{get_article_title($article, 1)}}</div>
-                <div style=" color:#666; line-height:24px;">{{get_article_title($article, 2)}}</div>
-                </a> </h2>
-              <div class="homeinfo"> 
-                <!--分类--> 
-                @if ($article->category)
-                @foreach ($article->category as $category) <a href="/article/category/{{$category['id']}}" rel="category tag">{{$category['name']}}</a> @endforeach
-                @endif 
-                <!--时间--> 
-                <span class="date">{{str_limit($article->release_time, 10, '')}}</span> 
-                <!--点赞--> 
-                <span title="" class="like"><i class="icon-eye"></i><span class="count">{{$article->view_num}}</span></span> </div>
-            </article>
-          </li>
+            <li class="layout_li ajaxpost">
+              <article class="postgrid">
+              <span class="guojia2" >
+                <a style="position:absolute;bottom:60px;right:35px;z-index:9;" href="#" rel="tag">{{$article->location_cn}}</a>
+              </span>
+                <figure> <a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif" title="{{get_article_title($article)}}" target="_blank"> <img class="thumb" src="{{get_article_thum($article)}}" data-original="{{get_article_thum($article)}}" alt="{{get_article_title($article)}}" style="display: block;"> </a> </figure>
+                <h2> <a href="@if($article->static_url) /article/{{$article->static_url}} @else /article/detail/{{$article->id}} @endif" title="{{get_article_title($article)}}" target="_blank">
+                  <div style="font-size:12px; line-height:30px; color:#999; font-family:Georgia , Times, serif;">{{get_article_title($article, 1)}}</div>
+                  <div style=" color:#666; line-height:24px;">{{get_article_title($article, 2)}}</div>
+                  </a> </h2>
+                <div class="homeinfo"> 
+                  <!--分类--> 
+                  @if ($article->category)
+                  @foreach ($article->category as $category) <a href="/article/category/{{$category['id']}}" rel="category tag">{{$category['name']}}</a> @endforeach
+                  @endif 
+                  <!--时间--> 
+                  <span class="date">{{str_limit($article->release_time, 10, '')}}</span> 
+                  <!--点赞--> 
+                  <span title="" class="like"><i class="icon-eye"></i><span class="count">{{$article->view_num}}</span></span> </div>
+              </article>
+            </li>
           @endforeach
         </ul>
         <!-- 分页 --> 

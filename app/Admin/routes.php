@@ -256,5 +256,75 @@ Route::group([
     $router->post('/hot_search', 'HotSearchController@postCreate');
     $router->get('/hot_search/{id}/edit', 'HotSearchController@getEdit');
 	$router->put('/hot_search/{id}', 'HotSearchController@putEdit');
-	$router->delete('/hot_search/{id}', 'HotSearchController@remove');
+    $router->delete('/hot_search/{id}', 'HotSearchController@remove');
+    
+    //摄影师
+    $router->get('/photographer/create', 'PhotographerController@getCreate');
+    $router->get('/photographer', 'PhotographerController@index');
+    $router->get('/photographer/{id}', 'PhotographerController@show');
+    $router->post('/photographer', 'PhotographerController@postCreate');
+    $router->get('/photographer/{id}/edit', 'PhotographerController@getEdit');
+	$router->put('/photographer/{id}', 'PhotographerController@putEdit');
+    $router->delete('/photographer/{id}', 'PhotographerController@remove');
+
+    //地产
+    $router->get('/dclist/create', 'DcController@getCreate');
+    $router->get('/dclist', 'DcController@index');
+    $router->get('/dclist/{id}', 'DcController@show');
+    $router->post('/dclist', 'DcController@postCreate');
+    $router->get('/dclist/{id}/edit', 'DcController@getEdit');
+    $router->put('/dclist/{id}', 'DcController@putEdit');
+    $router->delete('/dclist/{id}', 'DcController@remove');
+
+    // 楼盘
+    $router->get('/loupan/create', 'LouPanController@getCreate');
+    $router->get('/loupan', 'LouPanController@index');
+    $router->get('/loupan/{id}', 'LouPanController@show');
+    $router->post('/loupan', 'LouPanController@postCreate');
+    $router->get('/loupan/{id}/edit', 'LouPanController@getEdit');
+    $router->put('/loupan/{id}', 'LouPanController@putEdit');
+    $router->delete('/loupan/{id}', 'LouPanController@remove');
+
+    // 地产文章
+    $router->get('/dc_articles/create', 'DcArticleController@getCreate');
+    $router->get('/dc_articles', 'DcArticleController@index');
+    $router->get('/dc_articles/{id}', 'DcArticleController@show');
+    $router->post('/dc_articles', 'DcArticleController@postCreate');
+    $router->get('/dc_articles/{id}/edit', 'DcArticleController@getEdit');
+    $router->put('/dc_articles/{id}', 'DcArticleController@putEdit');
+    $router->delete('/dc_articles/{id}', 'DcArticleController@remove');
+
+    //地产文章详情
+    $router->get('/dc_category/create', 'DcCategoryController@getCreate');
+    $router->get('/dc_category', 'DcCategoryController@index');
+    $router->get('/dc_category/{id}', 'DcCategoryController@show');
+    $router->post('/dc_category', 'DcCategoryController@postCreate');
+    $router->get('/dc_category/{id}/edit', 'DcCategoryController@getEdit');
+    $router->put('/dc_category/{id}', 'DcCategoryController@putEdit');
+    $router->delete('/dc_category/{id}', 'DcCategoryController@remove');
+
+    //地产文章标签
+    $router->get('/dc_article_tags/create', 'DcArticleTagsController@getCreate');
+    $router->get('/dc_article_tags', 'DcArticleTagsController@index');
+    $router->get('/dc_article_tags/{id}', 'DcArticleTagsController@show');
+    $router->post('/dc_article_tags', 'DcArticleTagsController@postCreate');
+    $router->get('/dc_article_tags/{id}/edit', 'DcArticleTagsController@getEdit');
+    $router->put('/dc_article_tags/{id}', 'DcArticleTagsController@putEdit');
+    $router->delete('/dc_article_tags/{id}', 'DcArticleTagsController@remove');
+
+    // 地产文章评论
+    $router->get('/dc_article_comment/create', 'DcArticleCommentController@getCreate');
+    $router->get('/dc_article_comment', 'DcArticleCommentController@index');
+    $router->get('/dc_article_comment/{id}', 'DcArticleCommentController@show');
+    $router->post('/dc_article_comment', 'DcArticleCommentController@postCreate');
+    $router->get('/dc_article_comment/{id}/edit', 'DcArticleCommentController@getEdit');
+    $router->put('/dc_article_comment/{id}', 'DcArticleCommentController@putEdits');
+    $router->delete('/dc_article_comment/{id}', 'DcArticleCommentController@remove');
+
+
+
+    //excel导入导出
+    $router->get('/export','ExcelController@export');
+    $router->get('/import','ExcelController@import');
+    
 });

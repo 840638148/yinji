@@ -180,7 +180,9 @@ return [
 		
 		SocialiteProviders\Manager\ServiceProvider::class,
 		Toplan\PhpSms\PhpSmsServiceProvider::class,
-		Toplan\Sms\SmsManagerServiceProvider::class,
+        Toplan\Sms\SmsManagerServiceProvider::class,
+        
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
     ],
 
@@ -236,6 +238,7 @@ return [
 		'SmsManager' => Toplan\Sms\Facades\SmsManager::class,
 
         'Image' => Intervention\Image\Facades\Image::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];

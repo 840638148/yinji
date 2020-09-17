@@ -17,17 +17,29 @@
             </a>
           </li>
           <li>
+            @if(get_class($folder_detail['article'])=="App\Models\Article")
             <a target="_blank" href="https://service.weibo.com/share/share.php?url={{url('/article/detail/' . $folder_detail['article']['id'])}}&amp;title=【{{get_article_title($folder_detail['article'])}}】&nbsp; &nbsp; &nbsp; &nbsp;{!!get_article_description($folder_detail['article'])!!}&nbsp;@印际&amp;appkey=&amp;pic=&amp;searchPic=true" title="分享到新浪微博" class="weibo" rel="nofollow">
+            @else
+            <a target="_blank" href="https://service.weibo.com/share/share.php?url={{url('/details/' . $folder_detail['article']['id'])}}&amp;title=【{{get_article_title($folder_detail['article'])}}】&nbsp; &nbsp; &nbsp; &nbsp;{!!get_dc_description($folder_detail['article'])!!}&nbsp;@印际&amp;appkey=&amp;pic=&amp;searchPic=true" title="分享到新浪微博" class="weibo" rel="nofollow">
+            @endif
               <img src="/images/folder-weibo.png" alt="分享到新浪微博" style="width: 80%"/>
             </a>
           </li>
           <li>
+            @if(get_class($folder_detail['article'])=="App\Models\Article")
             <a target="_blank" href="https://connect.qq.com/widget/shareqq/index.html?url={{url('/article/detail/' . $folder_detail['article']['id'])}}&amp;title={{get_article_title($folder_detail['article'])}}&amp;desc=&amp;summary=&nbsp; &nbsp; &nbsp; &nbsp;{!!get_article_description($folder_detail['article'])!!}&amp;site=印际" title="分享到QQ好友" class="qq" rel="nofollow">
+            @else
+            <a target="_blank" href="https://connect.qq.com/widget/shareqq/index.html?url={{url('/details/' . $folder_detail['article']['id'])}}&amp;title={{get_dc_title($folder_detail['article'])}}&amp;desc=&amp;summary=&nbsp; &nbsp; &nbsp; &nbsp;{!!get_dc_description($folder_detail['article'])!!}&amp;site=印际" title="分享到QQ好友" class="qq" rel="nofollow">
+            @endif
               <img src="/images/folder-qq.png" alt="分享到QQ好友" style="width: 80%"/>
             </a>
           </li>
           <li>  
+            @if(get_class($folder_detail['article'])=="App\Models\Article")
             <a target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url={{url('/article/detail/' . $folder_detail['article']['id'])}}&amp;title={{get_article_title($folder_detail['article'])}}&amp;desc=&amp;summary=&nbsp; &nbsp; &nbsp; &nbsp;{!!get_article_description($folder_detail['article'])!!}&amp;site=印际" title="分享到QQ空间" class="qqzone" rel="nofollow">
+            @else
+            <a target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url={{url('/details/' . $folder_detail['article']['id'])}}&amp;title={{get_dc_title($folder_detail['article'])}}&amp;desc=&amp;summary=&nbsp; &nbsp; &nbsp; &nbsp;{!!get_dc_description($folder_detail['article'])!!}&amp;site=印际" title="分享到QQ空间" class="qqzone" rel="nofollow">
+            @endif
               <img src="/images/folder-qqzoe.png" alt="分享到空间" style="width: 80%"/>
             </a>
           </li>
@@ -43,8 +55,12 @@
 
 
 
-  @if ($folder_detail['images'])       
-  <div class="image content-post"><a target="_blank" href="article/{{$folder_detail['images'][0]['static_url']}}"><img atitle="{{$folder_detail['images'][0]['articletitle']}}" static_url="article/{{$folder_detail['images'][0]['static_url']}}" src="{{$folder_detail['images'][0]['photo_url']}}" alt="{{$folder_detail['images'][0]['title']}}" class="selected-image"/></a></div>
+  @if ($folder_detail['images'])
+    @if(get_class($folder_detail['article'])=="App\Models\Article")       
+    <div class="image content-post"><a target="_blank" href="article/{{$folder_detail['images'][0]['static_url']}}"><img atitle="{{$folder_detail['images'][0]['articletitle']}}" static_url="article/{{$folder_detail['images'][0]['static_url']}}" src="{{$folder_detail['images'][0]['photo_url']}}" alt="{{$folder_detail['images'][0]['title']}}" class="selected-image"/></a></div>
+    @else
+    <div class="image content-post"><a target="_blank" href="/details/{{$folder_detail['images'][0]['static_url']}}"><img atitle="{{$folder_detail['images'][0]['articletitle']}}" static_url="/details/{{$folder_detail['images'][0]['static_url']}}" src="{{$folder_detail['images'][0]['photo_url']}}" alt="{{$folder_detail['images'][0]['title']}}" class="selected-image" dcarticle_id="{{isset($folder_detail['images'][0]['dcarticle_id'])}}"/></a></div>
+    @endif
   @endif
 </div>
 <div class="right" >
@@ -53,10 +69,18 @@
   <div class="more_img" style="">
     @foreach ($folder_detail['images'] as $image)
     
-      @if ($loop->first)
-        <a href="javascript:void(0)" class="more-img-item item-inner selected"><img atitle="{{$image['articletitle']}}" static_url="article/{{$image['static_url']}}" src="{{$image['photo_url']}}" alt="{{$image['title']}}" /> <div class="cover"></div></a>
+      @if($loop->first)
+        @if(isset($image['dcarticle_id']))
+          <a href="javascript:void(0)" class="more-img-item item-inner selected"><img atitle="{{$image['articletitle']}}" dcarticle_id="{{isset($image['dcarticle_id'])?$image['dcarticle_id']:''}}" static_url="/details/{{$image['static_url']}}" src="{{$image['photo_url']}}" alt="{{$image['title']}}" /> <div class="cover"></div></a>
+        @else
+        <a href="javascript:void(0)" class="more-img-item item-inner selected"><img atitle="{{$image['articletitle']}}" dcarticle_id="{{isset($image['dcarticle_id'])?$image['dcarticle_id']:''}}" static_url="article/{{$image['static_url']}}" src="{{$image['photo_url']}}" alt="{{$image['title']}}" /> <div class="cover"></div></a>
+        @endif
       @else
-        <a href="javascript:void(0)" class="more-img-item item-inner"><img atitle="{{$image['articletitle']}}" static_url="article/{{$image['static_url']}}" src="{{$image['photo_url']}}" alt="{{$image['title']}}" /> <div class="cover"></div></a>
+        @if(isset($image['dcarticle_id']))
+          <a href="javascript:void(0)" class="more-img-item item-inner"><img atitle="{{$image['articletitle']}}" dcarticle_id="{{isset($image['dcarticle_id'])?$image['dcarticle_id']:''}}" static_url="/details/{{$image['static_url']}}" src="{{$image['photo_url']}}" alt="{{$image['title']}}" /> <div class="cover"></div></a>
+        @else
+        <a href="javascript:void(0)" class="more-img-item item-inner"><img atitle="{{$image['articletitle']}}" dcarticle_id="{{isset($image['dcarticle_id'])?$image['dcarticle_id']:''}}" static_url="article/{{$image['static_url']}}" src="{{$image['photo_url']}}" alt="{{$image['title']}}" /> <div class="cover"></div></a>
+        @endif
       @endif
     @endforeach
   </div>
@@ -112,13 +136,9 @@
             <li>
                 <h3>{{$value['name']}}</h3>
                 <span img="" floder_id="{{$folder_detail['article']['id']}}" class="folderattr null" title="{{$value['name']}}"></span>
-                {{--@foreach($issc as $isscs)
-                @if($isscs)--}}
+
                 <a href="javascript:;" class="Button2 fr to_find_floder_act add_finder_btn" photo_url="{{$value['name']}}" data-id="{{$value['id']}}" data-img="" data-source="{{$folder_detail['article']['id']}}">收藏</a >
-                {{--@else
-                <a href="javascript:;" class="Button fr to_find_floder_act add_finder_btn have-disalbed" data-id="{{$value['id']}}" data-img="" data-source="{{$folder_detail['article']['id']}}">已收藏</a >
-                @endif
-                @endforeach--}}
+                
             </li>
         @endforeach
     </ul>
@@ -310,6 +330,10 @@ $(document).on("click",".layui-layer-shade",function () {
   layer.closeAll()
   return false;
 })
+dcarticle_id='';
+$(function(){
+  dcarticle_id=$('.selected-image').attr('dcarticle_id');
+});
 
 
 $(".add_finder_btn").click(function () {
@@ -319,13 +343,14 @@ $(".add_finder_btn").click(function () {
   let photo_url = $(this).attr('data-img');
   let source = $(this).attr('data-source');
   let is_sc=1;
+  let dcarticle_id=$('.selected-image').attr('dcarticle_id');
   if (photo_url == '') {
     photo_url = $("#imageUrlJs").val();
   }
   if (title == '') {
     title = $("#imgtitle").val();
   }
-
+  // console.log(dcarticle_id)
   $.ajax({
     url: '/vip/finder_collect',
     type: 'POST',
@@ -337,6 +362,7 @@ $(".add_finder_btn").click(function () {
       photo_url:photo_url,
       source:source,
       is_sc:is_sc,
+      dcarticle_id:dcarticle_id,
     },
     success: function (data) {
       if (data.status_code == 0) {
@@ -432,6 +458,8 @@ $(document).on('click','.create-new-folder-btn',function(){
 //分享按钮点击
 $(document).on('click','.share-img-btn',function(){
   _img = $("#imageUrlJs").val();//$(this).parents(".img-container").find('img.alignnone.size-full').attr("src");
+  let dcarticle_id=$('.content-post img').attr('dcarticle_id');
+  // console.log(dcarticle_id);
   if(!IS_LOGIN){
     $('.login_box').show();
   }else if(IS_LOGIN && !IS_VIP){

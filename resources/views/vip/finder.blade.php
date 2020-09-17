@@ -195,64 +195,57 @@ $("#myform #txt_name").keydown(function (e) {
 
 <!--弹窗--> 
 
-<!-- 登录 -->
-
+  <!-- 登录 -->
 <div class="login_box" style="display:none;">
   <div class="new_folder_bj"></div>
-  <div class="login_folder">
-    <div id="login" class="login"> 
-      <!--		<h1><a href="--><!--" title="--><!--" tabindex="-1">--><!--</a></h1>-->
-      
-      <h1><a href="/" title="{{trans('comm.yinji')}}" tabindex="-1">{{trans('comm.yinji')}}</a></h1>
-      <h2>{{trans('login.login_title')}}</h2>
-      
-      <!-- 登陸 -->
-      
-      <form name="loginform" id="loginform" action="/user/login" method="post">
-        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-        <p>
-          <label for="user_login">
-            <input type="text" name="user_login" id="user_login" class="input" value="" size="20" placeholder="{{trans('login.input_username')}}">
-          </label>
-        </p>
-        <p>
-          <label for="user_pass">
-            <input type="password" name="password" id="user_pass" class="input" value="" size="20" placeholder="{{trans('login.input_password')}}">
-          </label>
-        </p>
-        <p class="forgetmenot">
-          <label for="rememberme">
-            <input name="rememberme" type="checkbox" id="rememberme" value="forever">
-            {{trans('login.remember_me')}} </label>
-        </p>
-        <p class="submit">
-          <input type="button" name="wp-submit" id="wp-submit-login"  class="button button-primary button-large" value="{{trans('login.login')}}">
-          <input type="hidden" name="redirect_to" value="/user/index">
-          <input type="hidden" name="testcookie" value="1">
-        </p>
-      </form>
-      <div style=" overflow:hidden">
-        <p id="nav" class="fr"> <a href="/user/register">{{trans('login.register')}}</a> | <a href="/user/forgot_password">{{trans('login.forgot_password')}}</a> </p>
-        <p class="fl"> <a href="/"> ← {{trans('login.return')}} </a> </p>
-      </div>
-      <div class=""> <span style="float:left; line-height:36px;color: #999;"> {{trans('login.other_login')}}：</span> <a href="javascript:void(0);" onclick="WeChatLogin();" title="使用微信登录"><img src="/img/tl_weixin.png"></a> </div>
-      <div class="login_ico"> <a href="javascript:void(0);" onclick="WeChatLogin();"><img src="/img/erweima.gif" width="51" height="51" alt="二维码登陆"></a> </div>
-      <div class="ma_box hide">
-        <h1><a href="/index" title="{{trans('comm.yinji')}}" tabindex="-1">{{trans('comm.yinji')}}</a></h1>
-        
-        <!-- <h2>微信扫码登陆</h2> -->
-        
-        <p>
-          <iframe frameborder="0" scrolling="no" width="365" height="395" src="/auth/weixin"></iframe>
-        </p>
-        <p class="backtoblog" style="text-align:center"> <a href="/"> ← {{trans('login.return')}} </a> </p>
-        <div class="login_ico"><a href="javascript:void(0);" onclick="WeChatLogin();"><img src="/img/diannao_03.gif" width="51" height="51" alt="账号登陆"></a></div>
+    <div class="login_folder">
+      <div id="login" class="login" style='height:640px;'> 
+        <div class="wxlogin">
+            <h1><a href="/" title="{{trans('comm.yinji')}}" tabindex="-1">{{trans('comm.yinji')}}</a></h1>
+            <!-- <h2>微信扫码登陆</h2> -->
+            <p><iframe frameborder="0" scrolling="no" width="300" height="395" src="/auth/weixin"></iframe></p>
+            <div class="login_ico"><a href="javascript:void(0);" onclick="WeChatLogin();"><img src="/img/diannao_03.gif" width="51" height="51" alt="账号登陆"></a></div>
+        </div>
+
+        <!-- 登陸 -->
+        <div class="ma_box hide" style='top:207px;padding-top:0;height:380px;'>
+          <div class="login_ico" style='position: absolute;top:-202px;right: 5px;'><a href="javascript:void(0);" onclick="WeChatLogin();"><img src="/img/erweima.gif" width="51" height="51" alt="账号登陆"></a></div>
+          <h2>{{trans('login.login_title')}}</h2>
+          <form name="loginform" id="loginform" action="/user/login" method="post">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+            <p>
+              <label for="user_login">
+                <input type="text" name="user_login" id="user_login" class="input" value="" size="20" placeholder="{{trans('login.input_username')}}">
+              </label>
+            </p>
+            <p>
+              <label for="user_pass">
+                <input type="password" name="password" id="user_pass" class="input" value="" size="20" placeholder="{{trans('login.input_password')}}">
+              </label>
+            </p>
+            <p class="forgetmenot" style='text-align:center;width: 316px;'>
+              <label for="rememberme">
+                <input name="rememberme" type="checkbox" id="rememberme" value="forever">{{trans('login.remember_me')}} 
+              </label>
+            </p>
+            <p class="submit">
+              <input type="button" name="wp-submit" id="wp-submit-login" class="button button-primary button-large" value="{{trans('login.login')}}">
+              <input type="hidden" name="redirect_to" value="/user/index">
+              <input type="hidden" name="testcookie" value="1">
+            </p>
+          </form>
+        </div>
+
+        <div class='lgbtm' style='height:50px;margin-top: -16px;'>
+          <p id="nav" class="fr" style='margin-top:0;'><a href="/user/register">{{trans('login.register')}}</a> | <a href="/user/forgot_password">{{trans('login.forgot_password')}}</a></p>
+          <p class="fl" style='margin-top:0;'> <a href="/"> ← {{trans('login.return')}} </a> </p>
+        </div>
+            
       </div>
     </div>
   </div>
 </div>
-
-<!--登陆结束--> 
+  <!--登陆结束-->
 
 <!--------选购会员弹窗------->
 
@@ -438,7 +431,7 @@ $("#myform #txt_name").keydown(function (e) {
     // 发现
     var discoveryItems = {!!$user->finders!!};
     var folders = {!!$user->my_folders!!};
-    // console.log()
+    // console.log(discoveryItems)
     var discoveryItemsDom = discoveryItems.map(function( item){ return getDiscoveryItemDom(item, folders) }).join('');
     $('#discoveryItems').html(discoveryItemsDom);
 
@@ -524,7 +517,8 @@ $("#myform #txt_name").keydown(function (e) {
         
         let source = $(this).attr('data-source');//图片所在的文章id
         let is_sc=1;
-        // console.log(source)
+        let dcarticle_id=$(this).attr('dcarticle_id')
+        // console.log(dcarticle_id)
         $.ajax({
           url: '/vip/finder_collect',
           type: 'POST',
@@ -535,6 +529,7 @@ $("#myform #txt_name").keydown(function (e) {
             photo_url:photo_url,
             source:source,
             is_sc:is_sc,
+            dcarticle_id:dcarticle_id,
           },
           success: function (data) {
             // console.log(data)
@@ -567,7 +562,7 @@ $("#myform #txt_name").keydown(function (e) {
       var h = '';
       h += '<div class="item discovery-item" style="display:flex">'
       h += '  <div class="item_content">';
-      h += '    <img src="' + item.img + '" class="bg-img" data-id="' + item.id + '" id="sourceimg" source="'+item.source+'"  />';
+      h += '    <img src="' + item.img + '" class="bg-img" data-id="' + item.id + '" id="sourceimg" source="'+item.source+'" dcarticle_id="'+item.dcarticle_id+'" />';
       h += '    <div class="find_title" data-source="'+item.source+'">'; 
       h += '      <h2>'+ item.who_find?item.who_find[0].tinames:'' +'...</h2>';
       if(item.who_find && item.who_find.length > 0){
@@ -610,9 +605,9 @@ $("#myform #txt_name").keydown(function (e) {
     	}
 		  // console.log(isscarr,item,folder,uc);
         if(is_sc){
-        	h += '          <span class="' + (folder.type == 'private' ? 'private' :'') +'" title="'+(folder.typeText ? folder.typeText : '') + '" ></span> <a style="width:50px;" href="javascript:void(0)" class="have-disalbed Button fr add_finder_btn" data-id="' + folder.id + '" data-img="' + item.img + '" data-title="' + item.title + '" data-source="' + item.source + '">已收藏</a>';
+        	h += '          <span class="' + (folder.type == 'private' ? 'private' :'') +'" title="'+(folder.typeText ? folder.typeText : '') + '" ></span> <a style="width:50px;" href="javascript:void(0)" class="have-disalbed Button fr add_finder_btn" data-id="' + folder.id + '" data-img="' + item.img + '" data-title="' + item.title + '" data-source="' + item.source + '" dcarticle_id="'+item.dcarticle_id+'">已收藏</a>';
         }else{
-        	h += '          <span class="' + (folder.type == 'private' ? 'private' :'') +'" title="'+(folder.typeText ? folder.typeText : '') + '" ></span> <a href="javascript:void(0)" class=" Button2 fr add_finder_btn" data-id="' + folder.id + '" data-img="' + item.img + '" data-title="' + item.title + '" data-source="' + item.source + '">收藏</a>';
+        	h += '          <span class="' + (folder.type == 'private' ? 'private' :'') +'" title="'+(folder.typeText ? folder.typeText : '') + '" ></span> <a href="javascript:void(0)" class=" Button2 fr add_finder_btn" data-id="' + folder.id + '" data-img="' + item.img + '" data-title="' + item.title + '" data-source="' + item.source + '" dcarticle_id="'+item.dcarticle_id+'">收藏</a>';
         }
 	
         h += '        </li>';
@@ -699,6 +694,7 @@ $("#myform #txt_name").keydown(function (e) {
     //切换图片
     $(document).on('click','.more-img-item',function(){
       let src = '';
+      let dcarticle_id=$(this).find('img').attr('dcarticle_id');
       //去除所有选中状态
       $('.more-img-item').each(function(){
         $(this).removeClass('selected');
@@ -708,18 +704,21 @@ $("#myform #txt_name").keydown(function (e) {
       src = $(this).find('img').attr('src');
       static_url = $(this).find('img').attr('static_url');
       atitle = $(this).find('img').attr('atitle');
-      console.log(atitle)
+      console.log(dcarticle_id,atitle)
       $(this).parents('.img_browse').find('.selected-image').attr('src',src);
       $(this).parents('.img_browse').find('.selected-image').attr('static_url',static_url);
       $('.content-post').find('a').attr('href',static_url);
       $(this).parents('.img_browse').find('.selected-image').attr('atitle',atitle);
       $('.folder-fenxiang').find('.select-img-name').html(atitle)
+      $(this).parents('.img_browse').find('.selected-image').attr('dcarticle_id',dcarticle_id);
     })
 
 
     // 发现展示图片框
     $(document).on('click','.discovery-item #sourceimg',function(){
       let folder_id = $(this).attr('data-id');
+      let dcarticle_id=$(this).attr('dcarticle_id');
+      // console.log(dcarticle_id);
       // let folder_id = $('.discovery-item .item_content').find('img').attr('data-id');
       $.ajax({
         async:false,
@@ -732,6 +731,7 @@ $("#myform #txt_name").keydown(function (e) {
         },
         success: function (data) {
           $('#discovery-img-browse').html(data);
+          $('#discovery-img-browse').attr('dcarticle_id',dcarticle_id);
           //初始化相框
           //getImgBrowseImgsDom(browseImgs,'#discovery-img-browse');
           layer.open({
@@ -1064,7 +1064,7 @@ $("#myform #txt_name").keydown(function (e) {
                       // console.log(arrs)
                       h+='<div class="item discovery-item" style="display:flex">';
                       h+='<div class="item_content"> ';
-                      h+='<img src="'+item.img+'" class="bg-img" data-id="'+item.id+'" id="sourceimg" source="'+item.source+'" /> ';
+                      h+='<img src="'+item.img+'" class="bg-img" data-id="'+item.id+'" id="sourceimg" source="'+item.source+'" dcarticle_id="'+item.dcarticle_id+'"/> ';
                       h+='<div class="find_title" data-source="'+item.source+'">'+item.tinames+'<a href="javascript:;" class="find_info_more"></a></div>';
                       h+='<div class="who_find" style="display:none">';
                       h+='<img src="'+item.who_find[0].userIcon+'" alt="头像" onerror="this.onerror=``;this.src=`/img/avatar.png`" />';

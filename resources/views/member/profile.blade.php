@@ -122,12 +122,10 @@
         </p>
         <p>
           <label for="sex">{{trans('index.sex')}}</label>
-          <input name="sex" type="radio" value="0" checked="checked" />
-          保密
-          <input name="sex" type="radio" value="1" @if('1' == $user->
-          sex) checked="checked" @endif/>男
-          <input name="sex" type="radio" value="2" @if('2' == $user->
-          sex) checked="checked" @endif/>女 </p>
+          <input name="sex" type="radio" value="0" checked="checked"/>保密
+          <input name="sex" type="radio" value="1" @if('1' == $user->sex) checked="checked" @endif/>男
+          <input name="sex" type="radio" value="2" @if('2' == $user->sex) checked="checked" @endif/>女 
+        </p>
         <p>
           <label for="city">{{trans('index.citys')}}</label>
           @if($user->city)
@@ -225,13 +223,13 @@
         <div id="profile_avatar" style="position:relative;">
           <label for="avatar">{{trans('index.avatar')}}</label>
           <style>
-                .photo-clip-rotateLayer img{width:  auto !important;height:  auto !important;padding: unset !important;border: unset !important;float: unset !important;background-color:unset !important;margin-right: unset !important;}
-                .photo-clip-rotateLayer{margin-top:-5px;}
-                .photo-clip-view{width:321px !important;height:321px !important;}
-                .photo-clip-area{width:321px !important;height:321px !important;left:56% !important;}
-                .photo-clip-mask-left{margin-right: 162px !important;}
-                .photo-clip-mask-right{margin-left: 160px !important;}
-              </style>
+            .photo-clip-rotateLayer img{width:  auto !important;height:  auto !important;padding: unset !important;border: unset !important;float: unset !important;background-color:unset !important;margin-right: unset !important;}
+            .photo-clip-rotateLayer{margin-top:-5px;}
+            .photo-clip-view{width:321px !important;height:321px !important;}
+            .photo-clip-area{width:321px !important;height:321px !important;left:56% !important;}
+            .photo-clip-mask-left{margin-right: 162px !important;}
+            .photo-clip-mask-right{margin-left: 160px !important;}
+          </style>
           <div class="cover-wrap" style="display:none;position:fixed;left:0;top:0;width:100%;height:100%;background: rgba(0, 0, 0, 0.4);z-index: 10000000;text-align:center;">
             <div class="caijian" style="width:900px;height:600px;margin:100px auto;background-color:#FFFFFF;overflow: hidden;border-radius:4px;">
               <div id="clipArea" style="margin:10px;height: 520px;"></div>
@@ -286,7 +284,7 @@
         <div class="" style='position:relative'> <a href="javascript:void(0);" title="微信绑定"><img src="/img/tl_weixin.png"></a> <span style='position:absolute;top: 0;left: 45px;color: #6d9aec;cursor: pointer;' onclick="WeChatLogins();" title="点击进行微信绑定">{{trans('index.wx_tips2')}}</span> </div>
         @endif
         <div class="ma_box" style="position: absolute;top: 160%;left: 34%;background: #eee;z-index:999;display:none;">
-          <h1><a href="/index" title="{{trans('comm.yinji')}}" tabindex="-1">{{trans('comm.yinji')}}</a><span class='closebtn' style='float: right;margin-top: -46px;cursor: pointer;color:#ddd;'>X</span></h1>
+          <h1><a href="/" title="{{trans('comm.yinji')}}" tabindex="-1">{{trans('comm.yinji')}}</a><span class='closebtn' style='float: right;margin-top: -46px;cursor: pointer;color:#ddd;'>X</span></h1>
           
           <!-- <h2>微信扫码登陆</h2> -->
           
@@ -317,6 +315,10 @@
           @if($user->email)
           <input type="email" disabled='disabled' value="{{$user->email}}" >
           <input style="padding: 0 19px;position:absolute;top:40px;height:47px;background: #636af3;color: #fff;width:98px !important;border:none;border-radius:3px;right:0;" type="button" value="{{trans('index.change_email')}}" class="jbemail">
+          <label class='code_email' for="verification_code" style="position:relative;display:none;">邮箱验证码</label>
+          <input type="email" name="verification_code_email" id="verification_code_email" class="input" value="" size="20" placeholder="输入邮箱验证码" style='display:none;'>
+          <input style="padding: 0px 19px;position: absolute;top: 127px;height: 48px;background:#636af3;color:#fff;border-radius: 3px;right:0;border:none;display:none;" name="发送验证码" type="button" value="获取验证码" class="verification_email" onclick='bdemail()'>
+          
           @else
           <input type="email" id="email" name="email" value="" placeholder="{{trans('index.email_tips')}}" >
           <input style="padding: 0 19px;position:absolute;top:40px;height:48px;background: #636af3;color: #fff;border-radius:3px;right:0;border:none;" name="发送验证码" type="button" value="{{trans('index.code')}}" class="verification_email" onclick='bdemail()'>
@@ -526,7 +528,7 @@
     }
   }
 
-  //点击解绑显示验证码kaung
+  //点击解绑显示验证码框
   $('.jbmobile').click(function () {
     $('#verification_code').show();
     $('.sjyzms').show();
@@ -540,6 +542,9 @@
 
   $('.jbemail').click(function () {
     $('.email_yzm').show(1000);
+    $('#verification_code_email').show();
+    $('.code_email').show();
+    $('.verification_email').show()
     $(this).siblings('input[type="email"]').removeAttr('disabled');
     $(this).siblings('input[type="email"]').attr('id','email');
     $(this).siblings('input[type="email"]').attr('name','email');
@@ -681,7 +686,7 @@
     let grsm=$('.grsm').val();
     let provinces=$("select[name='provinces']").val();
     let citys=$("select[name='citys']").val();
-    // console.log(zhiwei,grsm);
+    let sex=$("input[name='sex']:checked").val();
 
     let emailzz = /^([A-Za-z0-9_+-.])+@([A-Za-z0-9\-.])+\.([A-Za-z]{2,22})$/;
 
@@ -709,7 +714,7 @@
       async: false,
       url: '/member/edit',
       type: 'POST',
-      data:{nickname:nickname,mobile:mobile,email:email,pass1:pass1,pass2:pass2,code_tel:code_tel,code_email:code_email,zhiwei:zhiwei,grsm:grsm,provinces:provinces,citys:citys},
+      data:{nickname:nickname,mobile:mobile,email:email,pass1:pass1,pass2:pass2,code_tel:code_tel,code_email:code_email,zhiwei:zhiwei,grsm:grsm,provinces:provinces,citys:citys,sex:sex},
       success: function (data) {
         if (data.status_code == 0) {
           console.log(data.data)

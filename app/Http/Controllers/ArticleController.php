@@ -26,6 +26,8 @@ use App\Models\UserExchangeRecord;
 use Illuminate\Support\Facades\Auth;
 use App\Models\VipPrice;
 use App\Models\Photographer;
+use App\Models\Dc;
+use App\Models\Loupan;
 
 use Illuminate\Support\Collection;
 class ArticleController extends Controller
@@ -163,6 +165,73 @@ class ArticleController extends Controller
     }
 
 
+    /**
+     * 地产
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function develop(Request $request)
+    {
+        $where_category = [
+            'parent_id' => '19'
+        ];
+
+        $category_ids = [];
+        $categories = ArticleCategory::select('id')
+            ->where('parent_id', 19)
+            ->where('display', '0')
+            ->get();
+        foreach ($categories as $category) {
+            $category_ids[] = $category->id;
+        }
+        $current_category = null;
+        $type = "estate";
+
+        return $this->doLists($request, $type, $where_category, $category_ids, $current_category);
+    }
+
+    /**
+     * 地产分页
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function developAjax(Request $request)
+    {
+        $where_category = [
+            'parent_id' => '19'
+        ];
+
+        $category_ids = [];
+        $categories = ArticleCategory::select('id')
+            ->where('parent_id', 19)
+            ->where('display', '0')
+            ->get();
+        foreach ($categories as $category) {
+            $category_ids[] = $category->id;
+        }
+        $more_articles = Article::getMoreArticles($request, $category_ids);
+        return Output::makeResult($request, $more_articles);
+    }
+
+
+    /**
+     * 地产更多带分页
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function developCategoryAjax(Request $request, $id)
+    {
+        $where_category = [
+            'parent_id' => '19'
+        ];
+
+        $category_ids = [$id];
+
+        $more_articles = Article::getMoreArticles($request, $category_ids);
+        return Output::makeResult($request, $more_articles);
+    }
+
+
 
     /**
      * 所有文章列表
@@ -200,6 +269,8 @@ class ArticleController extends Controller
         }
         global $articles;
         $articles = Article::getArticles($request, $category_ids);
+        $dclists=Dc::orderby('created_at','desc')->paginate(15);
+        $loupanlists=Loupan::orderby('created_at','desc')->paginate(15);
 
 
         $data = [
@@ -210,6 +281,8 @@ class ArticleController extends Controller
             'current_category' => $current_category,
             'topics' => [],
             'articles' => $articles,
+            'dclists' => $dclists,
+            'loupanlists' => $loupanlists,
             // 'starsav'   =>$starsav,
         ];
         // echo("<script>console.log(".json_encode($data).");</script>");
@@ -250,6 +323,22 @@ class ArticleController extends Controller
 
 
     /**
+     * 地产分类
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function developCategory(Request $request, $id)
+    {
+        $category_where = [
+            ['parent_id', 19]
+        ];
+        $type = 'estate';
+        return $this->doCategory($request, $id, $type, $category_where);
+    }
+
+
+    /**
      * 所有分类
      * @param Request $request
      * @param $id
@@ -282,6 +371,8 @@ class ArticleController extends Controller
         $topics = ArticleCategory::getTopics($id);
 
         $articles = Article::getArticles($request, $category_ids);
+        $dclists=Dc::orderby('created_at','desc')->paginate(15);
+        $loupanlists=Loupan::orderby('created_at','desc')->paginate(15);
 
         $data = [
             'user' => $this->getUserInfo(),
@@ -291,6 +382,8 @@ class ArticleController extends Controller
             'current_category' => $id,
             'topics' => $topics,
             'articles' => $articles,
+            'dclists' => $dclists,
+            'loupanlists' => $loupanlists,
             
         ];
         return view('article.lists', $data);
@@ -616,31 +709,22 @@ class ArticleController extends Controller
         }
 
         $user = $this->getUserInfo();
-        
-        $freedown=User::getFreeDownloadNum($user->id);
-        $leftdown=User::getLeftDownloadNum($user->id);
-        
-        
-
+                
         //查出用户下载次数
-        $today_starts = date('Y-m-d H:i:s', strtotime('-3 days'));
+        $today_starts = date('Y-m-d H:i:s', strtotime('-7 days'));
         $today_ends   = date('Y-m-d H:i:s');
         $today_start = date('Y-m-d 00:00:00');
         $today_end   = date('Y-m-d 23:59:59');
-       
 
-        //当天兑换下载次数
-        $has_freedown=UserDownRecord::where('user_id', $user->id)->where('is_free','1')->where('created_at', '>=', $today_start)->where('created_at', '<', $today_end)->count();
-        // dd($freedown,$has_freedown,$freedown-$has_freedown);
         $article = Article::find($request->article_id);
-        //三天内重复下载
-        $sandays=UserDownRecord::where('user_id', $user->id)->where('is_free','1')->where('down_id',$request->article_id)->where('created_at', '>=', $today_starts)->where('created_at', '<', $today_ends)->get()->toArray();
-        // dd($sandays);
+        //七天内重复下载
+        $sandays=UserDownRecord::where('user_id', $user->id)->where('down_id',$request->article_id)->where('created_at', '>=', $today_starts)->where('created_at', '<', $today_ends)->get()->toArray();
 
         $leftkou=User::getFreeSum($user->id);
         if(!empty($sandays)){
             return Output::makeResult($request, null, 999, '您已经兑换过,请您移步到个人中心查看!');
-        }else if($leftkou>0){
+        }
+        if($leftkou>0){
             
             if($article->vip_download){
                 $data = [
@@ -653,26 +737,78 @@ class ArticleController extends Controller
 
                 $return_data = [
                     'vip_download' => $article->vip_download,
-                    'leftkou' => ($leftkou-1)<0?0:$leftkou-1,
+                    'leftkou' => '今日剩余免费下载次数'.(($leftkou-1)<0?0:$leftkou-1).' ',
                     'msg'=>'免费兑换成功',
                 ];
-                return Output::makeResult($request,null, 0, $return_data);
+                return Output::makeResult($request,null, 100, $return_data);
             }else{
                 return Output::makeResult($request, null, 500, '因版权要求，本作品暂不提供下载！');
             }
 
         }else{
-            return Output::makeResult($request, null, 501, '您当前没有免费的下载次数！');
+            // 印币兑换下载
+            if(!$article->vip_download){
+                return Output::makeResult($request, null, 500, '因版权要求，本作品暂不提供下载！');
+            }
+            $leftkou=User::getKouSum($user->id);
+            //检查是否可以兑换
+            
+            if($user->left_points>10){
+                if($leftkou>0){
+                    $data_exchange = ['user_id' => $user->id,];
+                    UserExchangeRecord::create($data_exchange);
+                    
+                    $das=[
+                        'user_id' => $user->id,
+                        'type' => '1',
+                        'point' => 10,
+                        'remark' => '印币抵扣',
+                    ];
+                    $re=UserPoint::create($das);
+
+                    $user->left_points = $user->left_points - 10;
+                    $user->save();
+                   
+                    $data_down = [
+                        'user_id' => $user->id,
+                        'down_type' => '1',
+                        'is_free' => 2,
+                        'down_id' => $request->article_id,
+                    ];
+                    UserDownRecord::create($data_down);
+                    
+                    $return_data = [
+                        'vip_download' => $article->vip_download,
+                        'leftkou' => '今日剩余积分下载次数'.(($leftkou-1)<1?0:$leftkou-1).' ',
+                        'msg'=>'抵扣成功,扣除10印币',
+                    ];
+                    return Output::makeResult($request,null,100, $return_data);
+
+                }else{
+                    if($user->level=0){
+                        return Output::makeResult($request, null, 500, '您的印币不足，更多下载请<a href="/vip/vip_service" style="color:red;">开通会员</a>');
+                    }else if($user->level=1 && $user->expire_time && $user->expire_time >= date('Y-m-d')){
+                        return Output::makeResult($request, null, 500, '您的印币不足，更多下载请<a href="/vip/vip_service" style="color:red;">升级会员</a>');
+                    }else if($user->level=2 && $user->expire_time && $user->expire_time >= date('Y-m-d')){
+                        return Output::makeResult($request, null, 500, '您的印币不足，更多下载请<a href="/vip/vip_service" style="color:red;">升级会员</a>');
+                    }else if($user->level=3 && $user->expire_time && $user->expire_time >= date('Y-m-d')){
+                    return Output::makeResult($request, null, 500, '您的今日下载次数已用完');
+                    }
+                }
+            }else{
+                return Output::makeResult($request, null, 500, '兑换失败，您的印币不足！');
+            }
+
         }
     }
 
     /**
-     * 印币兑换下载
-     *
-     * @param Request $request
-     * @return array
-     */
-    public function exchange(Request $request)
+    * 印币兑换下载
+    *
+    * @param Request $request
+    * @return array
+    */
+    /*public function exchange(Request $request)
     {
         if (!Auth::check()) {
             return Output::makeResult($request, null, Error::USER_NOT_LOGIN);
@@ -689,11 +825,12 @@ class ArticleController extends Controller
         $koudown=User::getKouDownloadNum($user->id);
         $has_koudown=UserDownRecord::where('user_id', $user->id)->where('is_free','2')->where('created_at', '>=', $today_start)->where('created_at', '<', $today_end)->count();
         $leftkou=USer::getKouSum($user->id);
-        
+        // dd($user->left_points);
         //检查是否可以兑换
+        
         if($user->left_points>10){
             // dd($leftkou);
-            if ($leftkou>0) {
+            if($leftkou>0){
                 $data_exchange = [
                     'user_id' => $user->id,
                 ];
@@ -725,11 +862,20 @@ class ArticleController extends Controller
                 ];
                 return Output::makeResult($request,null,100, $return_data);
             }else{
-                return Output::makeResult($request, null, 500, '兑换失败，您的兑换次数不足！');
+                if($user->level=0){
+                    return Output::makeResult($request, null, 500, '您的印币不足，更多下载请<a href="/vip/vip_service">开通会员</a>');
+                }else if($user->level=1 && $user->expire_time && $user->expire_time >= date('Y-m-d')){
+                    return Output::makeResult($request, null, 500, '您的印币不足，更多下载请<a href="/vip/vip_service">升级会员</a>');
+                }else if($user->level=2 && $user->expire_time && $user->expire_time >= date('Y-m-d')){
+                    return Output::makeResult($request, null, 500, '您的印币不足，更多下载请<a href="/vip/vip_service">升级会员</a>');
+                }else if($user->level=1 && $user->expire_time && $user->expire_time >= date('Y-m-d')){
+                    return Output::makeResult($request, null, 500, '您的今日下载次数已用完');
+                }
             }
 
-
+        }else{
+            return Output::makeResult($request, null, 500, '兑换失败，您的印币不足！');
         }
-        return Output::makeResult($request, null, 500, '兑换失败，您的印币不足！');
-    }
+        
+    }*/
 }

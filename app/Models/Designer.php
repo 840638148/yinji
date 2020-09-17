@@ -191,17 +191,18 @@ class Designer extends Model
             return false;
         }
 
-
+        // dd($designer,$designer->category_ids);
         $lang = Session::get('language') ?? 'zh-CN';
         $tmp = [];
         if ($designer->category_ids) {
             if ('zh-CN' == $lang) {
                 $display_name = "name_cn";
             } else {
-                $display_name = "name_en_abbr";
+                $display_name = "name_en";
             }
 
             $category_ids = $designer->category_ids;
+            
             $categories = DesignerCategory::whereIn('id',$category_ids)->get();
             $arr_category = [];
             foreach ($categories as $category) {

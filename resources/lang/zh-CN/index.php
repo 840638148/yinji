@@ -52,7 +52,7 @@ return [
     'collection_cenetr' => '收藏中心',
     'create' => '创建新文件',
     'down_center' => '下载中心',
-    'tips'=>'温馨提示：有效果期三天，过期需重新兑换！',
+    'tips'=>'温馨提示：有效果期七天，过期需重新兑换！',
     'expiration_time'=>'过期时间',
     'extract_the_code'=>'提取码',
     'download_address'=>'下载地址',
@@ -130,4 +130,6 @@ return [
     'related_news'=>'相关新闻',
     'a_total_of_found'=>'共找到',
     'result'=>'条结果',
+    'real_estate'=>'地产',
+    'integral_rules'=>'积分规则',
 ];

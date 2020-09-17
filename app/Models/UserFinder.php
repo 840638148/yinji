@@ -10,7 +10,7 @@ use App\Models\UserPoint;
 use App\Models\UserCollect;
 use App\Http\Output;
 use App\Http\Error;
-
+use DB;
 class UserFinder extends Model
 {
 
@@ -220,28 +220,26 @@ class UserFinder extends Model
      * @param $user_id
      * @return string
      */
-    public static function recommendFinders($user_id = 0)
+    public static function recommendFinders($user_id = null)
     {   
-        $user_id=Auth::id();
         $recommend_finders = [];
-        $user_finders = self::orderBy('user_finders.created_at', 'desc')->paginate(30);
-
-
-        //去除自己的收藏夹
-        $user_finders = $user_finders->reject(function ($val) use ($user_id) {
-            return $val->user_id == $user_id;
-        });
+        if($user_id){
+            $user_ids=$user_id;
+        }else{
+            $user_ids=Auth::id();
+        }
+        // $user_finders = self::select('id','user_id','user_finder_folder_id','photo_url','photo_source','updated_at')->where('user_id','!=',$user_ids)->groupby('photo_url')->orderBy('updated_at','desc')->paginate(20);
+        $user_finders = self::select('id','user_id','user_finder_folder_id','photo_url','photo_source','updated_at')->where('user_id','!=',$user_id)->groupby('photo_url')->orderBy('created_at', 'desc')->orderBy('updated_at', 'desc')->paginate(20);
+        // dd($user_finders);
 
         //显示图片最后一次被用户收藏得记录
         $userfinders=[];
-        $ufinders=$user_finders->groupby('photo_url');
-        
-        foreach($ufinders as $k=>$v){
-            $userfinders[] = $v->take(1)->all();
+        foreach($user_finders as $v){
+            // dump($v);
+            $userfinders[] = $v;
         }        
-        $userfinderss=collect($userfinders)->collapse();
-     
-        $finders = self::formatFinders($userfinderss);
+        // dd(000);
+        $finders = self::formatFinders($userfinders);
         foreach($finders as $k=>$v){
             foreach($v['finder'] as $key=>$val){
                 $recommend_finders[] = [
@@ -266,6 +264,7 @@ class UserFinder extends Model
         return json_encode($recommend_finders);
     }
 
+
     /**
      * 获取推荐的收藏夹
      * @param $user_id
@@ -276,10 +275,15 @@ class UserFinder extends Model
         $recommend_folders = [];
 
         $user_finders = UserFinder::where('user_id', '!=', $user_id)
-            ->orderBy('created_at', 'desc')
+            // ->select('id','user_id','user_finder_folder_id','title','photo_url','photo_source','is_sc','created_at','updated_at',Db::raw(count('id as sid')))
+            // ->orderBy('updated_at', 'desc')
+            // ->groupBy('user_finder_folder_id')
+            // // ->limit(20)
+            // // ->get();
+            // ->paginate(20);
+            ->select(DB::raw("*, count(*) as num"))
             ->groupBy('user_finder_folder_id')
-            // ->limit(20)
-            // ->get();
+            ->orderBy('num', 'desc')
             ->paginate(20);
         foreach ($user_finders as $finder) {
             $imgs = [];
@@ -290,6 +294,7 @@ class UserFinder extends Model
                     'title' => $img_finder->title,
                 ];
             }
+            // dump($finder);
 
             $user_info = User::find($finder->user_id);
             $recommend_folders[] = [
@@ -309,7 +314,7 @@ class UserFinder extends Model
 
             ];
         }
-		
+		// dd($recommend_folders);
         return json_encode($recommend_folders);
     }
 
@@ -360,13 +365,13 @@ class UserFinder extends Model
             }else{
                 $user->city='保密';
             }
-
+            
             $recommend_users[] = [
                 'id' => $user->id,
                 'icon' => $user->avatar,
                 'name' => $user->nickname,
                 'gender' => $sex,
-                'addr' => $user->city,
+                'addr' => $user->city ? $user->city :'保密' ,
                 'collections' => User::getCollectNum($user->id),
                 'fans' => User::getFansNum($user->id),
                 'rank' => $rank,
@@ -374,6 +379,7 @@ class UserFinder extends Model
                 'zhiwei'=>$user->zhiwei ? $user->zhiwei :'其他' ,
             ];
         }
+		// dd($recommend_users);
         return json_encode($recommend_users);
     }
     
@@ -391,7 +397,7 @@ class UserFinder extends Model
            
             ];
         }
-        
+        // dd($my_folders);
         return json_encode($my_folders);
     }
 
@@ -416,7 +422,7 @@ class UserFinder extends Model
         ];
         $folders = UserFinder::where('user_finder_folder_id', $folder_id)->orderBy('created_at', 'desc')->get();
         
-    
+        // dd($folders[0]->folder);
         if ($folders) {
 
             $folder_detail['folder'] = [
@@ -449,7 +455,7 @@ class UserFinder extends Model
                 
                 $articleid=Article::where('id',$folder->photo_source)->value('static_url');
                 $articletitle=Article::where('id',$folder->photo_source)->value('title_name_cn');
-                
+                // dd($articleid);
                 $folder_detail['images'][] = [
                     'photo_url' => $folder->photo_url,
                     'title' => $folder->title,
@@ -459,6 +465,7 @@ class UserFinder extends Model
             }
         }
 
+        // dd($folder_detail);
         return $folder_detail;
     }
 
@@ -489,6 +496,7 @@ class UserFinder extends Model
      */
     public static function getMoreTuijians(& $request,$cates)
     {   
+        // dd($request->all());
         $user_id= Auth::id();
         if($request->content){
             switch ($cates) {
@@ -547,6 +555,7 @@ class UserFinder extends Model
      */
     public static function findercollect($request)
     {   
+        // dd($request->all());
         $is_sc=$request->is_sc;
         $user_id = Auth::id();
         if (empty($request->photo_url) || empty($user_id)) {
@@ -571,7 +580,7 @@ class UserFinder extends Model
             ->where('photo_url', $photo_url)
             ->where('is_sc',$is_sc)
             ->first();
- 
+        // dd($obj);    
         if ($obj){
             return ['res'=>'你已经发现过了','num'=>'','status'=>false];
         }else{
@@ -599,7 +608,7 @@ class UserFinder extends Model
                 ];
                 UserPoint::create($point_log);  
             }
-            return ['res'=>'可以收藏','num'=>$fx_sum,'status'=>true];            
+            return ['res'=>'可以收藏','num'=>$fx_sum,'status'=>true]; 
         }
 
     }

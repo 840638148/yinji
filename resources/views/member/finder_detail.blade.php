@@ -6,14 +6,14 @@
 
 <style>
   .item .edit_favorites{
-      position: absolute;
-      display: inline-block;
-      vertical-align: top;
-      text-indent:0;
-      text-align: center;
-      line-height: 32px;
-      z-index: 120;
-      right:10px;
+    position: absolute;
+    display: inline-block;
+    vertical-align: top;
+    text-indent:0;
+    text-align: center;
+    line-height: 32px;
+    z-index: 120;
+    right:10px;
   }
 
   .edit_favorites:hover .item-setting-btns{
@@ -341,28 +341,17 @@
 </style>
 <div class="lzcfg"></div>
 <div class="home_top">
-
   <div class="home_banber"> <img src="/images/home_bj.jpg" alt="个人主页图片" /></div>
-
   <div class="home_tongji">
-
-  <ul>
-      <li>{{trans('index.discovery')}}</br>
-        {{$user->finder_num}} </li>
-      <li> {{trans('index.collection')}}</br>
-        {{$user->collect_num}} </li>
-      <li> {{trans('index.subscription')}}</br>
-        {{$user->subscription_num}} </li>
-      <li> {{trans('index.follow')}}</br>
-        {{$user->follow_num}} </li>
+    <ul>
+      <li>{{trans('index.discovery')}}</br>{{$user->finder_num}} </li>
+      <li>{{trans('index.collection')}}</br>{{$user->collect_num}} </li>
+      <li>{{trans('index.subscription')}}</br>{{$user->subscription_num}} </li>
+      <li>{{trans('index.follow')}}</br>{{$user->follow_num}} </li>
     </ul>
-
   </div>
 
-  <div class="home_personal"> <img src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}" />
-
-   
-  </div>
+  <div class="home_personal"> <img src="@if($user->avatar) {{$user->avatar}} @else /img/avatar.png @endif" alt="{{$user->nickname}}" /></div>
   <h2  style="position:absolute; text-align:center;left: 0;top:390px;width: 100%;"> {{$user->nickname}} <img src="{{$user->vip_level}}" alt=""></h2>
   <p style="position:absolute; text-align:center;left: 0;top:430px;width: 100%;">{{trans('index.personal_description')}}： {{$user->personal_note}}</p>
 
@@ -379,27 +368,22 @@
   </div>
 </div>
 
-
 <!--点击上面的图片显示轮播图片-->
 <div class="swiper-container swiper-home">
 	<div style="padding:5px;color:#fff;font-size:65px;position:fixed;z-index:999999999999;top:120px;right:20px;cursor: pointer;" class="closeltb"> × </div>
 	<div class="swiper-wrapper"> 
     @foreach ($folist as  $i =>$v)
-    
     <article class="swiper-slide slide-single" data-swiper-slide-index="{{$loop->iteration}}"> 
 		<div class="wrap" style="position: relative;">
 			<img id="btntp" width="600px" height="600px" src="{{$v['photo_url']}}" data-id="{{$v['photo_source']}}" alt="{{$v['name']}}">
 		</div>
     </article>
-
 		@endforeach 
     </div>
-      <!-- 按钮 -->
-      <div style="top:36%" class="swiper-home-button-next swiper-button-next"></div>
-      <div style="top:36%"  class="swiper-home-button-prev swiper-button-prev"></div>
+    <!-- 按钮 -->
+    <div style="top:36%" class="swiper-home-button-next swiper-button-next"></div>
+    <div style="top:36%"  class="swiper-home-button-prev swiper-button-prev"></div>
 </div>
-
-
 
 <section class="wrapper ">
   <div class="mt30 home_box ">
@@ -407,13 +391,12 @@
       <h2 class="fl"><span style='border-bottom:2px solid #3d87f1;padding-bottom:11px;'>{{$folder_name or ''}}</span></h2>
       <span class="fr"><a href="javascript:window.history.go(-1);" data-type="collect" >&lt; {{trans('index.back')}}</a></span> </div>
     <div class="masonry">
-
       @foreach ($user->finder_details as $detail)
       <div class="item discovery-item " style="display:flex">
         <div class="item_content item_content2">
         		<li> <img src="{{$detail['photo_url']}}" data-id="{{$detail['user_finder_folder_id']}}" source='{{$detail["photo_source"]}}' alt="{{mb_substr($detail['titlename'],0,30)}}"> </li>
           <div class="find_title">
-            <h2><a href="/article/{{$detail['static_url']}}" target="_blank">{{mb_substr($detail['titlename'],0,20)}}</a></h2>
+            <h2><a href="{{$detail['photo_source']? ('/article/'. $detail['static_url']):'/details/'.$detail['static_url']}}" target="_blank">{{mb_substr($detail['titlename'],0,20)}}</a></h2>
             <span class='dot'>•••</span>
             <div class='move_del'>
               <div class='left_sjx'></div>
@@ -427,19 +410,11 @@
               @endforeach
             </div>            
           </div>
-
         </div>
-
       </div>
-
-
-
       @endforeach 
-
     </div>
-
   </div>
-
 </section>
 
 <script type="text/javascript">
@@ -516,7 +491,7 @@
   
   }
   function change(){
-      $(".swiper-slide").eq(i).show().siblings().stop(true, true).hide();
+    $(".swiper-slide").eq(i).show().siblings().stop(true, true).hide();
   }
 
 	//--点击上面的图片显示轮播图片--
@@ -530,85 +505,85 @@
   })
   
 	//点击关闭轮播图
-    $(document).on('click','.closeltb',function(){
-      $('.swiper-container').css('display','none');
-      $('.showscbtnlbt').css('display','none');
-      $('.lzcfg').css('display','none');
-      // clearInterval(timer);
-    })
+  $(document).on('click','.closeltb',function(){
+    $('.swiper-container').css('display','none');
+    $('.showscbtnlbt').css('display','none');
+    $('.lzcfg').css('display','none');
+    // clearInterval(timer);
+  })
 
 
  
   $(document).on('click','.swiper-button-next',function(){
-  		let len = $(".swiper-slide").length
-  		i++;
-  		if(i >= len){
-  			i = 0;
-  		}
-  		change();
+    let len = $(".swiper-slide").length
+    i++;
+    if(i >= len){
+      i = 0;
+    }
+    change();
   })
   $(document).on('mousemove','.swiper-button-next',function(){
-  		// clearInterval(timer);
+    // clearInterval(timer);
   })
   $(document).on('mouseout','.swiper-button-next',function(){
-  		start()
+    start()
   })
   
   $(document).on('click','.swiper-button-prev',function(){
-  		let len = $(".swiper-slide").length
-  		i--;
-  		if(i <= 0){
-  		    i = len-1;
-  		}
-  		change();
+    let len = $(".swiper-slide").length
+    i--;
+    if(i <= 0){
+        i = len-1;
+    }
+    change();
   })
   $(document).on('mousemove','.swiper-button-prev',function(){
-  		// clearInterval(timer);
+    // clearInterval(timer);
   })
   $(document).on('mouseout','.swiper-button-prev',function(){
-  		start()
+    start()
   })
 
 
   function selectItem(index){
-      $('.dingyue-item .select-item').hide()
-      $($('.dingyue-item')[index]).find('.select-item').show()
-      localStorage.setItem("selectdD", index);
+    $('.dingyue-item .select-item').hide()
+    $($('.dingyue-item')[index]).find('.select-item').show()
+    localStorage.setItem("selectdD", index);
   }
 
 
   function selectItemGuanZhu(index){
-      $('.guanzhu-item .select-item').hide()
-      $($('.guanzhu-item')[index]).find('.select-item').show()
-      localStorage.setItem("selectdG", index);
+    $('.guanzhu-item .select-item').hide()
+    $($('.guanzhu-item')[index]).find('.select-item').show()
+    localStorage.setItem("selectdG", index);
   }
 
   $(document).ready(function(){
-      if(IS_VIP){
-          $('.order_center .order2').find('a').html('会员中心')
-          $('.order_center .order2').find('a').attr('href','/member/interest')
+    if(IS_VIP){
+      $('.order_center .order2').find('a').html('会员中心')
+      $('.order_center .order2').find('a').attr('href','/member/interest')
+    }
+
+    $('.dingyue-item .select-item').hide()
+    var dIndex = localStorage.getItem('selectdD')
+    $($('.dingyue-item')[dIndex]).find('.select-item').show()
+
+    $('.guanzhu-item .select-item').hide()
+    var gIndex = localStorage.getItem('selectdG')
+    $($('.guanzhu-item')[gIndex]).find('.select-item').show()
+
+    //最多显示8条数据
+    for(var i=0;i<$('.my-collection .collection-item').length;i++){
+      if(i>7){
+        $($('.my-collection .collection-item')[i]).hide()
       }
+    }
 
-      $('.dingyue-item .select-item').hide()
-      var dIndex = localStorage.getItem('selectdD')
-      $($('.dingyue-item')[dIndex]).find('.select-item').show()
-
-      $('.guanzhu-item .select-item').hide()
-      var gIndex = localStorage.getItem('selectdG')
-      $($('.guanzhu-item')[gIndex]).find('.select-item').show()
-
-      //最多显示8条数据
-      for(var i=0;i<$('.my-collection .collection-item').length;i++){
-          if(i>7){
-              $($('.my-collection .collection-item')[i]).hide()
-          }
+    for(var i=0;i<$('.my-finder .collection-item').length;i++){
+      if(i>7){
+        $($('.my-finder .collection-item')[i]).hide()
       }
-
-      for(var i=0;i<$('.my-finder .collection-item').length;i++){
-          if(i>7){
-              $($('.my-finder .collection-item')[i]).hide()
-          }
-      }
+    }
 
   });
 

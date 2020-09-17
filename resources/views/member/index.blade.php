@@ -482,9 +482,9 @@
   <form id="info-form" class="contribute_form" role="form" method="POST" action="/member/one_check"  onsubmit="return checkforms()">
     <p style="width:292px;">  
       <label for="nickname">
-        <input type="text" id='nickname' value="" placeholder='请填写昵称' style="height:46px;border-radius: 5px;">
+        <input type="text" id='nickname' value="{{$user->nickname}}" placeholder='请填写昵称' style="height:46px;border-radius: 5px;">
       </label>  
-      <span style='font-size:10px;margin-top:-5px;color:#ccc;'>(非会员用户只能更改一次)</span>
+      <span style='font-size:10px;margin-top:-5px;color:#ccc;'>(非会员只能更改一次,昵称由中文、英文、数字组成)</span>
     </p>
     <p style="position:relative;width:292px;margin: 10px 0;">
       <label for="user_phone">

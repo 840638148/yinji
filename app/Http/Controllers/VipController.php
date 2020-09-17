@@ -274,29 +274,6 @@ class VipController extends Controller
      * @param request
      */
 
-    public function finderslistsearch(Request $request)
-    {
-        $lang = $request->session()->get('language') ?? 'zh-CN';
-		$user_id = Auth::id();
-		$user = $this->getUserInfo();
-
-        if($request->content==''){
-            return '请输入搜索的关键词！';
-        }
-
-        $result = UserFinder::finderslistsearch($request);
-
-        
-        $data=[
-            'lang' => $lang,
-            'user' => $user,
-            'result' => $result,
-        ];
-
-        return view('vip.finderslistsearch', $data);
-
-    }
-
     public function finlistsearch(Request $request)
     {
         $lang = $request->session()->get('language') ?? 'zh-CN';
@@ -499,8 +476,12 @@ class VipController extends Controller
             $user_collect_folders = [];
         }
         
-        // dd($folder_detail['article']->title_designer_cn);
-        $title = $folder_detail['article']->title_designer_cn.' | '.$folder_detail['article']->title_intro_cn;
+        // dd(get_class($folder_detail['article']));
+        if(get_class($folder_detail['article'])=="App\Models\Article"){
+            $title = $folder_detail['article']->title_designer_cn.' | '.$folder_detail['article']->title_intro_cn;
+        }else{
+            $title = $folder_detail['article']->designer.' | '.$folder_detail['article']->intro;
+        }
         
 		foreach ($folder_detail['images'] as $k=>$v){
 			$folder_detail['images'][$k]['titlename']=$title;
@@ -514,7 +495,7 @@ class VipController extends Controller
 		$issc=UserFinder::where('user_finders.user_id',$user_id)->leftjoin('user_finder_folders','user_finder_folders.id','user_finders.user_finder_folder_id')->get()->toArray();
 
 		
-        // dd($folder_detail);
+        // dd($folder_detail['images']);
 		$data=[
 			'folder_detail'=>$folder_detail,
 			'isvip'=>$isvip,

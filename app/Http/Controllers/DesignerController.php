@@ -51,7 +51,6 @@ class DesignerController extends Controller
         return view('designer.lists', $data);
     }
     
-    
     public function detail(Request $request, $id)
     {
         $lang = $request->session()->get('language') ?? 'zh-CN';

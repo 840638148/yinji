@@ -282,7 +282,7 @@
       <div class="login_ico"> <a href="javascript:void(0);" onclick="WeChatLogin();"><img src="/img/erweima.gif" width="51" height="51" alt="二维码登陆"></a> </div>
       
       <div class="ma_box hide">
-        <h1><a href="/index" title="{{trans('comm.yinji')}}" tabindex="-1">{{trans('comm.yinji')}}</a></h1>
+        <h1><a href="/" title="{{trans('comm.yinji')}}" tabindex="-1">{{trans('comm.yinji')}}</a></h1>
         <!-- <h2>微信扫码登陆</h2> -->
         <p><iframe frameborder="0" scrolling="no" width="365" height="395" src="/auth/weixin"></iframe></p>
         <p class="backtoblog" style="text-align:center"> <a href="/"> ← {{trans('login.return')}} </a> </p>

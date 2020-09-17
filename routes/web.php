@@ -84,6 +84,8 @@ Route::get('article/detail/{id}', 'ArticleController@detail');
 Route::get('article/category/{id}', 'ArticleController@category');
 Route::get('interior/category/{id}', 'ArticleController@interiorCategory');
 Route::get('archs/category/{id}', 'ArticleController@archsCategory');
+
+
 Route::post('article/like', 'ArticleController@like');
 Route::post('article/collect', 'ArticleController@collect');//文章详情收藏
 Route::post('article/vip_download', 'ArticleController@vipDownload');//用户免费下载
@@ -127,6 +129,7 @@ Route::post('member/citysjld', 'MemberController@citysjld');//城市三级联动
 Route::post('member/one_visited', 'MemberController@one_visited');//是否第一次访问个人中心页面
 Route::post('member/one_check', 'MemberController@one_check');//微信注册进个人中心提交信息
 Route::post('member/movefxj', 'MemberController@movefxj');//移动图片到其他文件夹里
+Route::post('member/movecollect', 'MemberController@movecollect');//移动文章到其他文件夹里
 Route::post('member/desearch', 'MemberController@desearch');//搜索设计师
 Route::post('member/editnick', 'MemberController@editnick');//检测是否够次数修改昵称
 
@@ -181,7 +184,6 @@ Route::post('vip/finder_collect', 'VipController@finder_collect');//发现页-�
 // Route::post('vip/addfolders', 'VipController@addfolders');//推荐收藏夹列表
 Route::post('vip/autodelpay', 'VipController@autodelpay');//半小时后未付款的自动取消订单
 Route::post('finder_ajax', 'VipController@finderajax');//发现页-->发现的分页 
-Route::post('vip/finderslistsearch', 'VipController@finderslistsearch');//发现页-->搜索框
 Route::post('vip/finlistsearch', 'VipController@finlistsearch');//发现页-->搜索框
 Route::post('vip/checkstatus', 'VipController@checkstatus');//微信支付页面查询支付状态
 
@@ -198,3 +200,29 @@ Route::get('job_ajax', 'JobController@index');//工作的分页
 //搜索
 Route::get('search', 'SearchController@index');
 Route::get('hot_search_ajax', 'SearchController@hotSearch');
+
+Route::get('estate/category/{id}', 'ArticleController@developCategory');//地产分类
+Route::get('estate/detail/{id}', 'ArticleController@detail');//地产详情
+Route::post('estate/category/{id}_ajax', 'ArticleController@developCategoryAjax');//地产分类的分页
+Route::post('estate_ajax', 'ArticleController@developAjax'); //地产分页
+Route::get('estate', 'ArticleController@develop');  //地产
+
+// 地产模块
+Route::get('eatatecloud/{id}', 'DcController@lpintro');//楼盘简介
+Route::get('develop/{id}', 'DcController@dcintro');//地产简介
+Route::post('estates/search', 'DcController@search');//搜索
+Route::post('estates/allsortlist', 'DcController@allsortlist');//排序
+
+
+Route::get('estates', 'DcController@index');//全部  
+Route::post('estates_ajax', 'DcController@index');//分页
+// Route::get('details/{id}', 'DcController@details');//文章
+
+// Route::post('lpintro/vip_download', 'DcController@vipdownload');//下载
+// Route::post('lpintro/pingfen', 'DcController@pingfen');//评分
+// Route::post('lpintro/collect', 'DcController@collect');//直接收藏
+// Route::post('lpintro/finder_collect', 'DcController@finder_collect');//文章详情页点击图片进行收藏
+
+
+// redis测试路由
+Route::get('testredis','RedisController@testRedis')->name('testRedis');

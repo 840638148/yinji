@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Validator;
 use DB;
 use App\User as CurrentModel;
+use Zhusaidong\GridExporter\Exporter;
 
 class UserController extends BaseController
 {
@@ -30,6 +31,10 @@ class UserController extends BaseController
     protected function grid()
     {
         $grid = new Grid(new $this->currentModel);
+        
+        $exporter=Exporter::get($grid);
+        $exporter->setFileName('user.xlsx');
+
         $grid->filter(function($filter){
 
             // 去掉默认的id过滤器
@@ -58,6 +63,9 @@ class UserController extends BaseController
         return $grid;
     }
 
+    // public static function exporter(){
+    //     Exporter::get($grid);
+    // }
 
     /**
      * Make a form builder.
@@ -99,6 +107,7 @@ class UserController extends BaseController
         );
         $form->datetime('expire_time', '到期时间');
         $form->number('points', '积分');
+        $form->number('left_points', '剩余积分');
 
         //保存前回调
         $form->saving(function (Form $form) {

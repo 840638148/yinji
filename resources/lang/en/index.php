@@ -52,7 +52,7 @@ return [
     'discovery_cenetr' => 'Discovery center',
     'create' => 'Create',
     'down_center' => 'Down center',
-    'tips' => 'Tips: effective period of three days, expired to be redeemed!',
+    'tips' => 'Tips: effective period of seven days, expired to be redeemed!',
     'expiration_time' => 'Expiration time',
     'extract_the_code' => 'Extract the code',
     'download_address' => 'Download address',
@@ -131,4 +131,5 @@ return [
     'related_news'=>'Related news',
     'a_total_of_found'=>'A total of found',
     'result'=>'result',
+    'real_estate'=>'Real estate',
 ];

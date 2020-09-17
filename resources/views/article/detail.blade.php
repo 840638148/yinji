@@ -149,11 +149,11 @@
             </div>
                   </div>
         </li>
-                {{--@if($is_collect)
+               @if($is_collect)
                 <li><i class="icon-bookmark"></i>已收藏</li>
-                @else@endif--}}
+                @else
                 <li data-toggle="modal"  id="article-collect"><i class="icon-bookmark"></i>{{trans('article.collection')}}</li>
-                
+                @endif
                 <li style=" border-right:none" id="vip-download"> <a href="javascript:void(0)" ><i class="icon-download"></i>{{trans('article.down')}}</a>
                 <div class="down-load-tip" style='min-width:271px;'>
                     <div class="down-jiantou"></div>
@@ -321,25 +321,24 @@
      <!----点评星星------>
     <script type="text/javascript" src="/js/startScore.js"></script>
     <script>
-     scoreFun($("#startone"))
-     scoreFun($("#starttwo"),{
-     fen_d:16,//每一个a的宽度
-     ScoreGrade:5//a的个数 10或者
-    })
+        scoreFun($("#startone"))
+        scoreFun($("#starttwo"),{
+            fen_d:16,//每一个a的宽度
+            ScoreGrade:5//a的个数 10或者
+        })
          
-     
-    var num=$('.starsp').attr("tip");
-        //显示分数
-    $(".show_number li p").each(function(index, element) {
-        var num=$(this).attr("tip");
-        var www=num*1*16;//
-        $(this).css("width",www);
-        $(this).parent(".atar_Show").siblings("span").text(num+"分");
-    });
+        var num=$('.starsp').attr("tip");
+            //显示分数
+        $(".show_number li p").each(function(index, element) {
+            var num=$(this).attr("tip");
+            var www=num*1*16;//
+            $(this).css("width",www);
+            $(this).parent(".atar_Show").siblings("span").text(num+"分");
+        });
 
     </script>
     <!----点评星星------>
-            <script type="text/javascript">
+        <script type="text/javascript">
 
             //点赞
             /*$(".like_article").click(function(e){
@@ -409,34 +408,42 @@
                         data: {_token:'{{csrf_token()}}',article_id:article_id},
                         success: function (data) {
                             console.log(data);
-                            if(data.status_code == 0) {
+                            if(data.status_code == 100) {
                                 $('.down-load-tip').show()
                                 $('.down-load-tip').find('a').attr('href',data.message.vip_download)
                                 $('.down-load-tip').find('input').val(data.message.vip_download.substr(-4))
-                                $('.down_con').html('今日剩余免费下载次数'+data.message.leftkou)
-                            }else if(data.status_code == 501) {
-                                //todo 弹出确认兑换框，如果用户选择确认调用兑换接口/article/vip_exchange
-                                    $.ajax({
-                                        url: '/article/exchange',
-                                        type: 'POST',
-                                        dataType: 'json',
-                                        data: {_token:'{{csrf_token()}}',article_id:article_id},
-                                        success: function (data) {
-                                            console.log(data);
-                                            if (data.status_code == 100) {
-                                                layer.msg(data.message.msg,{skin: 'intro-login-class layui-layer-hui'})
-                                                $('.down-load-tip').show();
-                                                $('.down-load-tip').find('a').attr('href',data.message.vip_download);
-                                                $('.down-load-tip').find('input').val(data.message.vip_download.substr(-4));
-                                                $('.down_con').html('今日剩余积分下载次数'+data.message.left_down_num);
-                                            } else {
-                                                layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
-                                            }
-                                        }
-                                    });
-                                return ;
+                                $('.down_con').html(data.message.leftkou)
+                            }else if(data.status_code == 999){
+                                layer.msg(data.message,{time:2000,skin: 'intro-login-class layui-layer-hui'})
+                            
+                            // if(data.status_code == 501) {
+                            //     //todo 弹出确认兑换框，如果用户选择确认调用兑换接口/article/vip_exchange
+                            //         $.ajax({
+                            //             url: '/article/exchange',
+                            //             type: 'POST',
+                            //             dataType: 'json',
+                            //             data: {_token:'{{csrf_token()}}',article_id:article_id},
+                            //             success: function (data) {
+                            //                 console.log(data);
+                            //                 if (data.status_code == 100) {
+                            //                     layer.msg(data.message.msg,{skin: 'intro-login-class layui-layer-hui'})
+                            //                     $('.down-load-tip').show();
+                            //                     $('.down-load-tip').find('a').attr('href',data.message.vip_download);
+                            //                     $('.down-load-tip').find('input').val(data.message.vip_download.substr(-4));
+                            //                     $('.down_con').html('今日剩余积分下载次数'+data.message.left_down_num);
+                            //                 } else {
+                            //                     // layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+                            //                     $('.down-load-tip').show();
+                            //                     $('.down-load-tip').html(data.message);
+                            //                 }
+                            //             }
+                            //         });
+                            //     return ;
                             }else{
-                                layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+                                // layer.msg(data.message,{skin: 'intro-login-class layui-layer-hui'})
+                                console.log(data);
+                                $('.down-load-tip').show();
+                                $('.down-load-tip').html(data.message);
                             }
                         }
                     });
@@ -568,14 +575,14 @@
                         </ul>
                     </div>
                     @if($is_subscription) 
-                    <span style='width:82px;' class="Button wpfp_designer_act designer have-disalbed " title=""> {{trans('article.subscribed')}} </span> 
+                    <span style='width:82px;height:36px;line-height:36px;' class="Button wpfp_designer_act designer have-disalbed " title=""> {{trans('article.subscribed')}} </span> 
                     @else 
                     <span class="Button3 wpfp_designer_act designer subscription_designer" designer_id="{{$designer->id}}" title=""> {{trans('article.subscription')}} </span> 
                     @endif
                     <div class="mt20 more_design"></div>
 
 
-
+                    <!-- 更多设计师 -->
                     @if ($more_designer)
                     <div class="works_design" style='display:block;'>
                         <ul>
@@ -695,6 +702,8 @@
                     success: function (data) {
                         if (data.status_code == 0) {
                             that.text('已订阅')
+                            that.css('width','82px')
+                            that.css('hetght','36px')
                             that.removeClass('Button3')
                             that.addClass('Button')
                             that.addClass('have-disalbed')
@@ -777,200 +786,158 @@
 </section>
 
         <!-- 发现到 -->
-<div class="create_folder modal" id="discoveryFolders_1">
-  <div class="create_folder_title">
+    <div class="create_folder modal" id="discoveryFolders_1">
+        <div class="create_folder_title">
             <h2>图片发现到</h2>
-          </div>
-  <div class="close">关闭</div>
-  <div class="pic-name" style="padding: 8px 0 8px 8px;">
+        </div>
+        <div class="close">关闭</div>
+        <div class="pic-name" style="padding: 8px 0 8px 8px;">
             <!---label for="" style="font-size: 14px;color: #333;"> 图片名称 </label--->
             <input type="text" name="imgtitle" id="imgtitle" value="" placeholder="图片说明" style="width: 100%;border-radius:5px;">
-          </div>
-  <div class="collection_to">
+        </div>
+        <div class="collection_to">
             <ul class="discover-folders2">
-      @foreach($user_finder_folders as $value)
-      <li>
+            @foreach($user_finder_folders as $value)
+            <li>
                 <h3>{{$value['name']}}</h3>
                 <span img='' floder_id='{{$value["id"]}}'  class='folderattr null' title='{{$value["name"]}}'> </span> 
                 <div id="modal_btns"> <a href='' class='Button2 fr to_find_floder_act add_finder_btn' data-id='{{$value["id"]}}' data-img='' data-source=''>收藏</a> </div>
                 
                 {{--@foreach($issc as $issckey=>$isscval)
-                	<a href='' class='Button2 fr to_find_floder_act add_finder_btn' data-id='{{$key}}' data-img='' data-source=''>收藏</a > 
+                    <a href='' class='Button2 fr to_find_floder_act add_finder_btn' data-id='{{$key}}' data-img='' data-source=''>收藏</a > 
                 @endforeach--}} </li>
-      @endforeach
-    </ul>
-          </div>
-  <a href="#" class="create create-new-folder-btn">创建发现文件夹</a>
-  <div class="error_code"></div>
-</div>
+            @endforeach
+            </ul>
         </div>
+        <a href="#" class="create create-new-folder-btn">创建发现文件夹</a>
+        <div class="error_code"></div>
+    </div>
+    </div>
 
-        <!--创建发现文件夹-->
-<div class="create_folder modal" id="new-find-model-folder">
-  <div class="create_folder_title">
+    <!--创建发现文件夹-->
+    <div class="create_folder modal" id="new-find-model-folder">
+        <div class="create_folder_title">
             <h2>创建发现文件夹</h2>
-          </div>
-  <div class="close">关闭</div>
-  <input type="text" value=""  placeholder="收藏夹名称（必填）" class="mt30" name="favorite" id="finder_folder_name"/>
-  <textarea id="finder_folder_brief" name="memo" placeholder="简介"  rows="5" class="mt30 folder_introduction"></textarea>
-  <input type="hidden" id="finder_folder_id" value="1" />
-  <p class="mt30"> <i class="sourceinput" sourceid=""></i>
-            <input name="is_open" type="radio" value="1" checked="checked" />
-            公开
-            <input name="is_open" type="radio" value="0" />
-            不公开</p>
-  <div class="error_msg" id="error_msg"></div>
-  <div class="create_button">
+        </div>
+        <div class="close">关闭</div>
+        <input type="text" value=""  placeholder="收藏夹名称（必填）" class="mt30" name="favorite" id="finder_folder_name"/>
+        <textarea id="finder_folder_brief" name="memo" placeholder="简介"  rows="5" class="mt30 folder_introduction"></textarea>
+        <input type="hidden" id="finder_folder_id" value="1" />
+        <p class="mt30"> 
+            <i class="sourceinput" sourceid=""></i>
+            <input name="is_open" type="radio" value="1" checked="checked" />公开
+            <input name="is_open" type="radio" value="0" />不公开
+        </p>
+        <div class="error_msg" id="error_msg"></div>
+        <div class="create_button">
             <input type="hidden" name="folder_type" id="add_folder_type"  />
             <input type="button" value="取消" class="button_gray concle-create-folder" onclick="javascript:class_find_layui_win();" />
             <input type="button" value="确定" class="button_red create_finder_folder_enter_btn"/>
-          </div>
-</div>
+        </div>
+    </div>
 
         <!--弹窗--> 
 
-        <!-- 登录 -->
-
-<div class="login_box" style="display:none;">
-  <div class="new_folder_bj"></div>
-  <div class="login_folder">
-            <div id="login" class="login"> 
-      
-      <!--		<h1><a href="--><!--" title="--><!--" tabindex="-1">--><!--</a></h1>-->
-      
-      <h1><a href="/indx" title="{{trans('comm.yinji')}}" tabindex="-1">{{trans('comm.yinji')}}</a></h1>
-      <h2>{{trans('login.login_title')}}</h2>
-      
-      <!-- 登陸 -->
-      
-      <form name="loginform" id="loginform" action="/user/login" method="post">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                <p>
-          <label for="user_login">
-                    <input type="text" name="user_login" id="user_login" class="input" value="" size="20"
+    <!-- 登录 -->
+    <div class="login_box" style="display:none;">
+        <div class="new_folder_bj"></div>
+            <div class="login_folder">
+                <div id="login" class="login" style='height:640px;'> 
+    
+                    <div class="wxlogin">
+                        <h1><a href="/" title="{{trans('comm.yinji')}}" tabindex="-1">{{trans('comm.yinji')}}</a></h1>
+                        <!-- <h2>微信扫码登陆</h2> -->
+                        <p><iframe frameborder="0" scrolling="no" width="300" height="395" src="/auth/weixin"></iframe></p>
+                        <div class="login_ico"><a href="javascript:void(0);" onclick="WeChatLogin();"><img src="/img/diannao_03.gif" width="51" height="51" alt="账号登陆"></a></div>
+                    </div>
 
 
-
-                                   placeholder="{{trans('login.input_username')}}">
-                  </label>
-        </p>
-                <p>
-          <label for="user_pass">
-                    <input type="password" name="password" id="user_pass" class="input" value="" size="20" placeholder="{{trans('login.input_password')}}">
-                  </label>
-        </p>
-                <p class="forgetmenot">
-          <label for="rememberme">
-                    <input name="rememberme" type="checkbox" id="rememberme"
-
-
-
-                                   value="forever">
-                    {{trans('login.remember_me')}} </label>
-        </p>
-                <p class="submit">
-          <input type="button" name="wp-submit" id="wp-submit-login" class="button button-primary button-large"
-
-
-
-                               value="{{trans('login.login')}}">
-          <input type="hidden" name="redirect_to" value="/user/index">
-          <input type="hidden" name="testcookie" value="1">
-        </p>
-              </form>
-      <div style=" overflow:hidden">
-                <p id="nav" class="fr"> <a href="/user/register">{{trans('login.register')}}</a> | <a
-
-
-
-                                href="/user/forgot_password">{{trans('login.forgot_password')}}</a> </p>
-                <p class="fl"> <a href="/"> ← {{trans('login.return')}} </a> </p>
-              </div>
-      <div class=""> <span style="float:left; line-height:36px;color: #999;"> {{trans('login.other_login')}}：</span> <a href="javascript:void(0);" onclick="WeChatLogin();" title="使用微信登录"><img src="/img/tl_weixin.png"></a> </div>
-      <div class="login_ico"> <a href="javascript:void(0);" onclick="WeChatLogin();"><img src="/img/erweima.gif" width="51" height="51" alt="二维码登陆"></a> </div>
-      <div class="ma_box hide">
-                <h1><a href="/index" title="{{trans('comm.yinji')}}" tabindex="-1">{{trans('comm.yinji')}}</a></h1>
+                    <!-- 登陸 -->
+                    <div class="ma_box hide" style='top:207px;padding-top:0;height:380px;'>
+                        <div class="login_ico" style='position: absolute;top:-202px;right: 5px;'><a href="javascript:void(0);" onclick="WeChatLogin();"><img src="/img/erweima.gif" width="51" height="51" alt="账号登陆"></a></div>
+                        <h2>{{trans('login.login_title')}}</h2>
+                        <form name="loginform" id="loginform" action="/user/login" method="post">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                            <p>
+                                <label for="user_login">
+                                    <input type="text" name="user_login" id="user_login" class="input" value="" size="20" placeholder="{{trans('login.input_username')}}">
+                                </label>
+                            </p>
+                            <p>
+                                <label for="user_pass">
+                                    <input type="password" name="password" id="user_pass" class="input" value="" size="20" placeholder="{{trans('login.input_password')}}">
+                                </label>
+                            </p>
+                            <p class="forgetmenot" style='text-align:center;width: 316px;'>
+                                <label for="rememberme">
+                                    <input name="rememberme" type="checkbox" id="rememberme" value="forever">{{trans('login.remember_me')}} 
+                                </label>
+                            </p>
+                            <p class="submit">
+                                <input type="button" name="wp-submit" id="wp-submit-login" class="button button-primary button-large" value="{{trans('login.login')}}">
+                                <input type="hidden" name="redirect_to" value="/user/index">
+                                <input type="hidden" name="testcookie" value="1">
+                            </p>
+                        </form>
+                    </div>
+                    <div class='lgbtm' style='height:50px;margin-top: -16px;'>
+                        <p id="nav" class="fr" style='margin-top:0;'><a href="/user/register">{{trans('login.register')}}</a> | <a href="/user/forgot_password">{{trans('login.forgot_password')}}</a></p>
+                        <p class="fl" style='margin-top:0;'> <a href="/"> ← {{trans('login.return')}} </a> </p>
+                    </div>
+                    
                 
-                <!--<h2>微信扫码登陆</h2> -->
-                
-                <p>
-          <iframe frameborder="0" scrolling="no" width="365" height="395"
-
-
-
-                                src="/auth/weixin"></iframe>
-        </p>
-                <p class="backtoblog" style="text-align:center"> <a href="/"> ← {{trans('login.return')}} </a> </p>
-                <div class="login_ico"><a href="javascript:void(0);" onclick="WeChatLogin();"><img
-
-
-
-                                    src="/img/diannao_03.gif" width="51" height="51" alt="账号登陆"></a></div>
-              </div>
+                </div>
+            </div>
+        </div>
     </div>
-          </div>
-</div>
+    <!--登陆结束--> 
 
-        <!--登陆结束--> 
-
-        <!--------选购会员弹窗------->
-
-<div class="new_folder_box" style="display:none;">
-  <div class="new_folder_bj"></div>
-  <div class="create_folder">
-            <div class="create_folder_title">
-      <h2>成为会员</h2>
-    </div>
+    <!--------选购会员弹窗------->
+    <div class="new_folder_box" style="display:none;">
+        <div class="new_folder_bj"></div>
+        <div class="create_folder">
+            <div class="create_folder_title"><h2>成为会员</h2></div>
             <div class="close vip_close">关闭</div>
             <div class="vip_select mt30">
-        <ul>
-            <li class="determine vipfee_type1" vip_level="1" price="{{$month_price or '0.01'}}" omit="{{$be_month_price}}"><em>{{$month_price or '0.01'}}</em>元
-            <p>月会员</p>
-            <del>原价：{{$be_month_price}}元</del></li>
-                    <li class="vipfee_type2" vip_level="2" price="{{$season_price or '0.01'}}" omit="{{$be_season_price}}"><em>{{$season_price or '0.01'}}</em>元
-            <p>季会员</p>
-            <del>原价：{{$be_season_price}}元</del></li>
-                    <li class="vipfee_type3" vip_level="3" price="{{$year_price or '0.01'}}" omit="{{$be_year_price}}"><em>{{$year_price or '0.01'}}</em>元
-            <p>年会员</p>
-            <del>原价：{{$be_year_price}}元</del></li>
-        </ul>
-    </div>
+                <ul>
+                    <li class="determine vipfee_type1" vip_level="1" price="{{$month_price or '0.01'}}" omit="{{$be_month_price}}"><em>{{$month_price or '0.01'}}</em>元
+                    <p>月会员</p>
+                    <del>原价：{{$be_month_price}}元</del></li>
+                            <li class="vipfee_type2" vip_level="2" price="{{$season_price or '0.01'}}" omit="{{$be_season_price}}"><em>{{$season_price or '0.01'}}</em>元
+                    <p>季会员</p>
+                    <del>原价：{{$be_season_price}}元</del></li>
+                            <li class="vipfee_type3" vip_level="3" price="{{$year_price or '0.01'}}" omit="{{$be_year_price}}"><em>{{$year_price or '0.01'}}</em>元
+                    <p>年会员</p>
+                    <del>原价：{{$be_year_price}}元</del></li>
+                </ul>
+            </div>
             <div class="vip_check">
-      <ul>
-                <li>
-          <input name="" type="checkbox" value="" checked="checked" />
-          到期自动续费一个月，可随时取消</li>
-          <li><input name="" type="checkbox" value="" id="agree" /><a href="javascript:void(0);">同意并接受《服务条款》</a></li>
-              </ul>
-    </div>
+                <ul>
+                    <li><input name="" type="checkbox" value="" checked="checked" />到期自动续费一个月，可随时取消</li>
+                    <li><input name="" type="checkbox" value="" id="agree" /><a href="javascript:void(0);">同意并接受《服务条款》</a></li>
+                </ul>
+            </div>
+
             <div class="vip_pay">
-      <form class="cart vip_pay" action="/vip/wxbuy" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="vip_type" id="vip_type" value="1" />
-                <input type="hidden" name="payment_code" id="payment_code" value="wechatpay" />
-                <input type="hidden" name="pay_total" id="pay_total" value="{{$month_price or '0.01'}}" />
-                <input type="hidden" name="open_id" id="open_id" value="ohPM_1TdJ-oXTAWy7rP-82CT3glo" />
-                <p class="vip_pay_msg">应付：<span>{{$month_price or '0.01'}}</span>元 (立省9元)</p>
-                <p>
-          <button type="button" class="single_add_to_cart_button button_red alt" id="buy_now_button">立即购买 </button>
-        </p>
-              </form>
+                <form class="cart vip_pay" action="/vip/wxbuy" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="vip_type" id="vip_type" value="1" />
+                    <input type="hidden" name="payment_code" id="payment_code" value="wechatpay" />
+                    <input type="hidden" name="pay_total" id="pay_total" value="{{$month_price or '0.01'}}" />
+                    <input type="hidden" name="open_id" id="open_id" value="ohPM_1TdJ-oXTAWy7rP-82CT3glo" />
+                    <p class="vip_pay_msg">应付：<span>{{$month_price or '0.01'}}</span>元 (立省9元)</p>
+                    <p><button type="button" class="single_add_to_cart_button button_red alt" id="buy_now_button">立即购买 </button></p>
+                </form>
+            </div>
+        </div>
     </div>
-          </div>
-</div>
 
-        <!--------选购会员结束-------> 
+    <!--------选购会员结束-------> 
+    <!--VIP专栏提示-->
+    <div class="vip_prompt modal" id="vip-img"><a href="#" class="vip_buy">开通VIP会员</a><a href="#" class="vip_detail">了解VIP详情>></a></div>
 
-        <!--VIP专栏提示-->
+    <!--VIP专栏提示结束--> 
+    <input type="hidden" name="imageUrlJs" id="imageUrlJs" value="" />
 
-        <div class="vip_prompt modal" id="vip-img"><a href="#" class="vip_buy">开通VIP会员</a><a href="#" class="vip_detail">了解VIP详情>></a></div>
-
-        <!--VIP专栏提示结束--> 
-
-        <!-- <div id="st-el-1" class=" st-image-share-buttons st-left  st-inline-share-buttons st-animated              st-hide" style="position: absolute; width: 860px; left: 0px; top: 7477px; padding: 8px; box-sizing: border-box;"></div> -->
-
-        <input type="hidden" name="imageUrlJs" id="imageUrlJs" value="" />
-
-        <!-- <script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5c091d90711a3c0011d0822a&product=sop'></script> --> 
 
 <script src="/js/sharethis.js"></script> 
 <script src="/js/5c091d90711a3c0011d0822a.js"></script> 
@@ -982,8 +949,6 @@
             window.location.href = '/search?keyword=' + encodeURIComponent(value);
         }
     }
-
-
 
     // 判断是否有设计师
     if($('.users').html().trim()){
@@ -1166,8 +1131,6 @@
             $("#new-find-model-folder .error_msg").text("");
         }
 
-
-
         $.post("http://yinji.nenyes.com/finderfuc?action=add_finder_Favorite",$data,function (_res) {
             _obj = eval("("+_res+")");
             if (_obj.msg) {
@@ -1189,7 +1152,6 @@
     })
 
     
-
     //点“收藏”，发现收藏图片到文件夹内
     $(document).on('click','.to_find_floder_act',function(ev){
         if ($(".to_find_floder_act").data("open")==1) {

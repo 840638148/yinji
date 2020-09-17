@@ -10,9 +10,9 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Illuminate\Http\Request;
 use Validator;
-
+use App\Models\VipBuyOrder;
 use App\User as CurrentModel;
-
+use App\Admin\Controllers\ExcelController;
 class VipsumController extends BaseController
 {
     use HasResourceActions;
@@ -30,8 +30,9 @@ class VipsumController extends BaseController
     protected function grid()
     {
         $grid = new Grid(new $this->currentModel);
-        
-        $grid->model()->where('expire_time', '>', date('Y-m-d H:i:s'));
+        $grid->exporter(new ExcelController());
+        // $grid->model();
+        $grid->model()->leftjoin('vip_buy_orders','user_id','=','users.id')->select('users.id','users.avatar','users.nickname','users.expire_time','users.level')->where('expire_time', '>', date('Y-m-d H:i:s'))->where('pay_status',2)->where('pay_status_name','已支付');
         $grid->disableCreateButton();
         $grid->actions(function ($actions) {
             $actions->disableDelete();
@@ -87,7 +88,10 @@ class VipsumController extends BaseController
             return $res['price'];
         });
 
-        // $grid->title('支付类型');
+        $grid->title('支付类型')->display(function () {
+            $res=VipBuyOrder::getPayType($this->id);
+            return $res['payment_name'];
+        });
         $grid->expire_time('过期时间')->sortable();
 
         return $grid;

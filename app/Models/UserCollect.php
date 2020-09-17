@@ -11,7 +11,7 @@ use App\Http\Error;
 class UserCollect extends Model
 {
     protected $fillable = [//为了防止用户传入奇怪的参数  fillable为白名单，表示该字段可被批量赋值；guarded为黑名单，表示该字段不可被批量赋值。
-        'user_id', 'collect_type', 'user_collect_folder_id', 'collect_id','is_sc', 'photourl'
+        'user_id', 'collect_type', 'user_collect_folder_id', 'collect_id','is_sc', 
     ];
 
     public function folder()
@@ -42,9 +42,7 @@ class UserCollect extends Model
                 ->where('user_collect_folder_id', $request->folder_id)
                 ->where('collect_id', $request->collect_id)
                 ->first();
-			//通过连表左查询查出已经收藏的
-			// $issc=UserFinder::where('user_finders.user_id',$user_id)->leftjoin('user_finder_folders','user_finder_folders.id','user_finders.user_finder_folder_id')->get()->toArray();
-                
+
             if ($obj){
                //return '你已经收藏过了';
                return Output::makeResult($request, null, Error::SYSTEM_ERROR, '你已经收藏过了');
@@ -54,6 +52,7 @@ class UserCollect extends Model
                 'collect_type' => $collect_type,
                 'user_collect_folder_id' => $request->folder_id,
                 'collect_id' => $request->collect_id,
+                'is_sc'=>$request->is_sc,
             ];
             self::create($data);
         } else {
@@ -67,7 +66,7 @@ class UserCollect extends Model
                 'collect_type' => $collect_type,
                 'user_collect_folder_id' => $user_collect_folder->id,
                 'collect_id' => $request->collect_id,
-                // 'is_sc' => '0',
+                'is_sc' => $request->is_sc,
             ];
             self::create($data);
 
@@ -147,12 +146,6 @@ class UserCollect extends Model
     }
 
 
-
-
-	
-
-
-
     /**
      * 是否已经收藏
      * @param $article_id
@@ -164,14 +157,17 @@ class UserCollect extends Model
         if (empty($article_id) || empty($user_id)) {
             return false;
         }
-
-        $obj = UserCollectFolder::leftjoin('user_collects','user_collect_folders.id','=','user_collects.user_collect_folder_id')
-            ->select('user_collect_folders.name','user_collects.user_collect_folder_id','user_collects.collect_id','user_collects.is_sc','user_collects.user_id')
-            ->where('user_collects.user_id', $user_id)
-            ->where('user_collects.collect_type', '0')
-            ->where('user_collects.collect_id', $article_id)
-            ->where('user_collects.is_sc',1)
-            ->get();
+        $obj = self::where('user_id', $user_id)
+            ->where('collect_type', '0')
+            ->where('collect_id', $article_id)
+            ->first();
+        // $obj = UserCollectFolder::leftjoin('user_collects','user_collect_folders.id','=','user_collects.user_collect_folder_id')
+        //     ->select('user_collect_folders.name','user_collects.user_collect_folder_id','user_collects.collect_id','user_collects.is_sc','user_collects.user_id')
+        //     ->where('user_collects.user_id', $user_id)
+        //     ->where('user_collects.collect_type', '0')
+        //     ->where('user_collects.collect_id', $article_id)
+        //     ->where('user_collects.is_sc',1)
+        //     ->get();
 
         // dd($obj);
         if ($obj){
@@ -277,6 +273,7 @@ class UserCollect extends Model
      */
     public static function formatCollects(& $user_collects)
     {
+        
         $obj = [];
         foreach ($user_collects as $user_collect) {
             // dump($user_collect);
@@ -286,18 +283,32 @@ class UserCollect extends Model
             if (isset($obj[$user_collect->user_collect_folder_id])) {
                 if (count($obj[$user_collect->user_collect_folder_id]['collect']) < 4) {
                     if ('0' == $user_collect->collect_type) {
-                        $collect_obj = Article::find($user_collect->collect_id);
+                        if($user_collect->collect_id){
+                            $collect_obj = Article::find($user_collect->collect_id);
+                            $img = get_article_thum($collect_obj);
+                        }
+                        if($user_collect->dcarticle_id){
+                            $collect_obj = DcArticle::find($user_collect->dcarticle_id);
+                            $img = get_dc_thum($collect_obj);
+                        }
                         
 						if (empty($collect_obj)) {
 							continue;
 						}
-                        $img = get_article_thum($collect_obj);
-                        if ($collect_obj->static_url) {
+                        if ($collect_obj->static_url && $user_collect->collect_id) {
                             $url = url('/article/' . $collect_obj->static_url);
                         } else {
                             $url = url('/article/detail/' . $collect_obj->id);
                         }
-                        $title = get_article_title($collect_obj);
+                        
+                        if($user_collect->collect_id){
+                            $title = get_article_title($collect_obj);
+                        }
+                        if($user_collect->dcarticle_id){
+                            $url = url('/details/' . $collect_obj->id);
+                            $title = get_dc_title($collect_obj);
+                        }
+                        
                     } else {
                         $collect_obj = Designer::find($user_collect->collect_id);
 						if (empty($collect_obj)) {
@@ -323,12 +334,18 @@ class UserCollect extends Model
                 $user_info = User::where('id',$user_collect->user_id)->get()->first();
                 // dd($user_info);
                 if (0 == $user_collect->collect_type) {
-                    $collect_obj = Article::find($user_collect->collect_id);
-
+                    if($user_collect->collect_id){
+                        $collect_obj = Article::find($user_collect->collect_id);
+                        $img = get_article_thum($collect_obj);
+                    }
+                    if($user_collect->dcarticle_id){
+                        $collect_obj = DcArticle::find($user_collect->dcarticle_id);
+                        $img = get_dc_thum($collect_obj);
+                    }
                     if (empty($collect_obj)) {
                         continue;
                     }else{
-                        $img = get_article_thum($collect_obj);
+                        // $img = get_article_thum($collect_obj);
                         if ($collect_obj->static_url) {
                         $url = url('/article/' . $collect_obj->static_url);
                         } else {
@@ -401,22 +418,23 @@ class UserCollect extends Model
             ->get();
    
         $article_ids = [];
+        $articles = [];
 
         foreach ($user_collects as $collect) { 
-        	// dd($collect->folder);
-            if ('1' == $collect->folder->is_open) {
-                $article_ids[] = $collect->collect_id;
+            if($collect->collect_id){
+                if ('1' == $collect->folder->is_open){
+                    $article_ids[] = $collect->collect_id;
+                }else{
+                    $article_ids[] = $collect->collect_id;         
+                }
+                $articles[] = Article::whereIn('id', $article_ids)->get();
             }else{
-            	$article_ids[] = $collect->collect_id;
-            }
-			
+                $article_ids[] = $collect->dcarticle_id;$articles[] = DcArticle::whereIn('id', $article_ids)->get();
+            } 
         }
-        
-        $articles = Article::whereIn('id', $article_ids)->get();
-       
+        // dd($articles);
         return $articles;
     }
 
-    
 }
 

@@ -8,7 +8,7 @@ return [
     'latest' => '最新',
     'all_article' => '所有文章',
     'comments' => '评语',
-    'shares' => '分享',
+    'share' => '分享',
     'collection' => '收藏',
     'down' => '下载',
     'total' => '共',
